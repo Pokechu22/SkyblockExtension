@@ -30,10 +30,5 @@
            <type>jar</type>
            <scope>provided</scope>
        </dependency>
-       <dependency>
-       	<groupId>us.talabrek.ultimateskyblock</groupId>
-       	<artifactId>uSkyBlock</artifactId>
-       	<version>2.1.0</version>
-       </dependency>
 	   </dependencies>
 </project>

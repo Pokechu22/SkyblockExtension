@@ -77,7 +77,7 @@ public class SkyblockExtension extends JavaPlugin {
 				//For each of the values output it with a number next to it.
 				getLogger().severe("        " + i + ": " + args[i]);
 			}
-			
+						
 			//TODO: Reimpliment the command-accessible logging.
 			//CrashHandler.logError(e);
 			
