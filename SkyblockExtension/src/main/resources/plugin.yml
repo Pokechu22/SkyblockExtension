@@ -1,3 +1,15 @@
 name: SkyblockExtension
 main: pokechu22.plugins.SkyblockExtension.SkyblockExtension
-version: 0.0.1
+version: 0.0.0
+author: Pokechu22
+
+#This is used in logging.
+prefix: PSBE
+
+depend: [uSkyBlock]
+
+commands: 
+  pokechu22:
+    description: General SkyblockExtension configuration
+    usage: |
+          /pokechu22 help
