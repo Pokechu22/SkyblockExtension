@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.ChatPaginator;
 
 /**
  * An individual crash report.
@@ -126,4 +127,45 @@ public class CrashReport {
 	public String getTitle() {
 		return thrown.toString();
 	}
+	
+	/**
+	 * Prepended to headers of messages not yet read by anyone.
+	 */
+	static final String NEVERREAD = "§c";
+	/**
+	 * Prepended to headers of messages read by someone, but not the current player.
+	 */
+	static final String READBYOTHERS = "§e";
+	/**
+	 * Prepended to headers of messages read by the current player.
+	 */
+	static final String READBYME = "§a";
+	
+	/**
+	 * Gets the title for a specific player, providing the read/unread/other
+	 * coloration.
+	 * @param player
+	 * @return
+	 */
+	public String getTitleFor(String player) {
+		return getTitleFor(player, ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH, "...");
+	}
+	
+	public String getTitleFor(String player, int sizeLimit) {
+		return getTitleFor(player, sizeLimit, "...");
+	}
+	
+	public String getTitleFor(String player, int sizeLimit, String trailOff) {
+		String rawTitle = getTitle(sizeLimit, trailOff);
+		String finalTitle;
+		if (readers.isEmpty()) {
+			finalTitle = NEVERREAD + rawTitle;
+		} else if (readers.contains(player)) {
+			finalTitle = READBYME + rawTitle;
+		} else {
+			finalTitle = READBYOTHERS + rawTitle;
+		}
+		return finalTitle;
+	}
+	
 }
