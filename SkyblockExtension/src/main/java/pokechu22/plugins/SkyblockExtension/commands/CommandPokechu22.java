@@ -3,6 +3,8 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
  * 
@@ -24,8 +26,12 @@ public class CommandPokechu22 {
 	public static boolean Run(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
 		//TODO: This is debug code that should be removed.
 		if (args.length != 0) {
-			if (args[0].equals("catchtest")) {
+			if (args[0].equalsIgnoreCase("catchtest")) {
 				throw new Exception("Test");
+			}
+			if (args[0].equalsIgnoreCase("crashes")) {
+				ErrorHandler.listCrashes(sender, 0);
+				return true;
 			}
 		}
 		
