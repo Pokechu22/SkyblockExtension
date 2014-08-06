@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import java.util.logging.Level;
+
 import pokechu22.plugins.SkyblockExtension.commands.*;
 
 import org.bukkit.command.Command;
@@ -68,18 +70,18 @@ public class SkyblockExtension extends JavaPlugin {
 			sender.sendMessage("§4" + e.toString());
 			
 			//Put the error message in the console / log file.
-			getLogger().severe("[Skyblock Extension]: A error occoured:");
-			e.printStackTrace();
-			getLogger().severe("[Skyblock Extension]: Context: ");
+			getLogger().severe("A error occoured:");
+			getLogger().log(Level.SEVERE, "Exception:", e);
+			getLogger().severe("Context: ");
 			getLogger().severe("    Command name: " + cmd.getName() + "(Label: " + label + ")");
 			getLogger().severe("    Arguments: ");
 			for (int i = 0; i < args.length; i++) {
 				//For each of the values output it with a number next to it.
 				getLogger().severe("        " + i + ": " + args[i]);
 			}
-						
-			//TODO: Reimpliment the command-accessible logging.
-			//CrashHandler.logError(e);
+			
+			//Log the error for command access.
+			ErrorHandler.logError(e, sender, cmd, label, args);
 			
 		}
 		

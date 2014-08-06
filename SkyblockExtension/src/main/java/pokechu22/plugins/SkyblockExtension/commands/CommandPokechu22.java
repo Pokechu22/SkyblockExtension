@@ -19,9 +19,17 @@ public class CommandPokechu22 {
 	 * @param label The name of the command (EG "example" for "/example") 
 	 * @param args The arguments provided to the command.
 	 * @return True if the command syntax was correct, 
-	 *     false if you want the message in plugin.yml to be displayed.
+	 *     false if you want the message in plugin.yml to be displayed. 
 	 */
-	public static boolean Run(CommandSender sender, Command cmd, String label, String[] args) {
+	public static boolean Run(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
+		//TODO: This is debug code that should be removed.
+		if (args.length != 0) {
+			if (args[0].equals("catchtest")) {
+				throw new Exception("Test");
+			}
+		}
+		
+		
 		sender.sendMessage("Command sent sucessfully"); //TODO: Test.
 		return true;
 	}
