@@ -1,4 +1,4 @@
 SkyblockExtension
 =================
 
-Modernized version of my old skyblock extension for dwarfscraft, if I can ever figure git out.
+Modernized version of my older Skyblock extension plugin for the [Dwarfscraft Minecraft server](http://www.dwarfscraft.com).
