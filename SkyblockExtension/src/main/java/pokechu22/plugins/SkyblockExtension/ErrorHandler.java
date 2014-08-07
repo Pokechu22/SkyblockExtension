@@ -43,7 +43,7 @@ public class ErrorHandler {
 	 */
 	public static void listCrashes(CommandSender sender, int first) {
 		sender.sendMessage("§a-=[§3Crashes§a]=- §f(" + first + " to " +
-				(first + ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2) + 
+				(first + ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2 - 1) + 
 				" of " + errors.size() + ")");
 		sender.sendMessage("§aGreen: Read by me§f, §eYellow:Read by others§f, §cRed: Unread");
 		
