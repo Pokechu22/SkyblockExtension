@@ -63,7 +63,7 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 			}
 			
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			
 			//Tell the player that an error occurred.
 			sender.sendMessage("§4A unhandled error occoured while preforming this command.");
@@ -82,6 +82,14 @@ public class SkyblockExtension extends JavaPlugin {
 			
 			//Log the error for command access.
 			ErrorHandler.logError(e, sender, cmd, label, args);
+			
+			//Errors are typicaly things that shouldn't be caught (EG ThreadDeath), so they will
+			//be rethrown.
+			if (e instanceof Error) {
+				getLogger().severe("Rethrowing Error...");
+				sender.sendMessage("§4Rethrowing, as it extends error.");
+				throw e;
+			}
 			
 		}
 		
