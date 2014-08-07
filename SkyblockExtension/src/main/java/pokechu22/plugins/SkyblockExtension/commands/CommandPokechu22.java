@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 
@@ -66,11 +67,12 @@ public class CommandPokechu22 {
 					try {
 						line = Integer.parseInt(args[2]);
 					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse line number (Got " +args[2] + ").");
+						sender.sendMessage("§cFailed to parse page number (Got " +args[2] + ").");
 						sender.sendMessage("Usage: /" + label + " crashes help");
 						return;
 					}
-					ErrorHandler.listCrashes(sender, line);
+					int page = line * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
+					ErrorHandler.listCrashes(sender, page);
 					return;
 				} else {
 					sender.sendMessage("§cError: Too many parameters.");
