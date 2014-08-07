@@ -78,7 +78,10 @@ public class CrashReport {
 		StackTraceElement[] elements = thrown.getStackTrace();
 		for (int i = 0; i < elements.length; i++) {
 			text.append(elements[i].toString());
+			text.append("\n");
 		}
+		
+		text.append("End of report.");
 		
 		return text.toString();
 				
@@ -144,17 +147,33 @@ public class CrashReport {
 	/**
 	 * Gets the title for a specific player, providing the read/unread/other
 	 * coloration.
-	 * @param player
-	 * @return
+	 * @param player The player.
+	 * @return The title for said player.
 	 */
 	public String getTitleFor(String player) {
 		return getTitleFor(player, ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH, "...");
 	}
 	
+	/**
+	 * Gets the title for a specific player, providing the read/unread/other
+	 * coloration, and within the specified sizelimit.
+	 * @param player The player.
+	 * @param sizeLimit The sizelimit.
+	 * @return The title for said player.
+	 */
 	public String getTitleFor(String player, int sizeLimit) {
 		return getTitleFor(player, sizeLimit, "...");
 	}
 	
+	/**
+	 * Gets the title for a specific player, providing the read/unread/other
+	 * coloration, and within the specified sizelimit, using trailOff at the
+	 * end of the string if it goes out of bounds.
+	 * @param player The player.
+	 * @param sizeLimit The sizelimit.
+	 * @param trailOff The trail off.
+	 * @return The title for said player.
+	 */
 	public String getTitleFor(String player, int sizeLimit, String trailOff) {
 		String rawTitle = getTitle(sizeLimit, trailOff);
 		String finalTitle;
@@ -168,4 +187,22 @@ public class CrashReport {
 		return finalTitle;
 	}
 	
+	/**
+	 * Gets the number of pages this crash report takes up.
+	 * @return The number of pages.
+	 */
+	public int getNumberOfPages() {
+		return getNumberOfPages(ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT);
+	}
+	
+	/**
+	 * Gets the number of pages this crash report takes up.
+	 * @param pageHeight The number of lines a page is.
+	 * @return The number of pages.
+	 */
+	public int getNumberOfPages(int pageHeight) {
+		String[] paginatedText = ChatPaginator.wordWrap(this.getAsTextNoMark(), 
+				ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
+		return (int) Math.ceil(paginatedText.length / pageHeight);
+	}
 }

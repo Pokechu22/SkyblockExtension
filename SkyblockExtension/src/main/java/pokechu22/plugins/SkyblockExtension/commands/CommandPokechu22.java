@@ -67,8 +67,9 @@ public class CommandPokechu22 {
 					try {
 						line = Integer.parseInt(args[2]);
 					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse page number (Got " +args[2] + ").");
-						sender.sendMessage("Usage: /" + label + " crashes help");
+						sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
 					int page = line * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
@@ -76,9 +77,108 @@ public class CommandPokechu22 {
 					return;
 				} else {
 					sender.sendMessage("§cError: Too many parameters.");
-					sender.sendMessage("Usage: /" + label + " crashes help");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
 					return;
 				}
+			}
+			if (args[1].equalsIgnoreCase("show")) {
+				if (args.length == 2) {
+					sender.sendMessage("§cError: Too few parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				} else if (args.length == 3) {
+					int CrashID;
+					
+					try {
+						CrashID = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (ErrorHandler.getNumberOfCrashes() == 0) {
+						sender.sendMessage("§cThere are no crashes to show!");
+						return;
+					}
+					
+					if (CrashID > ErrorHandler.getLastCrashID()) {
+						sender.sendMessage("§cCrash ID is beyond the maximum!");
+						sender.sendMessage("§cMaximum ID is currently " + 
+								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (CrashID < 0) {
+						sender.sendMessage("§cCrash ID not allowed to be negative!");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					ErrorHandler.getCrashInfo(sender, CrashID, 1);
+					return;
+				} else if (args.length == 4) {
+					int CrashID;
+					int page;
+					
+					try {
+						CrashID = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (ErrorHandler.getNumberOfCrashes() == 0) {
+						sender.sendMessage("§cThere are no crashes to show!");
+						return;
+					}
+					
+					if (CrashID > ErrorHandler.getLastCrashID()) {
+						sender.sendMessage("§cCrash ID is beyond the maximum!");
+						sender.sendMessage("§cMaximum ID is currently " + 
+								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (CrashID < 0) {
+						sender.sendMessage("§cCrash ID not allowed to be negative!");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					try {
+						page = Integer.parseInt(args[3]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse page number (Got " + args[3] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (page < 0) {
+						sender.sendMessage("§cPage number cannot be negative! (Got " + 
+								args[3] + ")");
+						return;
+					}
+					
+					if (page == 0) {
+						sender.sendMessage("§cPage numbers start at one.");
+						return;
+					}
+					
+					ErrorHandler.getCrashInfo(sender, CrashID, page);
+					return;
+				} else {
+					sender.sendMessage("§cError: Too many parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				
 			}
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
