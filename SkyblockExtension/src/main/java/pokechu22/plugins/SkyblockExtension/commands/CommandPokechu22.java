@@ -50,7 +50,7 @@ public class CommandPokechu22 {
 	 * @Throws {@link Error} when args.length is 0, which should never happen.
 	 */
 	protected static void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length != 0) {
+		if (args.length == 0) {
 			throw new Error("Args.length should NEVER be 0.");
 		}
 		if (args.length == 1) {
