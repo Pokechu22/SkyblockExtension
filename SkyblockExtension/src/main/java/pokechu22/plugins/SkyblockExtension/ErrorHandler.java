@@ -42,17 +42,21 @@ public class ErrorHandler {
 	 * @param first The one to display at the top of the list..
 	 */
 	public static void listCrashes(CommandSender sender, int first) {
+		if (first < 0) {
+			sender.sendMessage("§cThe first crash shown cannot be negative.");
+		}
 		sender.sendMessage("§a-=[§3Crashes§a]=- §f(" + first + " to " +
 				(first + ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2 - 1) + 
 				" of " + errors.size() + ")");
-		sender.sendMessage("§aGreen: Read by me§f, §eYellow:Read by others§f, §cRed: Unread");
+		sender.sendMessage("§aGreen: Read by me§f, §eYellow: Read by others§f, §cRed: Unread");
 		
 		for (int i = 0; i < ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2; i ++) {
-			if (i >= errors.size()) {
+			int currentIndex = i + first;
+			if (currentIndex >= errors.size()) {
 				sender.sendMessage(""); //Due to no message, just skip.
 				continue;
 			}
-			CrashReport c = errors.get(i);
+			CrashReport c = errors.get(currentIndex);
 			sender.sendMessage(c.getTitleFor(sender.getName(), 
 					ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH));
 			

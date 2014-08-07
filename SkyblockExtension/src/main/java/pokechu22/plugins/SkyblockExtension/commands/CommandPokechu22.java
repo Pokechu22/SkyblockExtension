@@ -63,17 +63,30 @@ public class CommandPokechu22 {
 					ErrorHandler.listCrashes(sender, 0);
 					return;
 				} else if (args.length == 3){
-					int line;
+					int page;
+					
 					try {
-						line = Integer.parseInt(args[2]);
+						page = Integer.parseInt(args[2]);
 					} catch (NumberFormatException e) {
 						sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
 								", expected Integer).");
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
-					int page = line * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
-					ErrorHandler.listCrashes(sender, page);
+					
+					if (page < 0) {
+						sender.sendMessage("§cPage cannot be negative.  (Got " + args[2] + ")");
+						return;
+					}
+					
+					if (page == 0) {
+						sender.sendMessage("§cPages start at 1.");
+						return;
+					}
+					
+					int firstCrash = (page - 1) * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
+					
+					ErrorHandler.listCrashes(sender, firstCrash);
 					return;
 				} else {
 					sender.sendMessage("§cError: Too many parameters.");
