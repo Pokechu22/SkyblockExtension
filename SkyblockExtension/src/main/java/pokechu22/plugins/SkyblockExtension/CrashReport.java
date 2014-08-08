@@ -252,7 +252,6 @@ public class CrashReport implements ConfigurationSerializable {
 			this.loggedDate = (Date) map.get("LoggedDate");
 			this.readers = (HashSet<String>) map.get("Readers");
 		} catch (ClassCastException e) {
-			//TODO
 			SkyblockExtension.inst().getLogger().info("Failed to create.");
 			return;
 		}

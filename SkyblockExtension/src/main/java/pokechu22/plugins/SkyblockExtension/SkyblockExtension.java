@@ -46,14 +46,6 @@ public class SkyblockExtension extends JavaPlugin {
 	 */
 	@Override
 	public void onDisable() {
-		//Nothing yet.
-	}
-	
-	/**
-	 * Saves the config.
-	 */
-	@Override
-	public void saveConfig() {
 		Config.saveConfig();
 	}
 
