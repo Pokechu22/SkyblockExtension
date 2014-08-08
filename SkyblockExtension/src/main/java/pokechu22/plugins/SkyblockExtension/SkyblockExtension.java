@@ -126,7 +126,7 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 
 			// Log the error for command access.
-			ErrorHandler.logError(e, sender, cmd, label, args);
+			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label, args));
 
 			// Errors are typically things that shouldn't be caught (EG
 			// ThreadDeath), so they will be rethrown.

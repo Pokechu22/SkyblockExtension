@@ -30,6 +30,7 @@ public class ErrorHandler {
 	 * 
 	 * All arguments are converted to a single {@link CrashReport}, and then calls
 	 * {@link #logError(CrashReport)} with it.
+	 * @deprecated
 	 */
 	public static void logError (Throwable thrown, CommandSender sender, Command cmd, String label, String[] args) {
 		logError(new ThrowableReport(thrown,sender,cmd,label,args));
