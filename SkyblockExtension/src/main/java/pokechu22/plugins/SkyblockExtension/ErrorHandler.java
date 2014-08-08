@@ -1,6 +1,5 @@
 package pokechu22.plugins.SkyblockExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -16,7 +15,7 @@ public class ErrorHandler {
 	/**
 	 * List of previous crashes.
 	 */
-	protected static List<CrashReport> errors = new ArrayList<CrashReport>();
+	protected static List<CrashReport> errors;// = new ArrayList<CrashReport>();
 	
 	/**
 	 * Logs an error.

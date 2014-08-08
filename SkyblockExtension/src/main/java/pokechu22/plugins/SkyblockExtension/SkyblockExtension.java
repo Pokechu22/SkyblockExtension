@@ -31,6 +31,34 @@ public class SkyblockExtension extends JavaPlugin {
 	}
 	
 	/**
+	 * Called when the plugin is enabled.
+	 */
+	@Override
+	public void onEnable() {
+		this.saveDefaultConfig();
+		
+		inst = this;
+		Config.loadConfig();
+	}
+ 
+	/**
+	 * Called when the plugin is disabled.
+	 */
+	@Override
+	public void onDisable() {
+		//Nothing yet.
+	}
+	
+	/**
+	 * Saves the config.
+	 */
+	@Override
+	public void saveConfig() {
+		Config.saveConfig();
+	}
+
+	
+	/**
 	 * Called when a command is run.
 	 * 
 	 * @param sender The person who sent the command.
