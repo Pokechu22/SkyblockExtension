@@ -248,13 +248,20 @@ public class CrashReport implements ConfigurationSerializable {
 		
 		thrownMap.put("StackTrace", stackTraceList);
 		
-		map.put("Thrown", thrownMap);
-		map.put("Sender", this.sender);
-		map.put("Cmd", this.cmd);
-		map.put("Label", this.label);
-		map.put("Args", this.args);
-		map.put("LoggedDate", this.loggedDate);
-		map.put("Readers", this.readers);
+		//And now args.  (Apparently, configurations don't like String[]?)
+		ArrayList<String> argsList = new ArrayList<String>();
+		for (int i = 0; i < this.args.length; i++) {
+			argsList.add(this.args[i]);
+		}
+		
+		//The casts are useless but show the type.
+		map.put("Thrown", (HashMap<String, Object>) thrownMap);
+		map.put("Sender", (CommandSender) this.sender);
+		map.put("Cmd", (String) this.cmd);
+		map.put("Label", (String) this.label);
+		map.put("Args", (ArrayList<String>) argsList);
+		map.put("LoggedDate", (Date) this.loggedDate);
+		map.put("Readers", (HashSet<String>) this.readers);
 		
 		return map;
 	}
@@ -274,28 +281,32 @@ public class CrashReport implements ConfigurationSerializable {
 			ArrayList<HashMap<String, Object>> stackTraceListOld = 
 					(ArrayList<HashMap<String, Object>>) thrownMap.get("StackTrace");
 			
-			ArrayList<StackTraceElement> stackTraceList = new ArrayList<StackTraceElement>();
+			StackTraceElement[] stackTrace = new StackTraceElement[stackTraceListOld.size()];
 			for (int i = 0; i < stackTraceListOld.size(); i++) {
 				HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
 				
-				stackTraceList.add(new StackTraceElement(
+				stackTrace[i] = new StackTraceElement(
 						(String) stackTraceElementMap.get("ClassName"), //declaringClass
 						(String) stackTraceElementMap.get("MethodName"), //methodName
 						(String) stackTraceElementMap.get("FileName"), //fileName
 						(int) stackTraceElementMap.get("LineNumber") //lineNumber
-						));
+						);
 			}
 			
 			Throwable t = (Throwable) Class.forName(thrownClass)
 					.getConstructor(String.class)
 					.newInstance(thrownMessage);
-			t.setStackTrace((StackTraceElement[]) stackTraceList.toArray());
+			t.setStackTrace(stackTrace);
+			
+			//And convert args.
+			ArrayList<String> argsList = (ArrayList<String>) map.get("Args");
+			String[] argsArray = argsList.toArray(new String[argsList.size()]);
 			
 			this.thrown = t;
 			this.sender = (CommandSender) map.get("Sender");
 			this.cmd = (String) map.get("Cmd");
 			this.label = (String) map.get("Label");
-			this.args = (String[]) map.get("Args");
+			this.args = argsArray;
 			this.loggedDate = (Date) map.get("LoggedDate");
 			this.readers = (HashSet<String>) map.get("Readers");
 		} catch (ClassCastException | InstantiationException | IllegalAccessException 
