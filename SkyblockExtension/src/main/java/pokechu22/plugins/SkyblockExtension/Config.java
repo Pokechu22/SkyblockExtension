@@ -24,9 +24,10 @@ public class Config {
 		try {
 			//Sigh, java provides no good way to do this...
 			@SuppressWarnings("unchecked")
-			List<CrashReport> errors = (List<CrashReport>) getConfig().getList("CrashReports");
+			List<CrashReport> errors = (List<CrashReport>) getCrashesConfig()
+					.getList("CrashReports");
 			if (errors == null) {
-				getLogger().severe("Previous error messages was null.  If this is not the " +
+				getLogger().warning("Previous error messages was null.  If this is not the " +
 						"first time running this version of the plugin, they may have been " + 
 						"corrupted.  ");
 				errors = new ArrayList<CrashReport>();
@@ -49,21 +50,31 @@ public class Config {
 	static void saveConfig() {
 		getLogger().info("Saving configuration.");
 		
-		getConfig().set("CrashReports", ErrorHandler.errors);
+		getCrashesConfig().set("CrashReports", ErrorHandler.errors);
 		getLogger().config("Saved CrashReports.");
 		
 		getLogger().info("Configuration saved!");
 		
-		SkyblockExtension.inst().saveConfig();
+		SkyblockExtension.inst().saveAllConfigs();
 	}
 	
 	/**
-	 * Convenience method: Gets the configuration.
+	 * Convenience method: Gets the default configuration.
 	 *
 	 * @return The configuration.
 	 */
-	private static Configuration getConfig() {
+	@SuppressWarnings("unused")
+	private static Configuration getDefaultConfig() {
 		return SkyblockExtension.inst().getConfig();
+	}
+	
+	/**
+	 * Convenience method: Gets the crashes configuration.
+	 *
+	 * @return The configuration.
+	 */
+	private static Configuration getCrashesConfig() {
+		return SkyblockExtension.inst().getCrashesConfig();
 	}
 	
 	/**
