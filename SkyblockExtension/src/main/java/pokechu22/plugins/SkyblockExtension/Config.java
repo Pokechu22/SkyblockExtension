@@ -53,6 +53,8 @@ public class Config {
 		getLogger().config("Saved CrashReports.");
 		
 		getLogger().info("Configuration saved!");
+		
+		SkyblockExtension.inst().saveConfig();
 	}
 	
 	/**
