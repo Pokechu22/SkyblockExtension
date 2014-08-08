@@ -1,9 +1,12 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -91,6 +94,7 @@ public class CrashReport implements ConfigurationSerializable {
 		for (int i = 0; i < elements.length; i++) {
 			text.append(elements[i].toString());
 			text.append("\n");
+			
 		}
 		
 		text.append("End of report.");
@@ -226,7 +230,29 @@ public class CrashReport implements ConfigurationSerializable {
 		SkyblockExtension.inst().getLogger().info("Saving crash report to map.");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("Thrown", this.thrown);
+		
+		//Serialize thrown as a map.
+		//map.put("Thrown", this.thrown);
+		HashMap<String, Object> thrownMap = new HashMap<String, Object>();
+		thrownMap.put("Class",this.thrown.getClass().getName());
+		thrownMap.put("Message", this.thrown.getMessage());
+		
+		ArrayList<HashMap<String, Object>> stackTraceList = 
+				new ArrayList<HashMap<String, Object>>();
+		
+		StackTraceElement[] stackTrace = this.thrown.getStackTrace();
+		for (int i = 0; i < stackTrace.length; i++) {
+			HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
+			stackTraceMap.put("ClassName", stackTrace[i].getClassName());
+			stackTraceMap.put("MethodName", stackTrace[i].getMethodName());
+			stackTraceMap.put("FileName", stackTrace[i].getFileName());
+			stackTraceMap.put("LineNumber", stackTrace[i].getLineNumber());
+			stackTraceList.add(stackTraceMap);
+		}
+		
+		thrownMap.put("StackTrace", stackTraceList);
+		
+		map.put("Thrown", thrownMap);
 		map.put("Sender", this.sender);
 		map.put("Cmd", this.cmd);
 		map.put("Label", this.label);
@@ -244,17 +270,46 @@ public class CrashReport implements ConfigurationSerializable {
 	public CrashReport(Map<String, Object> map) {
 		SkyblockExtension.inst().getLogger().info("Creating crash report from map.");
 		try {
-			this.thrown = (Throwable) map.get("Thrown");
+			//Create thrown.
+			HashMap<String,Object> thrownMap = (HashMap<String, Object>) map.get("Thrown");
+			String thrownClass = (String) thrownMap.get("Class");
+			String thrownMessage = (String) thrownMap.get("Message");
+			
+			ArrayList<HashMap<String, Object>> stackTraceListOld = 
+					(ArrayList<HashMap<String, Object>>) thrownMap.get("StackTrace");
+			
+			ArrayList<StackTraceElement> stackTraceList = new ArrayList<StackTraceElement>();
+			for (int i = 0; i < stackTraceListOld.size(); i++) {
+				HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
+				
+				stackTraceList.add(new StackTraceElement(
+						(String) stackTraceElementMap.get("ClassName"), //declaringClass
+						(String) stackTraceElementMap.get("MethodName"), //methodName
+						(String) stackTraceElementMap.get("FileName"), //fileName
+						(int) stackTraceElementMap.get("LineNumber") //lineNumber
+						));
+			}
+			
+			Throwable t = (Throwable) Class.forName(thrownClass)
+					.getConstructor(String.class)
+					.newInstance(thrownMessage);
+			t.setStackTrace((StackTraceElement[]) stackTraceList.toArray());
+			
+			this.thrown = t;
 			this.sender = (CommandSender) map.get("Sender");
 			this.cmd = (Command) map.get("Cmd");
 			this.label = (String) map.get("Label");
 			this.args = (String[]) map.get("Args");
 			this.loggedDate = (Date) map.get("LoggedDate");
 			this.readers = (HashSet<String>) map.get("Readers");
-		} catch (ClassCastException e) {
-			SkyblockExtension.inst().getLogger().info("Failed to create.");
+		} catch (ClassCastException | InstantiationException | IllegalAccessException 
+				| IllegalArgumentException | InvocationTargetException | NoSuchMethodException 
+				| SecurityException | ClassNotFoundException e) {
+			SkyblockExtension.inst().getLogger().warning("Failed to create: " + e.toString());
+			SkyblockExtension.inst().getLogger().log(Level.WARNING, "Exception: ", e);
 			return;
 		}
+		
 		SkyblockExtension.inst().getLogger().info("Succeeded!");
 	}
 }
