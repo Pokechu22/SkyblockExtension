@@ -32,7 +32,7 @@ public class ErrorHandler {
 	 * {@link #logError(CrashReport)} with it.
 	 */
 	public static void logError (Throwable thrown, CommandSender sender, Command cmd, String label, String[] args) {
-		logError(new CrashReport(thrown,sender,cmd,label,args));
+		logError(new ThrowableReport(thrown,sender,cmd,label,args));
 	}
 	
 	/**

@@ -10,9 +10,7 @@ import java.util.logging.Level;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.util.ChatPaginator;
 
 /**
  * An individual crash report.
@@ -22,8 +20,8 @@ import org.bukkit.util.ChatPaginator;
  *
  */
 
-@SerializableAs("CrashReport")
-public class ThrowableReport implements ConfigurationSerializable {
+@SerializableAs("ThrowableReport")
+public class ThrowableReport extends CrashReport {
 	
 	//From the constructor.
 	public Throwable thrown;
@@ -38,14 +36,10 @@ public class ThrowableReport implements ConfigurationSerializable {
 	public Date loggedDate;
 	
 	/**
-	 * Who has read the report.
-	 */
-	public HashSet<String> readers;
-	
-	/**
 	 * Creates a crash report.
 	 */
-	public CrashReport(Throwable thrown, CommandSender sender, Command cmd, String label, String[] args) {
+	public ThrowableReport(Throwable thrown, CommandSender sender, Command cmd, 
+			String label, String[] args) {
 		this.thrown = thrown;
 		this.sender = sender;
 		this.cmd = cmd.toString();
@@ -53,24 +47,13 @@ public class ThrowableReport implements ConfigurationSerializable {
 		this.args = args;
 		
 		this.loggedDate = new Date(); //Current time.
-		this.readers = new HashSet<String>();
-	}
-	
-	/**
-	 * Gets the text of this crash report, and sender to the list of people who
-	 * have viewed this crash report.
-	 * @param sender
-	 * @return The text.
-	 */
-	public String getAsText(String sender) {
-		readers.add(sender);
-		return getAsTextNoMark();
 	}
 	
 	/**
 	 * Gets the text of this crash report, without marking a specific reader.
 	 * @return The text.
 	 */
+	@Override
 	public String getAsTextNoMark() {
 		StringBuilder text = new StringBuilder();
 		
@@ -93,6 +76,10 @@ public class ThrowableReport implements ConfigurationSerializable {
 			
 		}
 		
+		if (thrown instanceof java.lang.Error) {
+			text.append("This was rethrown due to being an instance of java.lang.error.\n");
+		}
+		
 		text.append("End of report.");
 		
 		return text.toString();
@@ -100,124 +87,14 @@ public class ThrowableReport implements ConfigurationSerializable {
 	}
 	
 	/**
-	 * Gets the title of the crash report, shortened to fit within sizeLimit.
-	 * If it does not fit, it has the text "..." put on the end.
-	 * @param sizeLimit The size that the title must fit in.
+	 * Gets the title of the CrashReport, which is "Throwable caught: " + thrown.toString().
 	 * @return The title.
 	 */
-	public String getTitle(int sizeLimit) {
-		return getTitle(sizeLimit, "...");
-	}
-	
-	/**
-	 * Gets the title of the crash report, shortened to fit within sizeLimit.
-	 * If it does not fit, it has trailOff's value put on the end.
-	 * @param sizeLimit
-	 * @param trailOff
-	 * @return The title.
-	 * @throws IllegalArgumentException if trailOff is longer than sizeLimit.
-	 */
-	public String getTitle(int sizeLimit, String trailOff) {
-		///The raw string version, which holds the original title.
-		String rawString = getTitle();
-		
-		//This probably won't happen, but if it does there will be issues.
-		if (sizeLimit < trailOff.length()) {
-			SkyblockExtension.inst().getLogger().severe("Size limit was");
-			throw new IllegalArgumentException("sizeLimit (" + sizeLimit + 
-					")is too small for trailOff (" + trailOff.length() + "to fit!");
-		}
-		
-		if (rawString.length() <= sizeLimit) {
-			return rawString;
-		} else {
-			return rawString.substring(0, sizeLimit - trailOff.length()) + trailOff;
-		}
-	}
-	
-	/**
-	 * Gets the title of the CrashReport.
-	 * @return The title.
-	 */
+	@Override
 	public String getTitle() {
-		return thrown.toString();
+		return "Throwable caught: " + thrown.toString();
 	}
 	
-	/**
-	 * Prepended to headers of messages not yet read by anyone.
-	 */
-	static final String NEVERREAD = "§c";
-	/**
-	 * Prepended to headers of messages read by someone, but not the current player.
-	 */
-	static final String READBYOTHERS = "§e";
-	/**
-	 * Prepended to headers of messages read by the current player.
-	 */
-	static final String READBYME = "§a";
-	
-	/**
-	 * Gets the title for a specific player, providing the read/unread/other
-	 * coloration.
-	 * @param player The player.
-	 * @return The title for said player.
-	 */
-	public String getTitleFor(String player) {
-		return getTitleFor(player, ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH, "...");
-	}
-	
-	/**
-	 * Gets the title for a specific player, providing the read/unread/other
-	 * coloration, and within the specified sizelimit.
-	 * @param player The player.
-	 * @param sizeLimit The sizelimit.
-	 * @return The title for said player.
-	 */
-	public String getTitleFor(String player, int sizeLimit) {
-		return getTitleFor(player, sizeLimit, "...");
-	}
-	
-	/**
-	 * Gets the title for a specific player, providing the read/unread/other
-	 * coloration, and within the specified sizelimit, using trailOff at the
-	 * end of the string if it goes out of bounds.
-	 * @param player The player.
-	 * @param sizeLimit The sizelimit.
-	 * @param trailOff The trail off.
-	 * @return The title for said player.
-	 */
-	public String getTitleFor(String player, int sizeLimit, String trailOff) {
-		String rawTitle = getTitle(sizeLimit, trailOff);
-		String finalTitle;
-		if (readers.isEmpty()) {
-			finalTitle = NEVERREAD + rawTitle;
-		} else if (readers.contains(player)) {
-			finalTitle = READBYME + rawTitle;
-		} else {
-			finalTitle = READBYOTHERS + rawTitle;
-		}
-		return finalTitle;
-	}
-	
-	/**
-	 * Gets the number of pages this crash report takes up.
-	 * @return The number of pages.
-	 */
-	public int getNumberOfPages() {
-		return getNumberOfPages(ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT);
-	}
-	
-	/**
-	 * Gets the number of pages this crash report takes up.
-	 * @param pageHeight The number of lines a page is.
-	 * @return The number of pages.
-	 */
-	public int getNumberOfPages(int pageHeight) {
-		String[] paginatedText = ChatPaginator.wordWrap(this.getAsTextNoMark(), 
-				ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
-		return (int) Math.ceil(paginatedText.length / pageHeight);
-	}
-
 	/**
 	 * Serializes the crashReport for configuration saving.
 	 */
@@ -270,7 +147,7 @@ public class ThrowableReport implements ConfigurationSerializable {
 	 * Deserializes the crashReport for configuration loading.
 	 */
 	@SuppressWarnings("unchecked")
-	public CrashReport(Map<String, Object> map) {
+	public ThrowableReport(Map<String, Object> map) {
 		SkyblockExtension.inst().getLogger().info("Creating crash report from map.");
 		try {
 			//Create thrown.
@@ -326,7 +203,7 @@ public class ThrowableReport implements ConfigurationSerializable {
 	 * @return
 	 */
 	public static CrashReport deserialize(Map<String, Object> map) {
-		return new CrashReport(map);
+		return new ThrowableReport(map);
 	}
 	
 	/**
@@ -335,6 +212,6 @@ public class ThrowableReport implements ConfigurationSerializable {
 	 * @return
 	 */
 	public static CrashReport valueOf(Map<String, Object> map) {
-		return new CrashReport(map);
+		return new ThrowableReport(map);
 	}
 }
