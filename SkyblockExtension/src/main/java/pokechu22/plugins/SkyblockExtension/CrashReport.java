@@ -1,10 +1,14 @@
 package pokechu22.plugins.SkyblockExtension;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.util.ChatPaginator;
 
 /**
@@ -14,7 +18,15 @@ import org.bukkit.util.ChatPaginator;
  * @author Pokechu22
  *
  */
-public class CrashReport {
+public class CrashReport implements ConfigurationSerializable {
+	
+	/**
+	 * Static block, that labels this as serializable.
+	 */
+	static {
+		ConfigurationSerialization.registerClass(CrashReport.class);
+	}
+	
 	//From the constructor.
 	public Throwable thrown;
 	public CommandSender sender;
@@ -204,5 +216,46 @@ public class CrashReport {
 		String[] paginatedText = ChatPaginator.wordWrap(this.getAsTextNoMark(), 
 				ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
 		return (int) Math.ceil(paginatedText.length / pageHeight);
+	}
+
+	/**
+	 * Serializes the crashReport for configuration saving.
+	 */
+	@Override
+	public Map<String, Object> serialize() {
+		SkyblockExtension.inst().getLogger().info("Saving crash report to map.");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("Thrown", this.thrown);
+		map.put("Sender", this.sender);
+		map.put("Cmd", this.cmd);
+		map.put("Label", this.label);
+		map.put("Args", this.args);
+		map.put("LoggedDate", this.loggedDate);
+		map.put("Readers", this.readers);
+		
+		return map;
+	}
+	
+	/**
+	 * Deserializes the crashReport for configuration loading.
+	 */
+	@SuppressWarnings("unchecked")
+	public CrashReport(Map<String, Object> map) {
+		SkyblockExtension.inst().getLogger().info("Creating crash report from map.");
+		try {
+			this.thrown = (Throwable) map.get("Thrown");
+			this.sender = (CommandSender) map.get("Sender");
+			this.cmd = (Command) map.get("Cmd");
+			this.label = (String) map.get("Label");
+			this.args = (String[]) map.get("Args");
+			this.loggedDate = (Date) map.get("LoggedDate");
+			this.readers = (HashSet<String>) map.get("Readers");
+		} catch (ClassCastException e) {
+			//TODO
+			SkyblockExtension.inst().getLogger().info("Failed to create.");
+			return;
+		}
+		SkyblockExtension.inst().getLogger().info("Succeeded!");
 	}
 }
