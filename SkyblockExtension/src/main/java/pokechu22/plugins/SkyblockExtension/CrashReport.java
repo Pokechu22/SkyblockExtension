@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.ChatPaginator;
 
 /**
@@ -21,19 +21,14 @@ import org.bukkit.util.ChatPaginator;
  * @author Pokechu22
  *
  */
+
+@SerializableAs("CrashReport")
 public class CrashReport implements ConfigurationSerializable {
-	
-	/**
-	 * Static block, that labels this as serializable.
-	 */
-	static {
-		ConfigurationSerialization.registerClass(CrashReport.class);
-	}
 	
 	//From the constructor.
 	public Throwable thrown;
 	public CommandSender sender;
-	public Command cmd;
+	public String cmd;
 	public String label;
 	public String[] args;
 	
@@ -53,7 +48,7 @@ public class CrashReport implements ConfigurationSerializable {
 	public CrashReport(Throwable thrown, CommandSender sender, Command cmd, String label, String[] args) {
 		this.thrown = thrown;
 		this.sender = sender;
-		this.cmd = cmd;
+		this.cmd = cmd.toString();
 		this.label = label;
 		this.args = args;
 		
@@ -82,7 +77,8 @@ public class CrashReport implements ConfigurationSerializable {
 		text.append(thrown.toString() + "\n");
 		text.append("Occured on: " + loggedDate.toString() + "\n"); 
 		text.append("Sender: " + sender.getName() + "\n"); 
-		text.append("Command: " + cmd.getName() + "(Label: " + label + ")\n");
+		text.append("Command: " + cmd + "\n");
+		text.append("(Label: " + label + ")\n");
 		text.append("Arguments: Length = " + args.length + "\n"); 
 		//Add each argument.
 		for (int i = 0; i < args.length; i++) {
@@ -297,7 +293,7 @@ public class CrashReport implements ConfigurationSerializable {
 			
 			this.thrown = t;
 			this.sender = (CommandSender) map.get("Sender");
-			this.cmd = (Command) map.get("Cmd");
+			this.cmd = (String) map.get("Cmd");
 			this.label = (String) map.get("Label");
 			this.args = (String[]) map.get("Args");
 			this.loggedDate = (Date) map.get("LoggedDate");
@@ -311,5 +307,23 @@ public class CrashReport implements ConfigurationSerializable {
 		}
 		
 		SkyblockExtension.inst().getLogger().info("Succeeded!");
+	}
+	
+	/**
+	 * Deserialization; calls the {@link #CrashReport(Map)} constructor.
+	 * @param map
+	 * @return
+	 */
+	public static CrashReport deserialize(Map<String, Object> map) {
+		return new CrashReport(map);
+	}
+	
+	/**
+	 * Deserialization; calls the {@link #CrashReport(Map)} constructor.
+	 * @param map
+	 * @return
+	 */
+	public static CrashReport valueOf(Map<String, Object> map) {
+		return new CrashReport(map);
 	}
 }

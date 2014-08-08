@@ -6,6 +6,7 @@ import pokechu22.plugins.SkyblockExtension.commands.*;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -35,6 +36,9 @@ public class SkyblockExtension extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		//In 
+		ConfigurationSerialization.registerClass(CrashReport.class, "CrashReport");
+		
 		this.saveDefaultConfig();
 		
 		inst = this;
