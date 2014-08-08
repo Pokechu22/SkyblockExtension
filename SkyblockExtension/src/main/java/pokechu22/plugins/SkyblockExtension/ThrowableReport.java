@@ -23,7 +23,7 @@ import org.bukkit.util.ChatPaginator;
  */
 
 @SerializableAs("CrashReport")
-public class CrashReport implements ConfigurationSerializable {
+public class ThrowableReport implements ConfigurationSerializable {
 	
 	//From the constructor.
 	public Throwable thrown;
