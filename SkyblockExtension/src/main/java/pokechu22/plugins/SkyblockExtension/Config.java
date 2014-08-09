@@ -38,7 +38,7 @@ public class Config {
 			getLogger().severe("Failed to load previous error messages.  ");
 			List<CrashReport> errors  = new ArrayList<CrashReport>();
 			//TODO: The below method is the exact reason for the interface.
-			errors.add(new ThrowableReport(e, null, null, null, null));  
+			errors.add(new ConfigurationErrorReport(e, "CrashReports", "CrashesConfig", false));  
 			ErrorHandler.errors = errors;
 		}
 		

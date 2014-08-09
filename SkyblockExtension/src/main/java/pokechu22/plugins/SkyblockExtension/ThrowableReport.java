@@ -25,7 +25,10 @@ public class ThrowableReport extends CrashReport {
 	
 	//From the constructor.
 	public Throwable thrown;
-	public CommandSender sender;
+	public String senderClass;
+	public String senderName;
+	public boolean senderIsOp;
+	//public CommandSender sender; //TODO: This causes errors when player offline.
 	public String cmd;
 	public String label;
 	public String[] args;
@@ -41,7 +44,10 @@ public class ThrowableReport extends CrashReport {
 	public ThrowableReport(Throwable thrown, CommandSender sender, Command cmd, 
 			String label, String[] args) {
 		this.thrown = thrown;
-		this.sender = sender;
+		this.senderClass = sender.getClass().getName();
+		this.senderName = sender.getName();
+		this.senderIsOp = sender.isOp();
+		//this.sender = sender;
 		this.cmd = cmd.toString();
 		this.label = label;
 		this.args = args;
@@ -59,7 +65,18 @@ public class ThrowableReport extends CrashReport {
 		
 		text.append(thrown.toString() + "\n");
 		text.append("Occured on: " + loggedDate.toString() + "\n"); 
-		text.append("Sender: " + sender.getName() + "\n"); 
+		text.append("Sender: " + senderName + (senderIsOp ? " (Op)" : "") + "\n");
+		text.append("Sender is ");
+		if (senderClass.startsWith("a") || 
+				senderClass.startsWith("e") || 
+				senderClass.startsWith("i") || 
+				senderClass.startsWith("o") || 
+				senderClass.startsWith("u")) {
+			text.append("a ");
+		} else {
+			text.append("an ");
+		}
+		text.append(senderClass + "\n");
 		text.append("Command: " + cmd + "\n");
 		text.append("(Label: " + label + ")\n");
 		text.append("Arguments: Length = " + args.length + "\n"); 
@@ -133,7 +150,9 @@ public class ThrowableReport extends CrashReport {
 		
 		//The casts are useless but show the type.
 		map.put("Thrown", (HashMap<String, Object>) thrownMap);
-		map.put("Sender", (CommandSender) this.sender);
+		map.put("SenderClass", (String) senderClass);
+		map.put("SenderName", (String) senderName);
+		map.put("SenderIsOp", (boolean) senderIsOp);
 		map.put("Cmd", (String) this.cmd);
 		map.put("Label", (String) this.label);
 		map.put("Args", (ArrayList<String>) argsList);
@@ -180,7 +199,10 @@ public class ThrowableReport extends CrashReport {
 			String[] argsArray = argsList.toArray(new String[argsList.size()]);
 			
 			this.thrown = t;
-			this.sender = (CommandSender) map.get("Sender");
+			this.senderName = (String) map.get("SenderName");
+			this.senderClass = (String) map.get("SenderClass");
+			this.senderIsOp = (boolean) map.get("SenderIsOp");
+			//this.sender = (CommandSender) map.get("Sender");
 			this.cmd = (String) map.get("Cmd");
 			this.label = (String) map.get("Label");
 			this.args = argsArray;

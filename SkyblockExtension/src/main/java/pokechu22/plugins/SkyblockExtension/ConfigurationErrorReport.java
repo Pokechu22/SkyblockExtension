@@ -3,11 +3,14 @@ package pokechu22.plugins.SkyblockExtension;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 
 
 import java.util.logging.Level;
+
+
 
 
 
@@ -320,6 +323,8 @@ public class ConfigurationErrorReport extends CrashReport {
 		
 		map.put("LoggedDate", this.loggedDate);
 		
+		map.put("Readers", (HashSet<String>) this.readers);
+		
 		return map;
 	}
 	
@@ -329,10 +334,10 @@ public class ConfigurationErrorReport extends CrashReport {
 	@SuppressWarnings("unchecked")
 	public ConfigurationErrorReport(Map<String, Object> map) {
 		try {
-			this.hasError = (Boolean) map.get("HasError");
+			this.hasError = (boolean) map.get("HasError");
 			if (this.hasError) {
 				//Create error.
-				HashMap<String,Object> errorMap = (HashMap<String, Object>) map.get("error");
+				HashMap<String,Object> errorMap = (HashMap<String, Object>) map.get("Error");
 				String errorClass = (String) errorMap.get("Class");
 				String errorMessage = (String) errorMap.get("Message");
 				
@@ -380,6 +385,8 @@ public class ConfigurationErrorReport extends CrashReport {
 			this.saving = (boolean) map.get("Saving");
 			
 			this.loggedDate = (Date) map.get("LoggedDate");
+			
+			this.readers = (HashSet<String>) map.get("Readers");
 			
 		} catch (Exception e) {
 			SkyblockExtension.inst().getLogger().warning("Failed to create " + 
