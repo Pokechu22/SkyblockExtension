@@ -50,6 +50,8 @@ public class SkyblockExtension extends JavaPlugin {
 				"CrashReport");
 		ConfigurationSerialization.registerClass(ThrowableReport.class,
 				"ThrowableReport");
+		ConfigurationSerialization.registerClass(ThrowableReport.class,
+				"ConfigurationErrorReport");
 
 		this.saveDefaultVersionsOfAllConfigs();
 

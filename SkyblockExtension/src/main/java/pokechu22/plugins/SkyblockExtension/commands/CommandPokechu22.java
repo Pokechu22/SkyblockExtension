@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -32,6 +33,97 @@ public class CommandPokechu22 {
 			switch (args[0].toLowerCase()) {
 			case "crashtest": {
 				throw new RuntimeException("Test"); //TODO Test code.
+			}
+			case "configtest": { //TODO: this is debug code.
+				//Test ALL the constructors!
+				sender.sendMessage("Testing all configurationerrorreport constructors.");
+				sender.sendMessage("Check /pokechu22 crashes list.");
+				SkyblockExtension.inst().getLogger().warning(sender.getName() + 
+						" just tested ConfigurationErrorReports...");
+				//With loading...
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(),
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								false));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								false));
+				//And with saving.
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(),
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								true));
+				ErrorHandler.logError(
+						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+								new Exception("Test").fillInStackTrace(), 
+								"Key.Example", 
+								SkyblockExtension.inst().getConfig().getName(), 
+								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+								true));
+				
+				return;
 			}
 			case "crashes": {
 				Crashes(sender,cmd,label,args);
