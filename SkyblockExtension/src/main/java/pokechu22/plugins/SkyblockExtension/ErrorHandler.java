@@ -112,4 +112,15 @@ public class ErrorHandler {
 	public static int getLastCrashID() {
 		return getNumberOfCrashes() - 1;
 	}
+	
+	/**
+	 * Removes all previous crashes.
+	 * @param sender
+	 */
+	public static void resetAllCrashes(CommandSender sender) {
+		errors.clear();
+		SkyblockExtension.inst().getLogger().info(
+				"All crashes reset by " + sender.getName() + ".");
+		sender.sendMessage("All crashes successfully reset.");
+	}
 }

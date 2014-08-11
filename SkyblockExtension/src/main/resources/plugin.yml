@@ -52,6 +52,14 @@ permissions:
   sbe.debug.crashes.show: 
     description: Allows a viewing of crashes.
     default: op
+    
+  sbe.debug.crashes.remove: 
+    description: Allows a player to remove crashes.
+    default: op
+  
+  sbe.debug.crashes.reset:
+    description: Allows a player to reset ALL previous crashes.
+    default: op
   
   sbe.debug.test.*: 
     description: Gives access to all SkyblockExtension debug tests.

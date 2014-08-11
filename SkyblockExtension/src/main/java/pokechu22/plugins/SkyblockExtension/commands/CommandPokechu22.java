@@ -60,147 +60,186 @@ public class CommandPokechu22 {
 		if (args.length == 1) {
 			sender.sendMessage("Usage: /" + label + " crashes help");
 			return;
-		} else {
-			if (args[1].equalsIgnoreCase("list")) {
-				if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.list")) {
-					if (args.length == 2) {
-						ErrorHandler.listCrashes(sender, 0);
-						return;
-					} else if (args.length == 3){
-						int page;
-						
-						try {
-							page = Integer.parseInt(args[2]);
-						} catch (NumberFormatException e) {
-							sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
-									", expected Integer).");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (page < 0) {
-							sender.sendMessage("§cPage cannot be negative.  (Got " + args[2] + ")");
-							return;
-						}
-						
-						if (page == 0) {
-							sender.sendMessage("§cPages start at 1.");
-							return;
-						}
-						
-						int firstCrash = (page - 1) * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
-						
-						ErrorHandler.listCrashes(sender, firstCrash);
-						return;
-					} else {
-						sender.sendMessage("§cError: Too many parameters.");
+		}
+		if (args[1].equalsIgnoreCase("list")) {
+			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.list")) {
+				if (args.length == 2) {
+					ErrorHandler.listCrashes(sender, 0);
+					return;
+				} else if (args.length == 3){
+					int page;
+					
+					try {
+						page = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
+								", expected Integer).");
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
+					
+					if (page < 0) {
+						sender.sendMessage("§cPage cannot be negative.  (Got " + args[2] + ")");
+						return;
+					}
+					
+					if (page == 0) {
+						sender.sendMessage("§cPages start at 1.");
+						return;
+					}
+					
+					int firstCrash = (page - 1) * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
+					
+					ErrorHandler.listCrashes(sender, firstCrash);
+					return;
+				} else {
+					sender.sendMessage("§cError: Too many parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
 				}
-				return;
 			}
-			if (args[1].equalsIgnoreCase("show")) {
-				if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.show")) {
-					if (args.length == 2) {
-						sender.sendMessage("§cError: Too few parameters.");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					} else if (args.length == 3) {
-						int CrashID;
-						
-						try {
-							CrashID = Integer.parseInt(args[2]);
-						} catch (NumberFormatException e) {
-							sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
-									", expected Integer).");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (ErrorHandler.getNumberOfCrashes() == 0) {
-							sender.sendMessage("§cThere are no crashes to show!");
-							return;
-						}
-						
-						if (CrashID > ErrorHandler.getLastCrashID()) {
-							sender.sendMessage("§cCrash ID is beyond the maximum!");
-							sender.sendMessage("§cMaximum ID is currently " + 
-									ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (CrashID < 0) {
-							sender.sendMessage("§cCrash ID not allowed to be negative!");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						ErrorHandler.getCrashInfo(sender, CrashID, 1);
-						return;
-					} else if (args.length == 4) {
-						int CrashID;
-						int page;
-						
-						try {
-							CrashID = Integer.parseInt(args[2]);
-						} catch (NumberFormatException e) {
-							sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
-									", expected Integer).");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (ErrorHandler.getNumberOfCrashes() == 0) {
-							sender.sendMessage("§cThere are no crashes to show!");
-							return;
-						}
-						
-						if (CrashID > ErrorHandler.getLastCrashID()) {
-							sender.sendMessage("§cCrash ID is beyond the maximum!");
-							sender.sendMessage("§cMaximum ID is currently " + 
-									ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (CrashID < 0) {
-							sender.sendMessage("§cCrash ID not allowed to be negative!");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						try {
-							page = Integer.parseInt(args[3]);
-						} catch (NumberFormatException e) {
-							sender.sendMessage("§cFailed to parse page number (Got " + args[3] + 
-									", expected Integer).");
-							sender.sendMessage("For usage, do /" + label + " crashes help");
-							return;
-						}
-						
-						if (page < 0) {
-							sender.sendMessage("§cPage number cannot be negative! (Got " + 
-									args[3] + ")");
-							return;
-						}
-						
-						if (page == 0) {
-							sender.sendMessage("§cPage numbers start at one.");
-							return;
-						}
-						
-						ErrorHandler.getCrashInfo(sender, CrashID, page);
-						return;
-					} else {
-						sender.sendMessage("§cError: Too many parameters.");
+			return;
+		}
+		if (args[1].equalsIgnoreCase("show")) {
+			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.show")) {
+				if (args.length == 2) {
+					sender.sendMessage("§cError: Too few parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				} else if (args.length == 3) {
+					int CrashID;
+					
+					try {
+						CrashID = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+								", expected Integer).");
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
+					
+					if (ErrorHandler.getNumberOfCrashes() == 0) {
+						sender.sendMessage("§cThere are no crashes to show!");
+						return;
+					}
+					
+					if (CrashID > ErrorHandler.getLastCrashID()) {
+						sender.sendMessage("§cCrash ID is beyond the maximum!");
+						sender.sendMessage("§cMaximum ID is currently " + 
+								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (CrashID < 0) {
+						sender.sendMessage("§cCrash ID not allowed to be negative!");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					ErrorHandler.getCrashInfo(sender, CrashID, 1);
+					return;
+				} else if (args.length == 4) {
+					int CrashID;
+					int page;
+					
+					try {
+						CrashID = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (ErrorHandler.getNumberOfCrashes() == 0) {
+						sender.sendMessage("§cThere are no crashes to show!");
+						return;
+					}
+					
+					if (CrashID > ErrorHandler.getLastCrashID()) {
+						sender.sendMessage("§cCrash ID is beyond the maximum!");
+						sender.sendMessage("§cMaximum ID is currently " + 
+								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (CrashID < 0) {
+						sender.sendMessage("§cCrash ID not allowed to be negative!");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					try {
+						page = Integer.parseInt(args[3]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cFailed to parse page number (Got " + args[3] + 
+								", expected Integer).");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					}
+					
+					if (page < 0) {
+						sender.sendMessage("§cPage number cannot be negative! (Got " + 
+								args[3] + ")");
+						return;
+					}
+					
+					if (page == 0) {
+						sender.sendMessage("§cPage numbers start at one.");
+						return;
+					}
+					
+					ErrorHandler.getCrashInfo(sender, CrashID, page);
+					return;
+				} else {
+					sender.sendMessage("§cError: Too many parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("remove")) {
+			//TODO
+			sender.sendMessage("§cNYI.");
+			return;
+		}
+		if (args[1].equalsIgnoreCase("reset")) {
+			//There's some checking here involving string hash codes.  It forces confirmation.
+			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.reset")) {
+				if (args.length >= 4) {
+					sender.sendMessage("§cError: Too many parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				if (args.length == 2) {
+					sender.sendMessage("§c§lAre you sure you wish to reset all previous crash logging?");
+					sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+					return;
+				}
+				if (args.length == 3) {
+					int confirmationCode;
+					try {
+						confirmationCode = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						//We can assume that if it is not an integer, it doesn't match an integer.
+						sender.sendMessage("§cConfirmation code does not match.");
+						sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+						return;
+					}
+					if (confirmationCode != sender.getName().hashCode()) {
+						sender.sendMessage("§cConfirmation code does not match.");
+						sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+						return;
+					}
+					ErrorHandler.resetAllCrashes(sender);
+					return;
 				}
 				return;
 			}
+			return;
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
 		return;
