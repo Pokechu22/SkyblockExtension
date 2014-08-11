@@ -40,6 +40,11 @@ public class CommandPokechu22 {
 				Crashes(sender,cmd,label,args);
 				return;
 			}
+			case "logo": {
+				//This is pointless, but is ported from the old version.
+				ShowLogo(sender);
+				return;
+			}
 			}
 		}
 		sender.sendMessage("Usage: /" + label + " help");
@@ -407,5 +412,30 @@ public class CommandPokechu22 {
 			}
 			return;
 		}
+	}
+	
+	/**
+	 * The text for the pointless logo.
+	 */
+	private static final String[] logoText = {
+		"§f\u2588§6\u2588§6\u2588§6\u2588§6\u2588§6\u2588§6\u2588§f\u2588§f\u2588",
+		"§f\u2588§6\u2588§f\u2588§2\u2588§2\u2588§2\u2588§6\u2588§2\u2588§2\u2588",
+		"§4\u2588§4\u2588§4\u2588§2\u2588§4\u2588§4\u2588§6\u2588§f\u2588§2\u2588",
+		"§4\u2588§6\u2588§3\u2588§3\u2588§3\u2588§4\u2588§3\u2588§3\u2588§2\u2588",
+		"§4\u2588§6\u2588§3\u2588§2\u2588§f\u2588§4\u2588§6\u2588§3\u2588§2\u2588",
+		"§4\u2588§6\u2588§6\u2588§2\u2588§6\u2588§6\u2588§6\u2588§3\u2588§2\u2588",
+		"§4\u2588§f\u2588§3\u2588§2\u2588§2\u2588§4\u2588§2\u2588§2\u2588§2\u2588",
+		"§4\u2588§4\u2588§3\u2588§4\u2588§4\u2588§4\u2588§f\u2588§3\u2588§f\u2588",
+		"§f\u2588§f\u2588§3\u2588§3\u2588§3\u2588§3\u2588§3\u2588§3\u2588§f\u2588",
+		"§0-§8=§7[§aPOKECHU22§7]§8=§0-"
+	};
+	
+	/**
+	 * Totally pointless logo dummy command.
+	 * 
+	 * @param sender The CommandSender to show the logo to.
+	 */
+	private static void ShowLogo(CommandSender sender) {
+		sender.sendMessage(logoText);
 	}
 }
