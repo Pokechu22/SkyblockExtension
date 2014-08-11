@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
@@ -31,99 +32,109 @@ public class CommandPokechu22 {
 			return;
 		} else {
 			switch (args[0].toLowerCase()) {
-			case "crashtest": {
-				throw new RuntimeException("Test"); //TODO Test code.
+			case "throwablereporttest": {
+				if (PermissionHandler.HasPermision(sender, "sbe.debug.test.ThrowableReport")) {
+					throw new RuntimeException("Test"); //TODO Test code.
+				} else {
+					PermissionHandler.SendPermisionError(sender, "sbe.debug.test.ThrowableReport");
+					return;
+				}
 			}
 			case "configtest": { //TODO: this is debug code.
-				//Test ALL the constructors!
-				sender.sendMessage("Testing all configurationerrorreport constructors.");
-				sender.sendMessage("Check /pokechu22 crashes list.");
-				SkyblockExtension.inst().getLogger().warning(sender.getName() + 
-						" just tested ConfigurationErrorReports...");
-				//With loading...
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(),
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				//And with saving.
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(),
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-				
-				return;
+				if (PermissionHandler.HasPermision(sender,"sbe.debug.test.ConfigErrorReport")) {
+					//Test ALL the constructors!
+					sender.sendMessage("Testing all configurationerrorreport constructors.");
+					sender.sendMessage("Check /pokechu22 crashes list.");
+					SkyblockExtension.inst().getLogger().warning(sender.getName() + 
+							" just tested ConfigurationErrorReports...");
+					//With loading...
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(),
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									false));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									false));
+					//And with saving.
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(),
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									true));
+					ErrorHandler.logError(
+							new pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport(
+									new Exception("Test").fillInStackTrace(), 
+									"Key.Example", 
+									SkyblockExtension.inst().getConfig().getName(), 
+									"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
+									true));
+					
+					return;
+				} else {
+					PermissionHandler.SendPermisionError(sender, "sbe.debug.test.ConfigErrorReport");
+					return;
+				}
 			}
 			case "crashes": {
 				Crashes(sender,cmd,label,args);
@@ -151,139 +162,148 @@ public class CommandPokechu22 {
 			return;
 		} else {
 			if (args[1].equalsIgnoreCase("list")) {
-				if (args.length == 2) {
-					ErrorHandler.listCrashes(sender, 0);
-					return;
-				} else if (args.length == 3){
-					int page;
-					
-					try {
-						page = Integer.parseInt(args[2]);
-					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
-								", expected Integer).");
+				if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.list")) {
+					if (args.length == 2) {
+						ErrorHandler.listCrashes(sender, 0);
+						return;
+					} else if (args.length == 3){
+						int page;
+						
+						try {
+							page = Integer.parseInt(args[2]);
+						} catch (NumberFormatException e) {
+							sender.sendMessage("§cFailed to parse page number (Got " + args[2] + 
+									", expected Integer).");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (page < 0) {
+							sender.sendMessage("§cPage cannot be negative.  (Got " + args[2] + ")");
+							return;
+						}
+						
+						if (page == 0) {
+							sender.sendMessage("§cPages start at 1.");
+							return;
+						}
+						
+						int firstCrash = (page - 1) * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
+						
+						ErrorHandler.listCrashes(sender, firstCrash);
+						return;
+					} else {
+						sender.sendMessage("§cError: Too many parameters.");
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
-					
-					if (page < 0) {
-						sender.sendMessage("§cPage cannot be negative.  (Got " + args[2] + ")");
-						return;
-					}
-					
-					if (page == 0) {
-						sender.sendMessage("§cPages start at 1.");
-						return;
-					}
-					
-					int firstCrash = (page - 1) * (ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2);
-					
-					ErrorHandler.listCrashes(sender, firstCrash);
-					return;
 				} else {
-					sender.sendMessage("§cError: Too many parameters.");
-					sender.sendMessage("For usage, do /" + label + " crashes help");
+					PermissionHandler.SendPermisionError(sender, "sbe.debug.crashes.list");
 					return;
 				}
 			}
 			if (args[1].equalsIgnoreCase("show")) {
-				if (args.length == 2) {
-					sender.sendMessage("§cError: Too few parameters.");
-					sender.sendMessage("For usage, do /" + label + " crashes help");
-					return;
-				} else if (args.length == 3) {
-					int CrashID;
-					
-					try {
-						CrashID = Integer.parseInt(args[2]);
-					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
-								", expected Integer).");
+				if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.show")) {
+					if (args.length == 2) {
+						sender.sendMessage("§cError: Too few parameters.");
+						sender.sendMessage("For usage, do /" + label + " crashes help");
+						return;
+					} else if (args.length == 3) {
+						int CrashID;
+						
+						try {
+							CrashID = Integer.parseInt(args[2]);
+						} catch (NumberFormatException e) {
+							sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+									", expected Integer).");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (ErrorHandler.getNumberOfCrashes() == 0) {
+							sender.sendMessage("§cThere are no crashes to show!");
+							return;
+						}
+						
+						if (CrashID > ErrorHandler.getLastCrashID()) {
+							sender.sendMessage("§cCrash ID is beyond the maximum!");
+							sender.sendMessage("§cMaximum ID is currently " + 
+									ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (CrashID < 0) {
+							sender.sendMessage("§cCrash ID not allowed to be negative!");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						ErrorHandler.getCrashInfo(sender, CrashID, 1);
+						return;
+					} else if (args.length == 4) {
+						int CrashID;
+						int page;
+						
+						try {
+							CrashID = Integer.parseInt(args[2]);
+						} catch (NumberFormatException e) {
+							sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+									", expected Integer).");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (ErrorHandler.getNumberOfCrashes() == 0) {
+							sender.sendMessage("§cThere are no crashes to show!");
+							return;
+						}
+						
+						if (CrashID > ErrorHandler.getLastCrashID()) {
+							sender.sendMessage("§cCrash ID is beyond the maximum!");
+							sender.sendMessage("§cMaximum ID is currently " + 
+									ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (CrashID < 0) {
+							sender.sendMessage("§cCrash ID not allowed to be negative!");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						try {
+							page = Integer.parseInt(args[3]);
+						} catch (NumberFormatException e) {
+							sender.sendMessage("§cFailed to parse page number (Got " + args[3] + 
+									", expected Integer).");
+							sender.sendMessage("For usage, do /" + label + " crashes help");
+							return;
+						}
+						
+						if (page < 0) {
+							sender.sendMessage("§cPage number cannot be negative! (Got " + 
+									args[3] + ")");
+							return;
+						}
+						
+						if (page == 0) {
+							sender.sendMessage("§cPage numbers start at one.");
+							return;
+						}
+						
+						ErrorHandler.getCrashInfo(sender, CrashID, page);
+						return;
+					} else {
+						sender.sendMessage("§cError: Too many parameters.");
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
-					
-					if (ErrorHandler.getNumberOfCrashes() == 0) {
-						sender.sendMessage("§cThere are no crashes to show!");
-						return;
-					}
-					
-					if (CrashID > ErrorHandler.getLastCrashID()) {
-						sender.sendMessage("§cCrash ID is beyond the maximum!");
-						sender.sendMessage("§cMaximum ID is currently " + 
-								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					if (CrashID < 0) {
-						sender.sendMessage("§cCrash ID not allowed to be negative!");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					ErrorHandler.getCrashInfo(sender, CrashID, 1);
-					return;
-				} else if (args.length == 4) {
-					int CrashID;
-					int page;
-					
-					try {
-						CrashID = Integer.parseInt(args[2]);
-					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
-								", expected Integer).");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					if (ErrorHandler.getNumberOfCrashes() == 0) {
-						sender.sendMessage("§cThere are no crashes to show!");
-						return;
-					}
-					
-					if (CrashID > ErrorHandler.getLastCrashID()) {
-						sender.sendMessage("§cCrash ID is beyond the maximum!");
-						sender.sendMessage("§cMaximum ID is currently " + 
-								ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					if (CrashID < 0) {
-						sender.sendMessage("§cCrash ID not allowed to be negative!");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					try {
-						page = Integer.parseInt(args[3]);
-					} catch (NumberFormatException e) {
-						sender.sendMessage("§cFailed to parse page number (Got " + args[3] + 
-								", expected Integer).");
-						sender.sendMessage("For usage, do /" + label + " crashes help");
-						return;
-					}
-					
-					if (page < 0) {
-						sender.sendMessage("§cPage number cannot be negative! (Got " + 
-								args[3] + ")");
-						return;
-					}
-					
-					if (page == 0) {
-						sender.sendMessage("§cPage numbers start at one.");
-						return;
-					}
-					
-					ErrorHandler.getCrashInfo(sender, CrashID, page);
-					return;
 				} else {
-					sender.sendMessage("§cError: Too many parameters.");
-					sender.sendMessage("For usage, do /" + label + " crashes help");
+					PermissionHandler.SendPermisionError(sender, "sbe.debug.crashes.show");
 					return;
 				}
-				
 			}
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");

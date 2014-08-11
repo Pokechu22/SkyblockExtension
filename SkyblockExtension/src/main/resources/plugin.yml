@@ -13,3 +13,57 @@ commands:
     description: General SkyblockExtension configuration
     usage: |
           /pokechu22 help
+
+permissions: 
+  sbe.*: 
+    description: Gives access to all SkyblockExtension commands and subpermisions.
+    children: 
+      #sbe.command.*: true
+      sbe.debug.*: true
+      #sbe.protection.*: true
+  
+  sbe.debug.*: 
+    description: Gives access to all SkyblockExtension debug functions.
+    children: 
+      sbe.debug.test.*: true
+      sbe.debug.crashes.*: true
+  
+  sbe.debug.crashes.*: 
+    description: Gives access to all subcommands of /pokechu22 crashes.
+    children: 
+      sbe.debug.crashes.read*: true
+      sbe.debug.crashes.write*: true
+  
+  sbe.debug.crashes.read*: 
+    description: Gives access to anything related to reading crash reports.
+    children: 
+      sbe.debug.crashes.list: true
+      sbe.debug.crashes.show: true
+  
+  sbe.debug.crashes.write*: 
+    description: Gives access to anything involving modifying existing crashes.
+    children: 
+      #
+  
+  sbe.debug.crashes.list: 
+    description: Allows listing of crashes.
+    default: op
+    
+  sbe.debug.crashes.show: 
+    description: Allows a viewing of crashes.
+    default: op
+  
+  sbe.debug.test.*: 
+    description: Gives access to all SkyblockExtension debug tests.
+    children: 
+      sbe.debug.test.ConfigErrorReport: true
+      sbe.debug.test.ThrowableReport: true
+  
+  sbe.debug.test.ThrowableReport: 
+    description: A test of ThrowableReports.
+    default: op
+    
+  sbe.debug.test.ConfigErrorReport: 
+    description: A test of ConfigurationErrorReports.
+    default: op
+  
