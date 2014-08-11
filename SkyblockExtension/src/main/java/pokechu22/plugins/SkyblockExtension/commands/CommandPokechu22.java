@@ -35,10 +35,8 @@ public class CommandPokechu22 {
 			case "throwablereporttest": {
 				if (PermissionHandler.HasPermision(sender, "sbe.debug.test.ThrowableReport")) {
 					throw new RuntimeException("Test"); //TODO Test code.
-				} else {
-					PermissionHandler.SendPermisionError(sender, "sbe.debug.test.ThrowableReport");
-					return;
 				}
+				return;
 			}
 			case "configtest": { //TODO: this is debug code.
 				if (PermissionHandler.HasPermision(sender,"sbe.debug.test.ConfigErrorReport")) {
@@ -131,10 +129,8 @@ public class CommandPokechu22 {
 									true));
 					
 					return;
-				} else {
-					PermissionHandler.SendPermisionError(sender, "sbe.debug.test.ConfigErrorReport");
-					return;
 				}
+				return;
 			}
 			case "crashes": {
 				Crashes(sender,cmd,label,args);
@@ -197,10 +193,8 @@ public class CommandPokechu22 {
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
-				} else {
-					PermissionHandler.SendPermisionError(sender, "sbe.debug.crashes.list");
-					return;
 				}
+				return;
 			}
 			if (args[1].equalsIgnoreCase("show")) {
 				if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.show")) {
@@ -300,10 +294,8 @@ public class CommandPokechu22 {
 						sender.sendMessage("For usage, do /" + label + " crashes help");
 						return;
 					}
-				} else {
-					PermissionHandler.SendPermisionError(sender, "sbe.debug.crashes.show");
-					return;
 				}
+				return;
 			}
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
