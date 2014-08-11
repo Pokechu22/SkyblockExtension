@@ -57,8 +57,9 @@ public class ErrorHandler {
 				continue;
 			}
 			CrashReport c = errors.get(currentIndex);
-			sender.sendMessage(c.getTitleFor(sender.getName(), 
-					ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH));
+			sender.sendMessage(currentIndex + ": " + c.getTitleFor(sender.getName(), 
+					ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - 
+					(Integer.toString(currentIndex).length() + 2)));
 			
 		}
 	}
@@ -111,6 +112,16 @@ public class ErrorHandler {
 	 */
 	public static int getLastCrashID() {
 		return getNumberOfCrashes() - 1;
+	}
+	
+	/**
+	 * Removes a single crash. <br>
+	 * Will not attempt to check if the crash is in-bounds.
+	 * 
+	 * @param CrashID The crash to remove.
+	 */
+	public static void removeCrash(int CrashID) {
+		errors.remove(CrashID);
 	}
 	
 	/**

@@ -202,8 +202,56 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("remove")) {
-			//TODO
-			sender.sendMessage("§cNYI.");
+			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.remove")) {
+				if (args.length <= 2) {
+					sender.sendMessage("§cError: Too few parameters.  ");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				if (args.length >= 4) {
+					sender.sendMessage("§cError: Too many parameters.");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				//Args.length can be assumed to be 3.
+				
+				int CrashID;
+				
+				try {
+					CrashID = Integer.parseInt(args[2]);
+				} catch (NumberFormatException e) {
+					sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+							", expected Integer).");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				
+				if (ErrorHandler.getNumberOfCrashes() == 0) {
+					sender.sendMessage("§cThere are no crashes to remove!");
+					return;
+				}
+				
+				if (CrashID > ErrorHandler.getLastCrashID()) {
+					sender.sendMessage("§cCrash ID is beyond the maximum!");
+					sender.sendMessage("§cMaximum ID is currently " + 
+							ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				
+				if (CrashID < 0) {
+					sender.sendMessage("§cCrash ID not allowed to be negative!");
+					sender.sendMessage("For usage, do /" + label + " crashes help");
+					return;
+				}
+				
+				ErrorHandler.removeCrash(CrashID);
+				
+				sender.sendMessage("§1NOTE: If you plan on removing aditional crashes, " 
+						+ "the numbers may have been shifted.");
+				
+				return;
+			}
 			return;
 		}
 		if (args[1].equalsIgnoreCase("reset")) {
