@@ -6,8 +6,12 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
@@ -120,12 +124,10 @@ public class CommandMultiChallenge {
 		
 		if (!canGetPlayerInfo(player)) {
 			sender.sendMessage("§4Internal error: You are not in the list of active players!");
-			sender.sendMessage("§4You cannot use this command.  You probably don't even exist.");
+			sender.sendMessage("§4You cannot use this command.  You might not even exist.");
 			sender.sendMessage("§4Try completing a challenge with /c and then trying again.");
 			return;
 		}
-		
-		PlayerInfo playerInfo = getPlayerInfo(player);
 		
 		if (args.length == 0) {
 			sendHelp(sender, commandLabel);
@@ -138,7 +140,7 @@ public class CommandMultiChallenge {
 				return;
 			}
 			sender.sendMessage("§cERROR: Too few parameters.");
-			sender.sendMessage("For syntax, do /" + commandLabel + "help");
+			sender.sendMessage("For syntax, do /" + commandLabel + " help");
 			return;
 		}
 		
@@ -169,6 +171,14 @@ public class CommandMultiChallenge {
 			}
 			
 			challengeName = args[1];
+			if (!challengeExists(player, challengeName)) {
+				sender.sendMessage("§cChallenge " + challengeName + " does not exist!");
+				return;
+			}
+			if (!isChallengeRepeatable(challengeName)) {
+				sender.sendMessage("§cChallenge " + challengeName + " is not repeatable!");
+				return;
+			}
 			if (!isChallengeAvailable(player, challengeName)) {
 				sender.sendMessage("§cYou have not unlocked " + challengeName + ".");
 				sender.sendMessage("§cTo be able to use a challenge with /" + commandLabel + 
@@ -176,12 +186,15 @@ public class CommandMultiChallenge {
 				return;
 			}
 			
+			//TODO test
+			sender.sendMessage("" + canCompleteChallenge(player, challengeName, repititions));
+			
 			return;
 		}
 		
 		if (args.length >= 3) {
 			sender.sendMessage("§cERROR: Too many parameters.");
-			sender.sendMessage("For syntax, do /" + commandLabel + "help");
+			sender.sendMessage("For syntax, do /" + commandLabel + " help");
 			return;
 		}
 	}
@@ -197,6 +210,17 @@ public class CommandMultiChallenge {
 	}
 	
 	/**
+	 * Checks if a challenge exists.
+	 * 
+	 * @param player
+	 * @param challengeName
+	 * @return
+	 */
+	public static boolean challengeExists(Player player, String challengeName) {
+		return getPlayerInfo(player).challengeExists(challengeName);
+	}
+	
+	/**
 	 * Checks if the specified challenge is available for use via this command.  
 	 * 
 	 * Please ensure that {@linkplain #canGetPlayerInfo(Player)} returns true
@@ -209,7 +233,32 @@ public class CommandMultiChallenge {
 	public static boolean isChallengeAvailable(Player player, String challengeName) {
 		PlayerInfo p = getPlayerInfo(player);
 		
-		return (p.checkChallenge(challengeName));
+		//Player has completed the challenge once & challenge is repeatable.
+		return (p.checkChallenge(challengeName) && isChallengeRepeatable(challengeName));
+	}
+	
+	/**
+	 * Checks if a challenge is repeatable.  It does this by reading the config.
+	 * This also returns false if it isn't a challenge that takes items.
+	 * 
+	 * @author talabrek
+	 * 
+	 * @param challengeName
+	 * @return
+	 */
+	public static boolean isChallengeRepeatable(String challengeName) {
+		//Will need to change getConfig() with getChallengeConfig() in the future
+		return (("onPlayer".equalsIgnoreCase(uSkyBlock
+				.getInstance()
+				.getConfig()
+				.getString(
+						"options.challenges.challengeList."
+								+ challengeName.toLowerCase() + ".type")) && uSkyBlock
+				.getInstance()
+				.getConfig()
+				.getBoolean(
+						"options.challenges.challengeList." + challengeName
+								+ ".repeatable")));
 	}
 	
 	/**
@@ -257,5 +306,176 @@ public class CommandMultiChallenge {
 	 */
 	protected static PlayerInfo getPlayerInfo(Player p) {
 		return uSkyBlock.getInstance().getActivePlayers().get(p.getName());
+	}
+	
+	/**
+	 * Can a player complete a challenge the required number of times?
+	 * 
+	 * Assumes challenge requires items.  Also uses deprecated constructors, 
+	 * because numeric ids.  Yay.
+	 * 
+	 * Based off of {@link uSkyBlock#hasRequired(Player, String, String)}.
+	 * 
+	 * @param player
+	 * @param challengeName
+	 * @param times
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static boolean canCompleteChallenge(Player player, String challengeName, int times) {
+		//Will look something like "1:4 44:1:64", where the first number is the numeric ID,
+		//and the last one is the quantity.  If it exists, the middle number is the data value.
+		String[] requiredItemsList = uSkyBlock
+				.getInstance()
+				.getConfig()
+				.getString(
+						"options.challenges.challengeList." + challengeName
+								+ ".requiredItems").split(" ");
+		int requiredItemID = 0;
+		int requiredAmount = 0;
+		int requiredDataValue = -1;
+		
+		for (int i = 0; i < requiredItemsList.length; i++) {
+			String[] requiredItemData = requiredItemsList[i].split(":");
+			if (requiredItemData.length == 2) {
+				try {
+					requiredItemID = Integer.parseInt(requiredItemData[0]);
+				} catch (NumberFormatException e) {
+					player.sendMessage(
+							"§4Internal error: " + 
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					ErrorHandler.logError(new ConfigurationErrorReport(
+							e,
+							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+							"uSkyBlock challenges config", false)
+					.setContext("Failed to parse int for requiredItemID.\n" + 
+							"Expected integer, got " + requiredItemData[0] + ".\n" + 
+							"Parsing: " + requiredItemsList[i] + ", index 0.\n" + 
+							"Index is " + i + ".")
+							);
+					
+					SkyblockExtension.inst().getLogger().warning(
+							"Failed to parse uSkyBlock challenges configuration.");
+					return false;
+				}
+				try {
+					requiredAmount = Integer.parseInt(requiredItemData[1]);
+				} catch (NumberFormatException e) {
+					player.sendMessage(
+							"§4Internal error: " + 
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					ErrorHandler.logError(new ConfigurationErrorReport(
+							e,
+							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+							"uSkyBlock challenges config", false)
+					.setContext("Failed to parse int for requiredAmount.\n" + 
+							"Expected integer, got " + requiredItemData[1] + ".\n" + 
+							"Parsing: " + requiredItemsList[i] + ", index 1.\n" + 
+							"Index is " + i + ".")
+							);
+					
+					SkyblockExtension.inst().getLogger().warning(
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					return false;
+				}
+				
+				if (!player.getInventory().contains(requiredItemID, requiredAmount * times)) {
+					return false;
+				}
+				
+			} else if (requiredItemData.length == 3) {
+				try {
+					requiredItemID = Integer.parseInt(requiredItemData[0]);
+				} catch (NumberFormatException e) {
+					player.sendMessage(
+							"§4Internal error: " + 
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					ErrorHandler.logError(new ConfigurationErrorReport(
+							e,
+							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+							"uSkyBlock challenges config", false)
+					.setContext("Failed to parse int for requiredItemID.\n" + 
+							"Expected integer, got " + requiredItemData[0] + ".\n" + 
+							"Parsing: " + requiredItemsList[i] + ", index 0.\n" + 
+							"Index is " + i + ".")
+							);
+					
+					SkyblockExtension.inst().getLogger().warning(
+							"Failed to parse uSkyBlock challenges configuration.");
+					return false;
+				}
+				try {
+					requiredAmount = Integer.parseInt(requiredItemData[2]);
+				} catch (NumberFormatException e) {
+					player.sendMessage(
+							"§4Internal error: " + 
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					ErrorHandler.logError(new ConfigurationErrorReport(
+							e,
+							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+							"uSkyBlock challenges config", false)
+					.setContext("Failed to parse int for requiredAmount.\n" + 
+							"Expected integer, got " + requiredItemData[2] + ".\n" + 
+							"Parsing: " + requiredItemsList[i] + ", index 2.\n" + 
+							"Index is " + i + ".")
+							);
+					
+					SkyblockExtension.inst().getLogger().warning(
+							"Failed to parse uSkyBlock challenges configuration.");
+					return false;
+				}
+				try {
+					requiredDataValue = Integer.parseInt(requiredItemData[1]);
+				} catch (NumberFormatException e) {
+					player.sendMessage(
+							"§4Internal error: " + 
+							"Failed to parse uSkyBlock challenges configuration.");
+					
+					ErrorHandler.logError(new ConfigurationErrorReport(
+							e,
+							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+							"uSkyBlock challenges config", false)
+					.setContext("Failed to parse int for requiredDataValue.\n" + 
+							"Expected integer, got " + requiredItemData[1] + ".\n" + 
+							"Parsing: " + requiredItemsList[i] + ", index 1.\n" + 
+							"Index is " + i + ".")
+							);
+					
+					SkyblockExtension.inst().getLogger().warning(
+							"Failed to parse uSkyBlock challenges configuration.");
+					return false;
+				}
+				if (!player.getInventory().containsAtLeast(
+						new ItemStack(requiredItemID, requiredAmount,
+								(short) requiredDataValue),
+						requiredAmount * times)) {
+					return false;
+				}
+			} else {
+				//Error state.
+				player.sendMessage(
+						"§4Internal error: Failed to parse uSkyBlock challenges configuration.");
+				
+				ErrorHandler.logError(new ConfigurationErrorReport(
+						"options.challenges.challengeList." + challengeName	+ ".requiredItems",
+						"uSkyBlock challenges config", false)
+				.setContext("requiredItemData.length was not valid.\n" + 
+						"Expected either 2 or 3, got " + requiredItemData.length + ".\n" + 
+						"Value is: " + requiredItemsList[i] + "\n" + 
+						"Index is " + i + ".")
+						);
+				
+				SkyblockExtension.inst().getLogger().warning(
+						"Failed to parse uSkyBlock challenges configuration.");
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }
