@@ -13,8 +13,14 @@ commands:
     description: General SkyblockExtension configuration
     usage: |
           /pokechu22 help
+    aliases: [skyblockextension, sbe, psbe]
+          
   multichallenge: 
     description: Do multiple challenges at once.
+    usage: |
+          /multichallenge help
+    aliases: [mc, spamchallenge]
+    
 
 permissions: 
   sbe.*: 
