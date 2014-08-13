@@ -430,4 +430,14 @@ public class ConfigurationErrorReport extends CrashReport {
 	public static CrashReport valueOf(Map<String, Object> map) {
 		return new ConfigurationErrorReport(map);
 	}
+	
+	/**
+	 * Sets context.
+	 * @param context
+	 * @return
+	 */
+	public CrashReport setContext(String context) {
+		this.context = context;
+		return this;
+	}
 }
