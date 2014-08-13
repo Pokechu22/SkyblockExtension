@@ -73,6 +73,11 @@ public class ConfigurationErrorReport extends CrashReport {
 	public boolean saving;
 	
 	/**
+	 * Context of the error.
+	 */
+	public String context;
+	
+	/**
 	 * When the error occurred.
 	 */
 	public Date loggedDate;
@@ -203,6 +208,8 @@ public class ConfigurationErrorReport extends CrashReport {
 		this.serializingClassName = serializingClassName;
 		this.saving = saving;
 		
+		this.context = "";
+		
 		this.loggedDate = new Date();
 	}
 	
@@ -223,6 +230,10 @@ public class ConfigurationErrorReport extends CrashReport {
 			text.append(key); 
 			text.append(" to Configuration file ");
 			text.append(configurationFile + ".\n");
+		}
+		
+		if (this.context != null) {
+			text.append("Context: " + this.context);
 		}
 		
 		if (hasSerializingClass) {
@@ -321,6 +332,8 @@ public class ConfigurationErrorReport extends CrashReport {
 		
 		map.put("Saving", this.saving);
 		
+		map.put("Context", this.context);
+		
 		map.put("LoggedDate", this.loggedDate);
 		
 		map.put("Readers", (HashSet<String>) this.readers);
@@ -383,6 +396,8 @@ public class ConfigurationErrorReport extends CrashReport {
 			}
 			
 			this.saving = (boolean) map.get("Saving");
+			
+			this.context = (String) map.get("Context");
 			
 			this.loggedDate = (Date) map.get("LoggedDate");
 			
