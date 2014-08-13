@@ -233,7 +233,7 @@ public class ConfigurationErrorReport extends CrashReport {
 		}
 		
 		if (this.context != null) {
-			text.append("Context: " + this.context);
+			text.append("Context: " + this.context + "\n");
 		}
 		
 		if (hasSerializingClass) {
