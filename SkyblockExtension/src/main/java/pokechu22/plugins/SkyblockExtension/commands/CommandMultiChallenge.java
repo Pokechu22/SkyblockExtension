@@ -68,11 +68,11 @@ public class CommandMultiChallenge {
 			return new ArrayList<String>();
 		}
 		
-		if (args.length == 1) {
+		if (args.length == 2) {
 			List<String> availableChallenges = getAvailableChallenges(player);
 			ArrayList<String> returned = new ArrayList<String>();
 	
-			String find = args[0].toLowerCase();
+			String find = args[1].toLowerCase();
 			
 			for (String name : availableChallenges) {
 				if (name.startsWith(find))
@@ -143,6 +143,38 @@ public class CommandMultiChallenge {
 		}
 		
 		if (args.length == 2) {
+			int repititions;
+			String challengeName;
+			
+			try {
+				repititions = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage("§cFailed to parse repititions (Got " + args[0] + 
+						", expected Integer).");
+				sender.sendMessage("For usage, do /" + commandLabel + " help");
+				return;
+			}
+			
+			if (repititions < 0) {
+				sender.sendMessage("§cError: Repititions must be positive.  " + 
+						"(Got " + args[0] + ")");
+				
+				return;
+			}
+			
+			if (repititions == 0) {
+				//It would be pointless if this were allowed.
+				sender.sendMessage("§cError: Repititions must not be 0.  ");
+				return;
+			}
+			
+			challengeName = args[1];
+			if (!isChallengeAvailable(player, challengeName)) {
+				sender.sendMessage("§cYou have not unlocked " + challengeName + ".");
+				sender.sendMessage("§cTo be able to use a challenge with /" + commandLabel + 
+						", you must first complete it with the regular /c command.");
+				return;
+			}
 			
 			return;
 		}
@@ -162,6 +194,22 @@ public class CommandMultiChallenge {
 		sender.sendMessage("Syntax: /" + label + " <repititions> <challengeName>");
 		sender.sendMessage("Note that you §lMUST§r complete the challenge once using the " + 
 				"regular challenges command (/c) first.");
+	}
+	
+	/**
+	 * Checks if the specified challenge is available for use via this command.  
+	 * 
+	 * Please ensure that {@linkplain #canGetPlayerInfo(Player)} returns true
+	 * beforehand.  
+	 * 
+	 * @param player
+	 * @param challengeName
+	 * @return
+	 */
+	public static boolean isChallengeAvailable(Player player, String challengeName) {
+		PlayerInfo p = getPlayerInfo(player);
+		
+		return (p.checkChallenge(challengeName));
 	}
 	
 	/**
