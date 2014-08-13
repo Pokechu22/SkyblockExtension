@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import pokechu22.plugins.SkyblockExtension.commands.*;
@@ -85,7 +87,6 @@ public class SkyblockExtension extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		try {
-			// TODO add the actual commands.
 			switch (cmd.getName().toLowerCase()) {
 			case "pokechu22": { // "/pokechu22" command
 
@@ -93,10 +94,15 @@ public class SkyblockExtension extends JavaPlugin {
 
 				break;
 			}
+			case "multichallenge": {
+				//TODO
+				CommandMultiChallenge.Run(sender, cmd, label, args);
+				break;
+			}
 			default: {
 				// Tell player.
-				sender.sendMessage("§4Unrecognised command: " + cmd.getName()
-						+ "(Label: " + label + ")");
+				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
+						+ " (Label: " + label + ")");
 
 				// Log to console.
 				getLogger().warning(
@@ -115,7 +121,7 @@ public class SkyblockExtension extends JavaPlugin {
 			sender.sendMessage("§4" + e.toString());
 
 			// Put the error message in the console / log file.
-			getLogger().severe("A error occoured:");
+			getLogger().severe("An error occoured:");
 			getLogger().log(Level.SEVERE, "Exception:", e);
 			getLogger().severe("Context: ");
 			getLogger().severe(
@@ -143,6 +149,71 @@ public class SkyblockExtension extends JavaPlugin {
 		return true;
 	}
 
+	/**
+	 * Handles tab completion.
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String args[]) {
+		try {
+			switch (cmd.getName().toLowerCase()) {
+			case "pokechu22": { // "/pokechu22" command
+
+				break; //TODO
+			}
+			case "multichallenge": {
+				
+				return CommandMultiChallenge.onTabComplete(sender, cmd, label, args);
+			}
+			default: {
+				// Tell player.
+				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
+						+ " (Label: " + label + ")");
+
+				// Log to console.
+				getLogger().warning(
+						"§4Unrecognised command: " + cmd.getName() + "(Label: "
+								+ label + ")");
+
+				// TODO: Log to player.
+				break;
+			}
+			}
+
+		} catch (Throwable e) {
+
+			// Tell the player that an error occurred.
+			sender.sendMessage("§4A unhandled error occoured while tab completing.");
+			sender.sendMessage("§4" + e.toString());
+
+			// Put the error message in the console / log file.
+			getLogger().severe("An error occoured:");
+			getLogger().log(Level.SEVERE, "Exception:", e);
+			getLogger().severe("Context: ");
+			getLogger().severe(
+					"    Command name: " + cmd.getName() + "(Label: " + label
+							+ ")");
+			getLogger().severe("    Arguments: ");
+			for (int i = 0; i < args.length; i++) {
+				// For each of the values output it with a number next to it.
+				getLogger().severe("        " + i + ": " + args[i]);
+			}
+
+			// Log the error for command access.
+			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label, args));
+
+			// Errors are typically things that shouldn't be caught (EG
+			// ThreadDeath), so they will be rethrown.
+			if (e instanceof Error) {
+				getLogger().severe("Rethrowing Error...");
+				sender.sendMessage("§4Rethrowing, as it extends error.");
+				throw e;
+			}
+
+		}
+
+		return new ArrayList<String>();
+	}
+	
 	/**
 	 * Custom configuration for crashes.
 	 */

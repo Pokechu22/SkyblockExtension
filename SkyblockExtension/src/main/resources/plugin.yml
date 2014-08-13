@@ -13,14 +13,27 @@ commands:
     description: General SkyblockExtension configuration
     usage: |
           /pokechu22 help
+  multichallenge: 
+    description: Do multiple challenges at once.
 
 permissions: 
   sbe.*: 
     description: Gives access to all SkyblockExtension commands and subpermisions.
     children: 
-      #sbe.command.*: true
+      sbe.challenges.*: true
       sbe.debug.*: true
       #sbe.protection.*: true
+  
+  sbe.challenges.*: 
+    description: Gives access to all SkyblockExtension challenge functions.
+    children: 
+      sbe.challenges.multicomplete: true
+  
+  sbe.challenges.multicomplete: 
+    description: 
+      Allows access to the /multichallenge command, which lets one complete the 
+      same challenge multiple times quickly.
+    default: true
   
   sbe.debug.*: 
     description: Gives access to all SkyblockExtension debug functions.
