@@ -186,8 +186,26 @@ public class CommandMultiChallenge {
 				return;
 			}
 			
-			//TODO test
-			sender.sendMessage("" + canCompleteChallenge(player, challengeName, repititions));
+			if (!canCompleteChallenge(player, challengeName, repititions)) {
+				sender.sendMessage("§cYou don't have the items needed to complete " + 
+						challengeName + " " + repititions + " time" + 
+						(repititions == 1 ? "" : "s") + "!");
+				return;
+			}
+			
+			for (int i = 0; i < repititions; i++) {
+				///Result of taking items.
+				boolean result;
+				//Takes the items required.
+				result = uSkyBlock.getInstance().takeRequired(player, challengeName, "onPlayer");
+				if (!result) {
+					throw new RuntimeException("Player does not have all needed items " + 
+							"despite canCompleteChallenge returning true!");
+				}
+				
+				//Give the reward.
+				uSkyBlock.getInstance().giveReward(player, challengeName);
+			}
 			
 			return;
 		}
