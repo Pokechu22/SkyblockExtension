@@ -95,7 +95,6 @@ public class SkyblockExtension extends JavaPlugin {
 				break;
 			}
 			case "multichallenge": {
-				//TODO
 				CommandMultiChallenge.Run(sender, cmd, label, args);
 				break;
 			}

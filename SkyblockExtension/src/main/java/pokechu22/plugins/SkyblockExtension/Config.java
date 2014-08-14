@@ -9,8 +9,6 @@ import org.bukkit.configuration.Configuration;
 /**
  * Utility class for dealing with bukkit configurations.
  * 
- * TODO Use this.  Currently not needed.
- * 
  * @author Pokechu22
  *
  */
@@ -37,7 +35,6 @@ public class Config {
 			
 			getLogger().severe("Failed to load previous error messages.  ");
 			List<CrashReport> errors  = new ArrayList<CrashReport>();
-			//TODO: The below method is the exact reason for the interface.
 			errors.add(new ConfigurationErrorReport(e, "CrashReports", "CrashesConfig", false));  
 			ErrorHandler.errors = errors;
 		}

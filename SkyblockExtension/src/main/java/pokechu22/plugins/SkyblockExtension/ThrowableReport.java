@@ -28,7 +28,6 @@ public class ThrowableReport extends CrashReport {
 	public String senderClass;
 	public String senderName;
 	public boolean senderIsOp;
-	//public CommandSender sender; //TODO: This causes errors when player offline.
 	public String cmd;
 	public String label;
 	public String[] args;
