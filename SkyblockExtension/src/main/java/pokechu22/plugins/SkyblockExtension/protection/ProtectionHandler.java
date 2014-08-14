@@ -8,6 +8,8 @@ import us.talabrek.ultimateskyblock.Settings;
 /**
  * Things to check if an area is protected.
  * 
+ * <b>This does NOT handle actual protection events.</b>
+ * 
  * @author Pokechu22
  *
  */
