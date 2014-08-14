@@ -415,15 +415,22 @@ public class CommandPokechu22 {
 			return;
 		}
 		
-		if (args[1].equalsIgnoreCase("protection")) {
+		if (args[1].equalsIgnoreCase("ProtectionHandler")) {
+			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.ProtectionHandler")) {
+				return;
+			}
+			
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("§cYou must be a player.");
 				return;
 			}
 			Player player = (Player) sender;
-			sender.sendMessage(""
-					+ ProtectionHandler.getProtectionHandler().isProtected(
-							player.getLocation(), player));
+			if (ProtectionHandler.getProtectionHandler().isProtected(
+					player.getLocation(), player)) {
+				sender.sendMessage("You have permission in this area.");
+			} else {
+				sender.sendMessage("You do not have permission in this area.");
+			}
 			return;
 		}
 		

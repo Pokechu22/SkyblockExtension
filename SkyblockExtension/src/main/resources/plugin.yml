@@ -85,6 +85,7 @@ permissions:
     children: 
       sbe.debug.test.ConfigErrorReport: true
       sbe.debug.test.ThrowableReport: true
+      sbe.debug.test.ProtectionHandler: true
   
   sbe.debug.test.ThrowableReport: 
     description: A test of ThrowableReports.
@@ -94,3 +95,6 @@ permissions:
     description: A test of ConfigurationErrorReports.
     default: op
   
+  sbe.debug.test.ProtectionHandler: 
+    description: A test that states whether your current position is protected.
+    default: op
