@@ -2,10 +2,12 @@ package pokechu22.plugins.SkyblockExtension.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
+import pokechu22.plugins.SkyblockExtension.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
@@ -412,6 +414,21 @@ public class CommandPokechu22 {
 			}
 			return;
 		}
+		
+		if (args[1].equalsIgnoreCase("protection")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cYou must be a player.");
+				return;
+			}
+			Player player = (Player) sender;
+			sender.sendMessage(""
+					+ ProtectionHandler.getProtectionHandler().isProtected(
+							player.getLocation(), player));
+			return;
+		}
+		
+		sender.sendMessage("§c\"" + args[1] + "\" is not a recognised test!");
+		return;
 	}
 	
 	/**
