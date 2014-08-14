@@ -9,6 +9,7 @@ import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
+import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -431,6 +432,17 @@ public class CommandPokechu22 {
 			} else {
 				sender.sendMessage("You do not have permission in this area.");
 			}
+			return;
+		}
+		
+		if (args[1].equalsIgnoreCase("RemoveDefaultProtections")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.test.RemoveDefaultProtections")) {
+				return;
+			}
+			//TODO: This is a REALLY dangerous command, and probably should be removed.
+			sender.sendMessage("Removing default uSkyBlock protection system.");
+			USkyBlockProtectionListener.removeExistingProtectionEvents();
+			sender.sendMessage("§cWARNING: All island protections have now been disabled.");
 			return;
 		}
 		
