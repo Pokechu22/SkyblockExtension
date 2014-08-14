@@ -7,8 +7,8 @@ import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
-import pokechu22.plugins.SkyblockExtension.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.

@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.util.HashMap;
 

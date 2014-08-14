@@ -47,6 +47,10 @@ public class SkyblockExtension extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		//TODO: Remove uSkyblock default protections as needed.
+		//HandlerList.unregisterAll (us.talabrek.ultimateskyblock.ProtectionEvents);
+		//Or something similar, since it needs to get all...
+		
 		// Register crash reports as being serializable.
 		ConfigurationSerialization.registerClass(CrashReport.class,
 				"CrashReport");
