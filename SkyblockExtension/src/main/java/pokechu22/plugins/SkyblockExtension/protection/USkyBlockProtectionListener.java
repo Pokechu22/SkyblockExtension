@@ -10,17 +10,19 @@ import us.talabrek.ultimateskyblock.ProtectionEvents;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
- * Handles overriding any existing uSkyBlock protections.
+ * Handles overriding any existing uSkyBlock protections, and new implementations
+ * of the previous ones.
  * 
  * @author Pokechu22
- *
+ * @author Talabrek
+ * @author wolfwork
  */
-public class USkyBlockProtectionListener extends ProtectionEvents {
+public class USkyBlockProtectionListener extends ProtectionEvents implements Listener {
 	/**
 	 * Constructor - Also removes the original ProtectionEvents.
 	 */
 	public USkyBlockProtectionListener() {
-		
+		removeExistingProtectionEvents();
 	}
 	
 	/**
@@ -38,4 +40,6 @@ public class USkyBlockProtectionListener extends ProtectionEvents {
 			}
 		}
 	}
+	
+	
 }
