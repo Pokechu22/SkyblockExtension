@@ -42,7 +42,7 @@ public class USkyBlockProtectionEvents {
 		if (event.getRightClicked().getType() == EntityType.HORSE || event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
 			final Player player = event.getPlayer();
 			if (player.getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-				if (!uSkyBlock.getInstance().locationIsOnIsland(player.getUniqueId(), event.getRightClicked().getLocation()) && !uSkyBlock.getInstance().playerIsInSpawn(event.getPlayer()) && !VaultHandler.checkPerk(player.getName(), "usb.mod.bypassprotection", player.getWorld()) && !player.isOp()) {
+				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(player, event.getRightClicked().getLocation()) && !uSkyBlock.getInstance().playerIsInSpawn(event.getPlayer()) && !VaultHandler.checkPerk(player.getName(), "usb.mod.bypassprotection", player.getWorld()) && !player.isOp()) {
 					return true;
 				}
 			}
@@ -90,7 +90,7 @@ public class USkyBlockProtectionEvents {
 
 	public boolean onPlayerBlockBreak(final BlockBreakEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
+			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(event.getPlayer(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
 				return true;
 			}
 		}
@@ -98,7 +98,7 @@ public class USkyBlockProtectionEvents {
 
 	public boolean onPlayerBlockPlace(final BlockPlaceEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
+			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(event.getPlayer(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
 				return true;
 			}
 		}
@@ -108,7 +108,7 @@ public class USkyBlockProtectionEvents {
 		if (event.getRemover() instanceof Player) {
 			breaker = (Player) event.getRemover();
 			if (breaker.getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-				if (!uSkyBlock.getInstance().locationIsOnIsland(breaker.getUniqueId(), event.getEntity().getLocation()) && !VaultHandler.checkPerk(breaker.getName(), "usb.mod.bypassprotection", breaker.getWorld()) && !breaker.isOp()) {
+				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(breaker, event.getEntity().getLocation()) && !VaultHandler.checkPerk(breaker.getName(), "usb.mod.bypassprotection", breaker.getWorld()) && !breaker.isOp()) {
 					return true;
 				}
 			}
@@ -117,7 +117,7 @@ public class USkyBlockProtectionEvents {
 
 	public boolean onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
+			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(event.getPlayer(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
 				return true;
 			}
 		}
@@ -125,7 +125,7 @@ public class USkyBlockProtectionEvents {
 
 	public boolean onPlayerBucketFill(final PlayerBucketFillEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
+			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(event.getPlayer(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
 				return true;
 			}
 		}
@@ -158,7 +158,7 @@ public class USkyBlockProtectionEvents {
 		if (event.getAttacker() instanceof Player) {
 			breaker = (Player) event.getAttacker();
 			if (breaker.getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
-				if (!uSkyBlock.getInstance().locationIsOnIsland(breaker.getUniqueId(), event.getVehicle().getLocation()) && !VaultHandler.checkPerk(breaker.getName(), "usb.mod.bypassprotection", breaker.getWorld()) && !breaker.isOp()) {
+				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(breaker, event.getVehicle().getLocation()) && !VaultHandler.checkPerk(breaker.getName(), "usb.mod.bypassprotection", breaker.getWorld()) && !breaker.isOp()) {
 					return true;
 				}
 			}
@@ -178,7 +178,7 @@ public class USkyBlockProtectionEvents {
 		if (!event.getEntered().getWorld().getName().equalsIgnoreCase(Settings.general_worldName))
 			return false;
 
-		if (!uSkyBlock.getInstance().locationIsOnIsland(player.getUniqueId(), event.getVehicle().getLocation())) {
+		if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(player, event.getVehicle().getLocation())) {
 			return true;
 		}
 	}
@@ -191,7 +191,7 @@ public class USkyBlockProtectionEvents {
 		if (!event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName))
 			return false;
 
-		if (uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getPlayer().getLocation()))
+		if (ProtectionHandler.getProtectionHandler().hasPermissionsIn(event.getPlayer(), event.getPlayer().getLocation()))
 			return false;
 
 		if (event.getMaterial() == Material.POTION && event.getItem().getDurability() != 0) {
