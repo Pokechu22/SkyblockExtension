@@ -38,4 +38,15 @@ public abstract class ProtectionHandler {
 	 * @return
 	 */
 	public abstract boolean isProtected(Location location, Player player);
+	
+	/**
+	 * Tests if a player has permissions in an area.  
+	 * Exactly the same as <code>!{@linkplain #isProtected(Location, Player)}</code>.
+	 * @param location
+	 * @param player
+	 * @return
+	 */
+	public boolean hasPermissionsIn(Location location, Player player) {
+		return !isProtected(location, player);
+	}
 }
