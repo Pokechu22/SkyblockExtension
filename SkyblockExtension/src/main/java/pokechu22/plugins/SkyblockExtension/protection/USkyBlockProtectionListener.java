@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.util.ArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -133,9 +134,123 @@ public class USkyBlockProtectionListener extends ProtectionEvents implements Lis
 
 	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (USBProtection.onPlayerInteract(event)) {
+		if (!USBProtection.onPlayerInteract(event)) {
+			return; //Exit if uSkyBlock would have allowed it.
+		}
+		
+		if (event.hasItem()) {
+			//TODO: User overrides, by material or numeric ID.
+			
+			if (event.getItem().getType() == Material.ENDER_PEARL) {
+				//TODO: Check if we allow this.
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou don't have permission to throw ender " + 
+						"perals from this area.");
+				return;
+			}
+			if (event.getItem().getType().isEdible()) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to eat in this area.");
+				return;
+			}
+			
+			//TODO: Default cases.
+		}
+		
+		if (event.hasBlock()) {
+			//TODO: User overrides, by material or numeric ID.
+			
+			//IF IS A REDSTONE ITEM {
+			if (event.getClickedBlock().getType() == Material.STONE_BUTTON || 
+					event.getClickedBlock().getType() == Material.WOOD_BUTTON) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use buttons " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.LEVER) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use levers " + 
+						"in this area.");
+				return;
+			}
+			//This includes some items as well, but it's hard to know which are and which aren't.
+			if (event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR || 
+					event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_OFF ||
+					event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_ON ||
+					event.getClickedBlock().getType() == Material.DIODE || //Repeater
+					event.getClickedBlock().getType() == Material.DIODE_BLOCK_ON ||
+					event.getClickedBlock().getType() == Material.DIODE_BLOCK_OFF) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to change the setting of " + 
+						"that in this area.");
+				return;
+			}
+			//} ELSE IF IS A DOOR {
+			if (event.getClickedBlock().getType() == Material.WOODEN_DOOR || 
+					event.getClickedBlock().getType() == Material.TRAP_DOOR) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use doors " + 
+						"in this area.");
+				return;
+			}
+			//} ELSE IF IS A STORAGE THINGY {
+			if (event.getClickedBlock().getType() == Material.CHEST || 
+					event.getClickedBlock().getType() == Material.TRAPPED_CHEST) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use chests " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.FURNACE || 
+					event.getClickedBlock().getType() == Material.BURNING_FURNACE) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use furnaces " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.FURNACE || 
+					event.getClickedBlock().getType() == Material.BURNING_FURNACE) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use furnaces " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.ANVIL) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use anvils " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.ENCHANTMENT_TABLE) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use enchantment tables " + 
+						"in this area.");
+				return;
+			}
+			if (event.getClickedBlock().getType() == Material.BREWING_STAND) {
+				//TODO: Check if we allow this.  
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou aren't allowed to use brewing stands " + 
+						"in this area.");
+				return;
+			}
+			//}
+		
+			//TODO: Check if we allow this.  
 			event.setCancelled(true);
-			event.getPlayer().sendMessage("§cYou don't have permission to do that in this area.");
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area.");
+			return;
 		}
 	}
 

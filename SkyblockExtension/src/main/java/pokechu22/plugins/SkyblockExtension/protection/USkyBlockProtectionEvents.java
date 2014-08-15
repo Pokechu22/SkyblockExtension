@@ -193,14 +193,17 @@ public class USkyBlockProtectionEvents {
 					&& !VaultHandler.checkPerk(event.getPlayer().getName(),
 							"usb.mod.bypassprotection", event.getPlayer()
 									.getWorld()) && !event.getPlayer().isOp()) {
-				if (event.getMaterial() == Material.ENDER_PEARL) {
-					return true;
-				}
-
-				if (event.getClickedBlock() != null
-						&& !event.getClickedBlock().getType().isEdible()) {
-					return true;
-				}
+				//All of these checks are handled externally now.
+				
+				//if (event.getMaterial() == Material.ENDER_PEARL) {
+				//	return true;
+				//}
+				//
+				//if (event.getClickedBlock() != null
+				//		&& !event.getClickedBlock().getType().isEdible()) {
+				//	return true;
+				//}
+				return true;
 			}
 		}
 		return false;
