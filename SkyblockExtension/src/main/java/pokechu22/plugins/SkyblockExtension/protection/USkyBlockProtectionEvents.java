@@ -24,6 +24,8 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.potion.Potion;
 
+import us.talabrek.ultimateskyblock.*;
+
 /**
  * Almost the exact same thing as the original 
  * {@linkplain us.talabrek.ultimateskyblock.ProtectionEvents ProtectionEvents}, 
