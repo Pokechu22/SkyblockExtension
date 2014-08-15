@@ -47,6 +47,7 @@ public class USkyBlockProtectionEvents {
 				}
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerAttack(final EntityDamageByEntityEvent event) {
@@ -78,6 +79,7 @@ public class USkyBlockProtectionEvents {
 
 		if (!uSkyBlock.getInstance().playerIsOnIsland(damager))
 			return true;
+	return false;
 	}
 
 	public boolean onPlayerBedEnter(final PlayerBedEnterEvent event) {
@@ -86,6 +88,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerBlockBreak(final BlockBreakEvent event) {
@@ -94,6 +97,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerBlockPlace(final BlockPlaceEvent event) {
@@ -102,6 +106,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerBreakHanging(final HangingBreakByEntityEvent event) {
@@ -113,6 +118,7 @@ public class USkyBlockProtectionEvents {
 				}
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
@@ -121,6 +127,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerBucketFill(final PlayerBucketFillEvent event) {
@@ -129,6 +136,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerInteract(final PlayerInteractEvent event) {
@@ -136,7 +144,6 @@ public class USkyBlockProtectionEvents {
 			if (!uSkyBlock.getInstance().playerIsOnIsland(event.getPlayer()) && !uSkyBlock.getInstance().playerIsInSpawn(event.getPlayer()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
 				if (event.getMaterial() == Material.ENDER_PEARL) {
 					return true;
-					return false;
 				}
 
 				if (event.getClickedBlock() != null && !event.getClickedBlock().getType().isEdible()) {
@@ -144,6 +151,7 @@ public class USkyBlockProtectionEvents {
 				}
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerShearEntity(final PlayerShearEntityEvent event) {
@@ -152,6 +160,7 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
 	public boolean onPlayerVehicleDamage(final VehicleDamageEvent event) {
@@ -163,9 +172,9 @@ public class USkyBlockProtectionEvents {
 				}
 			}
 		}
+	return false;
 	}
 
-	
 	public boolean onPlayerEnterVehicle(VehicleEnterEvent event) {
 		if (!(event.getEntered() instanceof Player))
 			return false;
@@ -181,9 +190,9 @@ public class USkyBlockProtectionEvents {
 		if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(player, event.getVehicle().getLocation())) {
 			return true;
 		}
+	return false;
 	}
 
-	
 	public boolean onPotionThrow(PlayerInteractEvent event) {
 		if (event.getPlayer().hasPermission("usb.mod.bypassprotection"))
 			return false;
@@ -211,9 +220,9 @@ public class USkyBlockProtectionEvents {
 				return true;
 			}
 		}
+	return false;
 	}
 
-  
 	public boolean onEntityInteract(EntityInteractEvent event) {
 		if (!(event.getEntity() instanceof Arrow))
 			return false;
@@ -233,5 +242,7 @@ public class USkyBlockProtectionEvents {
 
 		if (!uSkyBlock.getInstance().playerIsOnIsland(damager))
 			return true;
+		
+		return false;
 	}
 }
