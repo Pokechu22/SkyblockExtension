@@ -36,7 +36,6 @@ import org.bukkit.potion.Potion;
 public class USkyBlockProtectionEvents {
 	private Player breaker = null;
 
-	(priority = EventPriority.NORMAL)
 	public boolean onHorseLead(final PlayerInteractEntityEvent event) {
 		if (event.getRightClicked().getType() == EntityType.HORSE || event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
 			final Player player = event.getPlayer();
@@ -48,7 +47,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.HIGH)
 	public boolean onPlayerAttack(final EntityDamageByEntityEvent event) {
 		if (!event.getEntity().getWorld().getName().equalsIgnoreCase(Settings.general_worldName))
 			return false;
@@ -80,7 +78,6 @@ public class USkyBlockProtectionEvents {
 			return true;
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerBedEnter(final PlayerBedEnterEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().playerIsOnIsland(event.getPlayer()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -89,7 +86,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.HIGH)
 	public boolean onPlayerBlockBreak(final BlockBreakEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -98,7 +94,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.HIGH)
 	public boolean onPlayerBlockPlace(final BlockPlaceEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlock().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -107,7 +102,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerBreakHanging(final HangingBreakByEntityEvent event) {
 		if (event.getRemover() instanceof Player) {
 			breaker = (Player) event.getRemover();
@@ -119,7 +113,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -128,7 +121,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerBucketFill(final PlayerBucketFillEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().locationIsOnIsland(event.getPlayer().getUniqueId(), event.getBlockClicked().getLocation()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -137,7 +129,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().playerIsOnIsland(event.getPlayer()) && !uSkyBlock.getInstance().playerIsInSpawn(event.getPlayer()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -153,7 +144,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerShearEntity(final PlayerShearEntityEvent event) {
 		if (event.getPlayer().getWorld().getName().equalsIgnoreCase(Settings.general_worldName)) {
 			if (!uSkyBlock.getInstance().playerIsOnIsland(event.getPlayer()) && !VaultHandler.checkPerk(event.getPlayer().getName(), "usb.mod.bypassprotection", event.getPlayer().getWorld()) && !event.getPlayer().isOp()) {
@@ -162,7 +152,6 @@ public class USkyBlockProtectionEvents {
 		}
 	}
 
-	(priority = EventPriority.NORMAL)
 	public boolean onPlayerVehicleDamage(final VehicleDamageEvent event) {
 		if (event.getAttacker() instanceof Player) {
 			breaker = (Player) event.getAttacker();
