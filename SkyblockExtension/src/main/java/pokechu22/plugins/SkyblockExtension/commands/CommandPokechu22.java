@@ -435,14 +435,20 @@ public class CommandPokechu22 {
 			return;
 		}
 		
-		if (args[1].equalsIgnoreCase("RemoveDefaultProtections")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.test.RemoveDefaultProtections")) {
+		if (args[1].equalsIgnoreCase("ReplaceDefaultProtections")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.test.ReplaceDefaultProtections")) {
 				return;
 			}
-			//TODO: This is a REALLY dangerous command, and probably should be removed.
 			sender.sendMessage("Removing default uSkyBlock protection system.");
 			USkyBlockProtectionListener.removeExistingProtectionEvents();
-			sender.sendMessage("§cWARNING: All island protections have now been disabled.");
+			sender.sendMessage("Installing new protection system.");
+			SkyblockExtension
+					.inst()
+					.getServer()
+					.getPluginManager()
+					.registerEvents(new USkyBlockProtectionListener(),
+							SkyblockExtension.inst());
+			sender.sendMessage("Done!");
 			return;
 		}
 		

@@ -86,7 +86,7 @@ permissions:
       sbe.debug.test.ConfigErrorReport: true
       sbe.debug.test.ThrowableReport: true
       sbe.debug.test.ProtectionHandler: true
-      sbe.debug.test.RemoveDefaultProtections: true
+      sbe.debug.test.ReplaceDefaultProtections: true
   
   sbe.debug.test.ThrowableReport: 
     description: A test of ThrowableReports.
@@ -100,6 +100,6 @@ permissions:
     description: A test that states whether your current position is protected.
     default: op
     
-  sbe.debug.test.RemoveDefaultProtections: 
-    description: A test that attempts to remove all of the default uSkyBlock island protections.
+  sbe.debug.test.ReplaceDefaultProtections: 
+    description: A test that replaces the default uSkyBlock protection with the sbe version.
     default: op
