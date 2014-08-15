@@ -27,6 +27,8 @@ import us.talabrek.ultimateskyblock.*;
  * {@linkplain us.talabrek.ultimateskyblock.ProtectionEvents ProtectionEvents},
  * but returns booleans rather than canceling events.
  * 
+ * Returning true means that the event was canceled.  False means it was not.
+ * 
  * @author Talabrek
  * @author Pokechu22
  *
