@@ -42,11 +42,27 @@ public abstract class ProtectionHandler {
 	/**
 	 * Tests if a player has permissions in an area.  
 	 * Exactly the same as <code>!{@linkplain #isProtected(Location, Player)}</code>.
+	 * 
 	 * @param location
 	 * @param player
 	 * @return
 	 */
 	public boolean hasPermissionsIn(Location location, Player player) {
+		return !isProtected(location, player);
+	}
+	
+	/**
+	 * Tests if a player has permissions in an area.  
+	 * Exactly the same as <code>!{@linkplain #isProtected(Location, Player)}</code>.
+	 * <br>
+	 * This may seem like it is a redundant method, but it is needed to prevent
+	 * pains dealing with ProtectionEvents code.
+	 * 
+	 * @param location
+	 * @param player
+	 * @return
+	 */
+	public boolean hasPermissionsIn(Player player, Location location) {
 		return !isProtected(location, player);
 	}
 }
