@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 import us.talabrek.ultimateskyblock.Settings;
 
@@ -65,4 +66,6 @@ public abstract class ProtectionHandler {
 	public boolean hasPermissionsIn(Player player, Location location) {
 		return !isProtected(location, player);
 	}
+	
+	public abstract boolean areaAllowsPlacing(BlockPlaceEvent event);
 }
