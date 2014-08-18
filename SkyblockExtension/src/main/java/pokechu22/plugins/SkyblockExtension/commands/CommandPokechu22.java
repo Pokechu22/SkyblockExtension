@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -476,6 +478,27 @@ public class CommandPokechu22 {
 					IslandUtils.getPlayerInfo(player).getPartyIslandLocation()/*.toString()*/);
 			sender.sendMessage("§6getHomeLocation(): §e" + 
 					IslandUtils.getPlayerInfo(player).getHomeLocation()/*.toString()*/);
+			return;
+		}
+		
+		if (args[1].equalsIgnoreCase("NearestIslandLocation")) {
+			//Provides location of nearest island.
+			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.NearestIslandLocation")) {
+				return;
+			}
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cYou must be a player.");
+				return;
+			}
+			Player player = (Player) sender;
+			Location location = IslandUtils.getOccupyingIsland(player.getLocation());
+			sender.sendMessage("Nearest island is at " + location + ".");
+			if (location.getBlock().getType() == Material.BEDROCK) {
+				sender.sendMessage("Bedrock is found.");
+			} else {
+				sender.sendMessage("Bedrock is not found.");
+			}
 			return;
 		}
 		

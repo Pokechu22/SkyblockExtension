@@ -107,3 +107,7 @@ permissions:
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays various information about the executor's island.
     default: op
+    
+  sbe.debug.test.MyIslandLocation: 
+    description: A test that displays the island location nearest to the player.
+    default: op

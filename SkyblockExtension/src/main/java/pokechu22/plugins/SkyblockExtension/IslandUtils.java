@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import us.talabrek.ultimateskyblock.PlayerInfo;
+import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
@@ -36,22 +37,33 @@ public class IslandUtils {
 	
 	/**
 	 * Gets the island that the specified location is in, or null if it is not
-	 * in an island. The Y-value of the location remains unchanged.
+	 * in an island. The Y-value of the location is set to 120, the height of 
+	 * the bedrock on the island.
+	 * <br>
+	 * TODO: Stop using int rounding and start using Math.Ceil or Math.floor.
+	 * Save that for when you aren't coding at midnight, though.
 	 * 
-	 * TODO: Implement
-	 * 
-	 * @param location
+	 * @param startingLocation
 	 *            The location to start with.
 	 * @return The island location.
 	 * @throws IllegalArgumentException
 	 *             when location is null.
 	 */
-	public static Location getOccupyingIsland(Location location) {
+	public static Location getOccupyingIsland(Location startingLocation) {
 		Location returned = null;
-		if (location == null) {
+		if (startingLocation == null) {
 			throw new IllegalArgumentException("Location cannot be null!");
 		}
 		
-		return returned;//TODO
+		int semiX = (startingLocation.getBlockX() + 
+				(Settings.island_distance / 2)) / Settings.island_distance;
+		int semiZ = (startingLocation.getBlockZ() + 
+				(Settings.island_distance / 2)) / Settings.island_distance;
+		
+		double x = (semiX * Settings.island_distance);
+		double z = (semiZ * Settings.island_distance);
+		
+		returned = new Location(startingLocation.getWorld(), x, 120d, z);
+		return returned;
 	}
 }
