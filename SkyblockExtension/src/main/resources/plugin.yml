@@ -103,3 +103,7 @@ permissions:
   sbe.debug.test.ReplaceDefaultProtections: 
     description: A test that replaces the default uSkyBlock protection with the sbe version.
     default: op
+
+  sbe.debug.test.MyIslandLocation: 
+    description: A test that displays various information about the executor's island.
+    default: op

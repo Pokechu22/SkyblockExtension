@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.IslandUtils;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
@@ -449,6 +450,32 @@ public class CommandPokechu22 {
 					.registerEvents(new USkyBlockProtectionListener(),
 							SkyblockExtension.inst());
 			sender.sendMessage("Done!");
+			return;
+		}
+		
+		if (args[1].equalsIgnoreCase("MyIslandLocation")) {
+			//Provides location of own island.
+			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.MyIslandLocation")) {
+				return;
+			}
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cYou must be a player.");
+				return;
+			}
+			Player player = (Player) sender;
+			if (!IslandUtils.canGetPlayerInfo(player)) {
+				sender.sendMessage("§cError: You do not have an island.");
+				return;
+			}
+			//ToString is commented out because it caused issues with null.  
+			//The same effect is triggered automatically, but null is displayed as "null".
+			sender.sendMessage("§6getIslandLocation(): §e" + 
+					IslandUtils.getPlayerInfo(player).getIslandLocation()/*.toString()*/);
+			sender.sendMessage("§6getPartyIslandLocation(): §e" + 
+					IslandUtils.getPlayerInfo(player).getPartyIslandLocation()/*.toString()*/);
+			sender.sendMessage("§6getHomeLocation(): §e" + 
+					IslandUtils.getPlayerInfo(player).getHomeLocation()/*.toString()*/);
 			return;
 		}
 		
