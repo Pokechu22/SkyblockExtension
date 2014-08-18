@@ -55,15 +55,45 @@ public class IslandUtils {
 			throw new IllegalArgumentException("Location cannot be null!");
 		}
 		
-		int semiX = (startingLocation.getBlockX() + 
-				(Settings.island_distance / 2)) / Settings.island_distance;
-		int semiZ = (startingLocation.getBlockZ() + 
-				(Settings.island_distance / 2)) / Settings.island_distance;
+		int semiX = getNearestIslandLocalX(startingLocation);
+		int semiZ = getNearestIslandLocalZ(startingLocation);
 		
 		double x = (semiX * Settings.island_distance);
 		double z = (semiZ * Settings.island_distance);
 		
 		returned = new Location(startingLocation.getWorld(), x, 120d, z);
 		return returned;
+	}
+	
+	/**
+	 * Gets the x-coordinate of the nearest island, using the distance from spawn.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static int getNearestIslandLocalX(Location location) {
+		return (location.getBlockX() + 
+				(Settings.island_distance / 2)) / Settings.island_distance;
+	}
+	
+	/**
+	 * Gets the z-coordinate of the nearest island, using the distance from spawn.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static int getNearestIslandLocalZ(Location location) {
+		return (location.getBlockZ() + 
+				(Settings.island_distance / 2)) / Settings.island_distance;
+	}
+	
+	/**
+	 * Gets the name of the island, in the form of "x" + local x + "z" + local z 
+	 * @param location
+	 * @return
+	 */
+	public static String getNearestIslandName(Location location) {
+		return "x" + getNearestIslandLocalX(location) + 
+				"z" + getNearestIslandLocalZ(location);
 	}
 }
