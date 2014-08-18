@@ -25,7 +25,10 @@ ownerPermissions:
   breakAllowedBlocks: [] #Can break only these if canBreakAll is false
   breakBannedBlocks: [] #Can't break these, even if canBreakAll is true
   
-  canUseAll: true #Can use anything. The below are more detailed specifiers.
+  #Can use anything. The below are more detailed specifiers.
+  #If it is false and (eg) canUseChests is true, then the other's value is used.
+  #If it is true and (eg) canUseChests, are false, then this's value is used.
+  canUseAll: true
   useAllowedBlocks: [] #Can use only these if canBuildAll is false
   useBannedBlocks: [] #Can't use these, even if canBreakAll is true
   canUseChests: true
@@ -44,7 +47,7 @@ ownerPermissions:
   
   canEat: true
   
-  canBreakAllHanging: true #Hangings eg painting/
+  canBreakAllHanging: true #Hangings, such as paintings.
   breakAllowedHangings: []
   breakBannedHangings: []
   
@@ -66,3 +69,159 @@ ownerPermissions:
   canEnterAllVehicles: true
   enterAllowedVehicles: []
   enterBannedVehicles: []
+  
+memberPermissions: 
+  canBuildAll: true
+  buildAllowedBlocks: [] #Can place only these if canBuildAll is false
+  buildBannedBlocks: [] #Can't place these, even if canBuildAll is true
+  
+  canBreakAll: true
+  breakAllowedBlocks: [] #Can break only these if canBreakAll is false
+  breakBannedBlocks: [] #Can't break these, even if canBreakAll is true
+  
+  #Can use anything. The below are more detailed specifiers.
+  #If it is false and (eg) canUseChests is true, then the other's value is used.
+  #If it is true and (eg) canUseChests, are false, then this's value is used.
+  canUseAll: true
+  useAllowedBlocks: [] #Can use only these if canBuildAll is false
+  useBannedBlocks: [] #Can't use these, even if canBreakAll is true
+  canUseChests: true
+  canUseFurnaces: true
+  canUseAnvils: true
+  canUseEnchanters: true
+  canUseButtons: true
+  canUseLevers: true
+  canUseDoors: true
+  
+  canAttackAllMobs: true
+  canAttackAnimals: true
+  canAttackHostile: true
+  attackAllowedMobs: [] #Can attack only these if canAttackAllMobs is false
+  attackBannedMobs: [] #Can't attack these, even if canAttackAllMobs is true
+  
+  canEat: true
+  
+  canBreakAllHanging: true #Hangings, such as paintings.
+  breakAllowedHangings: []
+  breakBannedHangings: []
+  
+  canUseBeds: true
+  
+  canPVP: true
+  
+  canFillBuckets: true
+  canEmptyBuckets: true
+  
+  canShearSheep: true
+  
+  canUseEntities: true #Leads, opening donkes, ect.
+  
+  canDamageAllVehicles: true
+  damageAllowedVehicles: []
+  damageBannedVehicles: []
+  
+  canEnterAllVehicles: true
+  
+guestPermissions: 
+  canBuildAll: false
+  buildAllowedBlocks: [] #Can place only these if canBuildAll is false
+  buildBannedBlocks: [] #Can't place these, even if canBuildAll is true
+  
+  canBreakAll: false
+  breakAllowedBlocks: [] #Can break only these if canBreakAll is false
+  breakBannedBlocks: [] #Can't break these, even if canBreakAll is true
+  
+  #Can use anything. The below are more detailed specifiers.
+  #If it is false and (eg) canUseChests is true, then the other's value is used.
+  #If it is true and (eg) canUseChests, are false, then this's value is used.
+  canUseAll: false 
+  useAllowedBlocks: [] #Can use only these if canBuildAll is false
+  useBannedBlocks: [] #Can't use these, even if canBreakAll is true
+  canUseChests: false
+  canUseFurnaces: false
+  canUseAnvils: false
+  canUseEnchanters: false
+  canUseButtons: false
+  canUseLevers: false
+  canUseDoors: false
+  
+  canAttackAllMobs: false
+  canAttackAnimals: false
+  canAttackHostile: false
+  attackAllowedMobs: [] #Can attack only these if canAttackAllMobs is false
+  attackBannedMobs: [] #Can't attack these, even if canAttackAllMobs is true
+  
+  canEat: true
+  
+  canBreakAllHanging: false #Hangings, such as paintings.
+  breakAllowedHangings: []
+  breakBannedHangings: []
+  
+  canUseBeds: false
+  
+  canPVP: false
+  
+  canFillBuckets: false
+  canEmptyBuckets: false
+  
+  canShearSheep: false
+  
+  canUseEntities: false #Leads, opening donkes, ect.
+  
+  canDamageAllVehicles: false
+  damageAllowedVehicles: []
+  damageBannedVehicles: []
+  
+  canEnterAllVehicles: false
+  
+nonmemberPermissions:
+  canBuildAll: false
+  buildAllowedBlocks: [] #Can place only these if canBuildAll is false
+  buildBannedBlocks: [] #Can't place these, even if canBuildAll is true
+  
+  canBreakAll: false
+  breakAllowedBlocks: [] #Can break only these if canBreakAll is false
+  breakBannedBlocks: [] #Can't break these, even if canBreakAll is true
+  
+  #Can use anything. The below are more detailed specifiers.
+  #If it is false and (eg) canUseChests is true, then the other's value is used.
+  #If it is true and (eg) canUseChests, are false, then this's value is used.
+  canUseAll: false 
+  useAllowedBlocks: [] #Can use only these if canBuildAll is false
+  useBannedBlocks: [] #Can't use these, even if canBreakAll is true
+  canUseChests: false
+  canUseFurnaces: false
+  canUseAnvils: false
+  canUseEnchanters: false
+  canUseButtons: false
+  canUseLevers: false
+  canUseDoors: false
+  
+  canAttackAllMobs: false
+  canAttackAnimals: false
+  canAttackHostile: false
+  attackAllowedMobs: [] #Can attack only these if canAttackAllMobs is false
+  attackBannedMobs: [] #Can't attack these, even if canAttackAllMobs is true
+  
+  canEat: true
+  
+  canBreakAllHanging: false #Hangings, such as paintings.
+  breakAllowedHangings: []
+  breakBannedHangings: []
+  
+  canUseBeds: false
+  
+  canPVP: false
+  
+  canFillBuckets: false
+  canEmptyBuckets: false
+  
+  canShearSheep: false
+  
+  canUseEntities: false #Leads, opening donkes, ect.
+  
+  canDamageAllVehicles: false
+  damageAllowedVehicles: []
+  damageBannedVehicles: []
+  
+  canEnterAllVehicles: false
