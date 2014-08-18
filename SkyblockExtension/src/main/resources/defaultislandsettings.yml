@@ -1,0 +1,68 @@
+#An example of island settings.  Normaly, these are modified in-game, however.
+
+location: "x0z0" #The raw coordinates of the island.
+owner: "" #The person who owns the island.  Used only to confirm stuff.
+#This is for migrational purposes, if we ever port to use 
+#UUIDPlayerInfo from the new version.
+ownerUUID: 0 
+
+guests: [] # See beelow for the definition of guest.
+geustUUIDs: [] #UUIDS of guests, for porting purposes.
+
+#Levels: Owner, member, guest (!), nonmember.  
+#Owner - The owner of the island.
+#Member - A invited player, but not the owner.
+#Guest - Custom rank - Allows a player to temporarily have special permissions.
+#Guest is removed when the owner disconects; only the owner can grant guest.
+#Nonmember - Any other player. 
+
+ownerPermissions: 
+  canBuildAll: true
+  buildAllowedBlocks: [] #Can place only these if canBuildAll is false
+  buildBannedBlocks: [] #Can't place these, even if canBuildAll is true
+  
+  canBreakAll: true
+  breakAllowedBlocks: [] #Can break only these if canBreakAll is false
+  breakBannedBlocks: [] #Can't break these, even if canBreakAll is true
+  
+  canUseAll: true #Can use anything. The below are more detailed specifiers.
+  useAllowedBlocks: [] #Can use only these if canBuildAll is false
+  useBannedBlocks: [] #Can't use these, even if canBreakAll is true
+  canUseChests: true
+  canUseFurnaces: true
+  canUseAnvils: true
+  canUseEnchanters: true
+  canUseButtons: true
+  canUseLevers: true
+  canUseDoors: true
+  
+  canEat: true
+  
+  canAttackAllMobs: true
+  canAttackAnimals: true
+  canAttackHostile: true
+  attackAllowedMobs: [] #Can attack only these if canAttackAllMobs is false
+  attackBannedMobs: [] #Can't attack these, even if canAttackAllMobs is true
+  
+  canShearSheep: true
+  
+  canBreakAllHanging: true #Hangings eg painting/
+  breakAllowedHangings: []
+  breakBannedHangings: []
+  
+  canUseBeds: true
+  
+  canFillBuckets: true
+  canEmptyBuckets: true
+  
+  canUseEntities: true #Leads, opening donkes, ect.
+  
+  canDamageAllVehicles: true
+  damageAllowedVehicles: []
+  damageBannedVehicles: []
+  
+  canEnterAllVehicles: true
+  enterAllowedVehicles: []
+  enterBannedVehicles: []
+  
+  canPVP: true
