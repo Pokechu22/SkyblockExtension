@@ -36,15 +36,13 @@ ownerPermissions:
   canUseLevers: true
   canUseDoors: true
   
-  canEat: true
-  
   canAttackAllMobs: true
   canAttackAnimals: true
   canAttackHostile: true
   attackAllowedMobs: [] #Can attack only these if canAttackAllMobs is false
   attackBannedMobs: [] #Can't attack these, even if canAttackAllMobs is true
   
-  canShearSheep: true
+  canEat: true
   
   canBreakAllHanging: true #Hangings eg painting/
   breakAllowedHangings: []
@@ -52,8 +50,12 @@ ownerPermissions:
   
   canUseBeds: true
   
+  canPVP: true
+  
   canFillBuckets: true
   canEmptyBuckets: true
+  
+  canShearSheep: true
   
   canUseEntities: true #Leads, opening donkes, ect.
   
@@ -64,5 +66,3 @@ ownerPermissions:
   canEnterAllVehicles: true
   enterAllowedVehicles: []
   enterBannedVehicles: []
-  
-  canPVP: true
