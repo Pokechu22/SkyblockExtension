@@ -60,7 +60,7 @@ ownerPermissions:
   
   canShearSheep: true
   
-  canUseEntities: true #Leads, opening donkes, ect.
+  canUseEntities: true #Leads, opening donkeys, ect.
   
   canDamageAllVehicles: true
   damageAllowedVehicles: []
@@ -114,7 +114,7 @@ memberPermissions:
   
   canShearSheep: true
   
-  canUseEntities: true #Leads, opening donkes, ect.
+  canUseEntities: true #Leads, opening donkeys, ect.
   
   canDamageAllVehicles: true
   damageAllowedVehicles: []
@@ -166,7 +166,7 @@ guestPermissions:
   
   canShearSheep: false
   
-  canUseEntities: false #Leads, opening donkes, ect.
+  canUseEntities: false #Leads, opening donkeys, ect.
   
   canDamageAllVehicles: false
   damageAllowedVehicles: []
@@ -218,7 +218,7 @@ nonmemberPermissions:
   
   canShearSheep: false
   
-  canUseEntities: false #Leads, opening donkes, ect.
+  canUseEntities: false #Leads, opening donkeys, ect.
   
   canDamageAllVehicles: false
   damageAllowedVehicles: []
