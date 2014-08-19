@@ -99,6 +99,10 @@ public class SkyblockExtension extends JavaPlugin {
 				CommandMultiChallenge.Run(sender, cmd, label, args);
 				break;
 			}
+			case "islandprotection": {
+				CommandIslandProtection.Run(sender, cmd, label, args);
+				break;
+			}
 			default: {
 				// Tell player.
 				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
@@ -163,6 +167,9 @@ public class SkyblockExtension extends JavaPlugin {
 			case "multichallenge": {
 				
 				return CommandMultiChallenge.onTabComplete(sender, cmd, label, args);
+			}
+			case "islandprotection": {
+				return CommandIslandProtection.onTabComplete(sender, cmd, label, args);
 			}
 			default: {
 				// Tell player.

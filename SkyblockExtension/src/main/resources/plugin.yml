@@ -20,6 +20,12 @@ commands:
     usage: |
           /multichallenge help
     aliases: [mc, spamchallenge]
+  
+  islandprotection: 
+    description: Configure custom protections for your island!
+    usage: |
+          /islandprotection help
+    aliases: [isprot]
     
 
 permissions: 
@@ -62,7 +68,8 @@ permissions:
   sbe.debug.crashes.write*: 
     description: Gives access to anything involving modifying existing crashes.
     children: 
-      #
+      sbe.debug.crashes.remove: true
+      sbe.debug.crashes.reset: true
   
   sbe.debug.crashes.list: 
     description: Allows listing of crashes.
