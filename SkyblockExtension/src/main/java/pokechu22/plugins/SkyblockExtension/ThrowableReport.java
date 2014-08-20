@@ -25,6 +25,8 @@ public class ThrowableReport extends CrashReport {
 	
 	//From the constructor.
 	public Throwable thrown;
+	
+	public boolean hasCommand;
 	public String senderClass;
 	public String senderName;
 	public boolean senderIsOp;
@@ -32,23 +34,64 @@ public class ThrowableReport extends CrashReport {
 	public String label;
 	public String[] args;
 	
+	public boolean hasContext;
+	public String context;
+	
 	/**
 	 * When the error occurred.
 	 */
 	public Date loggedDate;
 	
 	/**
+	 * Creates a report.
+	 * @param thrown
+	 */
+	public ThrowableReport(Throwable thrown) {
+		this(thrown, false, null, null, null, null, false, null);
+	}
+	
+	/**
+	 * Creates a report.
+	 * @param thrown
+	 * @param context
+	 */
+	public ThrowableReport(Throwable thrown, String context) {
+		this(thrown, false, null, null, null, null, true, context);
+	}
+	
+	/**
 	 * Creates a crash report.
 	 */
 	public ThrowableReport(Throwable thrown, CommandSender sender, Command cmd, 
 			String label, String[] args) {
+		this(thrown, true, sender, cmd, label, args, false, null);
+	}
+	
+	/**
+	 * Creates a crash report.
+	 */
+	public ThrowableReport(Throwable thrown, CommandSender sender, Command cmd, 
+			String label, String[] args, String context) {
+		this(thrown, true, sender, cmd, label, args, true, context);
+	}
+	
+	/**
+	 * Internal creation of a report.
+	 */
+	private ThrowableReport(Throwable thrown, boolean hasCommand, CommandSender sender, 
+			Command cmd, String label, String[] args, boolean hasContext, String context) {
 		this.thrown = thrown;
+		
+		this.hasCommand = hasCommand;
 		this.senderClass = sender.getClass().getName();
 		this.senderName = sender.getName();
 		this.senderIsOp = sender.isOp();
-		//this.sender = sender;
 		this.cmd = cmd.toString();
 		this.label = label;
+		
+		this.hasContext = hasContext;
+		this.context = context;
+		
 		this.args = args;
 		
 		this.loggedDate = new Date(); //Current time.
@@ -63,25 +106,31 @@ public class ThrowableReport extends CrashReport {
 		StringBuilder text = new StringBuilder();
 		
 		text.append(thrown.toString() + "\n");
-		text.append("Occured on: " + loggedDate.toString() + "\n"); 
-		text.append("Sender: " + senderName + (senderIsOp ? " (Op)" : "") + "\n");
-		text.append("Sender is ");
-		if (senderClass.startsWith("a") || 
-				senderClass.startsWith("e") || 
-				senderClass.startsWith("i") || 
-				senderClass.startsWith("o") || 
-				senderClass.startsWith("u")) {
-			text.append("a ");
-		} else {
-			text.append("an ");
+		text.append("Occured on: " + loggedDate.toString() + "\n");
+		if (this.hasContext) {
+			text.append("Context: " + context + "\n");
 		}
-		text.append(senderClass + "\n");
-		text.append("Command: " + cmd + "\n");
-		text.append("(Label: " + label + ")\n");
-		text.append("Arguments: Length = " + args.length + "\n"); 
-		//Add each argument.
-		for (int i = 0; i < args.length; i++) {
-			text.append("args[" + i + "]: " + args[i] + "\n");
+		if (this.hasCommand) {
+			text.append("Command info: ");
+			text.append("  Sender: " + senderName + (senderIsOp ? " (Op)" : "") + "\n");
+			text.append("  Sender is ");
+			if (senderClass.startsWith("a") || 
+					senderClass.startsWith("e") || 
+					senderClass.startsWith("i") || 
+					senderClass.startsWith("o") || 
+					senderClass.startsWith("u")) {
+				text.append("a ");
+			} else {
+				text.append("an ");
+			}
+			text.append(senderClass + "\n");
+			text.append("  Command: " + cmd + "\n");
+			text.append("  (Label: " + label + ")\n");
+			text.append("  Arguments: Length = " + args.length + "\n"); 
+			//Add each argument.
+			for (int i = 0; i < args.length; i++) {
+				text.append("  args[" + i + "]: " + args[i] + "\n");
+			}
 		}
 		//Add the stacktrace.
 		text.append("Stacktrace: \n");
@@ -149,12 +198,19 @@ public class ThrowableReport extends CrashReport {
 		
 		//The casts are useless but show the type.
 		map.put("Thrown", (HashMap<String, Object>) thrownMap);
-		map.put("SenderClass", (String) senderClass);
-		map.put("SenderName", (String) senderName);
-		map.put("SenderIsOp", (boolean) senderIsOp);
-		map.put("Cmd", (String) this.cmd);
-		map.put("Label", (String) this.label);
-		map.put("Args", (ArrayList<String>) argsList);
+		map.put("HasCommand", this.hasCommand);
+		if (this.hasCommand) {
+			map.put("SenderClass", (String) senderClass);
+			map.put("SenderName", (String) senderName);
+			map.put("SenderIsOp", (boolean) senderIsOp);
+			map.put("Cmd", (String) this.cmd);
+			map.put("Label", (String) this.label);
+			map.put("Args", (ArrayList<String>) argsList);
+		}
+		map.put("HasContext", this.hasContext);
+		if (this.hasContext) {
+			map.put("Context", context);
+		}
 		map.put("LoggedDate", (Date) this.loggedDate);
 		map.put("Readers", (HashSet<String>) this.readers);
 		
@@ -198,13 +254,20 @@ public class ThrowableReport extends CrashReport {
 			String[] argsArray = argsList.toArray(new String[argsList.size()]);
 			
 			this.thrown = t;
-			this.senderName = (String) map.get("SenderName");
-			this.senderClass = (String) map.get("SenderClass");
-			this.senderIsOp = (boolean) map.get("SenderIsOp");
-			//this.sender = (CommandSender) map.get("Sender");
-			this.cmd = (String) map.get("Cmd");
-			this.label = (String) map.get("Label");
-			this.args = argsArray;
+			this.hasCommand = (boolean) map.get("HasCommand");
+			if (this.hasCommand) {
+				this.senderName = (String) map.get("SenderName");
+				this.senderClass = (String) map.get("SenderClass");
+				this.senderIsOp = (boolean) map.get("SenderIsOp");
+				//this.sender = (CommandSender) map.get("Sender");
+				this.cmd = (String) map.get("Cmd");
+				this.label = (String) map.get("Label");
+				this.args = argsArray;
+			}
+			this.hasContext = (boolean) map.get("HasContext");
+			if (this.hasContext) {
+				this.context = (String) map.get("Context");
+			}
 			this.loggedDate = (Date) map.get("LoggedDate");
 			this.readers = (HashSet<String>) map.get("Readers");
 		} catch (ClassCastException | InstantiationException | IllegalAccessException 
@@ -212,6 +275,8 @@ public class ThrowableReport extends CrashReport {
 				| SecurityException | ClassNotFoundException e) {
 			SkyblockExtension.inst().getLogger().warning("Failed to create: " + e.toString());
 			SkyblockExtension.inst().getLogger().log(Level.WARNING, "Exception: ", e);
+			ErrorHandler.logError(new ConfigurationErrorReport(e, this.getClass().getName(), 
+					false));
 			return;
 		}
 		
