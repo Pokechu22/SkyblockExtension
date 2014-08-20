@@ -8,63 +8,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.EntityType;
 
 public class IslandProtectionDataSet implements ConfigurationSerializable {
-	enum HangingType {
-		PAINTING(EntityType.PAINTING), 
-		ITEM_FRAME(EntityType.ITEM_FRAME),
-		LEASH_HITCH(EntityType.LEASH_HITCH);
-		
-		public boolean matches(EntityType entity) {
-			return type.equals(entity);
-		}
-		
-		private EntityType type;
-		
-		private HangingType(EntityType t) {
-			this.type = t;
-		}
-		
-		public static boolean isHanging(EntityType entity) {
-			for (HangingType hangingType : HangingType.values()) {
-				if (hangingType.matches(entity)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-	
-	enum VehicleType {
-		BOAT(EntityType.BOAT), 
-		HORSE(EntityType.HORSE),
-		PIG(EntityType.PIG),
-		MINECART(EntityType.MINECART),
-		MINECART_CHEST(EntityType.MINECART_CHEST),
-		MINECART_COMMAND(EntityType.MINECART_COMMAND),
-		MINECART_FURNACE(EntityType.MINECART_FURNACE),
-		MINECART_HOPPER(EntityType.MINECART_HOPPER),
-		MINECART_MOB_SPAWNER(EntityType.MINECART_MOB_SPAWNER),
-		MINECART_TNT(EntityType.MINECART_TNT);
-		
-		public boolean matches(EntityType entity) {
-			return type.equals(entity);
-		}
-		
-		private EntityType type;
-		
-		private VehicleType(EntityType t) {
-			this.type = t;
-		}
-		
-		public static boolean isVehicle(EntityType entity) {
-			for (VehicleType vehicleType : VehicleType.values()) {
-				if (vehicleType.matches(entity)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-	
 	public boolean canBuildAll;
 	public List<Material> buildAllowedBlocks;
 	public List<Material> buildBannedBlocks;
