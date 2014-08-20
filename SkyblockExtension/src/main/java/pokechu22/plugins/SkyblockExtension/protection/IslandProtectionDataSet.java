@@ -7,16 +7,23 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.EntityType;
 
+/**
+ * <b>Serializable</b> protection configuration data, for a single entry.
+ * 
+ * @author Pokechu22
+ *
+ */
 public class IslandProtectionDataSet implements ConfigurationSerializable {
-	public boolean canBuildAll;
+	
+	public boolean canBuildAllBlocks;
 	public List<Material> buildAllowedBlocks;
 	public List<Material> buildBannedBlocks;
 	
-	public boolean canBreakAll;
+	public boolean canBreakAllBlocks;
 	public List<Material> breakAllowedBlocks;
 	public List<Material> breakBannedBlocks;
 	
-	public boolean canUseAll;
+	public boolean canUseAllItems;
 	public List<Material> useAllowedBlocks;
 	public List<Material> useBannedBlocks;
 	
@@ -41,7 +48,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	
 	public boolean canShearSheep;
 	
-	public boolean canUseEntities;
+	public boolean canUseAllEntities;
 	public List<EntityType> useAllowedEntities;
 	public List<EntityType> useBannedEntities;
 	
