@@ -7,6 +7,8 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+
 public class CommandIslandProtection {
 	/**
 	 * Subcommands, belonging to args[0].
@@ -62,8 +64,18 @@ public class CommandIslandProtection {
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
-		
+		if (args.length == 2) {
+			try {
+				test.getClass().getField(args[0]).set(test, Boolean.valueOf(args[1]));
+			} catch (Exception e) {
+				sender.sendMessage("no: " + e.toString());
+			}
+		} else {
+			sender.sendMessage(Arrays.toString(test.getClass().getFields()));
+		}
 	}
+	
+	public static IslandProtectionDataSet test;
 	
 	/**
 	 * Filters tab completion for starting with same letter.

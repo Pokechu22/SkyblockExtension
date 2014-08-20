@@ -6,6 +6,9 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
 
+import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+
 /**
  * Utility class for dealing with bukkit configurations.
  * 
@@ -39,6 +42,8 @@ public class Config {
 			ErrorHandler.errors = errors;
 		}
 		
+		CommandIslandProtection.test = (IslandProtectionDataSet) getDefaultConfig().get("test", new IslandProtectionDataSet());
+		
 		getLogger().info("Configuration loaded!");
 	}
 	
@@ -52,6 +57,8 @@ public class Config {
 		getLogger().config("Saved CrashReports.");
 		
 		getLogger().info("Configuration saved!");
+		
+		getDefaultConfig().set("test", CommandIslandProtection.test);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}

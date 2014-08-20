@@ -55,6 +55,7 @@ public class SkyblockExtension extends JavaPlugin {
 				"ThrowableReport");
 		ConfigurationSerialization.registerClass(ConfigurationErrorReport.class,
 				"ConfigurationErrorReport");
+		ConfigurationSerialization.registerClass(pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet.class);
 
 		this.saveDefaultVersionsOfAllConfigs();
 
