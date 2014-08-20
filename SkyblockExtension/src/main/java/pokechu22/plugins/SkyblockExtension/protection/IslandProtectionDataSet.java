@@ -1,7 +1,10 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -178,13 +181,28 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public List<VehicleType> enterBannedVehicles;
 	
 	/**
+	 * Default constructor.
+	 */
+	public IslandProtectionDataSet() {
+		
+	}
+	
+	/**
 	 * Serialization for use with a configuration file.
 	 */
 	@Override
 	public Map<String, Object> serialize() {
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		// TODO Auto-generated method stub
-		return null;
+		for (Field f : this.getClass().getFields()) {
+			try {
+			map.put(f.getName(), f.get(map));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return map;
 	}
 	
 	/**
@@ -193,7 +211,15 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * @return
 	 */
 	public IslandProtectionDataSet(Map<String, Object> map) {
-		
+		//Reflection shenanigans; I don't want to write everything out.
+		Set<String> keys = map.keySet();
+		for (String key : keys) {
+			try {
+				this.getClass().getField(key).set(this, map.get(key));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
