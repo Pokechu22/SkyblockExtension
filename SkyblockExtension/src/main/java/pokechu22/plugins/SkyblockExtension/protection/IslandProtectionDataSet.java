@@ -71,14 +71,14 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public List<Material> useBannedBlocks;
 	
 	/**
-	 * Can one attack all mobs?
+	 * Can one attack all entities?
 	 * 
 	 * NOTE: When using {@link #canAttackAnimals} and 
 	 * {@link #canAttackHostile}, this counts as both of them being true,
 	 * along with handling all other entities.  Otherwise, the normal rules
 	 * are applied.
 	 */
-	public boolean canAttackAllMobs;
+	public boolean canAttackAllEntities;
 	/**
 	 * Can one attack all passive mobs?
 	 */
@@ -88,13 +88,13 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 */
 	public boolean canAttackHostile;
 	/**
-	 * Mobs that are allowed to be attacked.
+	 * Entities that are allowed to be attacked.
 	 */
-	public List<EntityType> attackAllowedMobs;
+	public List<EntityType> attackAllowedEntities;
 	/**
 	 * Mobs that cannot be attacked.
 	 */
-	public List<EntityType> attackBannedMobs;
+	public List<EntityType> attackBannedEntities;
 	
 	/**
 	 * Can one eat?
