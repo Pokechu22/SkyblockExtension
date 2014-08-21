@@ -259,6 +259,41 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
+	 * Gets a flag (as a String!).
+	 * @return The flag, or an error message.  
+	 */
+	public String getFlag(String flag) {
+		if (!flags.containsKey(flag)) {
+			return "§cFlag " + flag + " does not exist.";
+		}
+		
+		try {
+			return this.getClass().getField(flag).get(this).toString();
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (IllegalAccessException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (NoSuchFieldException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to find relevant field.  " + 
+							"Flag: " + flag + ".  " + 
+							"This probably means that flags is incorect."));
+			return "§cAn error occured: " + e.toString();
+		} catch (SecurityException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return "§cAn error occured: " + e.toString();
+		}
+	}
+	
+	/**
 	 * Sets a flag on this.  
 	 * Note: Uses reflection.
 	 * 

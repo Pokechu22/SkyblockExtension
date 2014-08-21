@@ -50,6 +50,33 @@ public class CommandIslandProtection {
 			}
 			}
 		}
+		if (args.length == 3) {
+			switch (args[0].toLowerCase()) {
+			case "view": //Fall thru to next
+			case "set": {
+				return TabLimit(new ArrayList<String>(
+						IslandProtectionDataSet.flags.keySet()), args[1]);
+			}
+			}
+		}
+		//NYI
+		/*if (args.length == 4) {
+			switch (args[0].toLowerCase()) {
+			case "view": //Fall thru to next
+			case "set": {
+				if (!IslandProtectionDataSet.flags.containsKey(args[2])) {
+					//Return nothing.
+					return new ArrayList<String>();
+				}
+				
+				switch (IslandProtectionDataSet.flags.get(args[2])) {
+				default: {
+					
+				}
+				}
+			}
+			}
+		}*/
 
 		//Basically, return nothing, rather than null which gives all online players.
 		return new ArrayList<String>();
@@ -58,13 +85,22 @@ public class CommandIslandProtection {
 	/**
 	 * Runs the command.
 	 * 
+	 * TODO: Make better (EG Error messages).
+	 * 
 	 * @param sender
 	 * @param cmd
 	 * @param label
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
-		
+		if (args.length == 4) {
+			if (args[0].equalsIgnoreCase("set")) {
+				sender.sendMessage(test.setFlag(args[2], args[3]));
+			}
+			if (args[0].equalsIgnoreCase("view")) {
+				sender.sendMessage(test.getFlag(args[2]));
+			}
+		}
 	}
 	
 	public static IslandProtectionDataSet test;
