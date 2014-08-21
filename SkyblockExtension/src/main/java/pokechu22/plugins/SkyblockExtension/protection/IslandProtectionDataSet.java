@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.EntityType;
 
+import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.ThrowableReport;
+
 /**
  * <b>Serializable</b> protection configuration data, for a single entry.
  * 
@@ -15,6 +20,74 @@ import org.bukkit.entity.EntityType;
  *
  */
 public class IslandProtectionDataSet implements ConfigurationSerializable {
+	/**
+	 * Different flags available.
+	 * First value is the name, second is the type.<br>
+	 * Currently used types: 
+	 * <dl>
+	 * <dt><code>Boolean</code></dt>
+	 * <dd>Requires a boolean value of either true or false.<br>
+	 * Actual type: boolean</dd>
+	 * 
+	 * <dt><code>MaterialList</code></dt>
+	 * <dd>Represents list of materials: Both blocks and items.<br>
+	 * Actual type: <tt>{@link List}&lt;{@link Material}&gt;</tt></dd>
+	 * 
+	 * <dt><code>EntityList</code></dt>
+	 * <dd>Represents a list of all entities.<br>
+	 * Actual type: <tt>{@link List}&lt;{@link EntityType}&gt;</tt></dd>
+	 * 
+	 * <dt><code>HangingList</code></dt>
+	 * <dd>Represents a list of all hangings.<br>
+	 * Actual type: <tt>{@link List}&lt;{@link HangingType}&gt;</tt></dd>
+	 * 
+	 * <dt><code>VehicleList</code></dt>
+	 * <dd>Represents a list of all vehicles.<br>
+	 * Actual type: <tt>{@link List}&lt;{@link VehicleType}&gt;</tt></dd>
+	 * </dl>
+	 */
+	public static final Map<String, String> flags;
+	
+	/**
+	 * Sets up flags.
+	 */
+	static {
+		HashMap<String, String> flagsTemp = new HashMap<String, String>();
+		flagsTemp.put("canBuildAllBlocks", "Boolean");
+		flagsTemp.put("buildAllowedBlocks", "MaterialList");
+		flagsTemp.put("buildBannedBlocks", "MaterialList");
+		flagsTemp.put("canBreakAllBlocks", "Boolean");
+		flagsTemp.put("breakAllowedBlocks", "MaterialList");
+		flagsTemp.put("breakBannedBlocks", "MaterialList");
+		flagsTemp.put("canUseAllItems", "Boolean");
+		flagsTemp.put("useAllowedBlocks", "MaterialList");
+		flagsTemp.put("useBannedBlocks", "MaterialList");
+		flagsTemp.put("canAttackAllMobs", "Boolean");
+		flagsTemp.put("canAttackAnimals", "Boolean");
+		flagsTemp.put("canAttackHostile", "Boolean");
+		flagsTemp.put("attackAllowedMobs", "EntityList");
+		flagsTemp.put("attackBannedMobs", "EntityList");
+		flagsTemp.put("canEat", "Boolean");
+		flagsTemp.put("canBreakAllHanging", "Boolean");
+		flagsTemp.put("breakAllowedHangings", "HangingList");
+		flagsTemp.put("breakBannedHangings", "HangingList");
+		flagsTemp.put("canUseBeds", "Boolean");
+		flagsTemp.put("canPVP", "Boolean");
+		flagsTemp.put("canFillBuckets", "Boolean");
+		flagsTemp.put("canEmptyBuckets", "Boolean");
+		flagsTemp.put("canShearSheep", "Boolean");
+		flagsTemp.put("canUseAllEntities", "Boolean");
+		flagsTemp.put("useAllowedEntities", "EntityList");
+		flagsTemp.put("useBannedEntities", "EntityList");
+		flagsTemp.put("canDamageAllVehicles", "Boolean");
+		flagsTemp.put("damageAllowedVehicles", "VehicleList");
+		flagsTemp.put("damageBannedVehicles", "VehicleList");
+		flagsTemp.put("canEnterAllVehicles", "Boolean");
+		flagsTemp.put("enterAllowedVehicles", "VehicleList");
+		flagsTemp.put("enterBannedVehicles", "VehicleList");
+		flags = Collections.unmodifiableMap(flagsTemp);
+	};
+	
 	/*
 	 * A note about the way all of these work, by way of examples: <br>
 	 * (Foo is a verb, eg "Attack", and bar is a noun, eg "Mobs")
@@ -183,6 +256,119 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 */
 	public IslandProtectionDataSet() {
 		
+	}
+	
+	/**
+	 * Sets a flag on this.  
+	 * Note: Uses reflection.
+	 * 
+	 * @param flag
+	 * @param value
+	 * 
+	 * @returns A message relating to success or failure.  
+	 * 			If you want to know if there was success, check the second 
+	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
+	 * 			success.
+	 */
+	public String setFlag(String flag, String value) {
+		if (!flags.containsKey(flag)) {
+			return "§cFlag " + flag + " does not exist.";
+		}
+		try {
+			switch (flags.get(flag)) {
+			case "Boolean": {
+				if (value.equalsIgnoreCase("true")) {
+					this.getClass().getField(flag).set(this, true);
+					return "§aFlag set successfully.";
+				} else if (value.equalsIgnoreCase("false")) {
+					this.getClass().getField(flag).set(this, true);
+					return "§aFlag set successfully.";
+				} else {
+					return "§cValue " + value + "is not a valid boolean."; 
+				}
+			}
+			case "MaterialList": {
+				//If there is only 1 [ and 1 ], and both are at the start 
+				//and end of the strings...
+				if (!((value.indexOf("[") == 0) 
+						&& value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") != value.length() - 1)) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+				String[] materialsStrings = 
+						value.substring(1, value.length() - 1)
+						.split(",");
+				List<Material> tempList = new ArrayList<Material>();
+				for (int i = 0; i < materialsStrings.length; i++) {
+					Material material = 
+							Material.matchMaterial(materialsStrings[i]);
+					if (material == null) {
+						return "§cMaterial \"" + materialsStrings[i] + 
+								"\" is not recognised.\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(materialsStrings[i], 
+										"§4§l" + materialsStrings[i] + 
+										"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+					}
+					
+					if (tempList.contains(material)) {
+						return "§cMaterial \"" + materialsStrings[i] + 
+								"\" is already entered.  (Repeat entries " +
+								"are not allowed).\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(materialsStrings[i], 
+										"§4§l" + materialsStrings[i] + 
+										"§r§c") + ")";
+					}
+					
+					tempList.add(material);
+					
+				}
+				
+				//Now handle the field.
+				this.getClass().getField(flag).set(this, tempList);
+				
+				return "§aFlag set successfully.";
+			}
+			case "EntityList":
+			case "HangingList":
+			case "VehicleList": {
+				//TODO.
+				break;
+			}
+			default: {
+				//return "§cFlag type " + flags.get(flag) + 
+					//	"is not recognised.";
+				
+			}
+			}
+		//Most of the exceptions here shouldn't happen, but they might.
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to set field.  Flag: " + 
+							flag + "; Value: " + value + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (IllegalAccessException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to set field.  Flag: " + 
+							flag + "; Value: " + value + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (NoSuchFieldException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to find relevant field.  " + 
+							"Flag: " + flag + "; Value: " + value + ".  " + 
+							"This probably means that flags is incorect."));
+			return "§cAn error occured: " + e.toString();
+		} catch (SecurityException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to set field.  Flag: " + 
+							flag + "; Value: " + value + "."));
+			return "§cAn error occured: " + e.toString();
+		}
+		return "";
 	}
 	
 	/**
