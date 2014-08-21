@@ -68,7 +68,7 @@ public class Config {
 	 *
 	 * @return The configuration.
 	 */
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	private static Configuration getDefaultConfig() {
 		return SkyblockExtension.inst().getConfig();
 	}
