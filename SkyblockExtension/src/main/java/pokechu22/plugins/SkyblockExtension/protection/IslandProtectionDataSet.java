@@ -290,8 +290,264 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 					"Failed to use reflection to get field.  Flag: " + 
 							flag + "."));
 			return "§cAn error occured: " + e.toString();
+		} catch (NullPointerException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Flag is null.  Flag: " + 
+							flag + "."));
+			return "§cAn error occured - Flag is null?: " + e.toString();
 		}
 	}
+	
+	/**
+	 * Adds additional data to an existing flag.
+	 * @param flag
+	 * @param addition
+	 * @param force
+	 * 			Whether to force it - If false, returns an error when trying
+	 * 			to add a value that exists in the flag already.  Otherwise,
+	 * 			it gives a warning, but still merges. 
+	 * @returns A message relating to success or failure.  
+	 * 			If you want to know if there was success, check the second 
+	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
+	 * 			success.
+	 */
+	/*@SuppressWarnings("unchecked")
+	public String addToFlag(String flag, String addition, boolean force) {
+		if (!flags.containsKey(flag)) {
+			return "§cFlag " + flag + " does not exist.";
+		}
+		
+		switch (flags.get(flag)) {
+		case "Boolean": {
+			return "§cBoolean flags cannot be added to!";
+		}
+		case "MaterialList": {
+			//If there is only 1 [ and 1 ], and both are at the start 
+			//and end of the strings...
+			if (!((value.indexOf("[") == 0) 
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+			
+			String[] materialsStrings = 
+					addition.substring(1, addition.length() - 1)
+					.split(",");
+			List<Material> addList = new ArrayList<Material>();
+			for (int i = 0; i < materialsStrings.length; i++) {
+				Material material = 
+						Material.matchMaterial(materialsStrings[i]);
+				if (material == null) {
+					return "§cMaterial \"" + materialsStrings[i] + 
+							"\" is not recognised.\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(materialsStrings[i], 
+									"§4§l" + materialsStrings[i] + 
+									"§r§c") + ")\n" + 
+							"§cTry using tab completion next time.";
+				}
+				
+				if (addList.contains(material)) {
+					return "§cMaterial \"" + materialsStrings[i] + 
+							"\" is already entered.  (Repeat entries " +
+							"are not allowed).\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(materialsStrings[i], 
+									"§4§l" + materialsStrings[i] + 
+									"§r§c") + ")";
+				}
+				
+				addList.add(material);
+				
+			}
+			
+			//Now handle the field.
+			this.getClass().getField(flag).set(this, addList);
+			
+			return "§aFlag set successfully.";
+		}
+		case "EntityList": {
+			//If there is only 1 [ and 1 ], and both are at the start 
+			//and end of the strings...
+			if (!((value.indexOf("[") == 0) 
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+			String[] entityStrings = 
+					addition.substring(1, addition.length() - 1)
+					.split(",");
+			List<EntityType> addList = new ArrayList<EntityType>();
+			for (int i = 0; i < entityStrings.length; i++) {
+				EntityType entity = 
+						EntityType.valueOf(entityStrings[i].trim()
+								.toUpperCase());
+				if (entity == null) {
+					return "§cEntity \"" + entityStrings[i] + 
+							"\" is not recognised.\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(entityStrings[i], 
+									"§4§l" + entityStrings[i] + 
+									"§r§c") + ")\n" + 
+							"§cTry using tab completion next time.";
+				}
+				
+				if (addList.contains(entity)) {
+					return "§cEntity \"" + entityStrings[i] + 
+							"\" is already entered.  (Repeat entries " +
+							"are not allowed).\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(entityStrings[i], 
+									"§4§l" + entityStrings[i] + 
+									"§r§c") + ")";
+				}
+				
+				addList.add(entity);
+				
+			}
+			
+			//Now handle the field.
+			this.getClass().getField(flag).set(this, addList);
+			
+			return "§aFlag set successfully.";
+		}
+		case "HangingList": {
+			//If there is only 1 [ and 1 ], and both are at the start 
+			//and end of the strings...
+			if (!((value.indexOf("[") == 0) 
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+			String[] hangingStrings = 
+					addition.substring(1, addition.length() - 1)
+					.split(",");
+			List<HangingType> addList = new ArrayList<HangingType>();
+			for (int i = 0; i < hangingStrings.length; i++) {
+				HangingType hanging = 
+						HangingType.valueOf(hangingStrings[i].trim()
+								.toUpperCase());
+				if (hanging == null) {
+					return "§cHanging \"" + hangingStrings[i] + 
+							"\" is not recognised.\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(hangingStrings[i], 
+									"§4§l" + hangingStrings[i] + 
+									"§r§c") + ")\n" + 
+							"§cTry using tab completion next time.";
+				}
+				
+				if (addList.contains(hanging)) {
+					return "§cHanging \"" + hangingStrings[i] + 
+							"\" is already entered.  (Repeat entries " +
+							"are not allowed).\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(hangingStrings[i], 
+									"§4§l" + hangingStrings[i] + 
+									"§r§c") + ")";
+				}
+				
+				addList.add(hanging);
+				
+			}
+			
+			//Now handle the field.
+			this.getClass().getField(flag).set(this, addList);
+			
+			return "§aFlag set successfully.";
+		}
+		case "VehicleList": {
+			//If there is only 1 [ and 1 ], and both are at the start 
+			//and end of the strings...
+			if (!((value.indexOf("[") == 0) 
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+			String[] vehicleStrings = 
+					addition.substring(1, addition.length() - 1)
+					.split(",");
+			List<VehicleType> addList = new ArrayList<VehicleType>();
+			for (int i = 0; i < vehicleStrings.length; i++) {
+				VehicleType vehicle = 
+						VehicleType.valueOf(vehicleStrings[i].trim()
+								.toUpperCase());
+				if (vehicle == null) {
+					return "§cVehicle \"" + vehicleStrings[i] + 
+							"\" is not recognised.\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(vehicleStrings[i], 
+									"§4§l" + vehicleStrings[i] + 
+									"§r§c") + ")\n" + 
+							"§cTry using tab completion next time.";
+				}
+				
+				if (addList.contains(vehicle)) {
+					return "§cVehicle \"" + vehicleStrings[i] + 
+							"\" is already entered.  (Repeat entries " +
+							"are not allowed).\n(Location: " + 
+							//Bolds the error.
+							addition.replaceAll(vehicleStrings[i], 
+									"§4§l" + vehicleStrings[i] + 
+									"§r§c") + ")";
+				}
+				
+				addList.add(vehicle);
+				
+			}
+			
+			//Now handle the field.
+			List<VehicleType> oldList = (List<VehicleType>)
+					this.getClass().getField(flag).get(this);
+			
+			///Number of errors while merging, for the error message.
+			int mergeErrorCount = 0;
+			///The actual error message.
+			String highlightedErrors = addition;
+			List<String> erroredValues = new ArrayList<String>();
+			
+			//Color used for the string.
+			String usedColor = (force ? "§e" : "§c");
+			
+			for (VehicleType v : oldList) {
+				if (addList.contains(v)) {
+					mergeErrorCount ++;
+					erroredValues.add(v.toString());
+				}
+			}
+			if (mergeErrorCount != 0) {
+				for (String errored : erroredValues) {
+					highlightedErrors = highlightedErrors
+							.replaceAll(errored, 
+							"§4§l" + errored + "§r" + usedColor);
+				}
+				
+				if (!force) {
+					return "§cPrevious values (Count: " + mergeErrorCount + 
+							") are already listed.  (Forcible merging " + 
+							"can be done by using the force option.\n" + 
+							"Already-existant values: " + erroredValues.;
+				}
+			}
+			
+			
+			return "§aFlag set successfully.";
+		}
+		default: {
+			return "§cInternal error: Flag type " + flags.get(flag) + 
+					"is not recognised.";
+			
+		}
+		}
+	}*/
 	
 	/**
 	 * Sets a flag on this.  
@@ -326,12 +582,13 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
 				if (!((value.indexOf("[") == 0) 
-						&& value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") != value.length() - 1)) {
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
 					return "§cList format is invalid: It must start with " +
 							"'[' and end with ']', and not have any '['" + 
 							" or ']' anywhere else in it.";
 				}
+				
 				String[] materialsStrings = 
 						value.substring(1, value.length() - 1)
 						.split(",");
@@ -372,8 +629,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
 				if (!((value.indexOf("[") == 0) 
-						&& value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") != value.length() - 1)) {
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
 					return "§cList format is invalid: It must start with " +
 							"'[' and end with ']', and not have any '['" + 
 							" or ']' anywhere else in it.";
@@ -419,8 +676,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
 				if (!((value.indexOf("[") == 0) 
-						&& value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") != value.length() - 1)) {
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
 					return "§cList format is invalid: It must start with " +
 							"'[' and end with ']', and not have any '['" + 
 							" or ']' anywhere else in it.";
@@ -466,8 +723,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
 				if (!((value.indexOf("[") == 0) 
-						&& value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") != value.length() - 1)) {
+						&& (value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") == (value.length() - 1)))) {
 					return "§cList format is invalid: It must start with " +
 							"'[' and end with ']', and not have any '['" + 
 							" or ']' anywhere else in it.";
