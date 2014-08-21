@@ -55,7 +55,7 @@ public class CommandIslandProtection {
 			case "view": //Fall thru to next
 			case "set": {
 				return TabLimit(new ArrayList<String>(
-						IslandProtectionDataSet.flags.keySet()), args[1]);
+						IslandProtectionDataSet.flags.keySet()), args[2]);
 			}
 			}
 		}
@@ -97,6 +97,8 @@ public class CommandIslandProtection {
 			if (args[0].equalsIgnoreCase("set")) {
 				sender.sendMessage(test.setFlag(args[2], args[3]));
 			}
+		}
+		if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("view")) {
 				sender.sendMessage(test.getFlag(args[2]));
 			}
