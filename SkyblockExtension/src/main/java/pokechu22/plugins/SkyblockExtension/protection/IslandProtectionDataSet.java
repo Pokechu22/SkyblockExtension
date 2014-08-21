@@ -333,15 +333,150 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				
 				return "§aFlag set successfully.";
 			}
-			case "EntityList":
-			case "HangingList":
+			case "EntityList": {
+				//If there is only 1 [ and 1 ], and both are at the start 
+				//and end of the strings...
+				if (!((value.indexOf("[") == 0) 
+						&& value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") != value.length() - 1)) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+				String[] entityStrings = 
+						value.substring(1, value.length() - 1)
+						.split(",");
+				List<EntityType> tempList = new ArrayList<EntityType>();
+				for (int i = 0; i < entityStrings.length; i++) {
+					EntityType entity = 
+							EntityType.valueOf(entityStrings[i].trim()
+									.toUpperCase());
+					if (entity == null) {
+						return "§cEntity \"" + entityStrings[i] + 
+								"\" is not recognised.\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(entityStrings[i], 
+										"§4§l" + entityStrings[i] + 
+										"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+					}
+					
+					if (tempList.contains(entity)) {
+						return "§cEntity \"" + entityStrings[i] + 
+								"\" is already entered.  (Repeat entries " +
+								"are not allowed).\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(entityStrings[i], 
+										"§4§l" + entityStrings[i] + 
+										"§r§c") + ")";
+					}
+					
+					tempList.add(entity);
+					
+				}
+				
+				//Now handle the field.
+				this.getClass().getField(flag).set(this, tempList);
+				
+				return "§aFlag set successfully.";
+			}
+			case "HangingList": {
+				//If there is only 1 [ and 1 ], and both are at the start 
+				//and end of the strings...
+				if (!((value.indexOf("[") == 0) 
+						&& value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") != value.length() - 1)) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+				String[] hangingStrings = 
+						value.substring(1, value.length() - 1)
+						.split(",");
+				List<HangingType> tempList = new ArrayList<HangingType>();
+				for (int i = 0; i < hangingStrings.length; i++) {
+					HangingType hanging = 
+							HangingType.valueOf(hangingStrings[i].trim()
+									.toUpperCase());
+					if (hanging == null) {
+						return "§cHanging \"" + hangingStrings[i] + 
+								"\" is not recognised.\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(hangingStrings[i], 
+										"§4§l" + hangingStrings[i] + 
+										"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+					}
+					
+					if (tempList.contains(hanging)) {
+						return "§cHanging \"" + hangingStrings[i] + 
+								"\" is already entered.  (Repeat entries " +
+								"are not allowed).\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(hangingStrings[i], 
+										"§4§l" + hangingStrings[i] + 
+										"§r§c") + ")";
+					}
+					
+					tempList.add(hanging);
+					
+				}
+				
+				//Now handle the field.
+				this.getClass().getField(flag).set(this, tempList);
+				
+				return "§aFlag set successfully.";
+			}
 			case "VehicleList": {
-				//TODO.
-				break;
+				//If there is only 1 [ and 1 ], and both are at the start 
+				//and end of the strings...
+				if (!((value.indexOf("[") == 0) 
+						&& value.indexOf("[", 1) == -1)
+						&& (value.indexOf("]") != value.length() - 1)) {
+					return "§cList format is invalid: It must start with " +
+							"'[' and end with ']', and not have any '['" + 
+							" or ']' anywhere else in it.";
+				}
+				String[] vehicleStrings = 
+						value.substring(1, value.length() - 1)
+						.split(",");
+				List<VehicleType> tempList = new ArrayList<VehicleType>();
+				for (int i = 0; i < vehicleStrings.length; i++) {
+					VehicleType vehicle = 
+							VehicleType.valueOf(vehicleStrings[i].trim()
+									.toUpperCase());
+					if (vehicle == null) {
+						return "§cVehicle \"" + vehicleStrings[i] + 
+								"\" is not recognised.\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(vehicleStrings[i], 
+										"§4§l" + vehicleStrings[i] + 
+										"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+					}
+					
+					if (tempList.contains(vehicle)) {
+						return "§cVehicle \"" + vehicleStrings[i] + 
+								"\" is already entered.  (Repeat entries " +
+								"are not allowed).\n(Location: " + 
+								//Bolds the error.
+								value.replaceAll(vehicleStrings[i], 
+										"§4§l" + vehicleStrings[i] + 
+										"§r§c") + ")";
+					}
+					
+					tempList.add(vehicle);
+					
+				}
+				
+				//Now handle the field.
+				this.getClass().getField(flag).set(this, tempList);
+				
+				return "§aFlag set successfully.";
 			}
 			default: {
-				//return "§cFlag type " + flags.get(flag) + 
-					//	"is not recognised.";
+				return "§cInternal error: Flag type " + flags.get(flag) + 
+						"is not recognised.";
 				
 			}
 			}
@@ -367,8 +502,12 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 					"Failed to use reflection to set field.  Flag: " + 
 							flag + "; Value: " + value + "."));
 			return "§cAn error occured: " + e.toString();
+		} catch (NullPointerException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to set field.  Flag: " + 
+							flag + "; Value: " + value + "."));
+			return "§cAn error occured: " + e.toString();
 		}
-		return "";
 	}
 	
 	/**
