@@ -62,11 +62,11 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 		flagsTemp.put("canUseAllItems", "Boolean");
 		flagsTemp.put("useAllowedBlocks", "MaterialList");
 		flagsTemp.put("useBannedBlocks", "MaterialList");
-		flagsTemp.put("canAttackAllMobs", "Boolean");
+		flagsTemp.put("canAttackAllEntities", "Boolean");
 		flagsTemp.put("canAttackAnimals", "Boolean");
 		flagsTemp.put("canAttackHostile", "Boolean");
-		flagsTemp.put("attackAllowedMobs", "EntityList");
-		flagsTemp.put("attackBannedMobs", "EntityList");
+		flagsTemp.put("attackAllowedEntities", "EntityList");
+		flagsTemp.put("attackBannedEntities", "EntityList");
 		flagsTemp.put("canEat", "Boolean");
 		flagsTemp.put("canBreakAllHanging", "Boolean");
 		flagsTemp.put("breakAllowedHangings", "HangingList");
