@@ -83,14 +83,18 @@ public class ThrowableReport extends CrashReport {
 		this.thrown = thrown;
 		
 		this.hasCommand = hasCommand;
-		this.senderClass = sender.getClass().getName();
-		this.senderName = sender.getName();
-		this.senderIsOp = sender.isOp();
-		this.cmd = cmd.toString();
-		this.label = label;
+		if (hasCommand) {
+			this.senderClass = sender.getClass().getName();
+			this.senderName = sender.getName();
+			this.senderIsOp = sender.isOp();
+			this.cmd = cmd.toString();
+			this.label = label;
+		}
 		
 		this.hasContext = hasContext;
-		this.context = context;
+		if (hasContext) {
+			this.context = context;
+		}
 		
 		this.args = args;
 		
