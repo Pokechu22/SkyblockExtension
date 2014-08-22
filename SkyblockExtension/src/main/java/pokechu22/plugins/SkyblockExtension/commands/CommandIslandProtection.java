@@ -72,15 +72,15 @@ public class CommandIslandProtection {
 						//Don't add.
 						break;
 					}
-					case "MaterialList": {
-						returned.add(e.getKey());
-						break;
-					}
+					case "MaterialList": //Fall thru.
 					case "EntityList": //Fall thru.
-					case "HangingList": //Fall thru.
-					case "VehicleList": {
+					case "HangingList": {
 						//Skipped due to temporary testing.
 						//returned.add(e.getKey());
+						break;
+					}
+					case "VehicleList": {
+						returned.add(e.getKey());
 						break;
 					}
 					default: {
