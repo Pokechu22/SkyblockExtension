@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,8 +15,10 @@ public class CommandIslandProtection {
 	 * Subcommands, belonging to args[0].
 	 */
 	private static final String[] subCommands = new String[] {
-		"view",
-		"set"
+		"view", //Shows a flag's value.
+		"add", //Adds to a flag's value.
+		"add-f", //Forcibly adds to a flag's value.
+		"set" //Sets a flag's value.
 	};
 	
 	/**
@@ -45,6 +48,8 @@ public class CommandIslandProtection {
 		if (args.length == 2) {
 			switch (args[0].toLowerCase()) {
 			case "view": //Fall thru to next
+			case "add": //Fall thru to next
+			case "add-f": //Fall thru to next
 			case "set": {
 				return TabLimit(Arrays.asList(membershipTiers), args[1]);
 			}
@@ -56,6 +61,35 @@ public class CommandIslandProtection {
 			case "set": {
 				return TabLimit(new ArrayList<String>(
 						IslandProtectionDataSet.flags.keySet()), args[2]);
+			}
+			case "add-f": //Fall thru to next
+			case "add": {
+				ArrayList<String> returned = new ArrayList<String>();
+				for (Map.Entry<String, String> e : 
+					IslandProtectionDataSet.flags.entrySet()) {
+					switch (e.getValue()) {
+					case "Boolean": {
+						//Don't add.
+						break;
+					}
+					case "MaterialList": {
+						returned.add(e.getKey());
+						break;
+					}
+					case "EntityList": //Fall thru.
+					case "HangingList": //Fall thru.
+					case "VehicleList": {
+						//Skipped due to temporary testing.
+						//returned.add(e.getKey());
+						break;
+					}
+					default: {
+						//TODO: ERROR CONDITION.
+						break;
+					}
+					}
+				}
+				return TabLimit(returned, args[2]);
 			}
 			}
 		}
@@ -96,6 +130,12 @@ public class CommandIslandProtection {
 		if (args.length == 4) {
 			if (args[0].equalsIgnoreCase("set")) {
 				sender.sendMessage(test.setFlag(args[2], args[3]));
+			}
+			if (args[0].equalsIgnoreCase("add")) {
+				sender.sendMessage(test.addToFlag(args[2], args[3], false));
+			}
+			if (args[0].equalsIgnoreCase("add-f")) {
+				sender.sendMessage(test.addToFlag(args[2], args[3], true));
 			}
 		}
 		if (args.length == 3) {

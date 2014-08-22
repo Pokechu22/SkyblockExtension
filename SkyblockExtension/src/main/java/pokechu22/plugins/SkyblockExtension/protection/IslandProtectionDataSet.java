@@ -311,243 +311,132 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	/*@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public String addToFlag(String flag, String addition, boolean force) {
 		if (!flags.containsKey(flag)) {
 			return "§cFlag " + flag + " does not exist.";
 		}
 		
-		switch (flags.get(flag)) {
-		case "Boolean": {
-			return "§cBoolean flags cannot be added to!";
-		}
-		case "MaterialList": {
-			//If there is only 1 [ and 1 ], and both are at the start 
-			//and end of the strings...
-			if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
+		try {
+			switch (flags.get(flag)) {
+			case "Boolean": {
+				return "§cBoolean flags cannot be added to!";
+			}
+			case "VehicleList": {
+				//If there is only 1 [ and 1 ], and both are at the start 
+				//and end of the strings...
+				if (!((addition.indexOf("[") == 0) 
+						&& (addition.indexOf("[", 1) == -1)
+						&& (addition.indexOf("]") == (addition.length() - 1)))) {
 					return "§cList format is invalid: It must start with " +
 							"'[' and end with ']', and not have any '['" + 
 							" or ']' anywhere else in it.";
 				}
-			
-			String[] materialsStrings = 
-					addition.substring(1, addition.length() - 1)
-					.split(",");
-			List<Material> addList = new ArrayList<Material>();
-			for (int i = 0; i < materialsStrings.length; i++) {
-				Material material = 
-						Material.matchMaterial(materialsStrings[i]);
-				if (material == null) {
-					return "§cMaterial \"" + materialsStrings[i] + 
-							"\" is not recognised.\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(materialsStrings[i], 
-									"§4§l" + materialsStrings[i] + 
-									"§r§c") + ")\n" + 
-							"§cTry using tab completion next time.";
+				String[] vehicleStrings = 
+						addition.substring(1, addition.length() - 1)
+						.split(",");
+				List<VehicleType> addList = new ArrayList<VehicleType>();
+				for (int i = 0; i < vehicleStrings.length; i++) {
+					VehicleType vehicle = 
+							VehicleType.valueOf(vehicleStrings[i].trim()
+									.toUpperCase());
+					if (vehicle == null) {
+						return "§cVehicle \"" + vehicleStrings[i] + 
+								"\" is not recognised.\n(Location: " + 
+								//Bolds the error.
+								addition.replaceAll(vehicleStrings[i], 
+										"§4§l" + vehicleStrings[i] + 
+										"§r§c") + ")\n" + 
+										"§cTry using tab completion next time.";
+					}
+
+					if (addList.contains(vehicle)) {
+						return "§cVehicle \"" + vehicleStrings[i] + 
+								"\" is already entered.  (Repeat entries " +
+								"are not allowed).\n(Location: " + 
+								//Bolds the error.
+								addition.replaceAll(vehicleStrings[i], 
+										"§4§l" + vehicleStrings[i] + 
+										"§r§c") + ")";
+					}
+
+					addList.add(vehicle);
+
 				}
-				
-				if (addList.contains(material)) {
-					return "§cMaterial \"" + materialsStrings[i] + 
-							"\" is already entered.  (Repeat entries " +
-							"are not allowed).\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(materialsStrings[i], 
-									"§4§l" + materialsStrings[i] + 
-									"§r§c") + ")";
+
+				//Now handle the field.
+				List<VehicleType> oldList = (List<VehicleType>)
+						this.getClass().getField(flag).get(this);
+
+				///Number of errors while merging, for the error message.
+				int mergeErrorCount = 0;
+				///The actual error message.
+				String highlightedErrors = addition;
+				ArrayList<String> erroredValues = new ArrayList<String>();
+
+				//Color used for the string.
+				String usedColor = (force ? "§e" : "§c");
+
+				for (VehicleType v : oldList) {
+					if (addList.contains(v)) {
+						mergeErrorCount ++;
+						erroredValues.add(v.toString());
+					}
 				}
-				
-				addList.add(material);
-				
+				if (mergeErrorCount != 0) {
+					for (String errored : erroredValues) {
+						highlightedErrors = highlightedErrors
+								.replaceAll(errored, 
+										"§4§l" + errored + "§r" + usedColor);
+					}
+
+					if (!force) {
+						return "§cPrevious values (Count: " + mergeErrorCount + 
+								") are already listed.  (Forcible merging " + 
+								"can be done by using the force option.\n" + 
+								"§cAlready-existant values: " + 
+								erroredValues.toString() + "\n" + 
+								"§cLocations: " + highlightedErrors + ".";
+					}
+				}
+
+
+				return "§aFlag set successfully.";
 			}
-			
-			//Now handle the field.
-			this.getClass().getField(flag).set(this, addList);
-			
-			return "§aFlag set successfully.";
-		}
-		case "EntityList": {
-			//If there is only 1 [ and 1 ], and both are at the start 
-			//and end of the strings...
-			if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-			String[] entityStrings = 
-					addition.substring(1, addition.length() - 1)
-					.split(",");
-			List<EntityType> addList = new ArrayList<EntityType>();
-			for (int i = 0; i < entityStrings.length; i++) {
-				EntityType entity = 
-						EntityType.valueOf(entityStrings[i].trim()
-								.toUpperCase());
-				if (entity == null) {
-					return "§cEntity \"" + entityStrings[i] + 
-							"\" is not recognised.\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(entityStrings[i], 
-									"§4§l" + entityStrings[i] + 
-									"§r§c") + ")\n" + 
-							"§cTry using tab completion next time.";
-				}
-				
-				if (addList.contains(entity)) {
-					return "§cEntity \"" + entityStrings[i] + 
-							"\" is already entered.  (Repeat entries " +
-							"are not allowed).\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(entityStrings[i], 
-									"§4§l" + entityStrings[i] + 
-									"§r§c") + ")";
-				}
-				
-				addList.add(entity);
-				
+			default: {
+				return "§cInternal error: Flag type " + flags.get(flag) + 
+						"is not recognised.";
+
 			}
-			
-			//Now handle the field.
-			this.getClass().getField(flag).set(this, addList);
-			
-			return "§aFlag set successfully.";
-		}
-		case "HangingList": {
-			//If there is only 1 [ and 1 ], and both are at the start 
-			//and end of the strings...
-			if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-			String[] hangingStrings = 
-					addition.substring(1, addition.length() - 1)
-					.split(",");
-			List<HangingType> addList = new ArrayList<HangingType>();
-			for (int i = 0; i < hangingStrings.length; i++) {
-				HangingType hanging = 
-						HangingType.valueOf(hangingStrings[i].trim()
-								.toUpperCase());
-				if (hanging == null) {
-					return "§cHanging \"" + hangingStrings[i] + 
-							"\" is not recognised.\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(hangingStrings[i], 
-									"§4§l" + hangingStrings[i] + 
-									"§r§c") + ")\n" + 
-							"§cTry using tab completion next time.";
-				}
-				
-				if (addList.contains(hanging)) {
-					return "§cHanging \"" + hangingStrings[i] + 
-							"\" is already entered.  (Repeat entries " +
-							"are not allowed).\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(hangingStrings[i], 
-									"§4§l" + hangingStrings[i] + 
-									"§r§c") + ")";
-				}
-				
-				addList.add(hanging);
-				
 			}
-			
-			//Now handle the field.
-			this.getClass().getField(flag).set(this, addList);
-			
-			return "§aFlag set successfully.";
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to add to field.  Flag: " + 
+							flag + "; Addition: " + addition + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (IllegalAccessException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to add ti field.  Flag: " + 
+							flag + "; Addition: " + addition + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (NoSuchFieldException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to find relevant field.  " + 
+							"Flag: " + flag + "; Addition: " + addition +  
+					".  This probably means that flags is incorect."));
+			return "§cAn error occured: " + e.toString();
+		} catch (SecurityException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to add to field.  Flag: " + 
+							flag + "; Addition: " + addition + "."));
+			return "§cAn error occured: " + e.toString();
+		} catch (NullPointerException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to add to field.  Flag: " + 
+							flag + "; Addition: " + addition + "."));
+			return "§cAn error occured: " + e.toString();
 		}
-		case "VehicleList": {
-			//If there is only 1 [ and 1 ], and both are at the start 
-			//and end of the strings...
-			if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-			String[] vehicleStrings = 
-					addition.substring(1, addition.length() - 1)
-					.split(",");
-			List<VehicleType> addList = new ArrayList<VehicleType>();
-			for (int i = 0; i < vehicleStrings.length; i++) {
-				VehicleType vehicle = 
-						VehicleType.valueOf(vehicleStrings[i].trim()
-								.toUpperCase());
-				if (vehicle == null) {
-					return "§cVehicle \"" + vehicleStrings[i] + 
-							"\" is not recognised.\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(vehicleStrings[i], 
-									"§4§l" + vehicleStrings[i] + 
-									"§r§c") + ")\n" + 
-							"§cTry using tab completion next time.";
-				}
-				
-				if (addList.contains(vehicle)) {
-					return "§cVehicle \"" + vehicleStrings[i] + 
-							"\" is already entered.  (Repeat entries " +
-							"are not allowed).\n(Location: " + 
-							//Bolds the error.
-							addition.replaceAll(vehicleStrings[i], 
-									"§4§l" + vehicleStrings[i] + 
-									"§r§c") + ")";
-				}
-				
-				addList.add(vehicle);
-				
-			}
-			
-			//Now handle the field.
-			List<VehicleType> oldList = (List<VehicleType>)
-					this.getClass().getField(flag).get(this);
-			
-			///Number of errors while merging, for the error message.
-			int mergeErrorCount = 0;
-			///The actual error message.
-			String highlightedErrors = addition;
-			List<String> erroredValues = new ArrayList<String>();
-			
-			//Color used for the string.
-			String usedColor = (force ? "§e" : "§c");
-			
-			for (VehicleType v : oldList) {
-				if (addList.contains(v)) {
-					mergeErrorCount ++;
-					erroredValues.add(v.toString());
-				}
-			}
-			if (mergeErrorCount != 0) {
-				for (String errored : erroredValues) {
-					highlightedErrors = highlightedErrors
-							.replaceAll(errored, 
-							"§4§l" + errored + "§r" + usedColor);
-				}
-				
-				if (!force) {
-					return "§cPrevious values (Count: " + mergeErrorCount + 
-							") are already listed.  (Forcible merging " + 
-							"can be done by using the force option.\n" + 
-							"Already-existant values: " + erroredValues.;
-				}
-			}
-			
-			
-			return "§aFlag set successfully.";
-		}
-		default: {
-			return "§cInternal error: Flag type " + flags.get(flag) + 
-					"is not recognised.";
-			
-		}
-		}
-	}*/
+	}
 	
 	/**
 	 * Sets a flag on this.  
