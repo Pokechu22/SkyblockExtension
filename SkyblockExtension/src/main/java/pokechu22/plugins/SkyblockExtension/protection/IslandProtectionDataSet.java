@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.EntityType;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
@@ -19,6 +20,7 @@ import pokechu22.plugins.SkyblockExtension.ThrowableReport;
  * @author Pokechu22
  *
  */
+@SerializableAs("IslandProtectionDataSet")
 public class IslandProtectionDataSet implements ConfigurationSerializable {
 	/**
 	 * Different flags available.

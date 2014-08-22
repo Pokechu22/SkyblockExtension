@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import pokechu22.plugins.SkyblockExtension.commands.*;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -49,13 +50,15 @@ public class SkyblockExtension extends JavaPlugin {
 	public void onEnable() {
 		
 		// Register crash reports as being serializable.
+		//TODO: Move to own methods.
 		ConfigurationSerialization.registerClass(CrashReport.class,
 				"CrashReport");
 		ConfigurationSerialization.registerClass(ThrowableReport.class,
 				"ThrowableReport");
 		ConfigurationSerialization.registerClass(ConfigurationErrorReport.class,
 				"ConfigurationErrorReport");
-		ConfigurationSerialization.registerClass(pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet.class);
+		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
+				"IslandProtectionDataSet");
 
 		this.saveDefaultVersionsOfAllConfigs();
 
