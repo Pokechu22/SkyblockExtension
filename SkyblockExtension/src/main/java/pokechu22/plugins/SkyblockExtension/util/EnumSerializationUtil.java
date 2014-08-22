@@ -10,6 +10,7 @@ import java.util.List;
  *
  */
 public class EnumSerializationUtil {
+	
 	/**
 	 * Gets a serializable array for 
 	 * @param e
@@ -17,9 +18,11 @@ public class EnumSerializationUtil {
 	 */
 	public static String[] getSerializable(List<Enum<?>> e) {
 		String[] returned = new String[e.size()];
+		
 		for (int i = 0; i < returned.length; i++) {
 			returned[i] = e.get(i).name();
 		}
+		
 		return returned;
 	}
 	
@@ -31,11 +34,13 @@ public class EnumSerializationUtil {
 	 */
 	public static <T extends Enum<T>> List<T> deserialize(
 			String[] serialized, Class<T> type) {
+		
 		ArrayList<T> returned = 
 				new ArrayList<T>(serialized.length);
 		for (int i = 0; i < serialized.length; i++) {
 			returned.add(Enum.valueOf(type, serialized[i]));
 		}
+		
 		return returned;
 	}
 }
