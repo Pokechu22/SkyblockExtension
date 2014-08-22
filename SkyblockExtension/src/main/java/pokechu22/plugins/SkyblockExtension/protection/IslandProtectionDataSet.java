@@ -400,6 +400,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 					}
 				}
 
+				oldList.addAll(addList);
 
 				return "§aFlag set successfully.";
 			}
