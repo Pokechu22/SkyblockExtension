@@ -196,9 +196,12 @@ public class ThrowableReport extends CrashReport {
 		
 		//And now args.  (Apparently, configurations don't like String[]?)
 		ArrayList<String> argsList = new ArrayList<String>();
-		for (int i = 0; i < this.args.length; i++) {
-			argsList.add(this.args[i]);
+		if (this.hasCommand) {
+			for (int i = 0; i < this.args.length; i++) {
+				argsList.add(this.args[i]);
+			}
 		}
+	
 		
 		//The casts are useless but show the type.
 		map.put("Thrown", (HashMap<String, Object>) thrownMap);
@@ -254,11 +257,14 @@ public class ThrowableReport extends CrashReport {
 			t.setStackTrace(stackTrace);
 			
 			//And convert args.
-			ArrayList<String> argsList = (ArrayList<String>) map.get("Args");
-			String[] argsArray = argsList.toArray(new String[argsList.size()]);
+			this.hasCommand = (boolean) map.get("HasCommand");
+			String[] argsArray = null;
+			if (this.hasCommand) {
+				ArrayList<String> argsList = (ArrayList<String>) map.get("Args");
+				argsArray = argsList.toArray(new String[argsList.size()]);
+			}
 			
 			this.thrown = t;
-			this.hasCommand = (boolean) map.get("HasCommand");
 			if (this.hasCommand) {
 				this.senderName = (String) map.get("SenderName");
 				this.senderClass = (String) map.get("SenderClass");
