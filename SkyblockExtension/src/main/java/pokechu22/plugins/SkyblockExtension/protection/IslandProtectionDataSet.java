@@ -405,7 +405,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			}
 			default: {
 				return "§cInternal error: Flag type " + flags.get(flag) + 
-						"is not recognised.";
+						" is not recognised.";
 
 			}
 			}
@@ -657,7 +657,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			}
 			default: {
 				return "§cInternal error: Flag type " + flags.get(flag) + 
-						"is not recognised.";
+						" is not recognised.";
 				
 			}
 			}
