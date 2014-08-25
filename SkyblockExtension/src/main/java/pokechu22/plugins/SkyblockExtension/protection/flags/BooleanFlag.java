@@ -53,7 +53,7 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public String addToValue(String addition) {
+	public String addToValue(String addition, boolean force) {
 		return "§cBooleans cannot be added to!";
 	}
 	

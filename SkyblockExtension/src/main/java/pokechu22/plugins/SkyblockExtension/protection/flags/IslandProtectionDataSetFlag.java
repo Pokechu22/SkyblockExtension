@@ -146,12 +146,15 @@ public abstract class IslandProtectionDataSetFlag {
 	 * Adds to the value.
 	 * 
 	 * @param addition The thing to add.
+	 * @param force Force merging.  (If not present, it is an error to add
+	 *        something already present.  Otherwise, it is allowed, but a 
+	 *        warning)
 	 * @returns A message relating to success or failure.  
 	 * 			If you want to know if there was success, check the second 
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	public abstract String addToValue(String addition);
+	public abstract String addToValue(String addition, boolean force);
 	
 	/**
 	 * Deserializes.  Handles making sure that the type is right, by using 
