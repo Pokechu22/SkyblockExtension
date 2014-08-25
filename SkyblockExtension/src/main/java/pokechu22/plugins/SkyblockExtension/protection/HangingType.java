@@ -2,7 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import org.bukkit.entity.EntityType;
 
-enum HangingType {
+public enum HangingType {
 	PAINTING(EntityType.PAINTING), 
 	ITEM_FRAME(EntityType.ITEM_FRAME),
 	LEASH_HITCH(EntityType.LEASH_HITCH);

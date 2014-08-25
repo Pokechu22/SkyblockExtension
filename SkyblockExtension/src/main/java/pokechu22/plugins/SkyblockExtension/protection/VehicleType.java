@@ -2,7 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import org.bukkit.entity.EntityType;
 
-enum VehicleType {
+public enum VehicleType {
 	BOAT(EntityType.BOAT), 
 	HORSE(EntityType.HORSE),
 	PIG(EntityType.PIG),
