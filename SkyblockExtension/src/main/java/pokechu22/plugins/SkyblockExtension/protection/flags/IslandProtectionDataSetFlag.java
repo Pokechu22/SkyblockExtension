@@ -2,17 +2,12 @@ package pokechu22.plugins.SkyblockExtension.protection.flags;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-
+import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.ThrowableReport;
-import pokechu22.plugins.SkyblockExtension.protection.HangingType;
-import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 
 /**
  * Represents a single flag.
@@ -28,39 +23,41 @@ public abstract class IslandProtectionDataSetFlag {
 	 */
 	static enum FlagType {
 		/**
-		 * Flag that requires a boolean value of either true or false.<br>
-		 * Actual used type: <tt>boolean</tt>
+		 * Flag that requires a boolean value of either true or false.
 		 */
-		BOOLEAN(BooleanFlag.class),
+		BOOLEAN(BooleanFlag.class, false),
 		/**
-		 * Represents list of materials: Both blocks and items.<br>
-		 * Actual used type: <tt>{@link List}&lt;{@link Material}&gt;</tt>
+		 * Represents list of materials: Both blocks and items.
 		 */
-		MATERIALLIST(MaterialListFlag.class),
+		MATERIALLIST(MaterialListFlag.class, true),
 		/**
-		 * Represents a list of all entities.<br>
-		 * Actual used type: <tt>{@link List}&lt;{@link EntityType}&gt;</tt>
+		 * Represents a list of all entities.
 		 */
-		ENTITYLIST(EntityListFlag.class),
+		ENTITYLIST(EntityListFlag.class, true),
 		/**
-		 * Represents a list of all hangings.<br>
-		 * Actual used type: <tt>{@link List}&lt;{@link HangingType}&gt;</tt>
+		 * Represents a list of all hangings.
 		 */
-		HANGINGLIST(HangingListFlag.class),
+		HANGINGLIST(HangingListFlag.class, true),
 		/**
-		 * Represents a list of all vehicles.<br>
-		 * Actual used type: <tt>{@link List}&lt;{@link VehicleType}&gt;</tt>
+		 * Represents a list of all vehicles.
 		 */
-		VEHICLELIST(VehicleListFlag.class);
+		VEHICLELIST(VehicleListFlag.class, true);
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
+		private boolean canBeAddedTo;
 		
-		private FlagType(Class<? extends IslandProtectionDataSetFlag> clazz) {
+		private FlagType(Class<? extends IslandProtectionDataSetFlag> clazz,
+				boolean canBeAddedTo) {
 			this.clazz = clazz;
+			this.canBeAddedTo = canBeAddedTo;
 		}
 		
 		public Class<? extends IslandProtectionDataSetFlag> getFlagClass() {
 			return clazz;
+		}
+		
+		public boolean canBeAddedTo() {
+			return this.canBeAddedTo;
 		}
 	}
 	/**
@@ -113,7 +110,7 @@ public abstract class IslandProtectionDataSetFlag {
 	/**
 	 * Gets the type of value this is.
 	 */
-	public abstract String getType();
+	public abstract FlagType getType();
 	
 	/**
 	 * Gets the serialized value.  
@@ -169,13 +166,30 @@ public abstract class IslandProtectionDataSetFlag {
 		try {
 			return flagTypes.get(flag).clazz.getConstructor(String.class)
 				.newInstance(serialized);
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ConfigurationErrorReport(e, 
+					flagTypes.get(flag).clazz.getName(), false).setContext(
+							"Failed to deserialize " + 
+									"IslandProtectionDataSetFlag " + flag + 
+									" of type " +  
+									flagTypes.get(flag).clazz.getName() 
+									+ " using " + serialized + "."));
+			SkyblockExtension.inst().getLogger().severe(
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + ".");
 		} catch (Exception e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + "."));
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + "."));
 			SkyblockExtension.inst().getLogger().severe(
 					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + ".");
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + ".");
 		}
 		return null;
 	}
