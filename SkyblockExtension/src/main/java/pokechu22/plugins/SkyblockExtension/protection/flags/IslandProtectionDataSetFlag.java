@@ -8,6 +8,9 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
+import pokechu22.plugins.SkyblockExtension.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.HangingType;
 import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 
@@ -63,62 +66,46 @@ public abstract class IslandProtectionDataSetFlag {
 	/**
 	 * Different flags available, and their types.
 	 * First value is the name, second is the type.<br>
-	 * Currently used types: 
-	 * <dl>
-	 * 
-	 * 
-	 * <dt><code>MaterialList</code></dt>
-	 * 
-	 * 
-	 * <dt><code>EntityList</code></dt>
-	 * 
-	 * 
-	 * <dt><code>HangingList</code></dt>
-	 * 
-	 * 
-	 * <dt><code>VehicleList</code></dt>
-	 * 
-	 * </dl>
 	 */
-	public static final Map<String, String> flagTypes;
+	public static final Map<String, FlagType> flagTypes;
 	
 	/**
 	 * Sets up flagTypes.
 	 */
 	static {
-		HashMap<String, String> flagTypesTemp = new HashMap<String, String>();
-		flagTypesTemp.put("canBuildAllBlocks", "Boolean");
-		flagTypesTemp.put("buildAllowedBlocks", "MaterialList");
-		flagTypesTemp.put("buildBannedBlocks", "MaterialList");
-		flagTypesTemp.put("canBreakAllBlocks", "Boolean");
-		flagTypesTemp.put("breakAllowedBlocks", "MaterialList");
-		flagTypesTemp.put("breakBannedBlocks", "MaterialList");
-		flagTypesTemp.put("canUseAllItems", "Boolean");
-		flagTypesTemp.put("useAllowedBlocks", "MaterialList");
-		flagTypesTemp.put("useBannedBlocks", "MaterialList");
-		flagTypesTemp.put("canAttackAllEntities", "Boolean");
-		flagTypesTemp.put("canAttackAnimals", "Boolean");
-		flagTypesTemp.put("canAttackHostile", "Boolean");
-		flagTypesTemp.put("attackAllowedEntities", "EntityList");
-		flagTypesTemp.put("attackBannedEntities", "EntityList");
-		flagTypesTemp.put("canEat", "Boolean");
-		flagTypesTemp.put("canBreakAllHanging", "Boolean");
-		flagTypesTemp.put("breakAllowedHangings", "HangingList");
-		flagTypesTemp.put("breakBannedHangings", "HangingList");
-		flagTypesTemp.put("canUseBeds", "Boolean");
-		flagTypesTemp.put("canPVP", "Boolean");
-		flagTypesTemp.put("canFillBuckets", "Boolean");
-		flagTypesTemp.put("canEmptyBuckets", "Boolean");
-		flagTypesTemp.put("canShearSheep", "Boolean");
-		flagTypesTemp.put("canUseAllEntities", "Boolean");
-		flagTypesTemp.put("useAllowedEntities", "EntityList");
-		flagTypesTemp.put("useBannedEntities", "EntityList");
-		flagTypesTemp.put("canDamageAllVehicles", "Boolean");
-		flagTypesTemp.put("damageAllowedVehicles", "VehicleList");
-		flagTypesTemp.put("damageBannedVehicles", "VehicleList");
-		flagTypesTemp.put("canEnterAllVehicles", "Boolean");
-		flagTypesTemp.put("enterAllowedVehicles", "VehicleList");
-		flagTypesTemp.put("enterBannedVehicles", "VehicleList");
+		HashMap<String, FlagType> flagTypesTemp = new HashMap<String, FlagType>();
+		flagTypesTemp.put("canBuildAllBlocks", FlagType.BOOLEAN);
+		flagTypesTemp.put("buildAllowedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("buildBannedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("canBreakAllBlocks", FlagType.BOOLEAN);
+		flagTypesTemp.put("breakAllowedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("breakBannedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("canUseAllItems", FlagType.BOOLEAN);
+		flagTypesTemp.put("useAllowedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("useBannedBlocks", FlagType.MATERIALLIST);
+		flagTypesTemp.put("canAttackAllEntities", FlagType.BOOLEAN);
+		flagTypesTemp.put("canAttackAnimals", FlagType.BOOLEAN);
+		flagTypesTemp.put("canAttackHostile", FlagType.BOOLEAN);
+		flagTypesTemp.put("attackAllowedEntities", FlagType.ENTITYLIST);
+		flagTypesTemp.put("attackBannedEntities", FlagType.ENTITYLIST);
+		flagTypesTemp.put("canEat", FlagType.BOOLEAN);
+		flagTypesTemp.put("canBreakAllHanging", FlagType.BOOLEAN);
+		flagTypesTemp.put("breakAllowedHangings", FlagType.HANGINGLIST);
+		flagTypesTemp.put("breakBannedHangings", FlagType.HANGINGLIST);
+		flagTypesTemp.put("canUseBeds", FlagType.BOOLEAN);
+		flagTypesTemp.put("canPVP", FlagType.BOOLEAN);
+		flagTypesTemp.put("canFillBuckets", FlagType.BOOLEAN);
+		flagTypesTemp.put("canEmptyBuckets", FlagType.BOOLEAN);
+		flagTypesTemp.put("canShearSheep", FlagType.BOOLEAN);
+		flagTypesTemp.put("canUseAllEntities", FlagType.BOOLEAN);
+		flagTypesTemp.put("useAllowedEntities", FlagType.ENTITYLIST);
+		flagTypesTemp.put("useBannedEntities", FlagType.ENTITYLIST);
+		flagTypesTemp.put("canDamageAllVehicles", FlagType.BOOLEAN);
+		flagTypesTemp.put("damageAllowedVehicles", FlagType.VEHICLELIST);
+		flagTypesTemp.put("damageBannedVehicles", FlagType.VEHICLELIST);
+		flagTypesTemp.put("canEnterAllVehicles", FlagType.BOOLEAN);
+		flagTypesTemp.put("enterAllowedVehicles", FlagType.VEHICLELIST);
+		flagTypesTemp.put("enterBannedVehicles", FlagType.VEHICLELIST);
 		
 		flagTypes = Collections.unmodifiableMap(flagTypesTemp);
 	};
@@ -142,5 +129,54 @@ public abstract class IslandProtectionDataSetFlag {
 	 */
 	public abstract String getDispayValue();
 	
+	/**
+	 * Sets the value of the flag, fit for being sent to a player.
+	 * 
+	 * @param value The new value.
+	 * @returns A message relating to success or failure.  
+	 * 			If you want to know if there was success, check the second 
+	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
+	 * 			success.
+	 */
+	public abstract String setValue(String value);
 	
+	/**
+	 * Does this type support adding to the flag?
+	 */
+	public abstract boolean canAddToValue();
+	
+	/**
+	 * Adds to the value.
+	 * 
+	 * @param addition The thing to add.
+	 * @returns A message relating to success or failure.  
+	 * 			If you want to know if there was success, check the second 
+	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
+	 * 			success.
+	 */
+	public abstract String addToValue(String addition);
+	
+	/**
+	 * Deserializes.  Handles making sure that the type is right, by using 
+	 * reflection.
+	 * 
+	 * @param flag
+	 * @param serialized
+	 * @return
+	 */
+	public static IslandProtectionDataSetFlag deserialize(String flag, 
+			String serialized) {
+		try {
+			return flagTypes.get(flag).clazz.getConstructor(String.class)
+				.newInstance(serialized);
+		} catch (Exception e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + "."));
+			SkyblockExtension.inst().getLogger().severe(
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + ".");
+		}
+		return null;
+	}
 }
