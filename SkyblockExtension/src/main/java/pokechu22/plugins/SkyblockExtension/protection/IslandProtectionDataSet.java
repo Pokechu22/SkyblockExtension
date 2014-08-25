@@ -261,6 +261,61 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
+	 * Gets a flag (as a String).
+	 * For usage in commands, use of {@linkplain #getFlag(String)} is prefered.
+	 *
+	 * @return The flag, or null if an error occurs.
+	 */
+	public String getFlagRaw(String flag) {
+		if (!flags.containsKey(flag)) {
+			return null;
+		}
+		
+		try {
+			return this.getClass().getField(flag).get(this).toString();
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return null;
+		} catch (IllegalAccessException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return null;
+		} catch (NoSuchFieldException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to find relevant field.  " + 
+							"Flag: " + flag + ".  " + 
+							"This probably means that flags is incorect."));
+			return null;
+		} catch (SecurityException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to use reflection to get field.  Flag: " + 
+							flag + "."));
+			return null;
+		} catch (NullPointerException e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Flag is null.  Flag: " + 
+							flag + "."));
+			return null;
+		}
+	}
+	
+	/**
+	 * Sets a flag on this.  
+	 * Note: Uses reflection.
+	 * 
+	 * @param flag
+	 * @param value
+	 * 
+	 * @returns A boolean, true if it succeeded.
+	 */
+	public boolean setFlagRaw(String flag, String value) {
+		return setFlag(flag, value).charAt(1) == 'a';
+	}
+	
+	/**
 	 * Gets a flag (as a String!).
 	 * @return The flag, or an error message.  
 	 */
@@ -701,50 +756,14 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public Map<String, Object> serialize() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("canBuildAllBlocks", canBuildAllBlocks);
-		map.put("buildAllowedBlocks", buildAllowedBlocks);
-		map.put("buildBannedBlocks", buildBannedBlocks);
-		
-		map.put("canBreakAllBlocks", canBreakAllBlocks);
-		map.put("breakAllowedBlocks", breakAllowedBlocks);
-		map.put("breakBannedBlocks", breakBannedBlocks);
-		
-		map.put("canUseAllItems", canUseAllItems);
-		map.put("useAllowedBlocks", useAllowedBlocks);
-		map.put("useBannedBlocks", useBannedBlocks);
-		
-		map.put("canAttackAllEntities", canAttackAllEntities);
-		map.put("canAttackAnimals", canAttackAnimals);
-		map.put("canAttackHostile", canAttackHostile);
-		map.put("attackAllowedEntities", attackAllowedEntities);
-		map.put("attackBannedEntities", attackBannedEntities);
-		
-		map.put("canEat", canEat);
-		
-		map.put("canBreakAllHanging", canBreakAllHanging);
-		map.put("breakAllowedHangings", breakAllowedHangings);
-		map.put("breakBannedHangings", breakBannedHangings);
-		
-		map.put("canUseBeds", canUseBeds);
-		
-		map.put("canPVP", canPVP);
-		
-		map.put("canFillBuckets", canFillBuckets);
-		map.put("canEmptyBuckets", canEmptyBuckets);
-		
-		map.put("canShearSheep", canShearSheep);
-		
-		map.put("canUseAllEntities", canUseAllEntities);
-		map.put("useAllowedEntities", useAllowedEntities);
-		map.put("useBannedEntities", useBannedEntities);
-		
-		map.put("canDamageAllVehicles", canDamageAllVehicles);
-		map.put("damageAllowedVehicles", damageAllowedVehicles);
-		map.put("damageBannedVehicles", damageBannedVehicles);
-		
-		map.put("canEnterAllVehicles", canEnterAllVehicles);
-		map.put("enterAllowedVehicles", enterAllowedVehicles);
-		map.put("enterBannedVehicles", enterBannedVehicles);
+		for (String flag : flags.keySet()) {
+			String value = this.getFlagRaw(flag);
+			if (value != null) {
+				map.put(flag, this.getFlag(flag));
+			} // else { //TODO Add default value otherwise
+			
+			// }
+		}
 		
 		return map;
 	}
@@ -754,52 +773,18 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * @param map
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public IslandProtectionDataSet(Map<String, Object> map) {
-		this.canBuildAllBlocks = (boolean) map.get("canBuildAllBlocks");
-		this.buildAllowedBlocks = (List<Material>) map.get("buildAllowedBlocks");
-		this.buildBannedBlocks = (List<Material>) map.get("buildBannedBlocks");
-		
-		this.canBreakAllBlocks = (boolean) map.get("canBreakAllBlocks");
-		this.breakAllowedBlocks = (List<Material>) map.get("breakAllowedBlocks");
-		this.breakBannedBlocks = (List<Material>) map.get("breakBannedBlocks");
-		
-		this.canUseAllItems = (boolean) map.get("canUseAllItems");
-		this.useAllowedBlocks = (List<Material>) map.get("useAllowedBlocks");
-		this.useBannedBlocks = (List<Material>) map.get("useBannedBlocks");
-		
-		this.canAttackAllEntities = (boolean) map.get("canAttackAllEntities");
-		this.canAttackAnimals = (boolean) map.get("canAttackAnimals");
-		this.canAttackHostile = (boolean) map.get("canAttackHostile");
-		this.attackAllowedEntities = (List<EntityType>) map.get("attackAllowedEntities");
-		this.attackBannedEntities = (List<EntityType>) map.get("attackBannedEntities");
-		
-		this.canEat = (boolean) map.get("canEat");
-		
-		this.canBreakAllHanging = (boolean) map.get("canBreakAllHanging");
-		this.breakAllowedHangings = (List<HangingType>) map.get("breakAllowedHangings");
-		this.breakBannedHangings = (List<HangingType>) map.get("breakBannedHangings");
-		
-		this.canUseBeds = (boolean) map.get("canUseBeds");
-		
-		this.canPVP = (boolean) map.get("canPVP");
-		
-		this.canFillBuckets = (boolean) map.get("canFillBuckets");
-		this.canEmptyBuckets = (boolean) map.get("canEmptyBuckets");
-		
-		this.canShearSheep = (boolean) map.get("canShearSheep");
-		
-		this.canUseAllEntities = (boolean) map.get("canUseAllEntities");
-		this.useAllowedEntities = (List<EntityType>) map.get("useAllowedEntities");
-		this.useBannedEntities = (List<EntityType>) map.get("useBannedEntities");
-		
-		this.canDamageAllVehicles = (boolean) map.get("canDamageAllVehicles");
-		this.damageAllowedVehicles = (List<VehicleType>) map.get("damageAllowedVehicles");
-		this.damageBannedVehicles = (List<VehicleType>) map.get("damageBannedVehicles");
-		
-		this.canEnterAllVehicles = (boolean) map.get("canEnterAllVehicles");
-		this.enterAllowedVehicles = (List<VehicleType>) map.get("enterAllowedVehicles");
-		this.enterBannedVehicles = (List<VehicleType>) map.get("enterBannedVehicles");
+		for (String flag : flags.keySet()) {
+			
+			boolean result = this.setFlagRaw(flag, (String) map.get(flag));
+			if (result == false) {
+				//TODO Add the default value otherwise.
+				//result = this.setFlagRaw(flag, (String) /*getDefaultFlagSomehow(flag)*/ "");
+				//if (result == false) {
+				//	//TODO ConfigurationErrorReport?
+				//}
+			}
+		}
 	}
 	
 	/**
