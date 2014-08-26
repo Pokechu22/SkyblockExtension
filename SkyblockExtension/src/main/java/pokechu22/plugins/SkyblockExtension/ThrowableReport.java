@@ -1,5 +1,6 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,6 +146,24 @@ public class ThrowableReport extends CrashReport {
 			
 		}
 		
+		Throwable cause = thrown.getCause();
+		//Append each subvalue.
+		while (cause != null) {
+			text.append("\n\nCaused By:\n");
+			text.append(cause.toString() + "\n");
+			
+			//Add the stacktrace.
+			text.append("Stacktrace: \n");
+			StackTraceElement[] causeElements = cause.getStackTrace();
+			for (int i = 0; i < causeElements.length; i++) {
+				text.append(causeElements[i].toString());
+				text.append("\n");
+				
+			}
+			
+			cause = cause.getCause();
+		}
+		
 		if (thrown instanceof java.lang.Error) {
 			text.append("This was rethrown due to being an instance of java.lang.error.\n");
 		}
@@ -175,24 +194,7 @@ public class ThrowableReport extends CrashReport {
 		
 		//Serialize thrown as a map.
 		//map.put("Thrown", this.thrown);
-		HashMap<String, Object> thrownMap = new HashMap<String, Object>();
-		thrownMap.put("Class",this.thrown.getClass().getName());
-		thrownMap.put("Message", this.thrown.getMessage());
-		
-		ArrayList<HashMap<String, Object>> stackTraceList = 
-				new ArrayList<HashMap<String, Object>>();
-		
-		StackTraceElement[] stackTrace = this.thrown.getStackTrace();
-		for (int i = 0; i < stackTrace.length; i++) {
-			HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
-			stackTraceMap.put("ClassName", stackTrace[i].getClassName());
-			stackTraceMap.put("MethodName", stackTrace[i].getMethodName());
-			stackTraceMap.put("FileName", stackTrace[i].getFileName());
-			stackTraceMap.put("LineNumber", stackTrace[i].getLineNumber());
-			stackTraceList.add(stackTraceMap);
-		}
-		
-		thrownMap.put("StackTrace", stackTraceList);
+		Map<String, Object> thrownMap = serializeThrowable(thrown);
 		
 		//And now args.  (Apparently, configurations don't like String[]?)
 		ArrayList<String> argsList = new ArrayList<String>();
@@ -204,7 +206,7 @@ public class ThrowableReport extends CrashReport {
 	
 		
 		//The casts are useless but show the type.
-		map.put("Thrown", (HashMap<String, Object>) thrownMap);
+		map.put("Thrown", (Map<String, Object>) thrownMap);
 		map.put("HasCommand", this.hasCommand);
 		if (this.hasCommand) {
 			map.put("SenderClass", (String) senderClass);
@@ -231,30 +233,9 @@ public class ThrowableReport extends CrashReport {
 	public ThrowableReport(Map<String, Object> map) {
 		SkyblockExtension.inst().getLogger().info("Creating crash report from map.");
 		try {
+			
 			//Create thrown.
-			HashMap<String,Object> thrownMap = (HashMap<String, Object>) map.get("Thrown");
-			String thrownClass = (String) thrownMap.get("Class");
-			String thrownMessage = (String) thrownMap.get("Message");
-			
-			ArrayList<HashMap<String, Object>> stackTraceListOld = 
-					(ArrayList<HashMap<String, Object>>) thrownMap.get("StackTrace");
-			
-			StackTraceElement[] stackTrace = new StackTraceElement[stackTraceListOld.size()];
-			for (int i = 0; i < stackTraceListOld.size(); i++) {
-				HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
-				
-				stackTrace[i] = new StackTraceElement(
-						(String) stackTraceElementMap.get("ClassName"), //declaringClass
-						(String) stackTraceElementMap.get("MethodName"), //methodName
-						(String) stackTraceElementMap.get("FileName"), //fileName
-						(int) stackTraceElementMap.get("LineNumber") //lineNumber
-						);
-			}
-			
-			Throwable t = (Throwable) Class.forName(thrownClass)
-					.getConstructor(String.class)
-					.newInstance(thrownMessage);
-			t.setStackTrace(stackTrace);
+			Throwable t = deserializeThrowable((Map<String, Object>) map.get("Thrown"));
 			
 			//And convert args.
 			this.hasCommand = (boolean) map.get("HasCommand");
@@ -309,5 +290,132 @@ public class ThrowableReport extends CrashReport {
 	 */
 	public static CrashReport valueOf(Map<String, Object> map) {
 		return new ThrowableReport(map);
+	}
+	
+	/**
+	 * Serializes a throwable.
+	 * TODO Move to a better location.
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private static Map<String, Object> serializeThrowable(Throwable t) {
+		if (t == null) {
+			return null;
+		}
+		
+		HashMap<String, Object> thrownMap = new HashMap<String, Object>();
+		thrownMap.put("Class", t.getClass().getName());
+		thrownMap.put("Message", t.getMessage());
+		
+		ArrayList<HashMap<String, Object>> stackTraceList = 
+				new ArrayList<HashMap<String, Object>>();
+		
+		StackTraceElement[] stackTrace = t.getStackTrace();
+		for (int i = 0; i < stackTrace.length; i++) {
+			HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
+			stackTraceMap.put("ClassName", stackTrace[i].getClassName());
+			stackTraceMap.put("MethodName", stackTrace[i].getMethodName());
+			stackTraceMap.put("FileName", stackTrace[i].getFileName());
+			stackTraceMap.put("LineNumber", stackTrace[i].getLineNumber());
+			stackTraceList.add(stackTraceMap);
+		}
+		
+		thrownMap.put("StackTrace", stackTraceList);
+		
+		Map<String, Object> causeMap;
+		if (t.getCause() != null) {
+			causeMap = serializeThrowable(t.getCause());
+			thrownMap.put("Cause", causeMap);
+		}
+		
+		return thrownMap;
+	}
+	
+	/**
+	 * Serializes a throwable.
+	 * TODO Move to a better location.
+	 * 
+	 * @param t
+	 * @return
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 */
+	@SuppressWarnings("unchecked")
+	private static Throwable deserializeThrowable(Map<String, Object> map) 
+			throws InstantiationException, IllegalAccessException, 
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, 
+			SecurityException, ClassNotFoundException {
+		if (map == null) {
+			return null;
+		}
+		
+		String thrownClass = (String) map.get("Class");
+		String thrownMessage = (String) map.get("Message");
+		
+		ArrayList<HashMap<String, Object>> stackTraceListOld = 
+				(ArrayList<HashMap<String, Object>>) map.get("StackTrace");
+		
+		StackTraceElement[] stackTrace = new StackTraceElement[stackTraceListOld.size()];
+		for (int i = 0; i < stackTraceListOld.size(); i++) {
+			HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
+			
+			stackTrace[i] = new StackTraceElement(
+					(String) stackTraceElementMap.get("ClassName"), //declaringClass
+					(String) stackTraceElementMap.get("MethodName"), //methodName
+					(String) stackTraceElementMap.get("FileName"), //fileName
+					(int) stackTraceElementMap.get("LineNumber") //lineNumber
+					);
+		}
+		
+		Map<String, Object> causeMap = (Map<String, Object>) map.get("Cause");
+		
+		Throwable t = null;
+		
+		if (causeMap != null) {
+			System.out.println("test");
+			Throwable cause = deserializeThrowable(causeMap);
+			System.out.println("test2");
+			System.out.println(thrownClass);
+			Constructor<?>[] constructors = Class.forName(thrownClass)
+					.getConstructors();
+			//Stupid issue with nonexistant message.
+			for (Constructor<?> c : constructors) {
+				if (c.getParameterTypes().length == 2 && 
+						c.getParameterTypes()[0].equals(String.class) &&
+						c.getParameterTypes()[1].equals(Throwable.class)) {
+					t = (Throwable) c.newInstance(thrownMessage, cause);
+				} else if (c.getParameterTypes().length == 2 && 
+						c.getParameterTypes()[0].equals(Throwable.class) &&
+						c.getParameterTypes()[1].equals(String.class)) {
+					//InvocationTargetException is like this...
+					t = (Throwable) c.newInstance(cause, thrownMessage);
+				} else if (c.getParameterTypes().length == 1 &&
+						c.getParameterTypes()[0].equals(Throwable.class)) {
+					t = (Throwable) c.newInstance(cause);
+				} else {
+					return null;
+				}
+			}
+			//t = (Throwable) Class.forName(thrownClass)
+			//		.getConstructor(String.class, Throwable.class)
+			//		.newInstance(thrownMessage, cause);
+			System.out.println("test3");
+		} else {
+			System.out.println("test4");
+			t = (Throwable) Class.forName(thrownClass)
+					.getConstructor(String.class)
+					.newInstance(thrownMessage);
+			System.out.println("test5");
+		}
+		
+		t.setStackTrace(stackTrace);
+		
+		return t;
 	}
 }

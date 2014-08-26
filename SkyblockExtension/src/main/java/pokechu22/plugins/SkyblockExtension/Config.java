@@ -38,8 +38,8 @@ public class Config {
 			
 			getLogger().severe("Failed to load previous error messages.  ");
 			List<CrashReport> errors  = new ArrayList<CrashReport>();
-			errors.add(new ConfigurationErrorReport(e, "CrashReports", "CrashesConfig", false));  
-			ErrorHandler.errors = errors;
+			errors.add(new ConfigurationErrorReport(e, "CrashReports", "CrashesConfig", false));
+			ErrorHandler.errors.addAll(errors);
 		}
 		
 		CommandIslandProtection.test = (IslandProtectionDataSet) getDefaultConfig().get("test", new IslandProtectionDataSet());
