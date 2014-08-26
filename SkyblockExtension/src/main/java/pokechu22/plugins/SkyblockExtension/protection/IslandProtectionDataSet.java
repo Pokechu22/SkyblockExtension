@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.entity.EntityType;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.protection.flags.*;
 
 /**
  * <b>Serializable</b> protection configuration data, for a single entry.
@@ -23,72 +22,12 @@ import pokechu22.plugins.SkyblockExtension.ThrowableReport;
 @SerializableAs("IslandProtectionDataSet")
 public class IslandProtectionDataSet implements ConfigurationSerializable {
 	/**
-	 * Different flags available.
-	 * First value is the name, second is the type.<br>
-	 * Currently used types: 
-	 * <dl>
-	 * <dt><code>Boolean</code></dt>
-	 * <dd>Requires a boolean value of either true or false.<br>
-	 * Actual type: boolean</dd>
-	 * 
-	 * <dt><code>MaterialList</code></dt>
-	 * <dd>Represents list of materials: Both blocks and items.<br>
-	 * Actual type: <tt>{@link List}&lt;{@link Material}&gt;</tt></dd>
-	 * 
-	 * <dt><code>EntityList</code></dt>
-	 * <dd>Represents a list of all entities.<br>
-	 * Actual type: <tt>{@link List}&lt;{@link EntityType}&gt;</tt></dd>
-	 * 
-	 * <dt><code>HangingList</code></dt>
-	 * <dd>Represents a list of all hangings.<br>
-	 * Actual type: <tt>{@link List}&lt;{@link HangingType}&gt;</tt></dd>
-	 * 
-	 * <dt><code>VehicleList</code></dt>
-	 * <dd>Represents a list of all vehicles.<br>
-	 * Actual type: <tt>{@link List}&lt;{@link VehicleType}&gt;</tt></dd>
-	 * </dl>
+	 * List of all flags.  A copy of 
+	 * {@link IslandProtectionDataSetFlag#flagTypes}.
 	 */
-	public static final Map<String, String> flags;
-	
-	/**
-	 * Sets up flags.
-	 */
-	static {
-		HashMap<String, String> flagsTemp = new HashMap<String, String>();
-		flagsTemp.put("canBuildAllBlocks", "Boolean");
-		flagsTemp.put("buildAllowedBlocks", "MaterialList");
-		flagsTemp.put("buildBannedBlocks", "MaterialList");
-		flagsTemp.put("canBreakAllBlocks", "Boolean");
-		flagsTemp.put("breakAllowedBlocks", "MaterialList");
-		flagsTemp.put("breakBannedBlocks", "MaterialList");
-		flagsTemp.put("canUseAllItems", "Boolean");
-		flagsTemp.put("useAllowedBlocks", "MaterialList");
-		flagsTemp.put("useBannedBlocks", "MaterialList");
-		flagsTemp.put("canAttackAllEntities", "Boolean");
-		flagsTemp.put("canAttackAnimals", "Boolean");
-		flagsTemp.put("canAttackHostile", "Boolean");
-		flagsTemp.put("attackAllowedEntities", "EntityList");
-		flagsTemp.put("attackBannedEntities", "EntityList");
-		flagsTemp.put("canEat", "Boolean");
-		flagsTemp.put("canBreakAllHanging", "Boolean");
-		flagsTemp.put("breakAllowedHangings", "HangingList");
-		flagsTemp.put("breakBannedHangings", "HangingList");
-		flagsTemp.put("canUseBeds", "Boolean");
-		flagsTemp.put("canPVP", "Boolean");
-		flagsTemp.put("canFillBuckets", "Boolean");
-		flagsTemp.put("canEmptyBuckets", "Boolean");
-		flagsTemp.put("canShearSheep", "Boolean");
-		flagsTemp.put("canUseAllEntities", "Boolean");
-		flagsTemp.put("useAllowedEntities", "EntityList");
-		flagsTemp.put("useBannedEntities", "EntityList");
-		flagsTemp.put("canDamageAllVehicles", "Boolean");
-		flagsTemp.put("damageAllowedVehicles", "VehicleList");
-		flagsTemp.put("damageBannedVehicles", "VehicleList");
-		flagsTemp.put("canEnterAllVehicles", "Boolean");
-		flagsTemp.put("enterAllowedVehicles", "VehicleList");
-		flagsTemp.put("enterBannedVehicles", "VehicleList");
-		flags = Collections.unmodifiableMap(flagsTemp);
-	};
+	public static final List<String> flags = Collections.unmodifiableList(
+			new ArrayList<String>(
+					IslandProtectionDataSetFlag.flagTypes.keySet()));
 	
 	/*
 	 * A note about the way all of these work, by way of examples: <br>
@@ -110,41 +49,41 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	/**
 	 * Can one build all blocks?
 	 */
-	public boolean canBuildAllBlocks;
+	public BooleanFlag canBuildAllBlocks;
 	/**
 	 * Blocks that are allowed to be placed.
 	 */
-	public List<Material> buildAllowedBlocks;
+	public MaterialListFlag buildAllowedBlocks;
 	/**
 	 * Blocks that cannot be placed.
 	 */
-	public List<Material> buildBannedBlocks;
+	public MaterialListFlag buildBannedBlocks;
 	
 	/**
 	 * Can one break all blocks?
 	 */
-	public boolean canBreakAllBlocks;
+	public BooleanFlag canBreakAllBlocks;
 	/**
 	 * Blocks that are allowed to be broken.
 	 */
-	public List<Material> breakAllowedBlocks;
+	public MaterialListFlag breakAllowedBlocks;
 	/**
 	 * Blocks that cannot be broken.
 	 */
-	public List<Material> breakBannedBlocks;
+	public MaterialListFlag breakBannedBlocks;
 	
 	/**
 	 * Can one use all items?
 	 */
-	public boolean canUseAllItems;
+	public BooleanFlag canUseAllItems;
 	/**
 	 * Items that are allowed to be used.
 	 */
-	public List<Material> useAllowedBlocks;
+	public MaterialListFlag useAllowedBlocks;
 	/**
 	 * Items that cannot be used.
 	 */
-	public List<Material> useBannedBlocks;
+	public MaterialListFlag useBannedBlocks;
 	
 	/**
 	 * Can one attack all entities?
@@ -154,178 +93,156 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * along with handling all other entities.  Otherwise, the normal rules
 	 * are applied.
 	 */
-	public boolean canAttackAllEntities;
+	public BooleanFlag canAttackAllEntities;
 	/**
 	 * Can one attack all passive mobs?
 	 */
-	public boolean canAttackAnimals;
+	public BooleanFlag canAttackAnimals;
 	/**
 	 * Can one attack all hostile mobs?
 	 */
-	public boolean canAttackHostile;
+	public BooleanFlag canAttackHostile;
 	/**
 	 * Entities that are allowed to be attacked.
 	 */
-	public List<EntityType> attackAllowedEntities;
+	public EntityListFlag attackAllowedEntities;
 	/**
 	 * Mobs that cannot be attacked.
 	 */
-	public List<EntityType> attackBannedEntities;
+	public EntityListFlag attackBannedEntities;
 	
 	/**
 	 * Can one eat?
 	 */
-	public boolean canEat;
+	public BooleanFlag canEat;
 	
 	/**
 	 * Can one break all hanging entities?
 	 */
-	public boolean canBreakAllHanging;
+	public BooleanFlag canBreakAllHanging;
 	/**
 	 * Hanging entities that are allowed to be broken.
 	 */
-	public List<HangingType> breakAllowedHangings;
+	public HangingListFlag breakAllowedHangings;
 	/**
 	 * Hanging entities that cannot be broken.
 	 */
-	public List<HangingType> breakBannedHangings;
+	public HangingListFlag breakBannedHangings;
 	
 	/**
 	 * Can one use beds?
 	 */
-	public boolean canUseBeds;
+	public BooleanFlag canUseBeds;
 	
 	/**
 	 * Can one PVP?
 	 */
-	public boolean canPVP;
+	public BooleanFlag canPVP;
 	
 	/**
 	 * Can one fill buckets?
 	 */
-	public boolean canFillBuckets;
+	public BooleanFlag canFillBuckets;
 	/**
 	 * Can one empty buckets?
 	 */
-	public boolean canEmptyBuckets;
+	public BooleanFlag canEmptyBuckets;
 	
 	/**
 	 * Can one shear sheep?
 	 */
-	public boolean canShearSheep;
+	public BooleanFlag canShearSheep;
 	
 	/**
 	 * Can one use (right-click) all entities?
 	 */
-	public boolean canUseAllEntities;
+	public BooleanFlag canUseAllEntities;
 	/**
 	 * Entities of which use is allowed.
 	 */
-	public List<EntityType> useAllowedEntities;
+	public EntityListFlag useAllowedEntities;
 	/**
 	 * Entities of which use is banned.
 	 */
-	public List<EntityType> useBannedEntities;
+	public EntityListFlag useBannedEntities;
 	
 	/**
 	 * Can one damage all vehicles?
 	 */
-	public boolean canDamageAllVehicles;
+	public BooleanFlag canDamageAllVehicles;
 	/**
 	 * Vehicles that are allowed to be damaged.
 	 */
-	public List<VehicleType> damageAllowedVehicles;
+	public VehicleListFlag damageAllowedVehicles;
 	/**
 	 * Vehicles that cannot be damaged.
 	 */
-	public List<VehicleType> damageBannedVehicles;
+	public VehicleListFlag damageBannedVehicles;
 	
 	/**
 	 * Can one enter all vehicles?
 	 */
-	public boolean canEnterAllVehicles;
+	public BooleanFlag canEnterAllVehicles;
 	/**
 	 * Vehicles that are allowed to be entered.
 	 */
-	public List<VehicleType> enterAllowedVehicles;
+	public VehicleListFlag enterAllowedVehicles;
 	/**
 	 * Vehicles that cannot be entered.
 	 */
-	public List<VehicleType> enterBannedVehicles;
+	public VehicleListFlag enterBannedVehicles;
 	
 	/**
 	 * Default constructor.
 	 */
 	public IslandProtectionDataSet() {
-		
+		//TODO
 	}
 	
 	/**
-	 * Gets a flag (as a String).
-	 * For usage in commands, use of {@linkplain #getFlag(String)} is prefered.
-	 *
-	 * @return The flag, or null if an error occurs.
+	 * Gets the raw flag object.
+	 * 
+	 * @param Flag
+	 * @return
 	 */
-	public String getFlagRaw(String flag) {
-		if (!flags.containsKey(flag)) {
-			return null;
-		}
-		
+	public IslandProtectionDataSetFlag getFlag(String flag) {
 		try {
-			return this.getClass().getField(flag).get(this).toString();
-		} catch (IllegalArgumentException e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to get field.  Flag: " + 
-							flag + "."));
-			return null;
-		} catch (IllegalAccessException e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to get field.  Flag: " + 
-							flag + "."));
-			return null;
-		} catch (NoSuchFieldException e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to find relevant field.  " + 
-							"Flag: " + flag + ".  " + 
-							"This probably means that flags is incorect."));
-			return null;
-		} catch (SecurityException e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to get field.  Flag: " + 
-							flag + "."));
-			return null;
-		} catch (NullPointerException e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Flag is null.  Flag: " + 
-							flag + "."));
+			return ((IslandProtectionDataSetFlag)(this.getClass()
+					.getField(flag).get(this)));
+		} catch (IllegalArgumentException | IllegalAccessException
+				| NoSuchFieldException | SecurityException e) {
+			//TODO log error.
 			return null;
 		}
 	}
 	
 	/**
-	 * Sets a flag on this.  
-	 * Note: Uses reflection.
+	 * Gets the raw flag object.
 	 * 
 	 * @param flag
 	 * @param value
-	 * 
-	 * @returns A boolean, true if it succeeded.
+	 * @return
 	 */
-	public boolean setFlagRaw(String flag, String value) {
-		return setFlag(flag, value).charAt(1) == 'a';
+	public boolean setFlag(String flag, IslandProtectionDataSetFlag value) {
+		try {
+			this.getClass().getField(flag).set(this, value);
+			
+			return true;
+		} catch (IllegalArgumentException | IllegalAccessException
+				| NoSuchFieldException | SecurityException e) {
+			//TODO log error.
+			return false;
+		}
 	}
 	
 	/**
 	 * Gets a flag (as a String!).
 	 * @return The flag, or an error message.  
 	 */
-	public String getFlag(String flag) {
-		if (!flags.containsKey(flag)) {
-			return "§cFlag " + flag + " does not exist.";
-		}
-		
+	public String getFlagValue(String flag) {
 		try {
-			return this.getClass().getField(flag).get(this).toString();
+			return ((IslandProtectionDataSetFlag)(this.getClass()
+					.getField(flag).get(this))).getDispayValue();
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to use reflection to get field.  Flag: " + 
@@ -368,105 +285,11 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	@SuppressWarnings("unchecked")
-	public String addToFlag(String flag, String addition, boolean force) {
-		if (!flags.containsKey(flag)) {
-			return "§cFlag " + flag + " does not exist.";
-		}
-		
+	public String addToFlagValue(String flag, String addition, 
+			boolean force) {
 		try {
-			switch (flags.get(flag)) {
-			case "Boolean": {
-				return "§cBoolean flags cannot be added to!";
-			}
-			case "VehicleList": {
-				//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-				if (!((addition.indexOf("[") == 0) 
-						&& (addition.indexOf("[", 1) == -1)
-						&& (addition.indexOf("]") == (addition.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-				String[] vehicleStrings = 
-						addition.substring(1, addition.length() - 1)
-						.split(",");
-				List<VehicleType> addList = new ArrayList<VehicleType>();
-				for (int i = 0; i < vehicleStrings.length; i++) {
-					VehicleType vehicle = 
-							VehicleType.valueOf(vehicleStrings[i].trim()
-									.toUpperCase());
-					if (vehicle == null) {
-						return "§cVehicle \"" + vehicleStrings[i] + 
-								"\" is not recognised.\n(Location: " + 
-								//Bolds the error.
-								addition.replaceAll(vehicleStrings[i], 
-										"§4§l" + vehicleStrings[i] + 
-										"§r§c") + ")\n" + 
-										"§cTry using tab completion next time.";
-					}
-
-					if (addList.contains(vehicle)) {
-						return "§cVehicle \"" + vehicleStrings[i] + 
-								"\" is already entered.  (Repeat entries " +
-								"are not allowed).\n(Location: " + 
-								//Bolds the error.
-								addition.replaceAll(vehicleStrings[i], 
-										"§4§l" + vehicleStrings[i] + 
-										"§r§c") + ")";
-					}
-
-					addList.add(vehicle);
-
-				}
-
-				//Now handle the field.
-				List<VehicleType> oldList = (List<VehicleType>)
-						this.getClass().getField(flag).get(this);
-
-				///Number of errors while merging, for the error message.
-				int mergeErrorCount = 0;
-				///The actual error message.
-				String highlightedErrors = addition;
-				ArrayList<String> erroredValues = new ArrayList<String>();
-
-				//Color used for the string.
-				String usedColor = (force ? "§e" : "§c");
-
-				for (VehicleType v : oldList) {
-					if (addList.contains(v)) {
-						mergeErrorCount ++;
-						erroredValues.add(v.toString());
-					}
-				}
-				if (mergeErrorCount != 0) {
-					for (String errored : erroredValues) {
-						highlightedErrors = highlightedErrors
-								.replaceAll(errored, 
-										"§4§l" + errored + "§r" + usedColor);
-					}
-
-					if (!force) {
-						return "§cPrevious values (Count: " + mergeErrorCount + 
-								") are already listed.  (Forcible merging " + 
-								"can be done by using the force option.\n" + 
-								"§cAlready-existant values: " + 
-								erroredValues.toString() + "\n" + 
-								"§cLocations: " + highlightedErrors + ".";
-					}
-				}
-
-				oldList.addAll(addList);
-
-				return "§aFlag set successfully.";
-			}
-			default: {
-				return "§cInternal error: Flag type " + flags.get(flag) + 
-						" is not recognised.";
-
-			}
-			}
+			return ((IslandProtectionDataSetFlag)(this.getClass()
+					.getField(flag).get(this))).addToValue(addition, force);
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to use reflection to add to field.  Flag: " + 
@@ -508,218 +331,10 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	public String setFlag(String flag, String value) {
-		if (!flags.containsKey(flag)) {
-			return "§cFlag " + flag + " does not exist.";
-		}
+	public String setFlagValue(String flag, String value) {
 		try {
-			switch (flags.get(flag)) {
-			case "Boolean": {
-				if (value.equalsIgnoreCase("true")) {
-					this.getClass().getField(flag).set(this, true);
-					return "§aFlag set successfully.";
-				} else if (value.equalsIgnoreCase("false")) {
-					this.getClass().getField(flag).set(this, true);
-					return "§aFlag set successfully.";
-				} else {
-					return "§cValue " + value + "is not a valid boolean."; 
-				}
-			}
-			case "MaterialList": {
-				//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-				if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-				
-				String[] materialsStrings = 
-						value.substring(1, value.length() - 1)
-						.split(",");
-				List<Material> tempList = new ArrayList<Material>();
-				for (int i = 0; i < materialsStrings.length; i++) {
-					Material material = 
-							Material.matchMaterial(materialsStrings[i]);
-					if (material == null) {
-						return "§cMaterial \"" + materialsStrings[i] + 
-								"\" is not recognised.\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(materialsStrings[i], 
-										"§4§l" + materialsStrings[i] + 
-										"§r§c") + ")\n" + 
-								"§cTry using tab completion next time.";
-					}
-					
-					if (tempList.contains(material)) {
-						return "§cMaterial \"" + materialsStrings[i] + 
-								"\" is already entered.  (Repeat entries " +
-								"are not allowed).\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(materialsStrings[i], 
-										"§4§l" + materialsStrings[i] + 
-										"§r§c") + ")";
-					}
-					
-					tempList.add(material);
-					
-				}
-				
-				//Now handle the field.
-				this.getClass().getField(flag).set(this, tempList);
-				
-				return "§aFlag set successfully.";
-			}
-			case "EntityList": {
-				//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-				if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-				String[] entityStrings = 
-						value.substring(1, value.length() - 1)
-						.split(",");
-				List<EntityType> tempList = new ArrayList<EntityType>();
-				for (int i = 0; i < entityStrings.length; i++) {
-					EntityType entity = 
-							EntityType.valueOf(entityStrings[i].trim()
-									.toUpperCase());
-					if (entity == null) {
-						return "§cEntity \"" + entityStrings[i] + 
-								"\" is not recognised.\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(entityStrings[i], 
-										"§4§l" + entityStrings[i] + 
-										"§r§c") + ")\n" + 
-								"§cTry using tab completion next time.";
-					}
-					
-					if (tempList.contains(entity)) {
-						return "§cEntity \"" + entityStrings[i] + 
-								"\" is already entered.  (Repeat entries " +
-								"are not allowed).\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(entityStrings[i], 
-										"§4§l" + entityStrings[i] + 
-										"§r§c") + ")";
-					}
-					
-					tempList.add(entity);
-					
-				}
-				
-				//Now handle the field.
-				this.getClass().getField(flag).set(this, tempList);
-				
-				return "§aFlag set successfully.";
-			}
-			case "HangingList": {
-				//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-				if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-				String[] hangingStrings = 
-						value.substring(1, value.length() - 1)
-						.split(",");
-				List<HangingType> tempList = new ArrayList<HangingType>();
-				for (int i = 0; i < hangingStrings.length; i++) {
-					HangingType hanging = 
-							HangingType.valueOf(hangingStrings[i].trim()
-									.toUpperCase());
-					if (hanging == null) {
-						return "§cHanging \"" + hangingStrings[i] + 
-								"\" is not recognised.\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(hangingStrings[i], 
-										"§4§l" + hangingStrings[i] + 
-										"§r§c") + ")\n" + 
-								"§cTry using tab completion next time.";
-					}
-					
-					if (tempList.contains(hanging)) {
-						return "§cHanging \"" + hangingStrings[i] + 
-								"\" is already entered.  (Repeat entries " +
-								"are not allowed).\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(hangingStrings[i], 
-										"§4§l" + hangingStrings[i] + 
-										"§r§c") + ")";
-					}
-					
-					tempList.add(hanging);
-					
-				}
-				
-				//Now handle the field.
-				this.getClass().getField(flag).set(this, tempList);
-				
-				return "§aFlag set successfully.";
-			}
-			case "VehicleList": {
-				//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-				if (!((value.indexOf("[") == 0) 
-						&& (value.indexOf("[", 1) == -1)
-						&& (value.indexOf("]") == (value.length() - 1)))) {
-					return "§cList format is invalid: It must start with " +
-							"'[' and end with ']', and not have any '['" + 
-							" or ']' anywhere else in it.";
-				}
-				String[] vehicleStrings = 
-						value.substring(1, value.length() - 1)
-						.split(",");
-				List<VehicleType> tempList = new ArrayList<VehicleType>();
-				for (int i = 0; i < vehicleStrings.length; i++) {
-					VehicleType vehicle = 
-							VehicleType.valueOf(vehicleStrings[i].trim()
-									.toUpperCase());
-					if (vehicle == null) {
-						return "§cVehicle \"" + vehicleStrings[i] + 
-								"\" is not recognised.\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(vehicleStrings[i], 
-										"§4§l" + vehicleStrings[i] + 
-										"§r§c") + ")\n" + 
-								"§cTry using tab completion next time.";
-					}
-					
-					if (tempList.contains(vehicle)) {
-						return "§cVehicle \"" + vehicleStrings[i] + 
-								"\" is already entered.  (Repeat entries " +
-								"are not allowed).\n(Location: " + 
-								//Bolds the error.
-								value.replaceAll(vehicleStrings[i], 
-										"§4§l" + vehicleStrings[i] + 
-										"§r§c") + ")";
-					}
-					
-					tempList.add(vehicle);
-					
-				}
-				
-				//Now handle the field.
-				this.getClass().getField(flag).set(this, tempList);
-				
-				return "§aFlag set successfully.";
-			}
-			default: {
-				return "§cInternal error: Flag type " + flags.get(flag) + 
-						" is not recognised.";
-				
-			}
-			}
-		//Most of the exceptions here shouldn't happen, but they might.
+			return ((IslandProtectionDataSetFlag)(this.getClass()
+					.getField(flag).get(this))).getDispayValue();
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to use reflection to set field.  Flag: " + 
@@ -756,10 +371,15 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public Map<String, Object> serialize() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		for (String flag : flags.keySet()) {
-			String value = this.getFlagRaw(flag);
+		for (String flagName : flags) {
+			IslandProtectionDataSetFlag flag = this.getFlag(flagName);
+			if (flag == null) {
+				//TODO Add default value otherwise
+				continue;
+			}
+			String value = flag.getSerializedValue();
 			if (value != null) {
-				map.put(flag, this.getFlag(flag));
+				map.put(flagName, value);
 			} // else { //TODO Add default value otherwise
 			
 			// }
@@ -774,12 +394,16 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * @return
 	 */
 	public IslandProtectionDataSet(Map<String, Object> map) {
-		for (String flag : flags.keySet()) {
-			
-			boolean result = this.setFlagRaw(flag, (String) map.get(flag));
-			if (result == false) {
+		for (String flagName : flags) {
+			IslandProtectionDataSetFlag flag = 
+					IslandProtectionDataSetFlag.deserialize(flagName, 
+							(String) map.get(flagName));
+			if (flag != null) {
+				this.setFlag(flagName, flag);
+			} else {
 				//TODO Add the default value otherwise.
-				//result = this.setFlagRaw(flag, (String) /*getDefaultFlagSomehow(flag)*/ "");
+				//result = this.setFlagRaw(flag, (String) 
+				// 			/*getDefaultFlagSomehow(flag)*/ "");
 				//if (result == false) {
 				//	//TODO ConfigurationErrorReport?
 				//}
@@ -792,7 +416,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * @param map
 	 * @return
 	 */
-	public static IslandProtectionDataSet deserialize(Map<String, Object> map) {
+	public static IslandProtectionDataSet deserialize(
+			Map<String, Object> map) {
 		return new IslandProtectionDataSet(map);
 	}
 
