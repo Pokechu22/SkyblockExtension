@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.bukkit.configuration.serialization.SerializableAs;
+
 /**
  * A generic error report that only contains a detail message and a stacktrace.
  *
  * @author Pokechu22
  *
  */
+@SerializableAs("GenericReport")
 public class GenericReport extends CrashReport {
 
 	public String context;

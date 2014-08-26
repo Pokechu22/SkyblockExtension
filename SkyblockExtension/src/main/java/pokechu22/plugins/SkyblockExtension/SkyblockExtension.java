@@ -57,6 +57,8 @@ public class SkyblockExtension extends JavaPlugin {
 				"ThrowableReport");
 		ConfigurationSerialization.registerClass(ConfigurationErrorReport.class,
 				"ConfigurationErrorReport");
+		ConfigurationSerialization.registerClass(GenericReport.class,
+				"GenericReport");
 		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
 				"IslandProtectionDataSet");
 
