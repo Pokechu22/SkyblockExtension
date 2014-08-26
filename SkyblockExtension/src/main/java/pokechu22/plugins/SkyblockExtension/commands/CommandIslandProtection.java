@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -137,21 +139,4 @@ public class CommandIslandProtection {
 	}
 	
 	public static IslandProtectionDataSet test;
-	
-	/**
-	 * Filters tab completion for starting with same letter.
-	 * TODO: Move to a better location.
-	 * @param list
-	 * @param starting
-	 * @return
-	 */
-	static List<String> TabLimit(List<String> list, String starting) {
-		ArrayList<String> returned = new ArrayList<String>();
-		for (String s : list) {
-			if (s.startsWith(starting)) {
-				returned.add(s);
-			}
-		}
-		return returned;
-	}
 }
