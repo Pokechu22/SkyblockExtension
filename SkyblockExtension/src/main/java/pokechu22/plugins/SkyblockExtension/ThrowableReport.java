@@ -378,9 +378,7 @@ public class ThrowableReport extends CrashReport {
 		Throwable t = null;
 		
 		if (causeMap != null) {
-			System.out.println("test");
 			Throwable cause = deserializeThrowable(causeMap);
-			System.out.println("test2");
 			System.out.println(thrownClass);
 			Constructor<?>[] constructors = Class.forName(thrownClass)
 					.getConstructors();
@@ -405,13 +403,10 @@ public class ThrowableReport extends CrashReport {
 			//t = (Throwable) Class.forName(thrownClass)
 			//		.getConstructor(String.class, Throwable.class)
 			//		.newInstance(thrownMessage, cause);
-			System.out.println("test3");
 		} else {
-			System.out.println("test4");
 			t = (Throwable) Class.forName(thrownClass)
 					.getConstructor(String.class)
 					.newInstance(thrownMessage);
-			System.out.println("test5");
 		}
 		
 		t.setStackTrace(stackTrace);
