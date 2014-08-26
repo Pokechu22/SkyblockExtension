@@ -21,7 +21,7 @@ public abstract class IslandProtectionDataSetFlag {
 	 * @author Pokechu22
 	 *
 	 */
-	static enum FlagType {
+	public static enum FlagType {
 		/**
 		 * Flag that requires a boolean value of either true or false.
 		 */
