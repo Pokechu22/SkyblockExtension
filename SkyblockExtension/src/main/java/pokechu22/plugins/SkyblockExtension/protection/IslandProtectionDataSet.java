@@ -211,7 +211,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 					.getField(flag).get(this)));
 		} catch (IllegalArgumentException | IllegalAccessException
 				| NoSuchFieldException | SecurityException e) {
-			//TODO log error.
+			ErrorHandler.logError(new ThrowableReport(e, "Exception while getting flag "
+					+ flag + " of IslandProtectionDataSet."));
 			return null;
 		}
 	}
@@ -230,7 +231,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			return true;
 		} catch (IllegalArgumentException | IllegalAccessException
 				| NoSuchFieldException | SecurityException e) {
-			//TODO log error.
+			ErrorHandler.logError(new ThrowableReport(e, "Exception while setting flag "
+					+ flag + " of IslandProtectionDataSet."));
 			return false;
 		}
 	}
