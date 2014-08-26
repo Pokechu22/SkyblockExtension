@@ -336,7 +336,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public String setFlagValue(String flag, String value) {
 		try {
 			return ((IslandProtectionDataSetFlag)(this.getClass()
-					.getField(flag).get(this))).getDispayValue();
+					.getField(flag).get(this))).setValue(value);
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to use reflection to set field.  Flag: " + 
