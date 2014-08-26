@@ -154,7 +154,10 @@ public abstract class IslandProtectionDataSetFlag {
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	public abstract String addToValue(String addition, boolean force);
+	public String addToValue(String addition, boolean force) {
+		return "§cAdding to flags of type " + getType().toString() + 
+				"is not allowed!";
+	}
 	
 	/**
 	 * Deserializes.  Handles making sure that the type is right, by using 
