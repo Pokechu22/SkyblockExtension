@@ -63,8 +63,7 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 			}
 			
 			VehicleType vehicle = 
-					VehicleType.valueOf(vehicleStrings[i].trim()
-							.toUpperCase());
+					VehicleType.matchVehicleType(vehicleStrings[i].trim());
 			if (vehicle == null) {
 				return "§cVehicle \"" + vehicleStrings[i] + 
 						"\" is not recognised.\n(Location: " + 
@@ -117,7 +116,7 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 		ArrayList<VehicleType> addList = new ArrayList<VehicleType>();
 		for (int i = 0; i < vehicleStrings.length; i++) {
 			VehicleType vehicle = 
-					VehicleType.matchVehicleType(vehicleStrings[i]);
+					VehicleType.matchVehicleType(vehicleStrings[i].trim());
 			if (vehicle == null) {
 				return "§cVehicle \"" + vehicleStrings[i] + 
 						"\" is not recognised.\n(Location: " + 

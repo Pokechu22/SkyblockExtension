@@ -106,15 +106,22 @@ public class CommandIslandProtection {
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
-		if (args.length == 4) {
+		if (args.length >= 4) {
+			String longParam = "";
+			for (int i = 3; i < args.length; i++) {
+				longParam += args[i];
+				longParam += " ";
+			}
+			longParam = longParam.trim();
+			
 			if (args[0].equalsIgnoreCase("set")) {
-				sender.sendMessage(test.setFlagValue(args[2], args[3]));
+				sender.sendMessage(test.setFlagValue(args[2], longParam));
 			}
 			if (args[0].equalsIgnoreCase("add")) {
-				sender.sendMessage(test.addToFlagValue(args[2], args[3], false));
+				sender.sendMessage(test.addToFlagValue(args[2], longParam, false));
 			}
 			if (args[0].equalsIgnoreCase("add-f")) {
-				sender.sendMessage(test.addToFlagValue(args[2], args[3], true));
+				sender.sendMessage(test.addToFlagValue(args[2], longParam, true));
 			}
 		}
 		if (args.length == 3) {

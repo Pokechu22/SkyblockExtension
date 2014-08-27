@@ -63,8 +63,7 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 			}
 			
 			Material material = 
-					Material.valueOf(materialStrings[i].trim()
-							.toUpperCase());
+					Material.matchMaterial(materialStrings[i].trim());
 			if (material == null) {
 				return "§cMaterial \"" + materialStrings[i] + 
 						"\" is not recognised.\n(Location: " + 
@@ -117,7 +116,7 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 		ArrayList<Material> addList = new ArrayList<Material>();
 		for (int i = 0; i < materialStrings.length; i++) {
 			Material material = 
-					Material.matchMaterial(materialStrings[i]);
+					Material.matchMaterial(materialStrings[i].trim());
 			if (material == null) {
 				return "§cMaterial \"" + materialStrings[i] + 
 						"\" is not recognised.\n(Location: " + 

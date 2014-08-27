@@ -64,8 +64,7 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 			}
 			
 			HangingType hanging = 
-					HangingType.valueOf(hangingStrings[i].trim()
-							.toUpperCase());
+					HangingType.matchHangingType(hangingStrings[i].trim());
 			if (hanging == null) {
 				return "§cHanging \"" + hangingStrings[i] + 
 						"\" is not recognised.\n(Location: " + 
@@ -118,7 +117,7 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 		ArrayList<HangingType> addList = new ArrayList<HangingType>();
 		for (int i = 0; i < hangingStrings.length; i++) {
 			HangingType hanging = 
-					HangingType.matchHangingType(hangingStrings[i]);
+					HangingType.matchHangingType(hangingStrings[i].trim());
 			if (hanging == null) {
 				return "§cHanging \"" + hangingStrings[i] + 
 						"\" is not recognised.\n(Location: " + 

@@ -61,8 +61,7 @@ public class EntityListFlag extends IslandProtectionDataSetFlag {
 			}
 			
 			EntityType entity = 
-					EntityType.valueOf(entityStrings[i].trim()
-							.toUpperCase());
+					/*EntityType.*/matchEntityType(entityStrings[i].trim());
 			if (entity == null) {
 				return "§cEntity \"" + entityStrings[i] + 
 						"\" is not recognised.\n(Location: " + 
@@ -115,7 +114,7 @@ public class EntityListFlag extends IslandProtectionDataSetFlag {
 		List<EntityType> addList = new ArrayList<EntityType>();
 		for (int i = 0; i < entityStrings.length; i++) {
 			EntityType entity = 
-					/*EntityType.*/matchEntityType(entityStrings[i]);
+					/*EntityType.*/matchEntityType(entityStrings[i].trim());
 			if (entity == null) {
 				return "§cEntity \"" + entityStrings[i] + 
 						"\" is not recognised.\n(Location: " + 
