@@ -1,6 +1,9 @@
 package pokechu22.plugins.SkyblockExtension.protection.flags;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 
@@ -189,4 +192,20 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 		return "§aFlag set successfully.";
 	}
 
+	@Override
+	public List<String> tabComplete(String action, String[] partialValues) {
+		switch (action) {
+		case "view": {
+			return new ArrayList<String>();
+		}
+		case "add": //Fall thru
+		case "add-f": //Fall thru
+		case "set": {
+			return TabLimit(partialValues, Material.values());
+		}
+		default: {
+			return new ArrayList<String>();
+		}
+		}
+	}
 }

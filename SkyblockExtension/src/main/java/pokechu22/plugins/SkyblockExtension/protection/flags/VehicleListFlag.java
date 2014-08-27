@@ -1,6 +1,9 @@
 package pokechu22.plugins.SkyblockExtension.protection.flags;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 
@@ -189,4 +192,20 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 		return "§aFlag set successfully.";
 	}
 
+	@Override
+	public List<String> tabComplete(String action, String[] partialValues) {
+		switch (action) {
+		case "view": {
+			return new ArrayList<String>();
+		}
+		case "add": //Fall thru
+		case "add-f": //Fall thru
+		case "set": {
+			return TabLimit(partialValues, VehicleType.values());
+		}
+		default: {
+			return new ArrayList<String>();
+		}
+		}
+	}
 }

@@ -367,6 +367,24 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
+	 * Tab completion.
+	 * 
+	 * @param flagName
+	 * @param action
+	 * @param partialValues
+	 * @return
+	 */
+	public List<String> tabComplete(String flagName, String action, String[] partialValues) {
+		IslandProtectionDataSetFlag flag = this.getFlag(flagName);
+		
+		if (flag != null) {
+			return flag.tabComplete(action, partialValues);
+		} else {
+			return new ArrayList<String>();
+		}
+	}
+	
+	/**
 	 * Serialization for use with a configuration file.
 	 */
 	@Override

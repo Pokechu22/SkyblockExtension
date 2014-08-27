@@ -1,5 +1,10 @@
 package pokechu22.plugins.SkyblockExtension.protection.flags;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class BooleanFlag extends IslandProtectionDataSetFlag {
 
@@ -57,4 +62,20 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 		return "§cBooleans cannot be added to!";
 	}
 	
+	@Override
+	public List<String> tabComplete(String action, String[] partialValues) {
+		if (partialValues.length == 0) {
+			List<String> returned = new ArrayList<String>();
+			returned.add("false");
+			returned.add("true");
+			return returned;
+		} else if (partialValues.length == 1) {
+			List<String> returned = new ArrayList<String>();
+			returned.add("false");
+			returned.add("true");
+			return TabLimit(returned, partialValues[0]);
+		} else {
+			return new ArrayList<String>();
+		}
+	}
 }

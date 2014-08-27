@@ -86,24 +86,10 @@ public class CommandIslandProtection {
 			}
 			}
 		}
-		//NYI
-		/*if (args.length == 4) {
-			switch (args[0].toLowerCase()) {
-			case "view": //Fall thru to next
-			case "set": {
-				if (!IslandProtectionDataSet.flags.containsKey(args[2])) {
-					//Return nothing.
-					return new ArrayList<String>();
-				}
-				
-				switch (IslandProtectionDataSet.flags.get(args[2])) {
-				default: {
-					
-				}
-				}
-			}
-			}
-		}*/
+		
+		if (args.length >= 4) {
+			return test.tabComplete(args[2], args[0], Arrays.copyOfRange(args, 3, args.length));
+		}
 
 		//Basically, return nothing, rather than null which gives all online players.
 		return new ArrayList<String>();

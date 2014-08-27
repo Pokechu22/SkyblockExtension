@@ -1,7 +1,9 @@
 package pokechu22.plugins.SkyblockExtension.protection.flags;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
@@ -157,6 +159,18 @@ public abstract class IslandProtectionDataSetFlag {
 	public String addToValue(String addition, boolean force) {
 		return "§cAdding to flags of type " + getType().toString() + 
 				"is not allowed!";
+	}
+	
+	/**
+	 * For tab-completion.  
+	 *
+	 * @param action The action, eg set or add.
+	 * @param partialValue The value.  May contain spaces.
+	 * @return
+	 */
+	public List<String> tabComplete(String action, String[] partialValues) {
+		//Empty list.
+		return new ArrayList<String>();
 	}
 	
 	/**

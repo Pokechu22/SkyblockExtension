@@ -50,53 +50,97 @@ public class TabCompleteUtil {
 			return returned;
 		}
 		
-		//First letter to be used.
-		int firstChar = 0;
+		String fullValue = "";
+		for (String partialValue : partialValues) {
+			fullValue += partialValue;
+			fullValue += " ";
+		}
+		fullValue = fullValue.trim();
 		
-		if (partialValues.length == 1) {
-			//Starting char.
-			if (partialValues[0].length() == 0) {
-				returned.add("[");
-				return returned;				
-			}
-			if (!partialValues[0].startsWith("[")) {
-				partialValues[0] = "[" + partialValues[0];
-				firstChar = 1;
-			}
+		if (fullValue.startsWith("[") && fullValue.endsWith("]")) {
+			//Already filled.
+			return returned;
 		}
 		
-		//Index in the array.
-		int i = partialValues.length - 1;
-		
-		String subValue = (partialValues[i]).substring(
-				(partialValues[i].contains(",") ? 
-						partialValues[i].lastIndexOf(",") : firstChar), 
-						partialValues[i].length());
-		
-		for (String option : options) {
-			//If it is an EXACT match
-			if (option.equalsIgnoreCase(subValue)) {
-				returned.add(partialValues[i] + ", ");
+		//Almost duplicate code, but functional.
+		if (partialValues.length == 1) {
+			if (!partialValues[0].startsWith("[")) {
+				returned.add("[" + partialValues[0]);
 				return returned;
 			}
-			//If it starts.
-			if (option.toUpperCase(Locale.ENGLISH)
-					.startsWith(subValue.toUpperCase(Locale.ENGLISH))) {
-				//Get the new section and add it.
-				String origional = (partialValues[i]).substring(firstChar,
-						(partialValues[i].contains(",") ? 
-								partialValues[i].lastIndexOf(",") : 
-									partialValues[i].length()));
-				String addition = partialValues[i].replace(subValue, "");
-				returned.add(origional + addition);
+			
+			int splitPoint = partialValues[0].lastIndexOf(",");
+			
+			String previousValues; 
+			String currentValue;
+			
+			System.out.println(splitPoint);
+			
+			if (splitPoint == -1) {
+				previousValues = "[";
+				currentValue = partialValues[0].substring(1);
+			} else {
+				previousValues = partialValues[0].substring(0, splitPoint + 1);
+				currentValue = partialValues[0].substring(splitPoint + 1);
 			}
+			
+			for (String option : options) {
+				//Complete match
+				if (option.equalsIgnoreCase(currentValue)) {
+					returned.add(previousValues + option + ", ");
+					return returned;
+				}
+				//Partial match
+				if (option.toUpperCase(Locale.ENGLISH).startsWith(
+						currentValue.toUpperCase())) {
+					returned.add(previousValues + option);
+				}
+			}
+			
+			returned.add(previousValues + "]");
+			
+			return returned;
+		} else {
+			//Position to modify.
+			int i = partialValues.length - 1;
+			
+			int splitPoint = partialValues[i].lastIndexOf(",");
+			
+			String previousValues; 
+			String currentValue;
+			
+			System.out.println(splitPoint);
+			
+			if (splitPoint == -1) {
+				previousValues = "";
+				currentValue = partialValues[i];
+			} else {
+				previousValues = partialValues[i].substring(0, splitPoint + 1);
+				currentValue = partialValues[i].substring(splitPoint + 1);
+			}
+			
+			for (String option : options) {
+				//Complete match
+				if (option.equalsIgnoreCase(currentValue)) {
+					returned.add(previousValues + option + ", ");
+					return returned;
+				}
+				//Partial match
+				if (option.toUpperCase(Locale.ENGLISH).startsWith(
+						currentValue.toUpperCase())) {
+					returned.add(previousValues + option);
+				}
+			}
+			
+			returned.add(previousValues + "]");
+			
+			return returned;
 		}
-		
-		return returned;
 	}
 	
 	public static List<String> TabLimit(String[] partialValues, 
 			List<String> options) {
+		//TODO
 		return TabLimit(partialValues, 
 				options.toArray(new String[options.size()]));
 	}
@@ -107,6 +151,7 @@ public class TabCompleteUtil {
 		for (int i = 0; i < options.length; i++) {
 			optionsList[i] = options[i].toString();
 		}
+		//TODO
 		return TabLimit(partialValues, optionsList);
 	}
 }

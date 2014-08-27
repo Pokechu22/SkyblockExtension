@@ -4,7 +4,6 @@ import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import pokechu22.plugins.SkyblockExtension.protection.HangingType;
 
@@ -196,40 +195,18 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 
 	@Override
 	public List<String> tabComplete(String action, String[] partialValues) {
-		ArrayList<String> returned = new ArrayList<String>();
-		
-		if (action.equalsIgnoreCase("view")) {
+		switch (action) {
+		case "view": {
 			return new ArrayList<String>();
 		}
-		
-		String currentValueGroup;
-		String currentValue;
-		
-		//Add the starting [ if needed.
-		if ((partialValues.length == 0) || 
-				(partialValues.length == 1 && partialValues[0].isEmpty())) {
-			returned.add("[");
-			return returned;
-		} else if (partialValues.length == 1 && 
-				!partialValues[0].startsWith("[")) {
-			returned.add("[" + partialValues[0]);
-			return returned;
+		case "add": //Fall thru
+		case "add-f": //Fall thru
+		case "set": {
+			return TabLimit(partialValues, HangingType.values());
 		}
-		
-		currentValueGroup = partialValues[partialValues.length - 1];
-		
-		String[] currentValueGroupArray = currentValueGroup.split(",");
-		currentValue = 
-				currentValueGroupArray[currentValueGroupArray.length - 1];
-		currentValue = currentValue.trim();
-		
-		for (HangingType h : HangingType.values()) {
-			if (h.name().toUpperCase(Locale.ENGLISH)
-					.startsWith(currentValue.toUpperCase(Locale.ENGLISH))) {
-				returned.add(currentValueGroup.replace(currentValue, h.name()));
-			}
+		default: {
+			return new ArrayList<String>();
 		}
-		
-		return returned;
+		}
 	}
 }
