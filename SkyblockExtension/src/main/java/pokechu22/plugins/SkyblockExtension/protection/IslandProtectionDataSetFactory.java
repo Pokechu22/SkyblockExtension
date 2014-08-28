@@ -2,6 +2,8 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.io.File;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,10 +30,18 @@ public class IslandProtectionDataSetFactory {
 	 * 
 	 * @return
 	 */
-	public static EnumMap<MembershipTier, IslandProtectionDataSet> 
+	public static Map<String, IslandProtectionDataSet> 
 			getDefaultValues() {
-		return new EnumMap<MembershipTier, IslandProtectionDataSet>
-				(defaultValues);
+		//No longer using EnumMaps, because that makes serialization tough.
+		Map<String, IslandProtectionDataSet> returned = 
+				new HashMap<String, IslandProtectionDataSet>(
+						defaultValues.size());
+		for (Map.Entry<MembershipTier, IslandProtectionDataSet> m : 
+			defaultValues.entrySet()) {
+			returned.put(m.getKey().name(), m.getValue());
+		}
+		
+		return returned;
 	}
 	
 	/**

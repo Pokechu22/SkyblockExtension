@@ -164,6 +164,6 @@ public class CommandIslandProtection {
 	 * Values of different tiers.
 	 * TODO: this is a test value.
 	 */
-	public static Map<MembershipTier, IslandProtectionDataSet> tieredValues
+	public static Map<String, IslandProtectionDataSet> tieredValues
 			= IslandProtectionDataSetFactory.getDefaultValues();
 }

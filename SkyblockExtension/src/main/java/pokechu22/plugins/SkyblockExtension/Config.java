@@ -44,7 +44,7 @@ public class Config {
 			ErrorHandler.errors.addAll(errors);
 		}
 		
-		CommandIslandProtection.tieredValues = (Map<MembershipTier, IslandProtectionDataSet>) getDefaultConfig().get("testdefault", new IslandProtectionDataSet());
+		CommandIslandProtection.tieredValues = (Map<String, IslandProtectionDataSet>) getDefaultConfig().get("testdefault", new IslandProtectionDataSet());
 		
 		getLogger().info("Configuration loaded!");
 	}
