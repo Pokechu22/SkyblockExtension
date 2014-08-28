@@ -2,12 +2,14 @@ package pokechu22.plugins.SkyblockExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
 
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -19,12 +21,12 @@ public class Config {
 	/**
 	 * Loads the configuration.
 	 */
+	@SuppressWarnings("unchecked")
 	static void loadConfig() {
 		getLogger().info("Loading configuration.");
 		
 		try {
 			//Sigh, java provides no good way to do this...
-			@SuppressWarnings("unchecked")
 			List<CrashReport> errors = (List<CrashReport>) getCrashesConfig()
 					.getList("CrashReports");
 			if (errors == null) {
@@ -42,7 +44,7 @@ public class Config {
 			ErrorHandler.errors.addAll(errors);
 		}
 		
-		CommandIslandProtection.test = (IslandProtectionDataSet) getDefaultConfig().get("test", new IslandProtectionDataSet());
+		CommandIslandProtection.tieredValues = (Map<MembershipTier, IslandProtectionDataSet>) getDefaultConfig().get("testdefault", new IslandProtectionDataSet());
 		
 		getLogger().info("Configuration loaded!");
 	}
@@ -58,7 +60,7 @@ public class Config {
 		
 		getLogger().info("Configuration saved!");
 		
-		getDefaultConfig().set("test", CommandIslandProtection.test);
+		getDefaultConfig().set("testdefault", CommandIslandProtection.tieredValues);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}

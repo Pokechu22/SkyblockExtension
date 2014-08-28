@@ -11,9 +11,11 @@ import java.util.logging.Level;
 
 import pokechu22.plugins.SkyblockExtension.commands.*;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -63,6 +65,14 @@ public class SkyblockExtension extends JavaPlugin {
 				"IslandProtectionDataSet");
 
 		this.saveDefaultVersionsOfAllConfigs();
+		
+		//Load the default protection.
+		try {
+			IslandProtectionDataSetFactory.init();
+		} catch (InvalidConfigurationException e) {
+			//If this fails, we want it to be fully thrown to stop loading.
+			throw new RuntimeException(e);
+		}
 
 		inst = this;
 		Config.loadConfig();

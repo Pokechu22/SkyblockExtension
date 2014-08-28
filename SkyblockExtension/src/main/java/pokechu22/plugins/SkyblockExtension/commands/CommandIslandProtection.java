@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 
@@ -92,7 +93,17 @@ public class CommandIslandProtection {
 		}
 		
 		if (args.length >= 4) {
-			return test.tabComplete(args[2], args[0], Arrays.copyOfRange(args, 3, args.length));
+			MembershipTier parsedTier = MembershipTier.matchTier(args[1]); 
+			
+			if (parsedTier == null) {
+				//Unlike with run, we don't want to send messages.
+				return new ArrayList<String>();
+			}
+			
+			IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier);
+			
+			return relevantDataSet.tabComplete
+					(args[2], args[0], Arrays.copyOfRange(args, 3, args.length));
 		}
 
 		//Basically, return nothing, rather than null which gives all online players.
@@ -110,6 +121,20 @@ public class CommandIslandProtection {
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
+		if (args.length < 3) {
+			return;
+			//TODO error message.
+		}
+		
+		MembershipTier parsedTier = MembershipTier.matchTier(args[1]); 
+		
+		if (parsedTier == null) {
+			sender.sendMessage("§cInvlaid tier"); //TODO better message
+			return;
+		}
+		
+		IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier);
+		
 		if (args.length >= 4) {
 			String longParam = "";
 			for (int i = 3; i < args.length; i++) {
@@ -119,21 +144,26 @@ public class CommandIslandProtection {
 			longParam = longParam.trim();
 			
 			if (args[0].equalsIgnoreCase("set")) {
-				sender.sendMessage(test.setFlagValue(args[2], longParam));
+				sender.sendMessage(relevantDataSet.setFlagValue(args[2], longParam));
 			}
 			if (args[0].equalsIgnoreCase("add")) {
-				sender.sendMessage(test.addToFlagValue(args[2], longParam, false));
+				sender.sendMessage(relevantDataSet.addToFlagValue(args[2], longParam, false));
 			}
 			if (args[0].equalsIgnoreCase("add-f")) {
-				sender.sendMessage(test.addToFlagValue(args[2], longParam, true));
+				sender.sendMessage(relevantDataSet.addToFlagValue(args[2], longParam, true));
 			}
 		}
 		if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("view")) {
-				sender.sendMessage(test.getFlagValue(args[2]));
+				sender.sendMessage(relevantDataSet.getFlagValue(args[2]));
 			}
 		}
 	}
 	
-	public static IslandProtectionDataSet test;
+	/**
+	 * Values of different tiers.
+	 * TODO: this is a test value.
+	 */
+	public static Map<MembershipTier, IslandProtectionDataSet> tieredValues
+			= IslandProtectionDataSetFactory.getDefaultValues();
 }
