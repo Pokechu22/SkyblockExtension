@@ -50,7 +50,6 @@ public class SkyblockExtension extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		
 		// Register crash reports as being serializable.
 		//TODO: Move to own methods.
 		ConfigurationSerialization.registerClass(CrashReport.class,
@@ -65,6 +64,8 @@ public class SkyblockExtension extends JavaPlugin {
 				"IslandProtectionDataSet");
 
 		this.saveDefaultVersionsOfAllConfigs();
+
+		inst = this;
 		
 		//Load the default protection.
 		try {
@@ -73,8 +74,7 @@ public class SkyblockExtension extends JavaPlugin {
 			//If this fails, we want it to be fully thrown to stop loading.
 			throw new RuntimeException(e);
 		}
-
-		inst = this;
+		
 		Config.loadConfig();
 	}
 
