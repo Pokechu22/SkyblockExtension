@@ -15,6 +15,9 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	 * @throws IllegalArgumentException when given invalid boolean.
 	 */
 	public BooleanFlag(String value) throws IllegalArgumentException {
+		if (value == null) {
+			throw new IllegalArgumentException("Value cannot be null!");
+		}
 		if (value.equalsIgnoreCase("false")) {
 			this.value = false;
 		} else if (value.equalsIgnoreCase("true")) {
@@ -42,6 +45,9 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 
 	@Override
 	public String setValue(String value) {
+		if (value == null) {
+			return "§cValue cannot be null!";
+		}
 		if (value.equalsIgnoreCase("false")) {
 			this.value = false;
 		} else if (value.equalsIgnoreCase("true")) {

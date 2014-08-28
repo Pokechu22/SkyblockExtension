@@ -43,6 +43,10 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 
 	@Override
 	public String setValue(String value) {
+		if (value == null) {
+			return "§cValue cannot be null!";
+		}
+		
 		//If there is only 1 [ and 1 ], and both are at the start 
 		//and end of the strings...
 		if (!((value.indexOf("[") == 0) 
