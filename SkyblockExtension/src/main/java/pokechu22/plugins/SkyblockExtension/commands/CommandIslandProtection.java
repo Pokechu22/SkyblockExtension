@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 
 public class CommandIslandProtection {
@@ -27,12 +28,15 @@ public class CommandIslandProtection {
 	/**
 	 * Levels of membership.
 	 */
-	private static final String[] membershipTiers = new String[] {
-		"owner",
-		"member",
-		"guest",
-		"nonmember"
-	};
+	private static final String[] membershipTiers;
+	
+	static {
+		MembershipTier[] values = MembershipTier.values();
+		membershipTiers = new String[values.length];
+		for (int i = 0; i < values.length; i++) {
+			membershipTiers[i] = values.toString();
+		}
+	}
 	
 	/**
 	 * Tab-completion.  
