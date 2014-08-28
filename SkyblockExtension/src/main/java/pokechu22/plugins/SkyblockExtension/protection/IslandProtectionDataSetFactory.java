@@ -50,7 +50,7 @@ public class IslandProtectionDataSetFactory {
 	 * @param m
 	 * @return
 	 */
-	public static IslandProtectionDataSet getDefaultValue(MembershipTier m) {
+	public static IslandProtectionDataSet getDefaultValue(MembershipTier m){
 		return defaultValues.get(m);
 	}
 
@@ -88,16 +88,16 @@ public class IslandProtectionDataSetFactory {
 						t.name(), "default_protection.yml", 
 						IslandProtectionDataSetFactory.class.getName(), 
 						false).setContext("An exception was caught.  " + 
-						"Loading the default IslandProtectionDataSet for " + 
+						"Loading the default IslandProtectionDataSet for "+ 
 						t.name() + ".  " + 
 						"The configuration is probably broken."));
 				SkyblockExtension.inst().getLogger().severe(
 						"An error occured while loading the default " + 
-						"protection configuration: Exception thrown while " +
+						"protection configuration: Exception thrown while "+
 						"reading " + t.name() + ".");
 				throw new InvalidConfigurationException(
 						"An error occured while loading the default " + 
-						"protection configuration: Exception thrown while " +
+						"protection configuration: Exception thrown while "+
 						"reading " + t.name() + ".");
 			}
 			if (i == null) {
@@ -105,7 +105,7 @@ public class IslandProtectionDataSetFactory {
 						t.name(), "default_protection.yml", 
 						IslandProtectionDataSetFactory.class.getName(), 
 						false).setContext("Value was null.  " + 
-						"Loading the default IslandProtectionDataSet for " + 
+						"Loading the default IslandProtectionDataSet for " +
 						t.name() + ".  " + 
 						"The configuration is probably broken."));
 				SkyblockExtension.inst().getLogger().severe(
