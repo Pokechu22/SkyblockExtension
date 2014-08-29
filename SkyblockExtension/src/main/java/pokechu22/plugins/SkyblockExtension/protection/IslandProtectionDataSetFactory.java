@@ -59,6 +59,7 @@ public class IslandProtectionDataSetFactory {
 	 * @throws InvalidConfigurationException 
 	 * 			if the default configuration is invalid
 	 */
+	@SuppressWarnings("unchecked")
 	public static void init() throws InvalidConfigurationException {
 		//Set up the config file.
 		
@@ -78,27 +79,60 @@ public class IslandProtectionDataSetFactory {
 				.loadConfiguration(defaultProtectionConfigFile);
 
 		//Now set up the defaults.
+		Object temp = null; //Temporary, for before casting.
+		Map<String, Object> objects;
+		
+		try {
+			temp = defaultProtectionConfig.get("defaultValues");
+			objects = (Map<String, Object>) temp;
+			if (temp == null || objects == null) {
+				ErrorHandler.logError(new ConfigurationErrorReport( 
+						"defaultValues", "default_protection.yml", 
+						IslandProtectionDataSetFactory.class.getName(), 
+						false).setContext("Value was null.  " + 
+						"Loading the default IslandProtectionDataSet." + 
+						"The configuration is probably broken."));
+				SkyblockExtension.inst().getLogger().severe(
+						"An error occured while loading the default " + 
+						"protection configuration: defaultValues " + 
+						"is null!");
+				throw new InvalidConfigurationException(
+						"An error occured while loading the default " + 
+						"protection configuration: defaultValues " + 
+						"is null!");
+			}
+		} catch (ClassCastException e) {
+			ErrorHandler.logError(new ConfigurationErrorReport(e, 
+					"defaultValues", "default_protection.yml", 
+					IslandProtectionDataSetFactory.class.getName(), false)
+					.setContext("Failed to cast defaultValues to a valid " +
+							"map.\nRequested type: Map<String, Object>.\n" +
+							"Actual type: " + temp.getClass().getName()));
+			return;
+		}
+		
 		for (MembershipTier t : MembershipTier.values()) {
 			IslandProtectionDataSet i;
 			try {
+				
 				i = (IslandProtectionDataSet)
-						defaultProtectionConfig.get(t.name());
+						objects.get(t.name());
 			} catch (Exception e) {
 				ErrorHandler.logError(new ConfigurationErrorReport(e, 
 						t.name(), "default_protection.yml", 
 						IslandProtectionDataSetFactory.class.getName(), 
 						false).setContext("An exception was caught.  " + 
 						"Loading the default IslandProtectionDataSet for "+ 
-						t.name() + ".  " + 
+						"defaultValues." + t.name() + ".  " + 
 						"The configuration is probably broken."));
 				SkyblockExtension.inst().getLogger().severe(
 						"An error occured while loading the default " + 
 						"protection configuration: Exception thrown while "+
-						"reading " + t.name() + ".");
+						"reading defaultValues." + t.name() + ".");
 				throw new InvalidConfigurationException(
 						"An error occured while loading the default " + 
 						"protection configuration: Exception thrown while "+
-						"reading " + t.name() + ".");
+						"reading defaultValues." + t.name() + ".", e);
 			}
 			if (i == null) {
 				ErrorHandler.logError(new ConfigurationErrorReport( 
@@ -106,16 +140,16 @@ public class IslandProtectionDataSetFactory {
 						IslandProtectionDataSetFactory.class.getName(), 
 						false).setContext("Value was null.  " + 
 						"Loading the default IslandProtectionDataSet for " +
-						t.name() + ".  " + 
+						"defaultValues." + t.name() + ".  " + 
 						"The configuration is probably broken."));
 				SkyblockExtension.inst().getLogger().severe(
 						"An error occured while loading the default " + 
-						"protection configuration: " + t.name() + 
-						"is null!");
+						"protection configuration: defaultValues." + 
+						t.name() + "is null!");
 				throw new InvalidConfigurationException(
 						"An error occured while loading the default " + 
-						"protection configuration: " + t.name() + 
-						"is null!");
+						"protection configuration: defaultValues." +
+						t.name() + "is null!");
 			}
 			
 			//Put the enum value and the corresponding 
