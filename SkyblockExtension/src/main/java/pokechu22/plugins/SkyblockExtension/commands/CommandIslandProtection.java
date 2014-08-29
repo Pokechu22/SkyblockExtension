@@ -11,7 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 
@@ -164,6 +163,5 @@ public class CommandIslandProtection {
 	 * Values of different tiers.
 	 * TODO: this is a test value.
 	 */
-	public static Map<String, IslandProtectionDataSet> tieredValues
-			= IslandProtectionDataSetFactory.getDefaultValues();
+	public static Map<String, IslandProtectionDataSet> tieredValues;
 }

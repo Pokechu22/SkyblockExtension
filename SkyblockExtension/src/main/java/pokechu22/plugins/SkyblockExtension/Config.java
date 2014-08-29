@@ -2,11 +2,13 @@ package pokechu22.plugins.SkyblockExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
 
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 
 /**
@@ -43,7 +45,7 @@ public class Config {
 		}
 		
 		//Test code.
-		CommandIslandProtection.tieredValues = IslandProtectionDataSetFactory.getDefaultValues();
+		CommandIslandProtection.tieredValues = (Map<String, IslandProtectionDataSet>) getDefaultConfig().get("testdefault", IslandProtectionDataSetFactory.getDefaultValues());
 		
 		getLogger().info("Configuration loaded!");
 	}
