@@ -1,4 +1,4 @@
-defaultValues: !!Map #That's required because ConfigurationSection.  D: 
+defaultValues: !!map
   owner:
     ==: IslandProtectionDataSet
     damageBannedVehicles: '[]'
