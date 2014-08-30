@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 
@@ -133,6 +134,8 @@ public class CommandIslandProtection {
 		}
 		
 		IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier);
+		System.out.println(IslandProtectionDataSetFactory.getDefaultValues().keySet().toString());
+		System.out.println(tieredValues.keySet().toString());
 		
 		if (args.length >= 4) {
 			String longParam = "";
