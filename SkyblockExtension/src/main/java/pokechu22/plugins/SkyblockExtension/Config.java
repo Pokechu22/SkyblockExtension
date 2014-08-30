@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
@@ -45,7 +46,19 @@ public class Config {
 		}
 		
 		//Test code.
-		CommandIslandProtection.tieredValues = (Map<String, IslandProtectionDataSet>) getDefaultConfig().get("testdefault", IslandProtectionDataSetFactory.getDefaultValues());
+		//Set it to the default values; if something missing is found, skip it.
+		CommandIslandProtection.tieredValues = IslandProtectionDataSetFactory.getDefaultValues();
+		try {
+			ConfigurationSection tempCfg = getDefaultConfig().getConfigurationSection("testdefault");
+			if (tempCfg != null) {
+				Map<String, Object> tempValue = tempCfg.getValues(true);
+				for (Map.Entry<String, Object> entry : tempValue.entrySet()) {
+					CommandIslandProtection.tieredValues.put(entry.getKey(), (IslandProtectionDataSet) entry.getValue());
+				}
+			}
+		} catch (ClassCastException e) {
+			e.printStackTrace(); //TODO
+		}
 		
 		getLogger().info("Configuration loaded!");
 	}
@@ -61,7 +74,7 @@ public class Config {
 		
 		getLogger().info("Configuration saved!");
 		
-		getDefaultConfig().set("testdefault", CommandIslandProtection.tieredValues);
+		getDefaultConfig().createSection("testdefault", CommandIslandProtection.tieredValues);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}
