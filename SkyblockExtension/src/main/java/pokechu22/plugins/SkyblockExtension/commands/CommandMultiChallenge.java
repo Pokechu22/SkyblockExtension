@@ -40,7 +40,7 @@ public class CommandMultiChallenge {
 	/**
 	 * Challenge names.
 	 */
-	static ArrayList<String> challengeNames = null;
+	static List<String> challengeNames = null;
 	/**
 	 * Has this command been initiated?
 	 */
