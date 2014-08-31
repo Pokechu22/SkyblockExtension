@@ -449,4 +449,15 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public static IslandProtectionDataSet valueOf(Map<String, Object> map) {
 		return new IslandProtectionDataSet(map);
 	}
+	
+	public String toString() {
+		StringBuilder returned = new StringBuilder();
+		
+		returned.append("IslandProtectionDataSet: ");
+		for (String flag : flags) {
+			returned.append("{" + flag + ": " + getFlag(flag) + "} ");
+		}
+		
+		return returned.toString();
+	}
 }

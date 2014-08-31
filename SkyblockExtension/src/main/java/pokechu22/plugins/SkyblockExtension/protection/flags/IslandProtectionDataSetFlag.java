@@ -213,4 +213,16 @@ public abstract class IslandProtectionDataSetFlag {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns a string representation of this flag.  
+	 * 
+	 * By default, this is equal to {@link #getSerializedValue()}.
+	 *
+	 * @return The string representation.
+	 */
+	@Override
+	public String toString() {
+		return this.getSerializedValue();
+	}
 }
