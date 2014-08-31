@@ -385,6 +385,48 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
+	 * Gets all values of this IslandProtectionDataSet.
+	 * <br>
+	 * <h1>Examples:</h1>
+	 * <i>(With only a 2 flags - both booleans, Foo and Bar)
+	 * <dt><code>getAllValues("Example - ","{",": ","}",".")</code></dt> 
+	 * <dd><samp>Example - {Foo: false}{Bar: true}.</samp></dd>
+	 * <dt><code>getAllValues("</code></dt>
+	 * <dd><samp>Example2</samp></dd>
+	 *
+	 * @param start Text put at the very start.
+	 * @param seperatorStart Text put at the start of each individual flag.
+	 * @param middleSeperator Text put between the flag name and it's value.
+	 * @param seperatorEnd Text put at the end of each individual flag.
+	 * @param end Text put at the very end.
+	 * 
+	 * @return
+	 */
+	public String getAllValues(String start, String seperatorStart, 
+			String middleSeperator, String seperatorEnd, 
+			String end) {
+		StringBuilder returned = new StringBuilder();
+		
+		returned.append(start);
+		
+		for (String flag : flags) {
+			returned.append(seperatorStart);
+			returned.append(flag);
+			returned.append(middleSeperator);
+			returned.append(getFlag(flag));
+			returned.append(seperatorEnd);
+		}
+		
+		returned.append(end);
+		
+		return returned.toString();
+	}
+	
+	public String toString() {
+		return getAllValues(this.getClass().getName(), "{", ": ", "} ", "");
+	}
+	
+	/**
 	 * Serialization for use with a configuration file.
 	 */
 	@Override
@@ -448,16 +490,5 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 */
 	public static IslandProtectionDataSet valueOf(Map<String, Object> map) {
 		return new IslandProtectionDataSet(map);
-	}
-	
-	public String toString() {
-		StringBuilder returned = new StringBuilder();
-		
-		returned.append("IslandProtectionDataSet: ");
-		for (String flag : flags) {
-			returned.append("{" + flag + ": " + getFlag(flag) + "} ");
-		}
-		
-		return returned.toString();
 	}
 }
