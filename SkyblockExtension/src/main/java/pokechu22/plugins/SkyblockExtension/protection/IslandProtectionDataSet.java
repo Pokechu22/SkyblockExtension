@@ -456,6 +456,359 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 		return getAllValues(this.getClass().getName(), "{", ": ", "} ", "", "");
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((attackAllowedEntities == null) ? 0 : attackAllowedEntities
+						.hashCode());
+		result = prime
+				* result
+				+ ((attackBannedEntities == null) ? 0 : attackBannedEntities
+						.hashCode());
+		result = prime
+				* result
+				+ ((breakAllowedBlocks == null) ? 0 : breakAllowedBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((breakAllowedHangings == null) ? 0 : breakAllowedHangings
+						.hashCode());
+		result = prime
+				* result
+				+ ((breakBannedBlocks == null) ? 0 : breakBannedBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((breakBannedHangings == null) ? 0 : breakBannedHangings
+						.hashCode());
+		result = prime
+				* result
+				+ ((buildAllowedBlocks == null) ? 0 : buildAllowedBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((buildBannedBlocks == null) ? 0 : buildBannedBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((canAttackAllEntities == null) ? 0 : canAttackAllEntities
+						.hashCode());
+		result = prime
+				* result
+				+ ((canAttackAnimals == null) ? 0 : canAttackAnimals.hashCode());
+		result = prime
+				* result
+				+ ((canAttackHostile == null) ? 0 : canAttackHostile.hashCode());
+		result = prime
+				* result
+				+ ((canBreakAllBlocks == null) ? 0 : canBreakAllBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((canBreakAllHanging == null) ? 0 : canBreakAllHanging
+						.hashCode());
+		result = prime
+				* result
+				+ ((canBuildAllBlocks == null) ? 0 : canBuildAllBlocks
+						.hashCode());
+		result = prime
+				* result
+				+ ((canDamageAllVehicles == null) ? 0 : canDamageAllVehicles
+						.hashCode());
+		result = prime * result + ((canEat == null) ? 0 : canEat.hashCode());
+		result = prime * result
+				+ ((canEmptyBuckets == null) ? 0 : canEmptyBuckets.hashCode());
+		result = prime
+				* result
+				+ ((canEnterAllVehicles == null) ? 0 : canEnterAllVehicles
+						.hashCode());
+		result = prime * result
+				+ ((canFillBuckets == null) ? 0 : canFillBuckets.hashCode());
+		result = prime * result + ((canPVP == null) ? 0 : canPVP.hashCode());
+		result = prime * result
+				+ ((canShearSheep == null) ? 0 : canShearSheep.hashCode());
+		result = prime
+				* result
+				+ ((canUseAllEntities == null) ? 0 : canUseAllEntities
+						.hashCode());
+		result = prime * result
+				+ ((canUseAllItems == null) ? 0 : canUseAllItems.hashCode());
+		result = prime * result
+				+ ((canUseBeds == null) ? 0 : canUseBeds.hashCode());
+		result = prime
+				* result
+				+ ((damageAllowedVehicles == null) ? 0 : damageAllowedVehicles
+						.hashCode());
+		result = prime
+				* result
+				+ ((damageBannedVehicles == null) ? 0 : damageBannedVehicles
+						.hashCode());
+		result = prime
+				* result
+				+ ((enterAllowedVehicles == null) ? 0 : enterAllowedVehicles
+						.hashCode());
+		result = prime
+				* result
+				+ ((enterBannedVehicles == null) ? 0 : enterBannedVehicles
+						.hashCode());
+		result = prime
+				* result
+				+ ((useAllowedBlocks == null) ? 0 : useAllowedBlocks.hashCode());
+		result = prime
+				* result
+				+ ((useAllowedEntities == null) ? 0 : useAllowedEntities
+						.hashCode());
+		result = prime * result
+				+ ((useBannedBlocks == null) ? 0 : useBannedBlocks.hashCode());
+		result = prime
+				* result
+				+ ((useBannedEntities == null) ? 0 : useBannedEntities
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		IslandProtectionDataSet other = (IslandProtectionDataSet) obj;
+		if (attackAllowedEntities == null) {
+			if (other.attackAllowedEntities != null) {
+				return false;
+			}
+		} else if (!attackAllowedEntities.equals(other.attackAllowedEntities)) {
+			return false;
+		}
+		if (attackBannedEntities == null) {
+			if (other.attackBannedEntities != null) {
+				return false;
+			}
+		} else if (!attackBannedEntities.equals(other.attackBannedEntities)) {
+			return false;
+		}
+		if (breakAllowedBlocks == null) {
+			if (other.breakAllowedBlocks != null) {
+				return false;
+			}
+		} else if (!breakAllowedBlocks.equals(other.breakAllowedBlocks)) {
+			return false;
+		}
+		if (breakAllowedHangings == null) {
+			if (other.breakAllowedHangings != null) {
+				return false;
+			}
+		} else if (!breakAllowedHangings.equals(other.breakAllowedHangings)) {
+			return false;
+		}
+		if (breakBannedBlocks == null) {
+			if (other.breakBannedBlocks != null) {
+				return false;
+			}
+		} else if (!breakBannedBlocks.equals(other.breakBannedBlocks)) {
+			return false;
+		}
+		if (breakBannedHangings == null) {
+			if (other.breakBannedHangings != null) {
+				return false;
+			}
+		} else if (!breakBannedHangings.equals(other.breakBannedHangings)) {
+			return false;
+		}
+		if (buildAllowedBlocks == null) {
+			if (other.buildAllowedBlocks != null) {
+				return false;
+			}
+		} else if (!buildAllowedBlocks.equals(other.buildAllowedBlocks)) {
+			return false;
+		}
+		if (buildBannedBlocks == null) {
+			if (other.buildBannedBlocks != null) {
+				return false;
+			}
+		} else if (!buildBannedBlocks.equals(other.buildBannedBlocks)) {
+			return false;
+		}
+		if (canAttackAllEntities == null) {
+			if (other.canAttackAllEntities != null) {
+				return false;
+			}
+		} else if (!canAttackAllEntities.equals(other.canAttackAllEntities)) {
+			return false;
+		}
+		if (canAttackAnimals == null) {
+			if (other.canAttackAnimals != null) {
+				return false;
+			}
+		} else if (!canAttackAnimals.equals(other.canAttackAnimals)) {
+			return false;
+		}
+		if (canAttackHostile == null) {
+			if (other.canAttackHostile != null) {
+				return false;
+			}
+		} else if (!canAttackHostile.equals(other.canAttackHostile)) {
+			return false;
+		}
+		if (canBreakAllBlocks == null) {
+			if (other.canBreakAllBlocks != null) {
+				return false;
+			}
+		} else if (!canBreakAllBlocks.equals(other.canBreakAllBlocks)) {
+			return false;
+		}
+		if (canBreakAllHanging == null) {
+			if (other.canBreakAllHanging != null) {
+				return false;
+			}
+		} else if (!canBreakAllHanging.equals(other.canBreakAllHanging)) {
+			return false;
+		}
+		if (canBuildAllBlocks == null) {
+			if (other.canBuildAllBlocks != null) {
+				return false;
+			}
+		} else if (!canBuildAllBlocks.equals(other.canBuildAllBlocks)) {
+			return false;
+		}
+		if (canDamageAllVehicles == null) {
+			if (other.canDamageAllVehicles != null) {
+				return false;
+			}
+		} else if (!canDamageAllVehicles.equals(other.canDamageAllVehicles)) {
+			return false;
+		}
+		if (canEat == null) {
+			if (other.canEat != null) {
+				return false;
+			}
+		} else if (!canEat.equals(other.canEat)) {
+			return false;
+		}
+		if (canEmptyBuckets == null) {
+			if (other.canEmptyBuckets != null) {
+				return false;
+			}
+		} else if (!canEmptyBuckets.equals(other.canEmptyBuckets)) {
+			return false;
+		}
+		if (canEnterAllVehicles == null) {
+			if (other.canEnterAllVehicles != null) {
+				return false;
+			}
+		} else if (!canEnterAllVehicles.equals(other.canEnterAllVehicles)) {
+			return false;
+		}
+		if (canFillBuckets == null) {
+			if (other.canFillBuckets != null) {
+				return false;
+			}
+		} else if (!canFillBuckets.equals(other.canFillBuckets)) {
+			return false;
+		}
+		if (canPVP == null) {
+			if (other.canPVP != null) {
+				return false;
+			}
+		} else if (!canPVP.equals(other.canPVP)) {
+			return false;
+		}
+		if (canShearSheep == null) {
+			if (other.canShearSheep != null) {
+				return false;
+			}
+		} else if (!canShearSheep.equals(other.canShearSheep)) {
+			return false;
+		}
+		if (canUseAllEntities == null) {
+			if (other.canUseAllEntities != null) {
+				return false;
+			}
+		} else if (!canUseAllEntities.equals(other.canUseAllEntities)) {
+			return false;
+		}
+		if (canUseAllItems == null) {
+			if (other.canUseAllItems != null) {
+				return false;
+			}
+		} else if (!canUseAllItems.equals(other.canUseAllItems)) {
+			return false;
+		}
+		if (canUseBeds == null) {
+			if (other.canUseBeds != null) {
+				return false;
+			}
+		} else if (!canUseBeds.equals(other.canUseBeds)) {
+			return false;
+		}
+		if (damageAllowedVehicles == null) {
+			if (other.damageAllowedVehicles != null) {
+				return false;
+			}
+		} else if (!damageAllowedVehicles.equals(other.damageAllowedVehicles)) {
+			return false;
+		}
+		if (damageBannedVehicles == null) {
+			if (other.damageBannedVehicles != null) {
+				return false;
+			}
+		} else if (!damageBannedVehicles.equals(other.damageBannedVehicles)) {
+			return false;
+		}
+		if (enterAllowedVehicles == null) {
+			if (other.enterAllowedVehicles != null) {
+				return false;
+			}
+		} else if (!enterAllowedVehicles.equals(other.enterAllowedVehicles)) {
+			return false;
+		}
+		if (enterBannedVehicles == null) {
+			if (other.enterBannedVehicles != null) {
+				return false;
+			}
+		} else if (!enterBannedVehicles.equals(other.enterBannedVehicles)) {
+			return false;
+		}
+		if (useAllowedBlocks == null) {
+			if (other.useAllowedBlocks != null) {
+				return false;
+			}
+		} else if (!useAllowedBlocks.equals(other.useAllowedBlocks)) {
+			return false;
+		}
+		if (useAllowedEntities == null) {
+			if (other.useAllowedEntities != null) {
+				return false;
+			}
+		} else if (!useAllowedEntities.equals(other.useAllowedEntities)) {
+			return false;
+		}
+		if (useBannedBlocks == null) {
+			if (other.useBannedBlocks != null) {
+				return false;
+			}
+		} else if (!useBannedBlocks.equals(other.useBannedBlocks)) {
+			return false;
+		}
+		if (useBannedEntities == null) {
+			if (other.useBannedEntities != null) {
+				return false;
+			}
+		} else if (!useBannedEntities.equals(other.useBannedEntities)) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Serialization for use with a configuration file.
 	 */
