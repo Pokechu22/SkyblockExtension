@@ -37,8 +37,14 @@ import static pokechu22.plugins.SkyblockExtension.IslandUtils.getPlayerInfo;
  */
 public class CommandMultiChallenge {
 	
-	private static ArrayList<String> challengeNames = null;
-	private static boolean initiated = false;
+	/**
+	 * Challenge names.
+	 */
+	static ArrayList<String> challengeNames = null;
+	/**
+	 * Has this command been initiated?
+	 */
+	static boolean initiated = false;
 	
 	/**
 	 * Initiates this.
