@@ -50,4 +50,9 @@ public class IslandProtectionDataSetTest {
 	public void testSerialization() {
 		assertThat(IslandProtectionDataSet.deserialize(set.serialize()), is(set));
 	}
+	
+	@Test
+	public void test() {
+		
+	}
 }
