@@ -20,6 +20,13 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
  */
 public class IslandProtectionDataSetFactory {
 	
+	/**
+	 * The text before the actual value to get.  
+	 * For example: "permissions.".  This means that it searches for 
+	 * "permissions.owner". 
+	 */
+	private static final String config_prepender = "permissions.";
+	
 	private static final EnumMap<MembershipTier, IslandProtectionDataSet> 
 			defaultValues = new EnumMap<MembershipTier, 
 					IslandProtectionDataSet>(MembershipTier.class); 
@@ -84,9 +91,8 @@ public class IslandProtectionDataSetFactory {
 		for (MembershipTier t : MembershipTier.values()) {
 			IslandProtectionDataSet i;
 			try {
-				System.out.println(t.name());
 				i = (IslandProtectionDataSet)
-						objects.get(t.name());
+						objects.get(config_prepender + t.name());
 			} catch (Exception e) {
 				ErrorHandler.logError(new ConfigurationErrorReport(e, 
 						t.name(), "default_protection.yml", 
