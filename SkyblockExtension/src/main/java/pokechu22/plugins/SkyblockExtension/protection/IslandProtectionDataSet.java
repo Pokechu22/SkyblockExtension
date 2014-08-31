@@ -392,7 +392,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * <i>(With only a 2 flags - both booleans, Foo and Bar)
 	 * <dt><code>getAllValues("Example - ", "{", ": ", "}", ", ", ".")</code></dt> 
 	 * <dd><samp>Example - {Foo: false}, {Bar: true}.</samp></dd>
-	 * <dt><code>getAllValues("", "§1", "§7: §b", "", "\n", ""</code></dt>
+	 * <dt><code>getAllValues("", "§1", "§7: §b", "", "\n", "")</code></dt>
 	 * <dd><samp>§1Foo§7: §bfalse\n§1Bar§7: §bfalse</samp><br>
 	 * <i>In-game style:</i><br>
 	 * <samp><font color=#0000AA>Foo</font><font color=#AAAAAA>: </font><font color=#55FFFF>false</font><br>
