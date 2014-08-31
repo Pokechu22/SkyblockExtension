@@ -445,6 +445,13 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 		return returned.toString();
 	}
 	
+	/**
+	 * Returns a string representation of this IslandProtectionDataSet.
+	 * This is the same as calling 
+	 * {@link #getAllValues(String, String, String, String, String, String)
+	 * getAllValues}("IslandProtectionDataSet", "{", ": ", "} ", "", "").
+	 */
+	@Override
 	public String toString() {
 		return getAllValues(this.getClass().getName(), "{", ": ", "} ", "", "");
 	}
