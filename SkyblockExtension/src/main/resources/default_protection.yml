@@ -11,7 +11,7 @@ permissions:
     canBreakAllBlocks: 'true'
     canBuildAllBlocks: 'true'
     useAllowedBlocks: '[]'
-    canPVP: 'true' #TODO may want to make this adjustable.
+    canPVP: 'true'
     breakBannedBlocks: '[]'
     breakAllowedHangings: '[]'
     canAttackHostile: 'true'
@@ -46,7 +46,7 @@ permissions:
     canBreakAllBlocks: 'true'
     canBuildAllBlocks: 'true'
     useAllowedBlocks: '[]'
-    canPVP: 'true' #TODO may want to make this adjustable.
+    canPVP: 'true'
     breakBannedBlocks: '[]'
     breakAllowedHangings: '[]'
     canAttackHostile: 'true'
@@ -81,7 +81,7 @@ permissions:
     canBreakAllBlocks: 'false'
     canBuildAllBlocks: 'false'
     useAllowedBlocks: '[]'
-    canPVP: 'false' #TODO may want to make this adjustable.
+    canPVP: 'false'
     breakBannedBlocks: '[]'
     breakAllowedHangings: '[]'
     canAttackHostile: 'false'
@@ -116,7 +116,7 @@ permissions:
     canBreakAllBlocks: 'false'
     canBuildAllBlocks: 'false'
     useAllowedBlocks: '[]'
-    canPVP: 'false' #TODO may want to make this adjustable.
+    canPVP: 'false'
     breakBannedBlocks: '[]'
     breakAllowedHangings: '[]'
     canAttackHostile: 'false'
