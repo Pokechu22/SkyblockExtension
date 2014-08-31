@@ -386,6 +386,14 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
+	 * Gets the actual values 
+	 * @return
+	 */
+	public String getAllValuesForChat() {
+		return getAllValues("", "§1", "§7: §b", "", "\n", "");
+	}
+	
+	/**
 	 * Gets all values of this IslandProtectionDataSet.
 	 * <br>
 	 * <h1>Examples:</h1>

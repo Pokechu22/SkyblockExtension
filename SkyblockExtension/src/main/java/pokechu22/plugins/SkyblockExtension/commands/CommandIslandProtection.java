@@ -11,7 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 
@@ -121,10 +120,10 @@ public class CommandIslandProtection {
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
-		if (args.length < 3) {
+		/*if (args.length < 3) {
 			return;
 			//TODO error message.
-		}
+		}*/
 		
 		MembershipTier parsedTier = MembershipTier.matchTier(args[1]); 
 		
@@ -156,6 +155,11 @@ public class CommandIslandProtection {
 		if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("view")) {
 				sender.sendMessage(relevantDataSet.getFlagValue(args[2]));
+			}
+		}
+		if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("view")) {
+				sender.sendMessage(relevantDataSet.getAllValuesForChat());
 			}
 		}
 	}
