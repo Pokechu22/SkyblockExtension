@@ -397,6 +397,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * <i>In-game style:</i><br>
 	 * <samp><font color=#0000AA>Foo</font><font color=#AAAAAA>: </font><font color=#55FFFF>false</font><br>
 	 * <font color=#0000AA>Bar</font><font color=#AAAAAA>: </font><font color=#55FFFF>false</font></samp></dd>
+	 * <dt><code>getAllValues("", "", "", "", "", "")</code></dt>
+	 * <dd><samp>FoofalseBartrue</samp></dd>
 	 *
 	 * @param start Text put at the very start.
 	 * @param seperatorStart Text put at the start of each individual flag.
