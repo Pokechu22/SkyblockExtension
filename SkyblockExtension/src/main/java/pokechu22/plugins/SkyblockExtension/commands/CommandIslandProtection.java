@@ -133,14 +133,7 @@ public class CommandIslandProtection {
 			return;
 		}
 		
-		IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier);
-		System.out.println("Default: " + 
-		IslandProtectionDataSetFactory.getDefaultValues().keySet().toString() + 
-		IslandProtectionDataSetFactory.getDefaultValues().values().toString());
-		
-		System.out.println("Actual: " + 
-		tieredValues.keySet().toString() + 
-		tieredValues.values().toString());
+		IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier.name());
 		
 		if (args.length >= 4) {
 			String longParam = "";
