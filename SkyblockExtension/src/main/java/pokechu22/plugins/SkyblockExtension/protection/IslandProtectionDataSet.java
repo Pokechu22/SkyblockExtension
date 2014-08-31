@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -389,32 +390,44 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * <br>
 	 * <h1>Examples:</h1>
 	 * <i>(With only a 2 flags - both booleans, Foo and Bar)
-	 * <dt><code>getAllValues("Example - ","{",": ","}",".")</code></dt> 
-	 * <dd><samp>Example - {Foo: false}{Bar: true}.</samp></dd>
-	 * <dt><code>getAllValues("</code></dt>
-	 * <dd><samp>Example2</samp></dd>
+	 * <dt><code>getAllValues("Example - ", "{", ": ", "}", ", ", ".")</code></dt> 
+	 * <dd><samp>Example - {Foo: false}, {Bar: true}.</samp></dd>
+	 * <dt><code>getAllValues("", "§1", "§7: §b", "", "\n", ""</code></dt>
+	 * <dd><samp>§1Foo§7: §bfalse\n§1Bar§7: §bfalse</samp><br>
+	 * <i>In-game style:</i><br>
+	 * <samp><font color=#0000AA>Foo</font><font color=#AAAAAA>: </font><font color=#55FFFF>false</font><br>
+	 * <font color=#0000AA>Bar</font><font color=#AAAAAA>: </font><font color=#55FFFF>false</font></samp></dd>
 	 *
 	 * @param start Text put at the very start.
 	 * @param seperatorStart Text put at the start of each individual flag.
 	 * @param middleSeperator Text put between the flag name and it's value.
 	 * @param seperatorEnd Text put at the end of each individual flag.
+	 * @param joiner Used to join any value EXCEPT for the last.
 	 * @param end Text put at the very end.
 	 * 
 	 * @return
 	 */
 	public String getAllValues(String start, String seperatorStart, 
 			String middleSeperator, String seperatorEnd, 
-			String end) {
+			String joiner, String end) {
 		StringBuilder returned = new StringBuilder();
 		
 		returned.append(start);
 		
-		for (String flag : flags) {
+		Iterator<String> iterator = flags.iterator();
+		
+		while (iterator.hasNext()) {
+			String flag = iterator.next();
 			returned.append(seperatorStart);
 			returned.append(flag);
 			returned.append(middleSeperator);
 			returned.append(getFlag(flag));
 			returned.append(seperatorEnd);
+			
+			//In all cases other than 
+			if (iterator.hasNext()) {
+				returned.append(joiner);
+			}
 		}
 		
 		returned.append(end);
@@ -423,7 +436,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	public String toString() {
-		return getAllValues(this.getClass().getName(), "{", ": ", "} ", "");
+		return getAllValues(this.getClass().getName(), "{", ": ", "} ", "", "");
 	}
 	
 	/**
