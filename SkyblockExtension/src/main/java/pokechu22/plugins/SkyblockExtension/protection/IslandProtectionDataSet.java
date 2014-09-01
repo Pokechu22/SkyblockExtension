@@ -13,6 +13,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.flags.*;
+import pokechu22.plugins.SkyblockExtension.util.nbt.*;
 
 /**
  * <b>Serializable</b> protection configuration data, for a single entry.
@@ -873,5 +874,52 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 */
 	public static IslandProtectionDataSet valueOf(Map<String, Object> map) {
 		return new IslandProtectionDataSet(map);
+	}
+	
+	/**
+	 * Sets the values of this to that of a NBT tag.
+	 * The tag must be of type TAG_COMPOUND in this case.
+	 * @param serialized
+	 */
+	public void deserializeFromNBT(Tag serialized) {
+		if (serialized instanceof CompoundTag) {
+			CompoundTag tag = (CompoundTag) serialized;
+			
+			for (String flagName : flags) {
+				IslandProtectionDataSetFlag flag = 
+						IslandProtectionDataSetFlag.deserialize(flagName, 
+								tag.getString(flagName));
+				if (flag != null) {
+					this.setFlag(flagName, flag);
+				} else {
+					//TODO Add the default value otherwise.
+					//result = this.setFlagRaw(flag, (String) 
+					// 			/*getDefaultFlagSomehow(flag)*/ "");
+					//if (result == false) {
+					//	//TODO ConfigurationErrorReport?
+					//}
+				}
+			}
+		}
+	}
+	
+	public Tag serializeToNBT() {
+		CompoundTag tag = new CompoundTag();
+		
+		for (String flagName : flags) {
+			IslandProtectionDataSetFlag flag = this.getFlag(flagName);
+			if (flag == null) {
+				//TODO Add default value otherwise
+				continue;
+			}
+			String value = flag.getSerializedValue();
+			if (value != null) {
+				tag.putString(flagName, value);
+			} // else { //TODO Add default value otherwise
+			
+			// }
+		}
+		
+		return tag;
 	}
 }

@@ -1,14 +1,18 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.util.nbt.*;
+import us.talabrek.ultimateskyblock.Settings;
 
 /**
  * Contains information about an island.
@@ -16,17 +20,132 @@ import org.bukkit.entity.Player;
  * @author Pokechu22
  *
  */
-public class IslandInfo implements ConfigurationSerializable {
+public class IslandInfo {
+	private class MemberInfo {
+		public String playerName;
+		public UUID playerUUID;
+		
+		public MemberInfo(String playerName, UUID playerUUID) {
+			this.playerName = playerName;
+			this.playerUUID = playerUUID;
+		}
+		
+		/**
+		 * Deserializes this from an NBT file.
+		 * Not a constructor - modifies existing values.
+		 * @throws IllegalArgumentException when given a tag other than
+		 * TAG_COMPOUND.
+		 * @param serialized
+		 */
+		public MemberInfo(Tag serialized) {
+			if (!(serialized instanceof CompoundTag)) {
+				throw new IllegalArgumentException("Can only deserialize " +
+						MemberInfo.class.getName() + "from Compound Tags." +
+						"  Got tag of type " + serialized.getClass()
+						.getName() + ", expected " + CompoundTag.class
+						.getName() + ".  Value (from toString): " + 
+						serialized.toString());
+			}
+			CompoundTag tag = (CompoundTag) serialized;
+			
+			this.playerName = tag.getString("PlayerName");
+			this.playerUUID = new UUID(tag.getLong("PlayerUUIDMost"),
+					tag.getLong("PlayerUUIDLeast"));  
+		}
+		
+		/**
+		 * Serializes this to a NBT tag.
+		 * @return
+		 */
+		public Tag serializeToNBT() {
+			CompoundTag tag = new CompoundTag();
+			
+			tag.putString("PlayerName", this.playerName);
+			tag.putLong("PlayerUUIDMost", 
+					this.playerUUID.getMostSignificantBits());
+			tag.putLong("PlayerUUIDLeast", 
+					this.playerUUID.getLeastSignificantBits());
+			
+			return tag;
+		}
+	}
+	
+	private class GuestInfo {
+		public String playerName;
+		public UUID playerUUID;
+		public Date guestUntil;
+		
+		public GuestInfo(String playerName, UUID playerUUID, 
+				Date guestUntil) {
+			this.playerName = playerName;
+			this.playerUUID = playerUUID;
+			this.guestUntil = guestUntil;
+		}
+		
+		/**
+		 * Deserializes this from an NBT file.
+		 * Not a constructor - modifies existing values.
+		 * @throws IllegalArgumentException when given a tag other than
+		 * TAG_COMPOUND.
+		 * @param serialized
+		 */
+		public GuestInfo(Tag serialized) {
+			if (!(serialized instanceof CompoundTag)) {
+				throw new IllegalArgumentException("Can only deserialize " +
+						GuestInfo.class.getName() + "from Compound Tags." +
+						"  Got tag of type " + serialized.getClass()
+						.getName() + ", expected " + CompoundTag.class
+						.getName() + ".  Value (from toString): " + 
+						serialized.toString());
+			}
+			CompoundTag tag = (CompoundTag) serialized;
+			
+			this.playerName = tag.getString("PlayerName");
+			this.playerUUID = new UUID(tag.getLong("PlayerUUIDMost"),
+					tag.getLong("PlayerUUIDLeast"));
+			this.guestUntil = new Date(tag.getLong("GuestUntil"));
+		}
+		
+		/**
+		 * Serializes this to a NBT tag.
+		 * @return
+		 */
+		public Tag serializeToNBT() {
+			CompoundTag tag = new CompoundTag();
+			
+			tag.putString("PlayerName", this.playerName);
+			tag.putLong("PlayerUUIDMost", 
+					this.playerUUID.getMostSignificantBits());
+			tag.putLong("PlayerUUIDLeast", 
+					this.playerUUID.getLeastSignificantBits());
+			
+			tag.putLong("GuestUntil", guestUntil.getTime());
+			
+			return tag;
+		}
+	}
+	
+	/**
+	 * The location of the bedrock in the center of the island.
+	 * This is based off of a uSkyBlock value.
+	 */
 	public Location islandCenter;
 	
-	public String owner;
-	public UUID ownerUUID;
+	/**
+	 * Information about the owner of the island.  
+	 * (Uses a member info because I don't want to create a redundant class)
+	 */
+	public MemberInfo ownerInfo;
 	
-	public List<String> members;
-	public List<UUID> memberUUIDs;
+	/**
+	 * Information about all members of the island.
+	 */
+	public List<MemberInfo> members;
 	
-	public List<String> guests;
-	public List<UUID> guestUUIDs;
+	/**
+	 * Information about all the guests on the island.
+	 */
+	public List<GuestInfo> guests;
 	
 	public Map<String, IslandProtectionDataSet> permissions;
 	
@@ -39,16 +158,15 @@ public class IslandInfo implements ConfigurationSerializable {
 	 */
 	public IslandInfo(Location islandCenter, Player owner) {
 		this.islandCenter = islandCenter;
-		this.owner = owner.getName();
-		this.ownerUUID = owner.getUniqueId();
+		this.ownerInfo = new MemberInfo(owner.getName(), 
+				owner.getUniqueId());
 		
-		this.members = new ArrayList<String>();
-		this.memberUUIDs = new ArrayList<UUID>();
+		this.members = new ArrayList<MemberInfo>();
 		
-		this.guests = new ArrayList<String>();
-		this.guestUUIDs = new ArrayList<UUID>();
+		this.guests = new ArrayList<GuestInfo>();
 		
-		this.permissions = IslandProtectionDataSetFactory.getDefaultValues();
+		this.permissions = IslandProtectionDataSetFactory
+				.getDefaultValues();
 	}
 	
 	/**
@@ -58,27 +176,7 @@ public class IslandInfo implements ConfigurationSerializable {
 	 * @param player The new owner.
 	 */
 	public void setOwner(Player player) {
-		//If the player is a guest, remove them.
-		guests.remove(player.getName());
-		guestUUIDs.remove(player.getUniqueId());
-		//If the player is a member, remove them.
-		members.remove(player.getName());
-		memberUUIDs.remove(player.getUniqueId());
-		
-		//If the owner is a guest, remove them.  (Shouldn't happen)
-		guests.remove(owner);
-		guestUUIDs.remove(ownerUUID);
-		//If the player is a member, remove them.  (Shouldn't happen)
-		members.remove(owner);
-		memberUUIDs.remove(ownerUUID);
-		
-		//Add the previous owner to the members list.
-		members.add(owner);
-		memberUUIDs.add(ownerUUID);
-		
-		//Set the new owner.
-		owner = player.getName();
-		ownerUUID = player.getUniqueId();
+		//TODO
 	}
 	
 	/**
@@ -87,93 +185,110 @@ public class IslandInfo implements ConfigurationSerializable {
 	 * @param player
 	 */
 	public void addMember(Player player) {
-		//If the player is a guest, remove them.
-		guests.remove(player.getName());
-		guestUUIDs.remove(player.getUniqueId());
-		
-		//If the player is an owner, do nothing.
-		if (owner.equals(player.getName()) || ownerUUID.equals(player.getUniqueId())) {
-			return;
-		}
-		
-		//If the player is already a member, do nothing.
-		if (members.contains(player.getName()) || memberUUIDs.contains(player.getUniqueId())) {
-			return;
-		}
-		
-		members.add(player.getName());
-		memberUUIDs.add(player.getUniqueId());
+		//TODO
 	}
 	
-	//Serialization.
-	
 	/**
-	 * Serialization for use with a configuration file.
+	 * Deserializes this from an NBT file.
+	 * Not a constructor - modifies existing values.
+	 * @param serialized
 	 */
-	@Override
-	public Map<String, Object> serialize() {
-		Map<String, Object> map = new HashMap<String, Object>();
+	public void deserializeFromNBT(Tag serialized) {
+		if (!(serialized instanceof CompoundTag)) {
+			throw new IllegalArgumentException("Can only deserialize " +
+					IslandInfo.class.getName() + "from Compound Tags." +
+					"  Got tag of type " + serialized.getClass()
+					.getName() + ", expected " + CompoundTag.class
+					.getName() + ".  Value (from toString): " + 
+					serialized.toString());
+		}
 		
-		map.put("islandCenter", islandCenter);
+		CompoundTag tag = (CompoundTag) serialized;
 		
-		map.put("owner", owner);
-		map.put("ownerUUID", ownerUUID);
+		CompoundTag location = tag.getCompound("Location");
+		this.islandCenter = new Location(SkyblockExtension.inst()
+				.getServer().getWorld(location.getString("World")), 
+				location.getDouble("X"), location.getDouble("Y"), 
+				location.getDouble("Z"));
 		
-		map.put("members", members);
-		map.put("memberUUIDs", memberUUIDs);
+		this.ownerInfo = new MemberInfo(tag.getCompound("OwnerInfo"));
 		
-		map.put("guests", guests);
-		map.put("guestUUIDs", guestUUIDs);
+		this.members = new ArrayList<MemberInfo>();
+		ListTag<? extends Tag> memberList = tag.getList("Members");
+		for (int i = 0; i < memberList.size(); i++) {
+			Tag member = memberList.get(i);
+			this.members.add(new MemberInfo(member));
+		}
 		
-		map.put("permissions", permissions);
+		this.guests = new ArrayList<GuestInfo>();
+		ListTag<? extends Tag> guestList = tag.getList("Guests");
+		for (int i = 0; i < guestList.size(); i++) {
+			Tag guest = guestList.get(i);
+			this.guests.add(new GuestInfo(guest));
+		}
 		
-		return map;
+		CompoundTag perms = tag.getCompound("Permissions");
+		this.permissions = 
+				IslandProtectionDataSetFactory.getDefaultValues();
+		for (Map.Entry<String, IslandProtectionDataSet> entry : 
+			this.permissions.entrySet()) {
+			entry.getValue().deserializeFromNBT(
+					perms.getCompound(entry.getKey()));
+		}
 	}
 	
 	/**
-	 * Constructor for deserialization of this from a configuration file.
-	 * @param map
+	 * Serializes this to a NBT tag.
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public IslandInfo(Map<String, Object> map) {
-		this.islandCenter = (Location) map.get("islandCenter");
+	public Tag serializeToNBT() {
+		CompoundTag tag = new CompoundTag();
 		
-		this.owner = (String) map.get("owner");
-		this.ownerUUID = (UUID) map.get(ownerUUID);
+		CompoundTag location = new CompoundTag("Location");
+		location.putString("World", this.islandCenter.getWorld().getName());
+		location.putDouble("X", this.islandCenter.getX());
+		location.putDouble("Y", this.islandCenter.getY());
+		location.putDouble("Z", this.islandCenter.getZ());
+		tag.putCompound("Location", location);
 		
-		this.members = (List<String>) map.get("members");
-		this.memberUUIDs = (List<UUID>) map.get("memberUUIDs");
+		tag.put("OwnerInfo", this.ownerInfo.serializeToNBT());
 		
-		this.guests = (List<String>) map.get("guestUUIDs");
-		this.guestUUIDs = (List<UUID>) map.get("geustUUIDs");
+		ListTag<CompoundTag> members = new ListTag<CompoundTag>("Members");
+		for (MemberInfo memberInfo : this.members) {
+			members.add((CompoundTag) memberInfo.serializeToNBT());
+		}
+		tag.put("Members", members);
 		
-		//Deserialize permissions
-		this.permissions = new HashMap<String, IslandProtectionDataSet>();
-		for (MembershipTier t : MembershipTier.values()) {
-			IslandProtectionDataSet i;
-			i = (IslandProtectionDataSet)map.get("permissions." + t.name());
+		ListTag<CompoundTag> guests = new ListTag<CompoundTag>("Guests");
+		for (GuestInfo guestInfo : this.guests) {
+			guests.add((CompoundTag) guestInfo.serializeToNBT());
+		}
+		tag.put("guests", guests);
+		
+		CompoundTag perms = new CompoundTag("Permissions");
+		this.permissions = 
+				IslandProtectionDataSetFactory.getDefaultValues();
+		for (Map.Entry<String, IslandProtectionDataSet> entry : 
+			this.permissions.entrySet()) {
 			
-			this.permissions.put(t.name(), i);
+			perms.put(entry.getKey(), entry.getValue().serializeToNBT());
 		}
+		
+		return tag;
 	}
 	
 	/**
-	 * Deserialization of this from a configuration file.
-	 * @param map
+	 * Gets the file name, but not the extension or path.
+	 * It's of the form 0x0z, which is the island location.
 	 * @return
 	 */
-	public static IslandInfo deserialize(
-			Map<String, Object> map) {
-		return new IslandInfo(map);
-	}
-
-	/**
-	 * Deserialization of this from a configuration file.
-	 * @param map
-	 * @return
-	 */
-	public static IslandInfo valueOf(Map<String, Object> map) {
-		return new IslandInfo(map);
+	public String getFileName() {
+		int xPos;
+		int zPos;
+		
+		xPos = (int)(this.islandCenter.getX() / Settings.island_distance);
+		zPos = (int)(this.islandCenter.getZ() / Settings.island_distance);
+		
+		return xPos + "x" + zPos + "z";
 	}
 }
