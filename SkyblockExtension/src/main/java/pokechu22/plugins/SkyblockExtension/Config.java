@@ -1,8 +1,5 @@
 package pokechu22.plugins.SkyblockExtension;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +11,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
-import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
-
-import com.sk89q.jnbt.*;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -66,15 +60,6 @@ public class Config {
 			e.printStackTrace(); //TODO
 		}
 		
-		try (NBTOutputStream s = new NBTOutputStream(new FileOutputStream("C:/Pokechu22/Test_3.nbt"))) {
-			s.writeTag(IslandProtectionDataSetFactory.getDefaultValue(MembershipTier.owner).serializeToNBT("test"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		getLogger().info("Configuration loaded!");
 	}
 	
