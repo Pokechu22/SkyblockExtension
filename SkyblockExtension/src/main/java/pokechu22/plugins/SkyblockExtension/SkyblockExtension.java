@@ -1,6 +1,8 @@
 package pokechu22.plugins.SkyblockExtension;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -12,6 +14,7 @@ import java.util.logging.Level;
 import pokechu22.plugins.SkyblockExtension.commands.*;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
+import pokechu22.plugins.SkyblockExtension.util.nbt.*;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -76,6 +79,18 @@ public class SkyblockExtension extends JavaPlugin {
 		}
 		
 		Config.loadConfig();
+		
+		CompoundTag t = new CompoundTag();
+		t.putInt("test", 0);
+		try {
+			NbtIo.writeCompressed(t, new FileOutputStream(new File(this.getDataFolder(), "test.nbt")));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
