@@ -188,7 +188,7 @@ public class ThrowableReport extends CrashReport {
 	 */
 	@Override
 	public Map<String, Object> serialize() {
-		SkyblockExtension.inst().getLogger().info("Saving crash report to map.");
+		SkyblockExtension.inst().getLogger().finest("Saving crash report to map.");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
@@ -231,7 +231,7 @@ public class ThrowableReport extends CrashReport {
 	 */
 	@SuppressWarnings("unchecked")
 	public ThrowableReport(Map<String, Object> map) {
-		SkyblockExtension.inst().getLogger().info("Creating crash report from map.");
+		SkyblockExtension.inst().getLogger().finest("Creating crash report from map.");
 		try {
 			
 			//Create thrown.
@@ -271,7 +271,7 @@ public class ThrowableReport extends CrashReport {
 			return;
 		}
 		
-		SkyblockExtension.inst().getLogger().info("Succeeded!");
+		SkyblockExtension.inst().getLogger().finest("Succeeded!");
 	}
 	
 	/**
