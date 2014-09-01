@@ -11,6 +11,7 @@ import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.IslandUtils;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 
@@ -500,6 +501,33 @@ public class CommandPokechu22 {
 				sender.sendMessage("Bedrock is not found.");
 			}
 			return;
+		}
+		if (args[1].equalsIgnoreCase("IslandInfoSerialization")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cYou must be a player.");
+				return;
+			}
+			
+			Player player = (Player) sender;
+			
+			try {
+				IslandInfo info = new IslandInfo(new Location(player.getWorld(),
+						0,120,0), player);
+				player.sendMessage("Starting NBT data: ");
+				player.sendMessage(info.serializeToNBT().toString());
+				info.saveToDisk();
+				player.sendMessage("Saved.");
+				IslandInfo loaded = IslandInfo.readFromDisk(0, 0);
+				player.sendMessage("Loaded.");
+				player.sendMessage("Loaded NBT data: ");
+				player.sendMessage(loaded.serializeToNBT().toString());
+				player.sendMessage("Done.");
+				return;
+			} catch (Exception e) {
+				player.sendMessage("Exception: " + e.toString());
+				e.printStackTrace();
+				return;
+			}
 		}
 		
 		sender.sendMessage("§c\"" + args[1] + "\" is not a recognised test!");

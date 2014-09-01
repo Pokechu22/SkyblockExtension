@@ -1,5 +1,10 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -150,6 +155,13 @@ public class IslandInfo {
 	public Map<String, IslandProtectionDataSet> permissions;
 	
 	/**
+	 * Deserialization empty constructor.
+	 */
+	private IslandInfo() {
+		
+	}
+	
+	/**
 	 * Creates an islandInfo with only the specified information.
 	 * All other parameters are set at default.
 	 *
@@ -290,5 +302,45 @@ public class IslandInfo {
 		zPos = (int)(this.islandCenter.getZ() / Settings.island_distance);
 		
 		return xPos + "x" + zPos + "z";
+	}
+	
+	/**
+	 * Saves this to disk as a .NBT file.
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public void saveToDisk() throws FileNotFoundException, IOException {
+		NbtIo.writeCompressed((CompoundTag) this.serializeToNBT(), 
+				new FileOutputStream(new File(SkyblockExtension.inst()
+						.getDataFolder(), (this.getFileName() + ".nbt"))));
+	}
+	
+	/**
+	 * Reads this from disk as a .NBT file.
+	 * @param x X-id of the island.
+	 * @param z Z-id of the island.
+	 * @return
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public static IslandInfo readFromDisk(int x, int z) throws FileNotFoundException, IOException {
+		return IslandInfo.readFromDisk(x + "x" + z + "z" + ".nbt");
+	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static IslandInfo readFromDisk(String fileName) throws FileNotFoundException, IOException {
+		IslandInfo returned = new IslandInfo();
+		
+		returned.deserializeFromNBT(NbtIo.readCompressed(
+				new FileInputStream(new File(SkyblockExtension.inst()
+				.getDataFolder(), fileName))));
+		
+		return returned;
 	}
 }
