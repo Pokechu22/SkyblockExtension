@@ -1,16 +1,12 @@
 package pokechu22.plugins.SkyblockExtension;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import pokechu22.plugins.SkyblockExtension.commands.*;
@@ -24,8 +20,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.sk89q.jnbt.*;
 
 /**
  * 
@@ -82,20 +76,6 @@ public class SkyblockExtension extends JavaPlugin {
 		}
 		
 		Config.loadConfig();
-		
-		try (NBTOutputStream out = new NBTOutputStream(new FileOutputStream("C:/Pokechu22/test_2.nbt"))) {
-			IntTag t = new IntTag("Test", 0);
-			Map<String, Tag> map = new HashMap<String, Tag>();
-			map.put("Test", t);
-			CompoundTag base = new CompoundTag("", map);
-			out.writeTag(base);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
