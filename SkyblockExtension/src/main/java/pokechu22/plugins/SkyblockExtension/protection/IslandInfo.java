@@ -1,6 +1,5 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+
+import com.sk89q.jnbt.*;
 
 /**
  * Contains information about an island.
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @author Pokechu22
  *
  */
-public class IslandInfo implements ConfigurationSerializable {
+public class IslandInfo {
 	public Location islandCenter;
 	
 	public String owner;
@@ -109,72 +109,9 @@ public class IslandInfo implements ConfigurationSerializable {
 	//Serialization.
 	
 	/**
-	 * Serialization for use with a configuration file.
+	 * 
 	 */
-	@Override
-	public Map<String, Object> serialize() {
-		Map<String, Object> map = new HashMap<String, Object>();
+	public void SaveToNBT() {
 		
-		map.put("islandCenter", islandCenter);
-		
-		map.put("owner", owner);
-		map.put("ownerUUID", ownerUUID);
-		
-		map.put("members", members);
-		map.put("memberUUIDs", memberUUIDs);
-		
-		map.put("guests", guests);
-		map.put("guestUUIDs", guestUUIDs);
-		
-		map.put("permissions", permissions);
-		
-		return map;
-	}
-	
-	/**
-	 * Constructor for deserialization of this from a configuration file.
-	 * @param map
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public IslandInfo(Map<String, Object> map) {
-		this.islandCenter = (Location) map.get("islandCenter");
-		
-		this.owner = (String) map.get("owner");
-		this.ownerUUID = (UUID) map.get(ownerUUID);
-		
-		this.members = (List<String>) map.get("members");
-		this.memberUUIDs = (List<UUID>) map.get("memberUUIDs");
-		
-		this.guests = (List<String>) map.get("guestUUIDs");
-		this.guestUUIDs = (List<UUID>) map.get("geustUUIDs");
-		
-		//Deserialize permissions
-		this.permissions = new HashMap<String, IslandProtectionDataSet>();
-		for (MembershipTier t : MembershipTier.values()) {
-			IslandProtectionDataSet i;
-			i = (IslandProtectionDataSet)map.get("permissions." + t.name());
-			
-			this.permissions.put(t.name(), i);
-		}
-	}
-	
-	/**
-	 * Deserialization of this from a configuration file.
-	 * @param map
-	 * @return
-	 */
-	public static IslandInfo deserialize(
-			Map<String, Object> map) {
-		return new IslandInfo(map);
-	}
-
-	/**
-	 * Deserialization of this from a configuration file.
-	 * @param map
-	 * @return
-	 */
-	public static IslandInfo valueOf(Map<String, Object> map) {
-		return new IslandInfo(map);
 	}
 }
