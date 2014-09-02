@@ -15,6 +15,7 @@ import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
+import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
@@ -547,6 +548,13 @@ public class CommandPokechu22 {
 				}
 				sender.sendMessage(genString);
 			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("USkyBlockPlayerInfoConversion")) {
+			//TODO permissions
+			USkyBlockPlayerInfoConverter.start();
+			sender.sendMessage("Started.");
+			
 			return;
 		}
 		

@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.util.nbt.*;
+import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 
 /**
@@ -342,6 +345,38 @@ public class IslandInfo {
 		returned.deserializeFromNBT(NbtIo.readCompressed(
 				new FileInputStream(new File(SkyblockExtension.inst()
 				.getDataFolder(), fileName))));
+		
+		return returned;
+	}
+	
+	/**
+	 * Creates an IslandInfo from a {@link PlayerInfo}.
+	 *
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static IslandInfo convertFromPlayerInfo(PlayerInfo info) {
+		IslandInfo returned = new IslandInfo();
+		
+		returned.islandCenter = info.getIslandLocation();
+		
+		OfflinePlayer ownerPlayer = 
+				Bukkit.getOfflinePlayer(info.getPartyLeader());
+		returned.ownerInfo =  new MemberInfo(ownerPlayer.getName(), 
+				ownerPlayer.getUniqueId());
+		
+		returned.members = new ArrayList<MemberInfo>();
+		for (String memberName : info.getMembers()) {
+			//Needed to convert UUID.
+			OfflinePlayer player = Bukkit.getOfflinePlayer(memberName);
+			MemberInfo member = new MemberInfo(player.getName(), 
+					player.getUniqueId());
+			returned.members.add(member);
+		}
+		
+		returned.guests = new ArrayList<GuestInfo>();
+		returned.permissions = 
+				IslandProtectionDataSetFactory.getDefaultValues();
 		
 		return returned;
 	}
