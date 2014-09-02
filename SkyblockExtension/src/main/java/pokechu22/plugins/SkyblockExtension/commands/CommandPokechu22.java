@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import java.lang.reflect.Method;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,6 +16,7 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
+import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -528,6 +531,23 @@ public class CommandPokechu22 {
 				e.printStackTrace();
 				return;
 			}
+		}
+		if (args[1].equalsIgnoreCase("USkyBlockMethods")) {
+			//TODO permissions
+			for (Method m : uSkyBlock.class.getDeclaredMethods()) {
+				String genString = m.toGenericString();
+				if (genString.startsWith("private")) {
+					genString = "§c" + genString;
+				} else if (genString.startsWith("protected")) {
+					genString = "§e" + genString;
+				} else if (genString.startsWith("public")) {
+					genString = "§a" + genString;
+				} else { //Package-private
+					genString = "§9" + genString;
+				}
+				sender.sendMessage(genString);
+			}
+			return;
 		}
 		
 		sender.sendMessage("§c\"" + args[1] + "\" is not a recognised test!");
