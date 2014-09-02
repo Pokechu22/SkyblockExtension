@@ -26,7 +26,7 @@ import us.talabrek.ultimateskyblock.Settings;
  *
  */
 public class IslandInfo {
-	private class MemberInfo {
+	private static class MemberInfo {
 		public String playerName;
 		public UUID playerUUID;
 		
@@ -75,7 +75,7 @@ public class IslandInfo {
 		}
 	}
 	
-	private class GuestInfo {
+	private static class GuestInfo {
 		public String playerName;
 		public UUID playerUUID;
 		public Date guestUntil;
