@@ -379,7 +379,6 @@ public class ThrowableReport extends CrashReport {
 		
 		if (causeMap != null) {
 			Throwable cause = deserializeThrowable(causeMap);
-			System.out.println(thrownClass);
 			Constructor<?>[] constructors = Class.forName(thrownClass)
 					.getConstructors();
 			//Stupid issue with nonexistant message.
