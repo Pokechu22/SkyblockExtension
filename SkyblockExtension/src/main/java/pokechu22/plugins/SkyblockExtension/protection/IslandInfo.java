@@ -323,7 +323,8 @@ public class IslandInfo {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public static IslandInfo readFromDisk(int x, int z) throws FileNotFoundException, IOException {
+	public static IslandInfo readFromDisk(int x, int z) 
+			throws FileNotFoundException, IOException {
 		return IslandInfo.readFromDisk(x + "x" + z + "z" + ".nbt");
 	}
 	
@@ -334,7 +335,8 @@ public class IslandInfo {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static IslandInfo readFromDisk(String fileName) throws FileNotFoundException, IOException {
+	public static IslandInfo readFromDisk(String fileName) 
+			throws FileNotFoundException, IOException {
 		IslandInfo returned = new IslandInfo();
 		
 		returned.deserializeFromNBT(NbtIo.readCompressed(
