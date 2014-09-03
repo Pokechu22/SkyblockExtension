@@ -367,11 +367,13 @@ public class IslandInfo {
 		
 		returned.members = new ArrayList<MemberInfo>();
 		for (String memberName : info.getMembers()) {
-			//Needed to convert UUID.
-			OfflinePlayer player = Bukkit.getOfflinePlayer(memberName);
-			MemberInfo member = new MemberInfo(player.getName(), 
-					player.getUniqueId());
-			returned.members.add(member);
+			if (!memberName.equals(returned.ownerInfo.playerName)) {
+				//Needed to convert UUID.
+				OfflinePlayer player = Bukkit.getOfflinePlayer(memberName);
+				MemberInfo member = new MemberInfo(player.getName(), 
+						player.getUniqueId());
+				returned.members.add(member);
+			}
 		}
 		
 		returned.guests = new ArrayList<GuestInfo>();
