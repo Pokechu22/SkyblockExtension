@@ -352,7 +352,7 @@ public class IslandInfo {
 	/**
 	 * Creates an IslandInfo from a {@link PlayerInfo}.
 	 *
-	 * @return
+	 * @return Either the new IslandInfo, or null.
 	 */
 	@SuppressWarnings("deprecation")
 	public static IslandInfo convertFromPlayerInfo(PlayerInfo info) {

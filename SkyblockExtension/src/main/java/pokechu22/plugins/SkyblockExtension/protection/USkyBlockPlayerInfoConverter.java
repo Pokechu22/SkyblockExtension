@@ -32,29 +32,40 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 	
 	@Override
 	public void run() {
-		SkyblockExtension.inst().getLogger().info("Started porting USkyBlockPlayerInfo's.");
+		SkyblockExtension.inst().getLogger()
+				.info("Started porting USkyBlockPlayerInfo's.");
 		
 		File playerDir = uSkyBlock.getInstance().directoryPlayers;
 
-		List<String> players = Arrays.asList(playerDir.list());
+		List<String> players = 
+				new ArrayList<String>(Arrays.asList(playerDir.list()));
+		List<String> ignored = new ArrayList<String>();
+		
 		for (String name : players) {
+			if (ignored.contains(name)) {
+				continue;
+			}
+			
 			PlayerInfo info = uSkyBlock.getInstance().readPlayerFile(name);
 			
-			players.remove(info.getPartyLeader());
-			players.removeAll(info.getMembers());
+			ignored.remove(info.getPartyLeader());
+			ignored.removeAll(info.getMembers());
 			
-			//Save the value to disk.
-			try {
-				IslandInfo.convertFromPlayerInfo(info).saveToDisk();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (info.getHasIsland()) {
+				//Save the value to disk.
+				try {
+					IslandInfo.convertFromPlayerInfo(info).saveToDisk();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
-		SkyblockExtension.inst().getLogger().info("Finished porting USkyBlockPlayerInfo's.");
+		SkyblockExtension.inst().getLogger()
+				.info("Finished porting USkyBlockPlayerInfo's.");
 	}
 }
