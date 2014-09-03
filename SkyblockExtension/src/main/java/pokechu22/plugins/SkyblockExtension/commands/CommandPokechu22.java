@@ -17,7 +17,6 @@ import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
-import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -507,6 +506,11 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("IslandInfoSerialization")) {
+			if (!PermissionHandler.HasPermision(sender,
+					"sbe.debug.test.IslandInfoSerialization")) {
+				return;
+			}
+			
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("§cYou must be a player.");
 				return;
@@ -533,25 +537,13 @@ public class CommandPokechu22 {
 				return;
 			}
 		}
-		if (args[1].equalsIgnoreCase("USkyBlockMethods")) {
-			//TODO permissions
-			for (Method m : uSkyBlock.class.getDeclaredMethods()) {
-				String genString = m.toGenericString();
-				if (genString.startsWith("private")) {
-					genString = "§c" + genString;
-				} else if (genString.startsWith("protected")) {
-					genString = "§e" + genString;
-				} else if (genString.startsWith("public")) {
-					genString = "§a" + genString;
-				} else { //Package-private
-					genString = "§9" + genString;
-				}
-				sender.sendMessage(genString);
-			}
-			return;
-		}
 		if (args[1].equalsIgnoreCase("USkyBlockPlayerInfoConversion")) {
-			//TODO permissions
+			//Very light test of conversion.
+			if (!PermissionHandler.HasPermision(sender,
+					"sbe.debug.test.USkyBlockPlayerInfoConversion")) {
+				return;
+			}
+			
 			USkyBlockPlayerInfoConverter.start();
 			sender.sendMessage("Started.");
 			

@@ -118,3 +118,12 @@ permissions:
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays the island location nearest to the player.
     default: op
+    
+  sbe.debug.test.IslandInfoSerialization: 
+    description: A test of IslandInfo serialization.
+    default: op
+    
+  sbe.debug.test.USkyBlockPlayerInfoConversion: 
+    description: A test that attempts to convert USkyblock's PlayerInfos.
+    default: op
+    
