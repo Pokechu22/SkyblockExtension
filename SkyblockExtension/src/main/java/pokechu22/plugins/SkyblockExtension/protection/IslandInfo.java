@@ -288,6 +288,7 @@ public class IslandInfo {
 			
 			perms.put(entry.getKey(), entry.getValue().serializeToNBT());
 		}
+		tag.putCompound("Permissions", perms);
 		
 		return tag;
 	}
@@ -377,6 +378,7 @@ public class IslandInfo {
 		}
 		
 		returned.guests = new ArrayList<GuestInfo>();
+		
 		returned.permissions = 
 				IslandProtectionDataSetFactory.getDefaultValues();
 		
