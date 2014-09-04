@@ -423,8 +423,8 @@ public class CommandPokechu22 {
 			return;
 		}
 		
-		if (args[1].equalsIgnoreCase("ProtectionHandler")) {
-			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.ProtectionHandler")) {
+		if (args[1].equalsIgnoreCase("IsProtected")) {
+			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.IsProtected")) {
 				return;
 			}
 			

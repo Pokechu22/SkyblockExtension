@@ -103,7 +103,7 @@ permissions:
     description: A test of ConfigurationErrorReports.
     default: op
   
-  sbe.debug.test.ProtectionHandler: 
+  sbe.debug.test.IsProtected: 
     description: A test that states whether your current position is protected.
     default: op
     
