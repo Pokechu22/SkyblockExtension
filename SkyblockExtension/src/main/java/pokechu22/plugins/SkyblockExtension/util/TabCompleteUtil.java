@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,6 +13,7 @@ import java.util.Locale;
  *
  */
 public class TabCompleteUtil {
+	
 	/**
 	 * Filters tab completion for starting with same phrase.
 	 *
@@ -28,6 +30,17 @@ public class TabCompleteUtil {
 			}
 		}
 		return returned;
+	}
+	
+	/**
+	 * Filters tab completion for starting with same phrase.
+	 *
+	 * @param list
+	 * @param starting
+	 * @return
+	 */
+	public static List<String> TabLimit(Collection<String> values, String starting){
+		return TabLimit(new ArrayList<String>(values), starting);
 	}
 	
 	/**
