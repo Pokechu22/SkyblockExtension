@@ -129,7 +129,11 @@ public class SkyblockExtension extends JavaPlugin {
 						"§4Unrecognised command: " + cmd.getName() + "(Label: "
 								+ label + ")");
 
-				// TODO: Log to player.
+				// Log to error handler.
+				ErrorHandler.logError(new GenericReport(
+						"Unrecognised command while tabCompleting: " + 
+								cmd.getName() + "(Label: "	+ label + ")"));
+				
 				break;
 			}
 			}
@@ -198,7 +202,10 @@ public class SkyblockExtension extends JavaPlugin {
 						"§4Unrecognised command: " + cmd.getName() + "(Label: "
 								+ label + ")");
 
-				// TODO: Log to player.
+				// Log to error handler.
+				ErrorHandler.logError(new GenericReport(
+						"Unrecognised command while tabCompleting: " + 
+								cmd.getName() + "(Label: "	+ label + ")"));
 				break;
 			}
 			}
