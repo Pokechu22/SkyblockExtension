@@ -1,6 +1,12 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
-import java.lang.reflect.Method;
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +31,67 @@ import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListene
  * 
  */
 public class CommandPokechu22 {
+	
+	/**
+	 * Information for when help is created.
+	 * This controls args[0]'s effects.
+	 */
+	private static final Map<String, String> subCommands;
+	/*
+	 * Static initializer for subCommands.
+	 */
+	static {
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		map.put("test", "Various tests for debuging purposes.  " 
+				+ "Most of these commands will be of no useless to " + 
+				"actual players.");
+		map.put("crashes", "Handles any error reports that may occur.");
+		map.put("logo", "Shows a rather pointless logo.");
+		map.put("help", "View the help.");
+		
+		subCommands = Collections.unmodifiableMap(map);
+	}
+	
+	/**
+	 * Help information for each test.
+	 */
+	private static final Map<String, String> tests;
+	/*
+	 * Static initializer for tests.
+	 */
+	static {
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		map.put("ThrowableReport", "A test that creates an example " + 
+				"ThrowableReport.");
+		map.put("ConfigurationErrorReport", "A test that creates example " +
+				"ConfigurationErrorReports, using all avaliable " + 
+				"constructors.");
+		map.put("IsProtected", "Checks if the area you are currently in " + 
+				"allows you to place blocks.");
+		//TODO Remove this, as it WILL be done automatically.
+		map.put("ReplaceDefaultProtections", "Replaces the default " + 
+				"USkyBlockProtection system with the custom one which " + 
+				"allows for player-based protection choises.  " + 
+				"NOTE: This should be done automatically.  Remove this.");
+		map.put("MyIslandLocation", "Provides your own island location.");
+		map.put("NearestIslandLocation", "Provides the nearest valid " + 
+				"island location.  This location should have a bedrock " + 
+				"block in it.");
+		map.put("IslandInfoSerialization", "Tests serializing and " + 
+				"deserializing of an IslandInfo, to an NBT file.  This " +
+				"WILL override the IslandInfo for 0,0; however, this " + 
+				"be spawn, and thus not be an issue.");
+		map.put("USkyBlockPlayerInfoConversion", "Manualy converts all " +
+				"of the USkyBlock PlayerInfo's (which contain island " + 
+				"and challenge information for each player) to the custom" +
+				"format used here.  This is done when needed normally " + 
+				"(EG on the first run), and for any new players as well, " +
+				"but can be forced using this.");
+		
+		tests = Collections.unmodifiableMap(map);
+	}
 	
 	/**
 	 * Called when a command is run.
@@ -60,6 +127,45 @@ public class CommandPokechu22 {
 		sender.sendMessage("Usage: /" + label + " help");
 	}
 	
+	/**
+	 * Tab-completion.  
+	 * 
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 * @return
+	 */
+	public static List<String> onTabComplete(CommandSender sender, Command cmd, String label, String args[]) {
+		if (args.length == 0) {
+			return new ArrayList<String>(subCommands.keySet());
+		}
+		if (args.length == 1) {
+			return TabLimit(subCommands.keySet(), args[0]);
+		}
+		
+		if (args.length == 2) {
+			switch (args[0]) {
+			case "help": {
+				//TODO; This is slightly more complicated. 
+				//It needs to show these things again.
+				return new ArrayList<String>();
+			}
+			case "test": {
+				return TabLimit(tests.keySet(), args[1]);
+			}
+			case "crashes": {
+				
+			}
+			case "logo": {
+				
+			}
+			}
+		}
+		
+		return new ArrayList<String>();
+	}
+
 	/**
 	 * Subcommand for /pokechu22 crashes.
 	 * @param sender

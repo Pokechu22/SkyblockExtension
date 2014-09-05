@@ -183,7 +183,7 @@ public class SkyblockExtension extends JavaPlugin {
 			switch (cmd.getName().toLowerCase()) {
 			case "pokechu22": { // "/pokechu22" command
 
-				break; //TODO
+				return CommandPokechu22.onTabComplete(sender, cmd, label, args);
 			}
 			case "multichallenge": {
 				
