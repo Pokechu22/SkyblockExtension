@@ -16,13 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
-import pokechu22.plugins.SkyblockExtension.IslandUtils;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
+import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -94,6 +94,32 @@ public class CommandPokechu22 {
 	}
 	
 	/**
+	 * Help information for the subcommands of /pokechu22 crashes.
+	 */
+	private static final Map<String, String> crashesCommands;
+	/*
+	 * Static initializer for crashesCommands.
+	 */
+	static {
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		map.put("show", "Shows a single crash report.  \nUsage: \n" +
+				"/pokechu22 crashes show <crashId> [page]");
+		map.put("list", "Lists all crash reports.  \nUsage: \n" +
+				"/pokechu22 crashes list [page]");
+		map.put("remove", "Removes a single crash report.  \nUsage: \n" +
+				"/pokechu22 crashes remove <crashId>  \nNOTE: After " + 
+				"running this command, crashes may be shifted.  " + 
+				"Make sure that this will not cause issues.");
+		map.put("reset", "Removes all crash reports.  \nUsage: \n" + 
+				"/pokechu22 crashes reset - Provides you with your magic number.\n" + 
+				"/pokechu22 crashes reset <magicNumber> - actually resets the crashes.\n" + 
+				"The magic number is obtained via a hashcode of your name-string.");
+		
+		crashesCommands = Collections.unmodifiableMap(map);
+	}
+	
+	/**
 	 * Called when a command is run.
 	 * 
 	 * @param sender The person who sent the command.
@@ -155,10 +181,10 @@ public class CommandPokechu22 {
 				return TabLimit(tests.keySet(), args[1]);
 			}
 			case "crashes": {
-				
+				return TabLimit(crashesCommands.keySet(), args[1]);
 			}
 			case "logo": {
-				
+				return new ArrayList<String>();
 			}
 			}
 		}

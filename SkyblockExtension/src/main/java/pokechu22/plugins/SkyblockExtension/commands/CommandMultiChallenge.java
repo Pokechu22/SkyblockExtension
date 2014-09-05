@@ -12,14 +12,13 @@ import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
-
 import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 //Static imports - Imports a function, not a class.
-import static pokechu22.plugins.SkyblockExtension.IslandUtils.canGetPlayerInfo;
-import static pokechu22.plugins.SkyblockExtension.IslandUtils.getPlayerInfo;
+import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.canGetPlayerInfo;
+import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo;
 
 /**
  * Hijacks the existing functionality of uSkyblock to allow players to quickly
