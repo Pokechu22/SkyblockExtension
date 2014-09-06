@@ -104,16 +104,16 @@ public class CommandPokechu22 {
 		HashMap<String, String> map = new HashMap<String, String>();
 		
 		map.put("show", "Shows a single crash report.  \nUsage: \n" +
-				"/pokechu22 crashes show <crashId> [page]");
+				"§e/pokechu22 crashes show <crashId> [page]§f");
 		map.put("list", "Lists all crash reports.  \nUsage: \n" +
-				"/pokechu22 crashes list [page]");
+				"§e/pokechu22 crashes list [page]§f");
 		map.put("remove", "Removes a single crash report.  \nUsage: \n" +
-				"/pokechu22 crashes remove <crashId>  \nNOTE: After " + 
+				"§e/pokechu22 crashes remove <crashId>§f  \nNOTE: After " + 
 				"running this command, crashes may be shifted.  " + 
 				"Make sure that this will not cause issues.");
 		map.put("reset", "Removes all crash reports.  \nUsage: \n" + 
-				"/pokechu22 crashes reset - Provides you with your magic number.\n" + 
-				"/pokechu22 crashes reset <magicNumber> - actually resets the crashes.\n" + 
+				"§e/pokechu22 crashes reset§f - Provides you with your magic number.\n" + 
+				"§e/pokechu22 crashes reset <magicNumber>§f - actually resets the crashes.\n" + 
 				"The magic number is obtained via a hashcode of your name-string.");
 		
 		crashesCommands = Collections.unmodifiableMap(map);
@@ -171,11 +171,9 @@ public class CommandPokechu22 {
 		}
 		
 		if (args.length == 2) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 			case "help": {
-				//TODO; This is slightly more complicated. 
-				//It needs to show these things again.
-				return new ArrayList<String>();
+				return TabLimit(subCommands.keySet(), args[1]);
 			}
 			case "test": {
 				return TabLimit(tests.keySet(), args[1]);
@@ -184,6 +182,20 @@ public class CommandPokechu22 {
 				return TabLimit(crashesCommands.keySet(), args[1]);
 			}
 			case "logo": {
+				return new ArrayList<String>();
+			}
+			}
+		}
+		
+		if (args.length == 3) {
+			switch (args[1]) {
+			case "test": {
+				return TabLimit(tests.keySet(), args[2]);
+			}
+			case "crashes": {
+				return TabLimit(crashesCommands.keySet(), args[2]);
+			}
+			default: {
 				return new ArrayList<String>();
 			}
 			}
@@ -709,5 +721,9 @@ public class CommandPokechu22 {
 	 */
 	private static void ShowLogo(CommandSender sender) {
 		sender.sendMessage(logoText);
+	}
+	
+	protected void Help(CommandSender sender, Command cmd, String label, String[] args) {
+		//TODO
 	}
 }
