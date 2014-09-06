@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -147,6 +148,9 @@ public class CommandPokechu22 {
 				//This is pointless, but is ported from the old version.
 				ShowLogo(sender);
 				return;
+			}
+			case "help": {
+				Help(sender, cmd, label, args);
 			}
 			}
 		}
@@ -723,7 +727,66 @@ public class CommandPokechu22 {
 		sender.sendMessage(logoText);
 	}
 	
-	protected void Help(CommandSender sender, Command cmd, String label, String[] args) {
-		//TODO
+	/**
+	 * The error message for when no help available.
+	 */
+	private static final String nonexistantHelpMessage = 
+			"§c: " + "There is no help for this subcommand.  It may be " + 
+			"an invalid command, or it may be that help has not been " +
+			"written.  Note: If you are including a parameter, don't do " +
+			"that.  Try removing each parameter, one at a time.";
+	
+	/**
+	 * Shows help information.
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 */
+	protected static void Help(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0) {
+			//Shouldn't happen.
+			return;
+		}
+		String[] helpArgs = Arrays.copyOfRange(args, 1, args.length);
+		if (helpArgs.length == 0) {
+			//Message prepended to each message.
+			final String preface = "§7/" + label + " ";
+			for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+				sender.sendMessage(preface + entry.getKey() + "§f:" + entry.getValue());
+			}
+			return;
+		}
+		if (helpArgs.length == 1) {
+			//Message prepended to each message.
+			final String preface = "§7/" + label + " " + helpArgs[0] + " ";
+			
+			//If there is no help message...
+			if (!subCommands.containsKey(helpArgs[0].toLowerCase())) {
+				sender.sendMessage(preface + nonexistantHelpMessage);
+				return;
+			}
+		    
+			//Send the root message if it exists
+			sender.sendMessage(preface + "§f: " + 
+					subCommands.get(helpArgs[0].toLowerCase()));
+			
+			switch (helpArgs[0].toLowerCase()) {
+			case "test": {
+				//Send the sub-help.
+				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				}
+				return;
+			}
+			case "crashes": {
+				//Send the sub-help.
+				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				}
+				return;
+			}
+			}
+		}
 	}
 }
