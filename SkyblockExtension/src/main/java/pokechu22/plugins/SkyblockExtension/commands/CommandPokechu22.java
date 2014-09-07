@@ -46,12 +46,17 @@ public class CommandPokechu22 {
 		TreeMap<String, String> map = new TreeMap<String, String>(
 				String.CASE_INSENSITIVE_ORDER);
 		
-		map.put("test", "Various tests for debuging purposes.  " 
-				+ "Most of these commands will be of no useless to " + 
-				"actual players.");
-		map.put("crashes", "Handles any error reports that may occur.");
-		map.put("logo", "Shows a rather pointless logo.");
-		map.put("help", "View the help.");
+		map.put("test", "Various tests for debuging purposes.  " +
+				"Most of these commands will be of no useless to " + 
+				"actual players.  \nUsage: \n" + 
+				"§e/pokechu22 test <TestName>§f.");
+		map.put("crashes", "Handles any error reports that may occur." +
+				"\nUsage: \nSee §e/pokechu22 help crashes§f.");
+		map.put("logo", "Shows a rather pointless logo.\nUsage: \n" + 
+				"§e/pokechu22 logo§f.");
+		map.put("help", "View this help.  It is clear you understand.\n" +
+				"Usage: \n§e/pokechu22 help [commandName, subCommand, " + 
+				"...]§f.");
 		
 		subCommands = Collections.unmodifiableMap(map);
 	}
@@ -68,31 +73,39 @@ public class CommandPokechu22 {
 				String.CASE_INSENSITIVE_ORDER);
 		
 		map.put("ThrowableReport", "A test that creates an example " + 
-				"ThrowableReport.");
+				"ThrowableReport.\nUsage: \n" + 
+				"§e/pokechu22 test ThrowableReport§f.");
 		map.put("ConfigurationErrorReport", "A test that creates example " +
 				"ConfigurationErrorReports, using all avaliable " + 
-				"constructors.");
+				"constructors.\nUsage: \n" + 
+				"§e/pokechu22 test ConfigurationErrorReport§f.");
 		map.put("IsProtected", "Checks if the area you are currently in " + 
-				"allows you to place blocks.");
+				"allows you to place blocks.\nUsage: \n" + 
+				"§e/pokechu22 test IsProtected§f.");
 		//TODO Remove this, as it WILL be done automatically.
 		map.put("ReplaceDefaultProtections", "Replaces the default " + 
 				"USkyBlockProtection system with the custom one which " + 
-				"allows for player-based protection choises.  " + 
+				"allows for player-based protection choises.\nUsage: \n" + 
+				"§e/pokechu22 test ReplaceDefaultProtections§f." + 
 				"NOTE: This should be done automatically.  Remove this.");
-		map.put("MyIslandLocation", "Provides your own island location.");
+		map.put("MyIslandLocation", "Provides your own island location." +
+				"\nUsage: \n§e/pokechu22 test MyIslandLocation§f.");
 		map.put("NearestIslandLocation", "Provides the nearest valid " + 
 				"island location.  This location should have a bedrock " + 
-				"block in it.");
+				"block in it.\nUsage: \n" + 
+				"§e/pokechu22 test NearestIslandLocation§f.");
 		map.put("IslandInfoSerialization", "Tests serializing and " + 
 				"deserializing of an IslandInfo, to an NBT file.  This " +
 				"WILL override the IslandInfo for 0,0; however, this " + 
-				"be spawn, and thus not be an issue.");
+				"be spawn, and thus not be an issue.\nUsage: \n" + 
+				"§e/pokechu22 test IslandInfoSerialization§f.");
 		map.put("USkyBlockPlayerInfoConversion", "Manualy converts all " +
 				"of the USkyBlock PlayerInfo's (which contain island " + 
 				"and challenge information for each player) to the custom" +
 				"format used here.  This is done when needed normally " + 
 				"(EG on the first run), and for any new players as well, " +
-				"but can be forced using this.");
+				"but can be forced using this.\nUsage: \n" + 
+				"§e/pokechu22 test USkyBlockPlayerInfoConversion§f.");
 		
 		tests = Collections.unmodifiableMap(map);
 	}
