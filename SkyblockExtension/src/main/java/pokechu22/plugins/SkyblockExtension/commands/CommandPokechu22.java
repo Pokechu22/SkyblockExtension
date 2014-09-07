@@ -734,7 +734,7 @@ public class CommandPokechu22 {
 			"§c: " + "There is no help for this subcommand.  It may be " + 
 			"an invalid command, or it may be that help has not been " +
 			"written.  Note: If you are including a parameter, don't do " +
-			"that.  Try removing each parameter, one at a time.";
+			"that.  Try removing each parameter, one at a time.  ";
 	
 	/**
 	 * Shows help information.
@@ -784,6 +784,39 @@ public class CommandPokechu22 {
 				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
 					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
 				}
+				return;
+			}
+			}
+		}
+		if (helpArgs.length == 2) {
+			//Message prepended to each message.
+			final String preface = "§7/" + label + " " + helpArgs[0] + " "
+					+ helpArgs[1] + " ";
+			
+			//If there is no help message...
+			if (!subCommands.containsKey(helpArgs[0].toLowerCase())) {
+				sender.sendMessage(preface + nonexistantHelpMessage + 
+						"Specifically, " + helpArgs[0] + " is not known.");
+				return;
+			}
+			
+			switch (helpArgs[0]) {
+			case "test": {
+				//Send the sub-help.
+				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				}
+				return;
+			}
+			case "crashes": {
+				//Send the sub-help.
+				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				}
+				return;
+			}
+			default: {
+				sender.sendMessage(preface + nonexistantHelpMessage);
 				return;
 			}
 			}
