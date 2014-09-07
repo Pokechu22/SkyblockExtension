@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import static pokechu22.plugins.SkyblockExtension.util.MessageUtil.*;
+
 import java.util.HashSet;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -48,7 +50,7 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 * @return The title.
 	 */
 	public String getTitle(int sizeLimit) {
-		return getTitle(sizeLimit, "...");
+		return trailOff(getTitle(), sizeLimit);
 	}
 
 	/**
@@ -60,21 +62,7 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 * @throws IllegalArgumentException if trailOff is longer than sizeLimit.
 	 */
 	public String getTitle(int sizeLimit, String trailOff) {
-		///The raw string version, which holds the original title.
-		String rawString = getTitle();
-		
-		//This probably won't happen, but if it does there will be issues.
-		if (sizeLimit < trailOff.length()) {
-			SkyblockExtension.inst().getLogger().severe("Size limit was");
-			throw new IllegalArgumentException("sizeLimit (" + sizeLimit + 
-					")is too small for trailOff (" + trailOff.length() + "to fit!");
-		}
-		
-		if (rawString.length() <= sizeLimit) {
-			return rawString;
-		} else {
-			return rawString.substring(0, sizeLimit - trailOff.length()) + trailOff;
-		}
+		return trailOff(getTitle(), sizeLimit, trailOff);
 	}
 
 	/**
