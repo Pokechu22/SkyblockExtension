@@ -9,7 +9,7 @@ import org.bukkit.util.ChatPaginator;
  * @author Pokechu22
  *
  */
-public class MessageUtil {
+public class StringUtil {
 	/**
 	 * Truncates a string to fit within 
 	 * {@link ChatPaginator#GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH}.  

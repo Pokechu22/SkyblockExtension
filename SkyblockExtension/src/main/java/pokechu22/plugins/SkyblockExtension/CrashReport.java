@@ -1,6 +1,6 @@
 package pokechu22.plugins.SkyblockExtension;
 
-import static pokechu22.plugins.SkyblockExtension.util.MessageUtil.*;
+import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 
 import java.util.HashSet;
 
