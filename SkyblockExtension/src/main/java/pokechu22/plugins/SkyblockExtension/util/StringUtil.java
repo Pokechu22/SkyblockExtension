@@ -56,6 +56,8 @@ public class StringUtil {
 	 * <dd><samp>"Not Hell..."</samp></dd>
 	 * <dt><code>trailOff("Arbitrary String", 1)</code></dt>
 	 * <dd>A thrown {@link IllegalArgumentException}.</dd>
+	 * <dt><code>trailOff("New-lined\nStrings!", 80)</code></dt>
+	 * <dd><samp>"New-lined"</samp></dd>
 	 * </dl>
 	 * 
 	 * @param string The original text.
@@ -94,6 +96,8 @@ public class StringUtil {
 	 * <dd><samp>"Not Hell"</samp></dd>
 	 * <dt><code>trailOff("Arbitrary", 4, "Long trailOff")</code></dt>
 	 * <dd>A thrown {@link IllegalArgumentException}.</dd>
+	 * <dt><code>trailOff("New-lined\nStrings!", 80, "...")</code></dt>
+	 * <dd><samp>"New-lined"</samp></dd>
 	 * </dl>
 	 * 
 	 * @param string The original text.
@@ -120,6 +124,14 @@ public class StringUtil {
 					"to fit!");
 		}
 		
+		//Handle \n's.  
+		int newLineIndex = string.indexOf('\n');
+		if (newLineIndex != -1) {
+			//Reassign the parameter to be the string before the newline
+			string = string.substring(0, newLineIndex);
+		}
+		
+		//Handle the main thing.
 		if (string.length() <= sizeLimit) {
 			return string;
 		} else {
