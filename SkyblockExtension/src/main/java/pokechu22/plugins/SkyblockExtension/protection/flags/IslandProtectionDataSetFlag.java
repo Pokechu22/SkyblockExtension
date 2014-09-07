@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
-import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
-import pokechu22.plugins.SkyblockExtension.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 
 /**
  * Represents a single flag.

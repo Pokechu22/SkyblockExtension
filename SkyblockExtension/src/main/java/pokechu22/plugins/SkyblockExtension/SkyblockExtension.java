@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 import pokechu22.plugins.SkyblockExtension.commands.*;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 

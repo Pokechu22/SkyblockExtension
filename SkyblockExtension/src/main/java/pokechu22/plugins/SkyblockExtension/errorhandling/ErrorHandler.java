@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
+
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
  * Handles player-accessible logging of crashes.
@@ -16,7 +18,7 @@ public class ErrorHandler {
 	/**
 	 * List of previous crashes.
 	 */
-	protected static List<CrashReport> errors = new ArrayList<CrashReport>();
+	public static List<CrashReport> errors = new ArrayList<CrashReport>();
 	
 	/**
 	 * Logs an error.

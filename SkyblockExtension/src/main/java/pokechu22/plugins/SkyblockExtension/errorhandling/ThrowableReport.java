@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.SerializableAs;
+
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
  * An individual crash report.

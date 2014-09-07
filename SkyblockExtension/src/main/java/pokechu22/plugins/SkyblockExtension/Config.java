@@ -9,6 +9,9 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 

@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,8 +15,11 @@ import java.util.logging.Level;
 
 
 
+
 //import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.serialization.SerializableAs;
+
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 
 /**
  * Error report for when configuration loading fails.

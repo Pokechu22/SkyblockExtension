@@ -9,9 +9,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import pokechu22.plugins.SkyblockExtension.ConfigurationErrorReport;
-import pokechu22.plugins.SkyblockExtension.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 /**
  * Tool that provides IslandProtectionDataSets with the default values.
  *

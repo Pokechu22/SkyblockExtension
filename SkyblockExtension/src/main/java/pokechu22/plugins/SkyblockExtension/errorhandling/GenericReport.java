@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.util.ArrayList;
 import java.util.HashMap;

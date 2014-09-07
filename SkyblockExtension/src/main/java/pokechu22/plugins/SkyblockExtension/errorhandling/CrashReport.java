@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension;
+package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 

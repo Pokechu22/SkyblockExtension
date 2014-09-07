@@ -10,8 +10,8 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-import pokechu22.plugins.SkyblockExtension.ErrorHandler;
-import pokechu22.plugins.SkyblockExtension.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.flags.*;
 import pokechu22.plugins.SkyblockExtension.util.nbt.*;
 
