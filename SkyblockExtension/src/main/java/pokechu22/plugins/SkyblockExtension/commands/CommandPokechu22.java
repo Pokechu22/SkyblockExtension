@@ -5,9 +5,10 @@ import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,7 +43,8 @@ public class CommandPokechu22 {
 	 * Static initializer for subCommands.
 	 */
 	static {
-		HashMap<String, String> map = new HashMap<String, String>();
+		TreeMap<String, String> map = new TreeMap<String, String>(
+				String.CASE_INSENSITIVE_ORDER);
 		
 		map.put("test", "Various tests for debuging purposes.  " 
 				+ "Most of these commands will be of no useless to " + 
@@ -62,7 +64,8 @@ public class CommandPokechu22 {
 	 * Static initializer for tests.
 	 */
 	static {
-		HashMap<String, String> map = new HashMap<String, String>();
+		TreeMap<String, String> map = new TreeMap<String, String>(
+				String.CASE_INSENSITIVE_ORDER);
 		
 		map.put("ThrowableReport", "A test that creates an example " + 
 				"ThrowableReport.");
@@ -102,7 +105,8 @@ public class CommandPokechu22 {
 	 * Static initializer for crashesCommands.
 	 */
 	static {
-		HashMap<String, String> map = new HashMap<String, String>();
+		TreeMap<String, String> map = new TreeMap<String, String>(
+				String.CASE_INSENSITIVE_ORDER);
 		
 		map.put("show", "Shows a single crash report.  \nUsage: \n" +
 				"§e/pokechu22 crashes show <crashId> [page]§f");
@@ -762,16 +766,16 @@ public class CommandPokechu22 {
 			final String preface = "§7/" + label + " " + helpArgs[0] + " ";
 			
 			//If there is no help message...
-			if (!subCommands.containsKey(helpArgs[0].toLowerCase())) {
+			if (!subCommands.containsKey(helpArgs[0])) {
 				sender.sendMessage(preface + nonexistantHelpMessage);
 				return;
 			}
 		    
 			//Send the root message if it exists
 			sender.sendMessage(preface + "§f: " + 
-					subCommands.get(helpArgs[0].toLowerCase()));
+					subCommands.get(helpArgs[0]));
 			
-			switch (helpArgs[0].toLowerCase()) {
+			switch (helpArgs[0].toLowerCase(Locale.ENGLISH)) {
 			case "test": {
 				//Send the sub-help.
 				for (Map.Entry<String, String> entry : tests.entrySet()) {
@@ -794,31 +798,31 @@ public class CommandPokechu22 {
 					+ helpArgs[1] + " ";
 			
 			//If there is no help message...
-			if (!subCommands.containsKey(helpArgs[0].toLowerCase())) {
+			if (!subCommands.containsKey(helpArgs[0])) {
 				sender.sendMessage(preface + nonexistantHelpMessage + 
 						"Specifically, " + helpArgs[0] + " is not known.");
 				return;
 			}
 			
-			switch (helpArgs[0]) {
+			switch (helpArgs[0].toLowerCase(Locale.ENGLISH)) {
 			case "test": {
 				//If there is no help message...
-				if (!tests.containsKey(helpArgs[1].toLowerCase())) {
+				if (!tests.containsKey(helpArgs[1])) {
 					sender.sendMessage(preface + nonexistantHelpMessage + 
 							"Specifically, " + helpArgs[1] + " is not known.");
 					return;
 				}
-				sender.sendMessage(preface + "§f: " + tests.get(helpArgs[1].toLowerCase()));
+				sender.sendMessage(preface + "§f: " + tests.get(helpArgs[1]));
 				return;
 			}
 			case "crashes": {
 				//If there is no help message...
-				if (!crashesCommands.containsKey(helpArgs[1].toLowerCase())) {
+				if (!crashesCommands.containsKey(helpArgs[1])) {
 					sender.sendMessage(preface + nonexistantHelpMessage + 
 							"Specifically, " + helpArgs[1] + " is not known.");
 					return;
 				}
-				sender.sendMessage(preface + "§f: " + crashesCommands.get(helpArgs[1].toLowerCase()));
+				sender.sendMessage(preface + "§f: " + crashesCommands.get(helpArgs[1]));
 				return;
 			}
 			default: {
