@@ -774,14 +774,14 @@ public class CommandPokechu22 {
 			switch (helpArgs[0].toLowerCase()) {
 			case "test": {
 				//Send the sub-help.
-				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+				for (Map.Entry<String, String> entry : tests.entrySet()) {
 					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
 				}
 				return;
 			}
 			case "crashes": {
 				//Send the sub-help.
-				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
+				for (Map.Entry<String, String> entry : crashesCommands.entrySet()) {
 					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
 				}
 				return;
@@ -802,17 +802,23 @@ public class CommandPokechu22 {
 			
 			switch (helpArgs[0]) {
 			case "test": {
-				//Send the sub-help.
-				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
-					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				//If there is no help message...
+				if (!tests.containsKey(helpArgs[1].toLowerCase())) {
+					sender.sendMessage(preface + nonexistantHelpMessage + 
+							"Specifically, " + helpArgs[1] + " is not known.");
+					return;
 				}
+				sender.sendMessage(preface + "§f: " + tests.get(helpArgs[1].toLowerCase()));
 				return;
 			}
 			case "crashes": {
-				//Send the sub-help.
-				for (Map.Entry<String, String> entry : subCommands.entrySet()) {
-					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+				//If there is no help message...
+				if (!crashesCommands.containsKey(helpArgs[1].toLowerCase())) {
+					sender.sendMessage(preface + nonexistantHelpMessage + 
+							"Specifically, " + helpArgs[1] + " is not known.");
+					return;
 				}
+				sender.sendMessage(preface + "§f: " + crashesCommands.get(helpArgs[1].toLowerCase()));
 				return;
 			}
 			default: {
