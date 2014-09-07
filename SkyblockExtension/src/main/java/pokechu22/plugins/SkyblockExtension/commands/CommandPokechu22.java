@@ -1,5 +1,6 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
@@ -770,7 +771,7 @@ public class CommandPokechu22 {
 			//Message prepended to each message.
 			final String preface = "§7/" + label + " ";
 			for (Map.Entry<String, String> entry : subCommands.entrySet()) {
-				sender.sendMessage(preface + entry.getKey() + "§f:" + entry.getValue());
+				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" + entry.getValue()));
 			}
 			return;
 		}
@@ -792,14 +793,14 @@ public class CommandPokechu22 {
 			case "test": {
 				//Send the sub-help.
 				for (Map.Entry<String, String> entry : tests.entrySet()) {
-					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+					sender.sendMessage(trailOff(preface + entry.getKey() + "§f: " + entry.getValue()));
 				}
 				return;
 			}
 			case "crashes": {
 				//Send the sub-help.
 				for (Map.Entry<String, String> entry : crashesCommands.entrySet()) {
-					sender.sendMessage(preface + entry.getKey() + "§f: " + entry.getValue());
+					sender.sendMessage(trailOff(preface + entry.getKey() + "§f: " + entry.getValue()));
 				}
 				return;
 			}
