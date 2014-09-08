@@ -32,6 +32,22 @@ public class IslandInfo {
 		public String playerName;
 		public UUID playerUUID;
 		
+		/**
+		 * Constructs a PlayerInfo off of a player.
+		 *
+		 * @param player
+		 */
+		public MemberInfo(Player player) {
+			this.playerName = player.getName();
+			this.playerUUID = player.getUniqueId();
+		}
+		
+		/**
+		 * Constructs a playerInfo using the specified information.
+		 *
+		 * @param playerName
+		 * @param playerUUID
+		 */
 		public MemberInfo(String playerName, UUID playerUUID) {
 			this.playerName = playerName;
 			this.playerUUID = playerUUID;
@@ -78,15 +94,70 @@ public class IslandInfo {
 	}
 	
 	private static class GuestInfo {
+		/**
+		 * A date to use for the default value, where guest will never 
+		 * expire.  (Fine, it will expire, but that's in several thousand
+		 * years)
+		 */
+		private static final Date NEVER_EXPIRE_DATE = 
+				new Date(0x7FFFFFFFFFFFFFFFL);
+		
 		public String playerName;
 		public UUID playerUUID;
 		public Date guestUntil;
 		
+		/**
+		 * Creates a geustInfo for the specified player that never expires.
+		 * @param player
+		 */
+		public GuestInfo(Player player) {
+			this(player, NEVER_EXPIRE_DATE);
+		}
+		
+		/**
+		 * Creates a geustInfo for the specified player that never expires.
+		 * @param player
+		 * @param guestUntil
+		 */
+		public GuestInfo(Player player, Date guestUntil) {
+			this.playerName = player.getName();
+			this.playerUUID = player.getUniqueId();
+			this.guestUntil = guestUntil;
+		}
+		
+		/**
+		 * Constructs a GuestInfo with the specified information, that will
+		 * never expire.
+		 *
+		 * @param playerName
+		 * @param playerUUID
+		 */
+		public GuestInfo(String playerName, UUID playerUUID) {
+			this(playerName, playerUUID, NEVER_EXPIRE_DATE);
+		}
+		
+		/**
+		 * Constructs a GuestInfo with the specified information.
+		 *
+		 * @param playerName
+		 * @param playerUUID
+		 * @param guestUntil
+		 */
 		public GuestInfo(String playerName, UUID playerUUID, 
 				Date guestUntil) {
 			this.playerName = playerName;
 			this.playerUUID = playerUUID;
 			this.guestUntil = guestUntil;
+		}
+		
+		/**
+		 * Checks if the player is still a guest.
+		 *
+		 * @return
+		 */
+		public boolean isStillGuest() {
+			Date now = new Date();
+			return now.before(this.guestUntil);
 		}
 		
 		/**
@@ -172,8 +243,7 @@ public class IslandInfo {
 	 */
 	public IslandInfo(Location islandCenter, Player owner) {
 		this.islandCenter = islandCenter;
-		this.ownerInfo = new MemberInfo(owner.getName(), 
-				owner.getUniqueId());
+		this.ownerInfo = new MemberInfo(owner);
 		
 		this.members = new ArrayList<MemberInfo>();
 		
@@ -190,7 +260,15 @@ public class IslandInfo {
 	 * @param player The new owner.
 	 */
 	public void setOwner(Player player) {
-		//TODO
+		MemberInfo oldOwner = this.ownerInfo;
+		MemberInfo newOwner = new MemberInfo(player);
+		
+		this.members.remove(newOwner); //Remove previous owner.
+		this.members.add(oldOwner); //Add old owner to members.
+		
+		this.guests.remove(newOwner);
+		
+		this.ownerInfo = newOwner;
 	}
 	
 	/**
@@ -199,7 +277,8 @@ public class IslandInfo {
 	 * @param player
 	 */
 	public void addMember(Player player) {
-		//TODO
+		//If the player is already an owner, do nothing.
+		
 	}
 	
 	/**
