@@ -97,6 +97,9 @@ public class IslandInfo {
 			if (obj instanceof MemberInfo) {
 				return ((MemberInfo)(obj)).playerUUID
 						.equals(this.playerUUID);
+			} else if (obj instanceof GuestInfo) {
+				return ((GuestInfo)(obj)).playerUUID
+						.equals(this.playerUUID);
 			} else if (obj instanceof Player) {
 				return ((Player)(obj)).getUniqueId()
 						.equals(this.playerUUID);
@@ -223,6 +226,9 @@ public class IslandInfo {
 			if (obj instanceof GuestInfo) {
 				return ((GuestInfo)(obj)).playerUUID
 						.equals(this.playerUUID);
+			} else if (obj instanceof MemberInfo) {
+				return ((MemberInfo)(obj)).playerUUID
+						.equals(this.playerUUID);
 			} else if (obj instanceof Player) {
 				return ((Player)(obj)).getUniqueId()
 						.equals(this.playerUUID);
@@ -306,7 +312,18 @@ public class IslandInfo {
 	 */
 	public void addMember(Player player) {
 		//If the player is already an owner, do nothing.
+		if (this.ownerInfo.equals(player)) {
+			return;
+		}
 		
+		MemberInfo memberInfo = new MemberInfo(player);
+		
+		if (this.members.contains(memberInfo)) {
+			return;
+		}
+		
+		this.guests.remove(memberInfo);
+		this.members.add(memberInfo);
 	}
 	
 	/**
