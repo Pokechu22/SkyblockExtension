@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -39,11 +38,6 @@ public class ThrowableReport extends CrashReport {
 	
 	public boolean hasContext;
 	public String context;
-	
-	/**
-	 * When the error occurred.
-	 */
-	public Date loggedDate;
 	
 	/**
 	 * Creates a report.
@@ -83,6 +77,8 @@ public class ThrowableReport extends CrashReport {
 	 */
 	private ThrowableReport(Throwable thrown, boolean hasCommand, CommandSender sender, 
 			Command cmd, String label, String[] args, boolean hasContext, String context) {
+		super();
+		
 		this.thrown = thrown;
 		
 		this.hasCommand = hasCommand;
@@ -192,7 +188,7 @@ public class ThrowableReport extends CrashReport {
 	public Map<String, Object> serialize() {
 		SkyblockExtension.inst().getLogger().finest("Saving crash report to map.");
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = super.serializeBase();
 		
 		//Serialize thrown as a map.
 		//map.put("Thrown", this.thrown);
@@ -222,8 +218,6 @@ public class ThrowableReport extends CrashReport {
 		if (this.hasContext) {
 			map.put("Context", context);
 		}
-		map.put("LoggedDate", (Date) this.loggedDate);
-		map.put("Readers", (HashSet<String>) this.readers);
 		
 		return map;
 	}
@@ -233,6 +227,8 @@ public class ThrowableReport extends CrashReport {
 	 */
 	@SuppressWarnings("unchecked")
 	public ThrowableReport(Map<String, Object> map) {
+		super(map);
+		
 		SkyblockExtension.inst().getLogger().finest("Creating crash report from map.");
 		try {
 			
@@ -261,8 +257,6 @@ public class ThrowableReport extends CrashReport {
 			if (this.hasContext) {
 				this.context = (String) map.get("Context");
 			}
-			this.loggedDate = (Date) map.get("LoggedDate");
-			this.readers = (HashSet<String>) map.get("Readers");
 		} catch (ClassCastException | InstantiationException | IllegalAccessException 
 				| IllegalArgumentException | InvocationTargetException | NoSuchMethodException 
 				| SecurityException | ClassNotFoundException e) {

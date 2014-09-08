@@ -1,22 +1,10 @@
 package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-
-
-
 import java.util.logging.Level;
 
-
-
-
-
-
-
-//import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.serialization.SerializableAs;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
@@ -79,11 +67,6 @@ public class ConfigurationErrorReport extends CrashReport {
 	 * Context of the error.
 	 */
 	public String context;
-	
-	/**
-	 * When the error occurred.
-	 */
-	public Date loggedDate;
 	
 	/**
 	 * For use when no other constructor is valid.  Otherwise, don't use it!
@@ -202,6 +185,8 @@ public class ConfigurationErrorReport extends CrashReport {
 			boolean configurationInfoKnown, String key, String configurationFile, 
 			boolean hasSerializingClass, String serializingClassName,
 			boolean saving) {
+		super();
+		
 		this.hasError = hasError;
 		this.error = error;
 		this.configurationInfoKnown = configurationInfoKnown;
@@ -212,8 +197,6 @@ public class ConfigurationErrorReport extends CrashReport {
 		this.saving = saving;
 		
 		this.context = "";
-		
-		this.loggedDate = new Date();
 	}
 	
 	/**
@@ -294,7 +277,7 @@ public class ConfigurationErrorReport extends CrashReport {
 	 */
 	@Override
 	public Map<String, Object> serialize() {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = super.serializeBase();
 		
 		map.put("HasError", (boolean) this.hasError);
 		if (hasError) {
@@ -337,10 +320,6 @@ public class ConfigurationErrorReport extends CrashReport {
 		
 		map.put("Context", this.context);
 		
-		map.put("LoggedDate", this.loggedDate);
-		
-		map.put("Readers", (HashSet<String>) this.readers);
-		
 		return map;
 	}
 	
@@ -349,6 +328,8 @@ public class ConfigurationErrorReport extends CrashReport {
 	 */
 	@SuppressWarnings("unchecked")
 	public ConfigurationErrorReport(Map<String, Object> map) {
+		super(map);
+		
 		try {
 			this.hasError = (boolean) map.get("HasError");
 			if (this.hasError) {
@@ -401,10 +382,6 @@ public class ConfigurationErrorReport extends CrashReport {
 			this.saving = (boolean) map.get("Saving");
 			
 			this.context = (String) map.get("Context");
-			
-			this.loggedDate = (Date) map.get("LoggedDate");
-			
-			this.readers = (HashSet<String>) map.get("Readers");
 			
 		} catch (Exception e) {
 			SkyblockExtension.inst().getLogger().warning("Failed to create " + 

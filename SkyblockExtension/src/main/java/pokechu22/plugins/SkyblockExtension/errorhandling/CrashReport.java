@@ -2,7 +2,11 @@ package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -10,8 +14,9 @@ import org.bukkit.util.ChatPaginator;
 
 /**
  * Crash report as an abstract class.
- * 
- * NOTE: You MUST implement a public ThrowableReport(Map<String, Object> map) { 
+ * <br>
+ * NOTE: Use <code>super.{@link #serializeBase()}</code> to serialize the
+ * base values.
  * @author Pokechu22
  *
  */
@@ -20,9 +25,28 @@ import org.bukkit.util.ChatPaginator;
 public abstract class CrashReport implements ConfigurationSerializable {
 	
 	/**
+	 * The date the error occured on.
+	 */
+	public Date loggedDate;
+	
+	/**
+	 * The stacktrace that lead to this event.
+	 */
+	public StackTraceElement[] localStackTrace;
+	
+	/**
 	 * Who has read the report.
 	 */
-	public HashSet<String> readers = new HashSet<String>();
+	public HashSet<String> readers;
+	
+	/**
+	 * Initiates the internal values.
+	 */
+	protected CrashReport() {
+		this.loggedDate = new Date(); //Current time.
+		this.localStackTrace = new Throwable().getStackTrace();
+		this.readers = new HashSet<String>();
+	}
 	
 	/**
 	 * Gets the text of this crash report, and sender to the list of people who
@@ -144,5 +168,55 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		return (int) Math.ceil(paginatedText.length / pageHeight);
 	}
 	
+	/**
+	 * Deserializes the CrashReport from an existing map.
+	 *
+	 * @param map
+	 */
+	@SuppressWarnings("unchecked")
+	protected CrashReport(Map<String, Object> map) {
+		this.loggedDate = new Date((Long)map.get("LoggedDate"));
+		//Deserialize stacktrace.
+		ArrayList<HashMap<String, Object>> stackTraceListOld = 
+				(ArrayList<HashMap<String, Object>>) map.get("LocalStackTrace");
+
+		this.localStackTrace = new StackTraceElement[stackTraceListOld.size()];
+		for (int i = 0; i < stackTraceListOld.size(); i++) {
+			HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
+
+			this.localStackTrace[i] = new StackTraceElement(
+					(String) stackTraceElementMap.get("ClassName"), //declaringClass
+					(String) stackTraceElementMap.get("MethodName"), //methodName
+					(String) stackTraceElementMap.get("FileName"), //fileName
+					(int) stackTraceElementMap.get("LineNumber") //lineNumber
+					);
+		}
+		
+		this.readers = (HashSet<String>)map.get("Readers");
+	}
 	
+	/**
+	 * Serializes the crashReport to a map.
+	 */
+	protected Map<String, Object> serializeBase() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		ArrayList<HashMap<String, Object>> stackTraceList = 
+				new ArrayList<HashMap<String, Object>>();
+		
+		for (int i = 0; i < localStackTrace.length; i++) {
+			HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
+			stackTraceMap.put("ClassName", localStackTrace[i].getClassName());
+			stackTraceMap.put("MethodName", localStackTrace[i].getMethodName());
+			stackTraceMap.put("FileName", localStackTrace[i].getFileName());
+			stackTraceMap.put("LineNumber", localStackTrace[i].getLineNumber());
+			stackTraceList.add(stackTraceMap);
+		}
+		
+		map.put("LocalStackTrace", stackTraceList);
+		map.put("LoggedDate", this.loggedDate.getTime());
+		
+		map.put("Readers", this.readers);
+		
+		return map;
+	}
 }
