@@ -14,50 +14,48 @@ import org.junit.Test;
  */
 public class StringUtilTest {
 	/**
-	 * Tests the 3-args trailOff method
+	 * Tests the 2-argument trailOff method
+	 * {@link StringUtil#trailOff(String, int, String)}.
+	 * 
+	 * Performs the tests shown in the JavaDoc.
+	 */
+	@Test
+	public void trailOffTwoArgsTest() {
+		assertThat(trailOff("Hello, world!", 80), is("Hello, world!"));
+		assertThat(trailOff("Hello, world!", 10), is("Hello, ..."));
+		assertThat(trailOff("Not Hello World", 11), is("Not Hell..."));
+	}
+	
+	/**
+	 * Tests 2-argument trailOff method
+	 * {@link StringUtil#trailOff(String, int, String)} throwing an
+	 * exception.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void trailOffTwoArgsExceptionTest() {
+		trailOff("Arbitrary String", 1);
+	}
+	
+	/**
+	 * Tests the 3-argument trailOff method
 	 * {@link StringUtil#trailOff(String, int, String)}.
 	 * 
 	 * Performs the tests shown in the JavaDoc.
 	 */
 	@Test
 	public void trailOffThreeArgsTest() {
-		assertThat(trailOff("Hello, world!", 80, "..."), Is("Hello, world!"));
-		assertThat(trailOff("Hello, world!", 10, "..."), Is("Hello, ..."));
-		assertThat(trailOff("Not Hello World", 8, ""), Is("Not Hell"));
+		assertThat(trailOff("Hello, world!", 80, "..."), is("Hello, world!"));
+		assertThat(trailOff("Hello, world!", 10, "..."), is("Hello, ..."));
+		assertThat(trailOff("Not Hello World", 8, ""), is("Not Hell"));
 	}
 	
 	/**
-	 * Tests 3-args trailOff method
+	 * Tests 3-argument trailOff method
 	 * {@link StringUtil#trailOff(String, int, String)} throwing an
 	 * exception.
 	 */
 	@Test(expected=IllegalArgumentException.class)
 	public void trailOffThreeArgsExceptionTest() {
 		trailOff("Irelivant string", 1, "...");
-		fail("No exception was thrown.");
-	}
-	
-	/**
-	 * Tests the 3-args trailOff method
-	 * {@link StringUtil#trailOff(String, int, String)}.
-	 * 
-	 * Performs the tests shown in the JavaDoc.
-	 */
-	@Test
-	public void trailOffThreeArgsTest() {
-		assertThat(trailOff("Hello, world!", 80, "..."), Is("Hello, world!"));
-		assertThat(trailOff("Hello, world!", 10, "..."), Is("Hello, ..."));
-		assertThat(trailOff("Not Hello World", 8, ""), Is("Not Hell"));
-	}
-	
-	/**
-	 * Tests 3-args trailOff method
-	 * {@link StringUtil#trailOff(String, int, String)} throwing an
-	 * exception.
-	 */
-	@Test(expected=IllegalArgumentException.class)
-	public void trailOffThreeArgsExceptionTest() {
-		trailOff("Irelivant string", 1, "...");
-		fail("No exception was thrown.");
 	}
 }
