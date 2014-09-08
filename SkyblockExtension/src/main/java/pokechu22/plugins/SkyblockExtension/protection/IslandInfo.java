@@ -91,6 +91,18 @@ public class IslandInfo {
 			
 			return tag;
 		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof MemberInfo) {
+				return ((MemberInfo)(obj)).playerUUID
+						.equals(this.playerUUID);
+			} else if (obj instanceof Player) {
+				return ((Player)(obj)).getUniqueId()
+						.equals(this.playerUUID);
+			}
+			return false;
+		}
 	}
 	
 	private static class GuestInfo {
@@ -200,6 +212,22 @@ public class IslandInfo {
 			tag.putLong("GuestUntil", guestUntil.getTime());
 			
 			return tag;
+		}
+		
+		/**
+		 * Checks equality.  
+		 * NOTE: Expiration time is ignored in this case.
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof GuestInfo) {
+				return ((GuestInfo)(obj)).playerUUID
+						.equals(this.playerUUID);
+			} else if (obj instanceof Player) {
+				return ((Player)(obj)).getUniqueId()
+						.equals(this.playerUUID);
+			}
+			return false;
 		}
 	}
 	
