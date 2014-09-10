@@ -216,24 +216,36 @@ public class IslandInfo {
 			
 			return tag;
 		}
-		
-		/**
-		 * Checks equality.  
-		 * NOTE: Expiration time is ignored in this case.
-		 */
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((playerUUID == null) ? 0 : playerUUID.hashCode());
+			return result;
+		}
+
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof GuestInfo) {
-				return ((GuestInfo)(obj)).playerUUID
-						.equals(this.playerUUID);
-			} else if (obj instanceof MemberInfo) {
-				return ((MemberInfo)(obj)).playerUUID
-						.equals(this.playerUUID);
-			} else if (obj instanceof Player) {
-				return ((Player)(obj)).getUniqueId()
-						.equals(this.playerUUID);
+			if (this == obj) {
+				return true;
 			}
-			return false;
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof GuestInfo)) {
+				return false;
+			}
+			GuestInfo other = (GuestInfo) obj;
+			if (playerUUID == null) {
+				if (other.playerUUID != null) {
+					return false;
+				}
+			} else if (!playerUUID.equals(other.playerUUID)) {
+				return false;
+			}
+			return true;
 		}
 	}
 	
@@ -324,6 +336,35 @@ public class IslandInfo {
 		
 		this.guests.remove(memberInfo);
 		this.members.add(memberInfo);
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 * @param guestUntil
+	 */
+	public void addGuest(Player player, Date guestUntil) {
+		//TODO
+	}
+
+	/**
+	 * 
+	 * @param player
+	 */
+	public void addGuest(Player player) {
+		//TODO
+	}
+	
+	/**
+	 * 
+	 * @param player
+	 */
+	public void removeMember(Player player) {
+		//TODO
+	}
+	
+	public void removeGuest(Player player) {
+		//TODO
 	}
 	
 	/**
