@@ -39,9 +39,46 @@ public class IslandUtilsTest {
 				is(new Location(null,0d,120d,0d)));
 		//Square around at the farthest.
 		{
-			//TODO
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,54d,120d,54d)),
+					is(new Location(null,0d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,0d,120d,54d)),
+					is(new Location(null,0d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-54d,120d,54d)),
+					is(new Location(null,0d,120d,0d)));
+			
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,54d,120d,0d)),
+					is(new Location(null,0d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-54d,120d,0d)),
+					is(new Location(null,0d,120d,0d)));
+			
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,54d,120d,-54d)),
+					is(new Location(null,0d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,0d,120d,-54d)),
+					is(new Location(null,0d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-54d,120d,-54d)),
+					is(new Location(null,0d,120d,0d)));
 		}
 		
-		//TODO: further islands.
+		//Slightly further island, all should return larger values.
+		{
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,56d,120d,56d)),
+					is(new Location(null,110d,120d,110d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,0d,120d,56d)),
+					is(new Location(null,0d,120d,110d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-56d,120d,56d)),
+					is(new Location(null,-110d,120d,110d)));
+			
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,56d,120d,0d)),
+					is(new Location(null,110d,120d,0d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-56d,120d,0d)),
+					is(new Location(null,-110d,120d,0d)));
+			
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,56d,120d,-56d)),
+					is(new Location(null,110d,120d,-110d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,0d,120d,-56d)),
+					is(new Location(null,0d,120d,-110d)));
+			assertThat(IslandUtils.getOccupyingIsland(new Location(null,-56d,120d,-56d)),
+					is(new Location(null,-110d,120d,-110d)));
+		}
 	}
 }
