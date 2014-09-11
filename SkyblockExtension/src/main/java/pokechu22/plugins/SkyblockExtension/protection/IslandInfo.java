@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -93,16 +94,43 @@ public class IslandInfo {
 		}
 		
 		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((playerUUID == null) ? 0 : playerUUID.hashCode());
+			return result;
+		}
+
+		@Override
 		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
 			if (obj instanceof MemberInfo) {
-				return ((MemberInfo)(obj)).playerUUID
-						.equals(this.playerUUID);
+				MemberInfo other = (MemberInfo) obj;
+				if (playerUUID == null) {
+					if (other.playerUUID != null) {
+						return false;
+					}
+				} else if (!playerUUID.equals(other.playerUUID)) {
+					return false;
+				}
+				return true;
 			} else if (obj instanceof GuestInfo) {
-				return ((GuestInfo)(obj)).playerUUID
-						.equals(this.playerUUID);
-			} else if (obj instanceof Player) {
-				return ((Player)(obj)).getUniqueId()
-						.equals(this.playerUUID);
+				//Conversion for returning stuff.
+				GuestInfo other = (GuestInfo) obj;
+				if (playerUUID == null) {
+					if (other.playerUUID != null) {
+						return false;
+					}
+				} else if (!playerUUID.equals(other.playerUUID)) {
+					return false;
+				}
+				return true;
 			}
 			return false;
 		}
@@ -234,18 +262,30 @@ public class IslandInfo {
 			if (obj == null) {
 				return false;
 			}
-			if (!(obj instanceof GuestInfo)) {
-				return false;
-			}
-			GuestInfo other = (GuestInfo) obj;
-			if (playerUUID == null) {
-				if (other.playerUUID != null) {
+			if (obj instanceof GuestInfo) {
+				GuestInfo other = (GuestInfo) obj;
+				if (playerUUID == null) {
+					if (other.playerUUID != null) {
+						return false;
+					}
+				} else if (!playerUUID.equals(other.playerUUID)) {
 					return false;
 				}
-			} else if (!playerUUID.equals(other.playerUUID)) {
-				return false;
+				return true;
+			} else if (obj instanceof MemberInfo) {
+				//Makes it easier to remove from lists.
+				MemberInfo other = (MemberInfo) obj;
+				if (playerUUID == null) {
+					if (other.playerUUID != null) {
+						return false;
+					}
+				} else if (!playerUUID.equals(other.playerUUID)) {
+					return false;
+				}
+				return true;
 			}
-			return true;
+			
+			return false;
 		}
 	}
 	
@@ -341,10 +381,27 @@ public class IslandInfo {
 	/**
 	 * 
 	 * @param player
+	 * @param seconds Seconds to have this player be a guest.
+	 */
+	public void addGuest(Player player, int seconds) {
+		Calendar expiryTime = Calendar.getInstance(); //Now.
+		expiryTime.add(Calendar.SECOND, seconds);
+		this.addGuest(player, expiryTime.getTime());
+	}
+	
+	/**
+	 * 
+	 * @param player
 	 * @param guestUntil
 	 */
 	public void addGuest(Player player, Date guestUntil) {
-		//TODO
+		GuestInfo added = new GuestInfo(player, guestUntil);
+		if (this.members.contains(added) || this.ownerInfo.equals(added)) {
+			return; //Already a member.
+		}
+		
+		this.guests.remove(added); //If it already exists, replace it.
+		this.guests.add(added); //Add it in now.
 	}
 
 	/**
@@ -352,7 +409,13 @@ public class IslandInfo {
 	 * @param player
 	 */
 	public void addGuest(Player player) {
-		//TODO
+		GuestInfo added = new GuestInfo(player);
+		if (this.members.contains(added) || this.ownerInfo.equals(added)) {
+			return; //Already a member.
+		}
+		
+		this.guests.remove(added); //If it already exists, replace it.
+		this.guests.add(added); //Add it in now.
 	}
 	
 	/**
