@@ -28,10 +28,6 @@ public class IslandUtilsTest {
 	
 	@Test
 	public void getOccupyingIslandTest() {
-		boolean t = true;
-		if (t) {
-			return; //TODO
-		}
 		//Check 0,0.
 		assertThat(IslandUtils.getOccupyingIsland(new Location(null,0d,120d,0d)),
 				is(new Location(null,0d,120d,0d)));
@@ -89,8 +85,6 @@ public class IslandUtilsTest {
 	/**
 	 * Tests the {@link IslandUtils#getNearestIslandLocalX(Location)}
 	 * method.
-	 * 
-	 * TODO: One of these for z.
 	 */
 	@Test
 	public void getNearestIslandLocalXTest() {
@@ -101,6 +95,32 @@ public class IslandUtilsTest {
 		assertThat(IslandUtils.getNearestIslandLocalX(
 				new Location(null, -56d, 0d, 0d)), is(-1));
 		
+		//More centralized tests.
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, 110d, 0d, 0d)), is(1));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, 164d, 0d, 0d)), is(1));
+		
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, -110d, 0d, 0d)), is(-1));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, -164d, 0d, 0d)), is(-1));
+		
+		//Further distance.
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, 166d, 0d, 0d)), is(2));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, 220d, 0d, 0d)), is(2));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, 274d, 0d, 0d)), is(2));
+		
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, -166d, 0d, 0d)), is(-2));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, -220d, 0d, 0d)), is(-2));
+		assertThat(IslandUtils.getNearestIslandLocalX(
+				new Location(null, -274d, 0d, 0d)), is(-2));
+		
 		//Tests showing that z is ignored.
 		assertThat(IslandUtils.getNearestIslandLocalX(
 				new Location(null, 0d, 0d, 100000d)), is(0));
@@ -109,6 +129,54 @@ public class IslandUtilsTest {
 		assertThat(IslandUtils.getNearestIslandLocalX(
 				new Location(null, -56d, 0d, -10000d)), is(-1));
 		
+	}
+	
+	/**
+	 * Tests the {@link IslandUtils#getNearestIslandLocalZ(Location)}
+	 * method.
+	 */
+	@Test
+	public void getNearestIslandLocalZTest() {
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 0d)), is(0));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 56d)), is(1));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -56d)), is(-1));
+		
+		//More centralized tests.
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 110d)), is(1));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 164d)), is(1));
+		
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -110d)), is(-1));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -164d)), is(-1));
+		
+		//Further distance.
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 166d)), is(2));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 220d)), is(2));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, 274d)), is(2));
+		
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -166d)), is(-2));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -220d)), is(-2));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 0d, 0d, -274d)), is(-2));
+		
+		//Tests showing that z is ignored.
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 100000d, 0d, 0d)), is(0));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, 100000d, 0d, 56d)), is(1));
+		assertThat(IslandUtils.getNearestIslandLocalZ(
+				new Location(null, -10000d, 0d, -56d)), is(-1));
 		
 	}
 }
