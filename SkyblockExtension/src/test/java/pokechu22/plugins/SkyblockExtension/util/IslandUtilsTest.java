@@ -3,8 +3,10 @@ package pokechu22.plugins.SkyblockExtension.util;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import org.bukkit.Location;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.bukkit.Location;
 import org.junit.Test;
 
 /**
@@ -178,5 +180,32 @@ public class IslandUtilsTest {
 		assertThat(IslandUtils.getNearestIslandLocalZ(
 				new Location(null, -10000d, 0d, -56d)), is(-1));
 		
+	}
+	
+	/**
+	 * Tests the uniqueness of the names of islands.
+	 * For any island location, the value should be used by only that island.
+	 */
+	@Test
+	public void islandNameUniquenessTest() {
+		//Map of attempted values.
+		Map<Location, String> usedValues = new HashMap<Location, String>();
+		for (double x = -1100d; x <= 1100d; x+=110) {
+			for (double z = -1100d; z <= 1100d; z+=110) {
+				Location location = new Location(null, x, 120d, z);
+				String locationName = IslandUtils.getNearestIslandName(location);
+				//If the value hasn't already been used.
+				//There isn't a good matcher for this, unfortunately.
+				//Also, I need an entry, so I can't used containsValue.
+				for (Map.Entry<Location, String> entry : usedValues.entrySet()) {
+					if (entry.getValue().equals(locationName)) {
+						fail("Island name " + locationName + " for " + location.toString() + 
+								" has already been used by " + entry.getValue() + " at " + 
+								entry.getKey().toString() + ".");
+					}
+				}
+				usedValues.put(location, locationName);
+			}
+		}
 	}
 }
