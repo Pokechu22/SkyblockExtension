@@ -36,4 +36,10 @@ public class USkyBlockCommandIsland extends IslandCommand {
 	public void oldGenerateIslandBlocks(int x, int z, Player player, World world) {
 		return;
 	}
+	
+	@Override
+	public boolean addPlayertoParty(String playername, String partyleader) {
+		boolean superResult = super.addPlayertoParty(playername, partyleader);
+		return superResult;
+	}
 }
