@@ -28,7 +28,7 @@ import us.talabrek.ultimateskyblock.Settings;
  *
  */
 public class IslandInfo {
-	private static class MemberInfo {
+	public static class MemberInfo {
 		public String playerName;
 		public UUID playerUUID;
 		
@@ -108,7 +108,7 @@ public class IslandInfo {
 		}
 	}
 	
-	private static class GuestInfo {
+	public static class GuestInfo {
 		/**
 		 * A date to use for the default value, where guest will never 
 		 * expire.  (Fine, it will expire, but that's in several thousand
