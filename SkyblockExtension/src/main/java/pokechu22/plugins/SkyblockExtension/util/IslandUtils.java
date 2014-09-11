@@ -43,6 +43,7 @@ public class IslandUtils {
 	 * TODO: Stop using int rounding and start using Math.Ceil or Math.floor.
 	 * Save that for when you aren't coding at midnight, though.
 	 * 
+	 * 
 	 * @param startingLocation
 	 *            The location to start with.
 	 * @return The island location.
@@ -67,22 +68,40 @@ public class IslandUtils {
 	
 	/**
 	 * Gets the x-coordinate of the nearest island, using the distance from spawn.
+	 * <br>
+	 * NOTE: At the exact border, the exact behavior is uncertain, and doesn't
+	 * matter.  It does not need to be tested; so long as 55 returns either 1 or 0,
+	 * we are good.
 	 * 
 	 * @param location
 	 * @return
 	 */
 	public static int getNearestIslandLocalX(Location location) {
+		if (location.getBlockX() < 0) { //Special case...
+			return (location.getBlockX() - 
+					(Settings.island_distance / 2)) / Settings.island_distance;
+		}
+		
 		return (location.getBlockX() + 
 				(Settings.island_distance / 2)) / Settings.island_distance;
 	}
 	
 	/**
 	 * Gets the z-coordinate of the nearest island, using the distance from spawn.
+	 * <br>
+	 * NOTE: At the exact border, the exact behavior is uncertain, and doesn't
+	 * matter.  It does not need to be tested; so long as 55 returns either 1 or 0,
+	 * we are good.
 	 * 
 	 * @param location
 	 * @return
 	 */
 	public static int getNearestIslandLocalZ(Location location) {
+		if (location.getBlockZ() < 0) { //Special case...
+			return (location.getBlockZ() - 
+					(Settings.island_distance / 2)) / Settings.island_distance;
+		}
+		
 		return (location.getBlockZ() + 
 				(Settings.island_distance / 2)) / Settings.island_distance;
 	}
