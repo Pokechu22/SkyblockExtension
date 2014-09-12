@@ -18,21 +18,42 @@ public class IslandUtils {
 	 * Tests if the player is active, and thus player info can be obtained via
 	 * {@linkplain #getPlayerInfo(Player)}.
 	 * 
-	 * @param p
+	 * @param player
 	 * @return
 	 */
-	public static boolean canGetPlayerInfo(Player p) {
-		return uSkyBlock.getInstance().getActivePlayers().containsKey(p.getName());
+	public static boolean canGetPlayerInfo(Player player) {
+		return canGetPlayerInfo(player.getName());
+	}
+	
+	/**
+	 * Tests if the player is active, and thus player info can be obtained via
+	 * {@linkplain #getPlayerInfo(Player)}.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static boolean canGetPlayerInfo(String player) {
+		return uSkyBlock.getInstance().getActivePlayers().containsKey(player);
 	}
 	
 	/**
 	 * Gets the {@linkplain PlayerInfo} for a player.
 	 * 
-	 * @param p
+	 * @param player
 	 * @return The player info, or null if there is no info available.
 	 */
-	public static PlayerInfo getPlayerInfo(Player p) {
-		return uSkyBlock.getInstance().getActivePlayers().get(p.getName());
+	public static PlayerInfo getPlayerInfo(Player player) {
+		return getPlayerInfo(player.getName());
+	}
+	
+	/**
+	 * Gets the {@linkplain PlayerInfo} for a player.
+	 * 
+	 * @param player
+	 * @return The player info, or null if there is no info available.
+	 */
+	public static PlayerInfo getPlayerInfo(String player) {
+		return uSkyBlock.getInstance().getActivePlayers().get(player);
 	}
 	
 	/**
