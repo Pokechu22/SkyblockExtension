@@ -584,6 +584,10 @@ public class IslandInfo {
 	 */
 	@SuppressWarnings("deprecation")
 	public static IslandInfo convertFromPlayerInfo(PlayerInfo info) {
+		if (!info.getHasIsland()) {
+			return null;
+		}
+		
 		IslandInfo returned = new IslandInfo();
 		
 		returned.islandCenter = info.getIslandLocation();
