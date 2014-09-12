@@ -1,15 +1,12 @@
 /*     */ package us.talabrek.ultimateskyblock;
-/*     */ 
-/*     */ import java.io.PrintStream;
 /*     */ import java.io.Serializable;
 /*     */ import java.util.ArrayList;
 /*     */ import java.util.HashMap;
 /*     */ import java.util.Iterator;
 /*     */ import java.util.List;
-/*     */ import java.util.Set;
+
 /*     */ import org.bukkit.Bukkit;
 /*     */ import org.bukkit.Location;
-/*     */ import org.bukkit.Server;
 /*     */ import org.bukkit.World;
 /*     */ import org.bukkit.entity.Player;
 /*     */ 
@@ -33,7 +30,7 @@
 /*     */   public PlayerInfo(String playerName)
 /*     */   {
 /*  34 */     this.playerName = playerName;
-/*  35 */     this.members = new ArrayList();
+/*  35 */     this.members = new ArrayList<String>();
 /*  36 */     this.hasIsland = false;
 /*     */ 
 /*  38 */     this.islandLocation = null;
@@ -43,7 +40,7 @@
 /*  42 */     this.partyLeader = null;
 /*  43 */     this.partyIslandLocation = null;
 /*  44 */     this.islandExp = 0.0F;
-/*  45 */     this.challengeList = new HashMap();
+/*  45 */     this.challengeList = new HashMap<String, Boolean>();
 /*  46 */     this.islandLevel = 0;
 /*     */   }
 /*     */ 
@@ -59,6 +56,7 @@
 /*  58 */     return getLocationString(this.partyIslandLocation);
 /*     */   }
 /*     */ 
+@SuppressWarnings("deprecation")
 /*     */   public Player getPlayer() {
 /*  62 */     return Bukkit.getPlayer(this.playerName);
 /*     */   }
@@ -101,7 +99,7 @@
 /*     */   public boolean getHasParty() {
 /* 101 */     if (this.members == null)
 /*     */     {
-/* 103 */       this.members = new ArrayList();
+/* 103 */       this.members = new ArrayList<String>();
 /*     */     }
 /* 105 */     return this.hasParty;
 /*     */   }
@@ -117,7 +115,7 @@
 /* 116 */     this.partyLeader = null;
 /* 117 */     this.islandLevel = 0;
 /* 118 */     this.partyIslandLocation = null;
-/* 119 */     this.members = new ArrayList();
+/* 119 */     this.members = new ArrayList<String>();
 /*     */   }
 /*     */ 
 /*     */   public List<String> getMembers() {
@@ -211,7 +209,7 @@
 /*     */   {
 /* 211 */     if (this.challengeList.containsKey(challenge.toLowerCase()))
 /*     */     {
-/* 213 */       return ((Boolean)this.challengeList.get(challenge.toLowerCase())).booleanValue();
+/* 213 */       return this.challengeList.get(challenge.toLowerCase()).booleanValue();
 /*     */     }
 /*     */ 
 /* 216 */     return false;
@@ -235,8 +233,8 @@
 /*     */   public void buildChallengeList()
 /*     */   {
 /* 236 */     if (this.challengeList == null)
-/* 237 */       this.challengeList = new HashMap();
-/* 238 */     Iterator itr = Settings.challenges_challengeList.iterator();
+/* 237 */       this.challengeList = new HashMap<String, Boolean>();
+/* 238 */     Iterator<String> itr = Settings.challenges_challengeList.iterator();
 /* 239 */     while (itr.hasNext())
 /*     */     {
 /* 241 */       String current = (String)itr.next();
@@ -258,11 +256,11 @@
 /*     */ 
 /*     */   public void displayChallengeList()
 /*     */   {
-/* 261 */     Iterator itr = this.challengeList.keySet().iterator();
+/* 261 */     Iterator<String> itr = this.challengeList.keySet().iterator();
 /* 262 */     System.out.print("Displaying Challenge list for " + this.playerName);
 /* 263 */     while (itr.hasNext())
 /*     */     {
-/* 265 */       String current = (String)itr.next();
+/* 265 */       String current = itr.next();
 /* 266 */       System.out.print(current + ": " + this.challengeList.get(current));
 /*     */     }
 /*     */   }
