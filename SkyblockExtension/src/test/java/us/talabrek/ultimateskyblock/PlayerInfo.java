@@ -275,7 +275,7 @@
 /*     */   }
 /*     */ }
 
-/* Location:           C:\Users\Alex M\Desktop\uSkyBlock.jar
+/* Location:           C:\\Users\\Alex M\\Desktop\\uSkyBlock.jar
  * Qualified Name:     us.talabrek.ultimateskyblock.PlayerInfo
  * JD-Core Version:    0.6.2
  */
