@@ -1,17 +1,17 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
+import us.talabrek.ultimateskyblock.VaultHandler;
 
 /**
  * Intended to do the same thing as IslandCommand, but override some 
- * functionality.  It's Intended to be called in an 
- * {org.bukkit.event.player.PlayerCommandPreprocessEvent 
- * PlayerCommandPreprocessEvent}, and has a run method that takes the
- * needed parameters from that as well as the regular run from the 
- * supertype.
+ * functionality.  It is intended to replace the vanilla command.
  *
  * @author Pokechu22
  *
@@ -22,24 +22,21 @@ public class USkyBlockCommandIsland extends IslandCommand {
 	}
 	
 	/**
-	 * Disabled.
+	 * Adds a player to the party.
 	 */
 	@Override
-	public void generateIslandBlocks(int x, int z, Player player, World world) {
-		return;
+	public boolean addPlayertoParty(String playername, String partyleader) {
+		//IslandUtils.getPlayerInfo()
+		boolean superResult = super.addPlayertoParty(playername, partyleader);
+		return superResult;
 	}
 	
 	/**
-	 * Disabled.
+	 * Removes a player from the party.
 	 */
 	@Override
-	public void oldGenerateIslandBlocks(int x, int z, Player player, World world) {
+	public void removePlayerFromParty(String playername, String partyleader) {
+		super.removePlayerFromParty(playername, partyleader);
 		return;
-	}
-	
-	@Override
-	public boolean addPlayertoParty(String playername, String partyleader) {
-		boolean superResult = super.addPlayertoParty(playername, partyleader);
-		return superResult;
 	}
 }
