@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
 import us.talabrek.ultimateskyblock.VaultHandler;
+import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
  * Intended to do the same thing as IslandCommand, but override some 
@@ -17,8 +18,18 @@ import us.talabrek.ultimateskyblock.VaultHandler;
  *
  */
 public class USkyBlockCommandIsland extends IslandCommand {
+	public static void registerHooks() {
+		uSkyBlock.getInstance().getCommand("island").setExecutor(
+				new USkyBlockCommandIsland());
+	}
+	
 	public USkyBlockCommandIsland() {
 		super();
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		return super.onCommand(sender, command, label, args);
 	}
 	
 	/**

@@ -68,6 +68,8 @@ public class SkyblockExtension extends JavaPlugin {
 		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
 				"IslandProtectionDataSet");
 
+		USkyBlockCommandIsland.registerHooks();
+		
 		this.saveDefaultVersionsOfAllConfigs();
 
 		inst = this;
