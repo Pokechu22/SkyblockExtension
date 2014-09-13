@@ -220,16 +220,13 @@ public class CommandPokechu22 {
 		}
 		
 		if (args.length == 3) {
-			switch (args[1]) {
-			case "test": {
-				return TabLimit(tests.keySet(), args[2]);
-			}
-			case "crashes": {
-				return TabLimit(crashesCommands.keySet(), args[2]);
-			}
-			default: {
-				return new ArrayList<String>();
-			}
+			//Provides tab-completion for reset.
+			if (args[0].equalsIgnoreCase("crashes")) {
+				if (args[1].equalsIgnoreCase("reset")) {
+					ArrayList<String> returned = new ArrayList<>();
+					returned.add("" + getResetConfirmCode(sender));
+					return returned;
+				}
 			}
 		}
 		
@@ -455,7 +452,8 @@ public class CommandPokechu22 {
 				}
 				if (args.length == 2) {
 					sender.sendMessage("§c§lAre you sure you wish to reset all previous crash logging?");
-					sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+					sender.sendMessage("To confirm, please run /" + label + " crashes reset " +
+							getResetConfirmCode(sender));
 					return;
 				}
 				if (args.length == 3) {
@@ -465,12 +463,14 @@ public class CommandPokechu22 {
 					} catch (NumberFormatException e) {
 						//We can assume that if it is not an integer, it doesn't match an integer.
 						sender.sendMessage("§cConfirmation code does not match.");
-						sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+						sender.sendMessage("To confirm, please run /" + label + 
+								" crashes reset " + getResetConfirmCode(sender));
 						return;
 					}
-					if (confirmationCode != sender.getName().hashCode()) {
+					if (confirmationCode != getResetConfirmCode(sender)) {
 						sender.sendMessage("§cConfirmation code does not match.");
-						sender.sendMessage("To confirm, please run /" + label + " crashes reset " + sender.getName().hashCode());
+						sender.sendMessage("To confirm, please run /" + label + 
+								" crashes reset " + getResetConfirmCode(sender));
 						return;
 					}
 					ErrorHandler.resetAllCrashes(sender);
@@ -482,6 +482,10 @@ public class CommandPokechu22 {
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
 		return;
+	}
+	
+	private static int getResetConfirmCode(CommandSender sender) {
+		return sender.getName().hashCode();
 	}
 	
 	/**
