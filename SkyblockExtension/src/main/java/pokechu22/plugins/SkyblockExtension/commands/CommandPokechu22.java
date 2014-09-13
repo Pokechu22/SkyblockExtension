@@ -714,8 +714,15 @@ public class CommandPokechu22 {
 					"sbe.debug.test.USkyBlockPlayerInfoConversion")) {
 				return;
 			}
+			if (args.length >= 3) {
+				if (args[2].equalsIgnoreCase("-nl") || args[2].equalsIgnoreCase("--no-log")) {
+					USkyBlockPlayerInfoConverter.start();
+					sender.sendMessage("Started.");
+					return;
+				}
+			}
 			
-			USkyBlockPlayerInfoConverter.start();
+			USkyBlockPlayerInfoConverter.start(new PlayerPrintStream(sender));
 			sender.sendMessage("Started.");
 			
 			return;
