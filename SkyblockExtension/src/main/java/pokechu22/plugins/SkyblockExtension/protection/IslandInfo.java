@@ -618,7 +618,7 @@ public class IslandInfo {
 	 */
 	@SuppressWarnings("deprecation")
 	public static IslandInfo convertFromPlayerInfo(PlayerInfo info) {
-		if (!info.getHasIsland()) {
+		if (!info.getHasIsland() && !info.getHasParty()) {
 			return null;
 		}
 		

@@ -127,3 +127,6 @@ permissions:
     description: A test that attempts to convert USkyblock's PlayerInfos.
     default: op
     
+  sbe.debug.test.MyIslandInfoData: 
+    description: A test that sends the user the NBT structure of their island's IslandInfo.
+    default: op

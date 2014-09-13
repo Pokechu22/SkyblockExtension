@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +27,8 @@ import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
+import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
+import us.talabrek.ultimateskyblock.PlayerInfo;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -107,6 +110,8 @@ public class CommandPokechu22 {
 				"(EG on the first run), and for any new players as well, " +
 				"but can be forced using this.\nUsage: \n" + 
 				"§e/pokechu22 test USkyBlockPlayerInfoConversion§f.");
+		map.put("MyIslandInfoData", "Sends the user the NBT structure " + 
+				"of their island's IslandInfo.");
 		
 		tests = Collections.unmodifiableMap(map);
 	}
@@ -712,6 +717,26 @@ public class CommandPokechu22 {
 			
 			USkyBlockPlayerInfoConverter.start();
 			sender.sendMessage("Started.");
+			
+			return;
+		}
+		if (args[1].equalsIgnoreCase("MyIslandInfoData")) {
+			//Very light test of conversion.
+			if (!PermissionHandler.HasPermision(sender,
+					"sbe.debug.test.MyIslandInfoData")) {
+				return;
+			}
+			
+			try (PlayerPrintStream s = new PlayerPrintStream(sender)) {
+				PlayerInfo info = IslandUtils.getPlayerInfo(sender
+						.getName());
+				IslandInfo isInfo = IslandUtils.getIslandInfo(info.getIslandLocation());
+				isInfo.serializeToNBT().print(s);
+			} catch (Exception e) {
+				sender.sendMessage("§cAn error occured: " + e.toString());
+				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
+						"An error occured in MyIslandInfoData test.", e);
+			}
 			
 			return;
 		}
