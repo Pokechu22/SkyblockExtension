@@ -358,6 +358,40 @@ public class IslandInfo {
 	}
 	
 	/**
+	 * Updates the owner with previous information, as needed.
+	 * If the owner was changed, the old one is moved to members.
+	 *
+	 * @param owner
+	 */
+	public void freshenOwner(Player owner) {
+		MemberInfo info = new MemberInfo(owner);
+		if (info.equals(this.ownerInfo)) {
+			return;
+		}
+		this.setOwner(owner);
+	}
+	
+	/**
+	 * Updates the member with previous information, as needed.
+	 * If the player was previously a guest, they are moved to
+	 * member.  If the player is owner, this action is ignored.
+	 *
+	 * @param owner
+	 */
+	public void freshenMember(Player member) {
+		MemberInfo info = new MemberInfo(member);
+		if (this.ownerInfo.equals(info)) {
+			return;
+		}
+		if (this.members.contains(info)) {
+			return;
+		}
+		this.addMember(member);
+	}
+	
+	//TODO: freshenGuest
+	
+	/**
 	 * Adds a player as a member.
 	 *
 	 * @param player
