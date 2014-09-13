@@ -689,17 +689,17 @@ public class CommandPokechu22 {
 			
 			Player player = (Player) sender;
 			
-			try {
+			try (PlayerPrintStream stream = new PlayerPrintStream(sender)) {
 				IslandInfo info = new IslandInfo(new Location(player.getWorld(),
 						0,120,0), player);
 				player.sendMessage("Starting NBT data: ");
-				player.sendMessage(info.serializeToNBT().toString());
+				info.serializeToNBT().print(stream);
 				info.saveToDisk();
 				player.sendMessage("Saved.");
 				IslandInfo loaded = IslandInfo.readFromDisk(0, 0);
 				player.sendMessage("Loaded.");
 				player.sendMessage("Loaded NBT data: ");
-				player.sendMessage(loaded.serializeToNBT().toString());
+				loaded.serializeToNBT().print(stream);
 				player.sendMessage("Done.");
 				return;
 			} catch (Exception e) {

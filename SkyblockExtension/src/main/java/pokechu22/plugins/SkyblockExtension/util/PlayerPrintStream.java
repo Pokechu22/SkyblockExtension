@@ -41,6 +41,15 @@ public class PlayerPrintStream extends PrintStream {
 		 */
 		@Override
 		public void write(int codePoint) throws IOException {
+			//Ugly, but I don't know the right way...
+			if (codePoint == Character.codePointAt(new char[] {'\r'}, 0)) {
+				//Minecraft doesn't do \r.
+				return;
+			}
+			if (codePoint == Character.codePointAt(new char[] {'\n'}, 0)) {
+				this.flush();
+				return;
+			}
 			cachedMessage.appendCodePoint(codePoint);
 		}
 		
@@ -53,6 +62,6 @@ public class PlayerPrintStream extends PrintStream {
 	}
 	
 	public PlayerPrintStream(CommandSender sender) {
-		super(new PlayerOutputStream(sender), true);
+		super(new PlayerOutputStream(sender), false);
 	}
 }
