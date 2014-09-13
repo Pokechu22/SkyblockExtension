@@ -1,12 +1,15 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
+import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.VaultHandler;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
@@ -35,10 +38,27 @@ public class USkyBlockCommandIsland extends IslandCommand {
 	/**
 	 * Adds a player to the party.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean addPlayertoParty(String playername, String partyleader) {
+	public boolean addPlayertoParty(String playerName, String partyLeader) {
+		if (IslandUtils.canGetPlayerInfo(partyLeader)) {
+			//Should ALWAYS happen.
+			Player leader = Bukkit.getPlayer(partyLeader);
+			PlayerInfo info = IslandUtils.getPlayerInfo(leader);
+			
+			IslandInfo islandInfo = IslandUtils.getIslandInfo(info);
+			islandInfo.freshenOwner(leader);
+		}
+		if (IslandUtils.canGetPlayerInfo(playerName)) {
+			//Should ALWAYS happen.
+			Player member = Bukkit.getPlayer(playerName);
+			PlayerInfo info = IslandUtils.getPlayerInfo(member);
+			
+			IslandInfo islandInfo = IslandUtils.getIslandInfo(info);
+			islandInfo.freshenMember(member);
+		}
 		//IslandUtils.getPlayerInfo()
-		boolean superResult = super.addPlayertoParty(playername, partyleader);
+		boolean superResult = super.addPlayertoParty(playerName, partyLeader);
 		return superResult;
 	}
 	
@@ -46,8 +66,8 @@ public class USkyBlockCommandIsland extends IslandCommand {
 	 * Removes a player from the party.
 	 */
 	@Override
-	public void removePlayerFromParty(String playername, String partyleader) {
-		super.removePlayerFromParty(playername, partyleader);
+	public void removePlayerFromParty(String playerName, String partyLeader) {
+		super.removePlayerFromParty(playerName, partyLeader);
 		return;
 	}
 }
