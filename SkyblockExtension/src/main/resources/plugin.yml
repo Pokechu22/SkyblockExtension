@@ -7,6 +7,8 @@ author: Pokechu22
 prefix: PSBE
 
 depend: [uSkyBlock]
+#Most of these aren't used but are still needed.
+softdepend: [Essentials, WorldEdit, WorldGuard] 
 
 commands: 
   pokechu22:

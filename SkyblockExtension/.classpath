@@ -33,15 +33,16 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/uSkyBlock.jar" sourcepath="C:/Pokechu22/uSkyBlock-1d2327eeb4ecde0f928feca1975db509f31f89fd.zip"/>
-	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/WorldGuard.jar">
+	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/WorldGuard.jar" sourcepath="C:/Pokechu22/TestServer/plugins/WorldGuard-ca37dc0fc6bff2a8079f587714a8bcde060c14d2.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldguard/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/WorldEdit.jar">
+	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/WorldEdit.jar" sourcepath="C:/Pokechu22/TestServer/plugins/WorldEdit-2214bcc948128a448e41dde0b2a03c4ef02c56d6.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldedit/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/Essentials.jar" sourcepath="C:/Pokechu22/TestServer/plugins/Essentials-d11a295ffd006a6b3edd2c84866b343342e052da.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
