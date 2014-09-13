@@ -109,7 +109,12 @@ public class CommandPokechu22 {
 				"format used here.  This is done when needed normally " + 
 				"(EG on the first run), and for any new players as well, " +
 				"but can be forced using this.\nUsage: \n" + 
-				"§e/pokechu22 test USkyBlockPlayerInfoConversion§f.");
+				"§e/pokechu22 test USkyBlockPlayerInfoConversion§f - " + 
+				"Convert with logging enabled.\n" + 
+				"§e/pokechu22 test USkyBlockPlayerInfoConversion -nl§f" + 
+				" OR \n§e/pokechu22 test USkyBlockPlayerInfoConversion " +
+				"--no-logging§f - Convert with no logging.  (Useful if " +
+				"you have no use for receiving a bunch of chat stuff.)");
 		map.put("MyIslandInfoData", "Sends the user the NBT structure " + 
 				"of their island's IslandInfo.");
 		
