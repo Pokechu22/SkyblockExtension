@@ -28,6 +28,12 @@ commands:
     usage: |
           /islandprotection help
     aliases: [isprot]
+
+  tpcancel: 
+    description: Configure custom protections for your island!
+    usage: |
+          /<command> [player]
+    aliases: [tpacancel, tpc, tpac]
     
 
 permissions: 

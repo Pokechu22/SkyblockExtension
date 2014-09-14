@@ -126,6 +126,10 @@ public class SkyblockExtension extends JavaPlugin {
 				CommandIslandProtection.Run(sender, cmd, label, args);
 				break;
 			}
+			case "tpcancel": {
+				CommandTpCancel.Run(sender, cmd, label, args);
+				break;
+			}
 			default: {
 				// Tell player.
 				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
@@ -198,6 +202,9 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 			case "islandprotection": {
 				return CommandIslandProtection.onTabComplete(sender, cmd, label, args);
+			}
+			case "tpcancel": {
+				return CommandTpCancel.onTabComplete(sender, cmd, label, args);
 			}
 			default: {
 				// Tell player.
