@@ -8,6 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
+import us.talabrek.ultimateskyblock.uSkyBlock;
+
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.Commandtpa;
@@ -27,11 +31,37 @@ public class CommandTpCancel {
 	 *
 	 */
 	public static class AsyncTpCanceler implements Runnable {
+		public Player player;
 		
+		public AsyncTpCanceler(Player player) {
+			this.player = player;
+		}
 		
 		@Override
 		public void run() {
-			//TODO
+			Essentials essentials = (Essentials)Bukkit.getPluginManager()
+					.getPlugin("Essentials");
+			
+			int usedTeleports = 0;
+			
+			for (String userName : essentials.getUserMap()
+					.getAllUniqueUsers()) {
+				User user = essentials.getOfflineUser(userName);
+				if (player.getName().equalsIgnoreCase(user
+						.getTeleportRequest())) {
+					player.sendMessage("§6Withdrew request from " + 
+						user.getDisplayName() + "§6.");
+					user.sendMessage(player.getDisplayName() + 
+							"§6 withdrew their teleport request.");
+					//Cancel the teleport.
+					user.requestTeleport(null, false);
+					usedTeleports++;
+				}
+			}
+			if (usedTeleports == 0) {
+				player.sendMessage("§cError: §4You do not have any " + 
+						"pending requests.");
+			}
 		}
 	}
 	public static void Run(CommandSender sender, Command cmd, 
@@ -44,11 +74,8 @@ public class CommandTpCancel {
 		
 		Player player = (Player) sender;
 		
-		Essentials e = (Essentials)Bukkit.getPluginManager()
-				.getPlugin("Essentials");
-		
-		//Iterate thru all teleport requests.
-		Set<String> userNames = e.getUserMap().getAllUniqueUsers();
+		Bukkit.getScheduler().runTaskLater(SkyblockExtension.inst(), 
+				new AsyncTpCanceler(player), 4L);
 	}
 	
 	public static List<String> onTabComplete(CommandSender sender, 
