@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.errorhandling;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
@@ -26,11 +27,23 @@ public class ErrorHandler {
 	public static List<CrashReport> errors = new ArrayList<CrashReport>();
 	
 	/**
-	 * Logs an error.  Also 
+	 * Logs an error.  Uses the broadcast value to check.
 	 * @param c The crash report.
 	 */
 	public static void logError (CrashReport c) {
+		logError(c, ErrorHandler.broadcastOnError);
+	}
+	
+	/**
+	 * Logs an error, and broadcasts it if enabled.
+	 * @param c
+	 * @param broadcast
+	 */
+	public static void logError (CrashReport c, boolean broadcast) {
 		errors.add(c);
+		if (broadcast) {
+			broadcastError(c);
+		}
 	}
 	
 	/**
@@ -144,5 +157,19 @@ public class ErrorHandler {
 			}
 		}
 		return returned;
+	}
+	
+	/**
+	 * Broadcasts a new error to specific players.
+	 * @param report
+	 */
+	public static void broadcastError(CrashReport report) {
+		Bukkit.getServer().broadcast("§c[SBE]: An error occured: " + 
+				report.getTitle(9999999), 
+				"sbe.debug.crashes.broadcast");
+		Bukkit.getServer().broadcast("§c(This is not your fault; this is " + 
+				"broadcast to all players with a specific permission when " +
+				"an error is detected.",
+				"sbe.debug.crashes.broadcast");
 	}
 }
