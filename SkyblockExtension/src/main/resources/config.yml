@@ -1,5 +1,10 @@
 #Default config.yml
 
+uSkyBlockOverrides:
+  islandCommand:
+    #Alternative help system, which should make things nicer.
+    enableHelp2: true
+
 errorHandling: 
   #Broadcast an error to all players who have the permission 
   #sbe.debug.crashes.broadcast set - This includes ops by default.

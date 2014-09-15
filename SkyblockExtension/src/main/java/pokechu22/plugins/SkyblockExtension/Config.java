@@ -9,6 +9,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
+import pokechu22.plugins.SkyblockExtension.commands.USkyBlockCommandIsland;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
@@ -68,6 +69,8 @@ public class Config {
 				.getBoolean("errorHandling.broadcastOnError", true);
 		LoginErrorBroadcaster.broadcastOnLogin = getDefaultConfig()
 				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
+		USkyBlockCommandIsland.enableHelp2 = getDefaultConfig().getBoolean(
+				"uSkyBlockOverrides.islandCommand.enableHelp2", true);
 		
 		getLogger().info("Configuration loaded!");
 	}
@@ -87,6 +90,10 @@ public class Config {
 				ErrorHandler.broadcastOnError);
 		getDefaultConfig().set("errorHandling.notifyOfExistingOnLogin", 
 				LoginErrorBroadcaster.broadcastOnLogin);
+		
+		getDefaultConfig().set(
+				"uSkyBlockOverrides.islandCommand.enableHelp2",
+				USkyBlockCommandIsland.enableHelp2);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}
