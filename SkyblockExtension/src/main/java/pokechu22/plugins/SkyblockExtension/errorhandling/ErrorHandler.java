@@ -3,7 +3,6 @@ package pokechu22.plugins.SkyblockExtension.errorhandling;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
@@ -16,27 +15,22 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
  */
 public class ErrorHandler {
 	/**
+	 * Should errors be broadcast by default?
+	 * (Only goes to players with specific permissions)
+	 */
+	public static boolean broadcastOnError;
+	
+	/**
 	 * List of previous crashes.
 	 */
 	public static List<CrashReport> errors = new ArrayList<CrashReport>();
 	
 	/**
-	 * Logs an error.
+	 * Logs an error.  Also 
 	 * @param c The crash report.
 	 */
 	public static void logError (CrashReport c) {
 		errors.add(c);
-	}
-	
-	/**
-	 * Logs an error.
-	 * 
-	 * All arguments are converted to a single {@link CrashReport}, and then calls
-	 * {@link #logError(CrashReport)} with it.
-	 * @deprecated
-	 */
-	public static void logError (Throwable thrown, CommandSender sender, Command cmd, String label, String[] args) {
-		logError(new ThrowableReport(thrown,sender,cmd,label,args));
 	}
 	
 	/**
@@ -136,5 +130,19 @@ public class ErrorHandler {
 		SkyblockExtension.inst().getLogger().info(
 				"All crashes reset by " + sender.getName() + ".");
 		sender.sendMessage("All crashes successfully reset.");
+	}
+	
+	/**
+	 * Gets the number of errors that this sender has not yet read.
+	 * @param sender
+	 */
+	public static int getNumberOfUnreadIssues(CommandSender sender) {
+		int returned = 0;
+		for (CrashReport c : errors) {
+			if (!c.readers.contains(sender.getName())) {
+				returned++;
+			}
+		}
+		return returned;
 	}
 }

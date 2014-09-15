@@ -14,6 +14,7 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorRepor
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
@@ -68,6 +69,10 @@ public class SkyblockExtension extends JavaPlugin {
 		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
 				"IslandProtectionDataSet");
 
+		//Register events.
+		getServer().getPluginManager().registerEvents(new LoginErrorBroadcaster(), this);
+		
+		//Other registration.
 		USkyBlockCommandIsland.registerHooks();
 		
 		this.saveDefaultVersionsOfAllConfigs();

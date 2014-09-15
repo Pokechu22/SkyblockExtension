@@ -1,1 +1,10 @@
 #Default config.yml
+
+errorHandling: 
+  #Broadcast an error to all players who have the permission 
+  #sbe.debug.crashes.broadcast set - This includes ops by default.
+  #Disabling this means that no receive this information.
+  #There is potential for errors to ignore this, for very important errors.
+  broadcastOnError: true
+  #Similar to above, but only for logins.  The permission is 
+  notifyOfExistingOnLogin: true

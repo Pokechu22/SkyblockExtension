@@ -12,6 +12,7 @@ import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 
@@ -63,6 +64,11 @@ public class Config {
 			e.printStackTrace(); //TODO
 		}
 		
+		ErrorHandler.broadcastOnError = getDefaultConfig()
+				.getBoolean("errorHandling.broadcastOnError", true);
+		LoginErrorBroadcaster.broadcastOnLogin = getDefaultConfig()
+				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
+		
 		getLogger().info("Configuration loaded!");
 	}
 	
@@ -77,7 +83,10 @@ public class Config {
 		
 		getLogger().info("Configuration saved!");
 		
-		getDefaultConfig().createSection("testdefault", CommandIslandProtection.tieredValues);
+		getDefaultConfig().set("errorHandling.broadcastOnError", 
+				ErrorHandler.broadcastOnError);
+		getDefaultConfig().set("errorHandling.notifyOfExistingOnLogin", 
+				LoginErrorBroadcaster.broadcastOnLogin);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}
