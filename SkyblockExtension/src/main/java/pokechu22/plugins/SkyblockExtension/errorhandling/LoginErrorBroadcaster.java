@@ -30,6 +30,14 @@ public class LoginErrorBroadcaster implements Listener {
 					//TODO: Might want to still have a message.
 					return;
 				}
+				if (unreadReports == 1) {
+					//Singular case.
+					e.getPlayer().sendMessage("§4There is " + unreadReports + 
+							" report that you have not yet read.");
+					e.getPlayer().sendMessage("§4To view it, do " + 
+							"§e/pokechu22 crashes list§4.");
+					return;
+				}
 				e.getPlayer().sendMessage("§4There are " + unreadReports + 
 						" reports that you have not yet read.");
 				e.getPlayer().sendMessage("§4To view these, do " + 
