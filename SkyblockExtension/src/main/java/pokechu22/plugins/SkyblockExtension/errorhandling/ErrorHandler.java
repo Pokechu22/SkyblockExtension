@@ -167,9 +167,8 @@ public class ErrorHandler {
 		Bukkit.getServer().broadcast("§c[SBE]: An error occured: " + 
 				report.getTitle(9999999), 
 				"sbe.debug.crashes.broadcast");
-		Bukkit.getServer().broadcast("§c(This is not your fault; this is " + 
-				"broadcast to all players with a specific permission when " +
-				"an error is detected.",
+		Bukkit.getServer().broadcast("§c(View this error in " + 
+				"§4/pokechu22 crashes list§c)",
 				"sbe.debug.crashes.broadcast");
 	}
 }
