@@ -191,8 +191,8 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 * Marks this report as read for this specific player.
 	 * @param sender
 	 */
-	public void setRead(String sender) {
-		this.readers.add(sender);
+	public boolean setRead(String sender) {
+		return this.readers.add(sender);
 	}
 	
 	/**
@@ -208,8 +208,8 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 * Hides this report from this specific player.
 	 * @param sender
 	 */
-	public void hideFrom(String sender) {
-		this.hiders.add(sender);
+	public boolean hideFrom(String sender) {
+		return this.hiders.add(sender);
 	}
 	
 	/**
