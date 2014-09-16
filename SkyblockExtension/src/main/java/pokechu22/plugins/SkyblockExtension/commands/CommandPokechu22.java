@@ -542,11 +542,11 @@ public class CommandPokechu22 {
 			if (args.length != 3) {
 				sender.sendMessage("§cUsage: /" + label + " help crashes hide");
 			}
-			//TODO
 			try {
-				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+				ErrorHandler.getReportByID(args[2], 
 						"§cUsage: /" + label + " help crashes hide")
-						.getAsRawYaml());
+						.hideFrom(sender.getName());
+				sender.sendMessage("§aHid report " + args[2] + " from you.");
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(e.getMessage());
 			}
@@ -559,11 +559,11 @@ public class CommandPokechu22 {
 			if (args.length != 3) {
 				sender.sendMessage("§cUsage: /" + label + " help crashes unhide");
 			}
-			//TODO
 			try {
-				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+				ErrorHandler.getReportByID(args[2], 
 						"§cUsage: /" + label + " help crashes unhide")
-						.getAsRawYaml());
+						.hideFrom(sender.getName());
+				sender.sendMessage("§aYou can now see report " + args[2] + " again.");
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(e.getMessage());
 			}
