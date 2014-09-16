@@ -172,4 +172,63 @@ public class ErrorHandler {
 				"an error is detected.",
 				"sbe.debug.crashes.broadcast");
 	}
+	
+	/**
+	 * Gets a crash report by an ID, for use in commands.
+	 * @param id
+	 * @return The CrashRreport.
+	 * @throws IllegalArgumentException when ID is invalid.
+	 * 			(Contains player-friendly context)
+	 */
+	public static CrashReport getReportByID(String id) 
+			throws IllegalArgumentException {
+		return getReportByID(id, null);
+	}
+	
+	/**
+	 * Gets a crash report by an ID, for use in commands.
+	 * @param id
+	 * @param usage The usage text to provide.  Do not prepend with \n; 
+	 * 				that's done automatically.  If null, no usage is given.
+	 * 				However, if an empty string (""), it will have a newline
+	 * 				beforehand, which looks odd and is probably a bad thing.
+	 * @return The CrashReport.
+	 * @throws IllegalArgumentException when ID is invalid.  
+	 * 			(Contains player-friendly context)
+	 */
+	public static CrashReport getReportByID(String id, String usage) 
+			throws IllegalArgumentException {
+		int CrashID;
+		
+		//Kind of odd-seeming, but this means that it will be on a new line.
+		if (usage != null) {
+			usage = "\n" + usage;
+		} else {
+			usage = "";
+		}
+		
+		try {
+			CrashID = Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("§cFailed to parse crash ID." +
+					"(Got " + id + ", expected Integer)." + usage);
+		}
+		
+		if (ErrorHandler.getNumberOfCrashes() == 0) {
+			throw new IllegalArgumentException("§cThere are no crashes to show!");
+		}
+		
+		if (CrashID > ErrorHandler.getLastCrashID()) {
+			throw new IllegalArgumentException("§cCrash ID is beyond the " +
+					"maximum!\n§cMaximum ID is currently " + ErrorHandler
+					.getLastCrashID() +	", got " + id + "." + usage);
+		}
+		
+		if (CrashID < 0) {
+			throw new IllegalArgumentException("§cCrash ID not allowed to" +
+					"be negative!" + usage);
+		}
+		
+		return errors.get(CrashID);
+	}
 }

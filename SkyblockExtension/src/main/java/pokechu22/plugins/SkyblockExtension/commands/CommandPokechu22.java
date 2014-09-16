@@ -488,49 +488,92 @@ public class CommandPokechu22 {
 			if (args.length != 3) {
 				sender.sendMessage("§cUsage: /" + label + " help crashes viewraw");
 			}
-			int CrashID;
 			
 			try {
-				CrashID = Integer.parseInt(args[2]);
-			} catch (NumberFormatException e) {
-				sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
-						", expected Integer).");
-				sender.sendMessage("For usage, do /" + label + " crashes help");
-				return;
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes viewraw")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
 			}
-			
-			if (ErrorHandler.getNumberOfCrashes() == 0) {
-				sender.sendMessage("§cThere are no crashes to show!");
-				return;
-			}
-			
-			if (CrashID > ErrorHandler.getLastCrashID()) {
-				sender.sendMessage("§cCrash ID is beyond the maximum!");
-				sender.sendMessage("§cMaximum ID is currently " + 
-						ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
-				sender.sendMessage("For usage, do /" + label + " crashes help");
-				return;
-			}
-			
-			if (CrashID < 0) {
-				sender.sendMessage("§cCrash ID not allowed to be negative!");
-				sender.sendMessage("For usage, do /" + label + " crashes help");
-				return;
-			}
-			sender.sendMessage(ErrorHandler.errors.get(CrashID).getAsRawYaml());
 			
 			return;
 		}
-		if (args[1].equalsIgnoreCase("read")) {
+		if (args[1].equalsIgnoreCase("markread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markread")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markread");
+			}
+			
+			try {
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes markread")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
 			return;
 		}
-		if (args[1].equalsIgnoreCase("unread")) {
+		if (args[1].equalsIgnoreCase("markunread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markunread")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markunread");
+			}
+			
+			try {
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes markunread")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
 			return;
 		}
 		if (args[1].equalsIgnoreCase("hide")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.hide")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes hide");
+			}
+			
+			try {
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes hide")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
 			return;
 		}
 		if (args[1].equalsIgnoreCase("unhide")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.unhide")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes unhide");
+			}
+			
+			try {
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes unhide")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("markallread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markallread")) {
+				return;
+			}
+			if (args.length != 2) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markallread");
+			}
 			return;
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
