@@ -205,6 +205,15 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	}
 
 	/**
+	 * 
+	 * @param sender
+	 * @return
+	 */
+	public boolean hasRead(String sender) {
+		return this.readers.contains(sender);
+	}
+	
+	/**
 	 * Hides this report from this specific player.
 	 * @param sender
 	 */
@@ -219,6 +228,10 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 */
 	public boolean unhideFrom(String sender) {
 		return this.hiders.remove(sender);
+	}
+	
+	public boolean isHiddenFrom(String sender) {
+		return this.hiders.contains(sender);
 	}
 	
 	/**
