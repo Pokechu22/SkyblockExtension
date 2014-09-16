@@ -102,6 +102,30 @@ permissions:
   sbe.debug.crashes.loginBroadcast:
     description: Any player that has this permission will be notified of new errors when they login.
     default: op 
+    
+  sbe.debug.crashes.viewraw:
+    description: Allows a player to view the raw YML data of crashreport.
+    default: op
+    
+  sbe.debug.crashes.markread: 
+    description: Marks a crash report as read.
+    default: op
+    
+  sbe.debug.crashes.markunread: 
+    description: Marks a crash report as unread.
+    default: op
+    
+  sbe.debug.crashes.hide:
+    description: Hides a crash report from your view.
+    default: op
+  
+  sbe.debug.crashes.unhide:
+    description: Returns a crah report to your view.
+    default: op  
+    
+  sbe.debug.crashes.markallread:
+    description: Marks all existing crashes as read.
+    default: op
   
   sbe.debug.test.*: 
     description: Gives access to all SkyblockExtension debug tests.
