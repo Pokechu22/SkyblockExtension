@@ -511,7 +511,7 @@ public class CommandPokechu22 {
 				ErrorHandler.getReportByID(args[2], 
 						"§cUsage: /" + label + " help crashes markread")
 						.setRead(sender.getName());
-				sender.sendMessage("§aMarked report " + args[2] + "as read.");
+				sender.sendMessage("§aMarked report " + args[2] + " as read.");
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(e.getMessage());
 			}
@@ -529,7 +529,7 @@ public class CommandPokechu22 {
 				ErrorHandler.getReportByID(args[2], 
 						"§cUsage: /" + label + " help crashes markunread")
 						.setUnread(sender.getName());
-				sender.sendMessage("§aMarked report " + args[2] + "as unread.");
+				sender.sendMessage("§aMarked report " + args[2] + " as unread.");
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(e.getMessage());
 			}
