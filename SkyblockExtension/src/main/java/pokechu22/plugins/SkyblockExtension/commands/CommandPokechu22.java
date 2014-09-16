@@ -21,6 +21,7 @@ import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
@@ -145,6 +146,7 @@ public class CommandPokechu22 {
 				"§e/pokechu22 crashes reset <magicNumber>§f - actually resets the crashes.\n" + 
 				"The magic number is obtained via a hashcode of your name-string.");
 		
+		
 		crashesCommands = Collections.unmodifiableMap(map);
 	}
 	
@@ -243,7 +245,7 @@ public class CommandPokechu22 {
 	 */
 	protected static void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
-			throw new Error("Args.length should NEVER be 0.");
+			throw new IllegalArgumentException("Args.length should NEVER be 0.");
 		}
 		if (args.length == 1) {
 			sender.sendMessage("Usage: /" + label + " crashes help");
@@ -478,6 +480,111 @@ public class CommandPokechu22 {
 				}
 				return;
 			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("viewraw")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.viewraw")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes viewraw");
+			}
+			
+			try {
+				sender.sendMessage(ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes viewraw")
+						.getAsRawYaml());
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			
+			return;
+		}
+		if (args[1].equalsIgnoreCase("markread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markread")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markread");
+			}
+			
+			try {
+				ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes markread")
+						.setRead(sender.getName());
+				sender.sendMessage("§aMarked report " + args[2] + " as read.");
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("markunread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markunread")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markunread");
+			}
+			
+			try {
+				ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes markunread")
+						.setUnread(sender.getName());
+				sender.sendMessage("§aMarked report " + args[2] + " as unread.");
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("hide")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.hide")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes hide");
+			}
+			try {
+				ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes hide")
+						.hideFrom(sender.getName());
+				sender.sendMessage("§aHid report " + args[2] + " from you.");
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("unhide")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.unhide")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes unhide");
+			}
+			try {
+				ErrorHandler.getReportByID(args[2], 
+						"§cUsage: /" + label + " help crashes unhide")
+						.hideFrom(sender.getName());
+				sender.sendMessage("§aYou can now see report " + args[2] + " again.");
+			} catch (IllegalArgumentException e) {
+				sender.sendMessage(e.getMessage());
+			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("markallread")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markallread")) {
+				return;
+			}
+			if (args.length != 2) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes markallread");
+			}
+			int changedCount = 0;
+			for (CrashReport c : ErrorHandler.errors) {
+				//The returned result is if it was changed (right?)
+				if (c.setRead(sender.getName())) {
+					changedCount++;
+				}
+			}
+			sender.sendMessage("§aMarked " + changedCount + " reports as read.");
 			return;
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
