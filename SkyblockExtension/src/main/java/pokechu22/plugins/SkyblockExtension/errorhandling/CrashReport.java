@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.ChatPaginator;
@@ -38,6 +39,11 @@ public abstract class CrashReport implements ConfigurationSerializable {
 	 * Who has read the report.
 	 */
 	public HashSet<String> readers;
+	
+	/**
+	 * Who has hidden the report.
+	 */
+	public HashSet<String> hiders;
 	
 	/**
 	 * Initiates the internal values.
@@ -166,6 +172,53 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		String[] paginatedText = ChatPaginator.wordWrap(this.getAsTextNoMark(), 
 				ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
 		return (int) Math.ceil(paginatedText.length / pageHeight);
+	}
+	
+	/**
+	 * Sends the RAW text of this report.
+	 * As in, the base YML.  
+	 * It's kind of ugly looking, but will provide the raw data.
+	 * The only use for this is accessing parameters that aren't given
+	 * normally; for instance the localStackTrace field here.
+	 */
+	public final String getAsRawYaml() {
+		YamlConfiguration cfg = new YamlConfiguration();
+		cfg.createSection("ReportRoot", this.serialize());
+		return cfg.saveToString();
+	}
+	
+	/**
+	 * Marks this report as read for this specific player.
+	 * @param sender
+	 */
+	public void setRead(String sender) {
+		this.readers.add(sender);
+	}
+	
+	/**
+	 * Marks this report as unread for this specific player.
+	 * Returns whether the user was present in the first place.
+	 * @param sender
+	 */
+	public boolean setUnread(String sender) {
+		return this.readers.remove(sender);
+	}
+
+	/**
+	 * Hides this report from this specific player.
+	 * @param sender
+	 */
+	public void hideFrom(String sender) {
+		this.hiders.add(sender);
+	}
+	
+	/**
+	 * Unhides this report from this specific player.
+	 * Returns whether the user was present in the first place.
+	 * @param sender
+	 */
+	public boolean unhideFrom(String sender) {
+		return this.hiders.remove(sender);
 	}
 	
 	/**

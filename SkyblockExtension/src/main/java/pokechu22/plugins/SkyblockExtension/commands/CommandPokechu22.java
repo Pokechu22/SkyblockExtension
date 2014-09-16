@@ -145,6 +145,7 @@ public class CommandPokechu22 {
 				"§e/pokechu22 crashes reset <magicNumber>§f - actually resets the crashes.\n" + 
 				"The magic number is obtained via a hashcode of your name-string.");
 		
+		
 		crashesCommands = Collections.unmodifiableMap(map);
 	}
 	
@@ -243,7 +244,7 @@ public class CommandPokechu22 {
 	 */
 	protected static void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
-			throw new Error("Args.length should NEVER be 0.");
+			throw new IllegalArgumentException("Args.length should NEVER be 0.");
 		}
 		if (args.length == 1) {
 			sender.sendMessage("Usage: /" + label + " crashes help");
@@ -478,6 +479,58 @@ public class CommandPokechu22 {
 				}
 				return;
 			}
+			return;
+		}
+		if (args[1].equalsIgnoreCase("viewraw")) {
+			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.viewraw")) {
+				return;
+			}
+			if (args.length != 3) {
+				sender.sendMessage("§cUsage: /" + label + " help crashes viewraw");
+			}
+			int CrashID;
+			
+			try {
+				CrashID = Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+				sender.sendMessage("§cFailed to parse crash ID (Got " + args[2] + 
+						", expected Integer).");
+				sender.sendMessage("For usage, do /" + label + " crashes help");
+				return;
+			}
+			
+			if (ErrorHandler.getNumberOfCrashes() == 0) {
+				sender.sendMessage("§cThere are no crashes to show!");
+				return;
+			}
+			
+			if (CrashID > ErrorHandler.getLastCrashID()) {
+				sender.sendMessage("§cCrash ID is beyond the maximum!");
+				sender.sendMessage("§cMaximum ID is currently " + 
+						ErrorHandler.getLastCrashID() +	", got " + args[2] + ".");
+				sender.sendMessage("For usage, do /" + label + " crashes help");
+				return;
+			}
+			
+			if (CrashID < 0) {
+				sender.sendMessage("§cCrash ID not allowed to be negative!");
+				sender.sendMessage("For usage, do /" + label + " crashes help");
+				return;
+			}
+			sender.sendMessage(ErrorHandler.errors.get(CrashID).getAsRawYaml());
+			
+			return;
+		}
+		if (args[1].equalsIgnoreCase("read")) {
+			return;
+		}
+		if (args[1].equalsIgnoreCase("unread")) {
+			return;
+		}
+		if (args[1].equalsIgnoreCase("hide")) {
+			return;
+		}
+		if (args[1].equalsIgnoreCase("unhide")) {
 			return;
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
