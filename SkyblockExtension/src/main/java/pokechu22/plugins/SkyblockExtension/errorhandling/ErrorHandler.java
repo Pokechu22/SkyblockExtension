@@ -60,13 +60,21 @@ public class ErrorHandler {
 				" of " + errors.size() + ")");
 		sender.sendMessage("§aGreen: Read by me§f, §eYellow: Read by others§f, §cRed: Unread");
 		
+		int mainIndex = 0;
+		
 		for (int i = 0; i < ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2; i ++) {
-			int currentIndex = i + first;
+			mainIndex ++;
+			int currentIndex = mainIndex + first;
 			if (currentIndex >= errors.size()) {
 				sender.sendMessage(""); //Due to no message, just skip.
 				continue;
 			}
 			CrashReport c = errors.get(currentIndex);
+			if (c.isHiddenFrom(sender.getName())) {
+				//This iteration of the loop didn't happen.
+				i --;
+				continue;
+			}
 			sender.sendMessage(currentIndex + ": " + c.getTitleFor(sender.getName(), 
 					ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - 
 					(Integer.toString(currentIndex).length() + 2)));
