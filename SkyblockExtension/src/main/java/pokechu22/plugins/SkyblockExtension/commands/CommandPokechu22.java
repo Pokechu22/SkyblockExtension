@@ -21,6 +21,7 @@ import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
@@ -576,7 +577,14 @@ public class CommandPokechu22 {
 			if (args.length != 2) {
 				sender.sendMessage("§cUsage: /" + label + " help crashes markallread");
 			}
-			//TODO
+			int changedCount = 0;
+			for (CrashReport c : ErrorHandler.errors) {
+				//The returned result is if it was changed (right?)
+				if (c.setRead(sender.getName())) {
+					changedCount++;
+				}
+			}
+			sender.sendMessage("§aMarked " + changedCount + " reports as read.");
 			return;
 		}
 		sender.sendMessage("Usage: /" + label + " crashes help");
