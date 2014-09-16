@@ -19,22 +19,21 @@ public class LoginErrorBroadcaster implements Listener {
 	 */
 	public static boolean broadcastOnLogin = true;
 	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=false)
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerLogin(PlayerJoinEvent e) {
-		int unreadReports = ErrorHandler.getNumberOfUnreadIssues(
-				e.getPlayer());
-		//if (unreadReports == 0) {
-			//TODO: Might want to still have a message.
-		//	return;
-		//}
-		e.getPlayer().sendMessage("§4There are " + unreadReports + 
-				" reports that you have not yet read.");
-		e.getPlayer().sendMessage("§4To view these, do " + 
-				"§e/pokechu22 crashes list§4.");
 		if (LoginErrorBroadcaster.broadcastOnLogin) {
 			if (e.getPlayer()
 					.hasPermission("sbe.debug.crashes.loginBroadcast")) {
-				
+				int unreadReports = ErrorHandler.getNumberOfUnreadIssues(
+						e.getPlayer());
+				if (unreadReports == 0) {
+					//TODO: Might want to still have a message.
+					return;
+				}
+				e.getPlayer().sendMessage("§4There are " + unreadReports + 
+						" reports that you have not yet read.");
+				e.getPlayer().sendMessage("§4To view these, do " + 
+						"§e/pokechu22 crashes list§4.");
 			}
 		}
 	}
