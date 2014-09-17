@@ -45,6 +45,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -332,7 +333,21 @@ public class Metrics {
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = description.getVersion();
         String serverVersion = Bukkit.getVersion();
-        int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
+        int playersOnline;
+        try {
+        	//Stupidity between my bukkit install on 2 computers...
+        	//So this needs to be done...
+	        Object onlinePlayersIsh = Bukkit.getServer().getOnlinePlayers();
+	        if (onlinePlayersIsh instanceof Object[]) {
+	        	playersOnline = ((Object[]) onlinePlayersIsh).length;
+	        } else if (onlinePlayersIsh instanceof Collection<?>) {
+	        	playersOnline = ((Collection<?>) onlinePlayersIsh).size();
+	        } else {
+	        	throw new RuntimeException("Bukkit.getServer().getOnlinePlayers() returned an unknown type!  " + onlinePlayersIsh.getClass().getName());
+	        }
+        } catch (Exception e) {
+        	throw new RuntimeException(e);
+        }
 
         // END server software specific section -- all code below does not use any code outside of this class / Java
 
