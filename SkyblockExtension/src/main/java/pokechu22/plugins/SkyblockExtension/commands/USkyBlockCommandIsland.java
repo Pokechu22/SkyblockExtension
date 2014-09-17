@@ -309,7 +309,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		//Permission tests.
 		if (helpData.length >= 2) {
 			loop: //Goto-like label, to make actions logical.
-			for (String perm : helpData) {
+			for (String perm : helpData[1].split(",")) {
 				if (perm.startsWith("_")) {
 					perm = perm.substring(1);
 					switch (perm.toLowerCase(Locale.ENGLISH)) {
