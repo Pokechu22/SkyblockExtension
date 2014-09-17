@@ -17,6 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
@@ -304,6 +306,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 					"info for " + player.toString() + "!");
 		}
 		
+		//Permission tests.
 		if (helpData.length >= 2) {
 			loop: //Goto-like label, to make actions logical.
 			for (String perm : helpData) {
@@ -396,6 +399,16 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 						}
 						continue loop;
 					}
+					default: {
+						ErrorHandler.logError(
+								new GenericReport("Failed to process " +
+										"help value for /" + label + 
+										" with args " + Arrays
+										.toString(args) + ": Unknown " +
+										"requirement " + perm + " " +
+										" (HelpData: " + Arrays
+										.toString(helpData) + "."));
+					}
 					}
 					continue;
 				} else {
@@ -406,6 +419,9 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				}
 			}
 		}
+		
+		//Config tests.
+		
 		return "§a" + commandText;
 	}
 	
