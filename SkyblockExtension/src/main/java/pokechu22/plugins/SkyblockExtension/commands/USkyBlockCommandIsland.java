@@ -1,7 +1,11 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import static pokechu22.plugins.SkyblockExtension.util.StringUtil.trailOff;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +36,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, 
+			String label, String[] args) {
 		if (allowIgnoreCase) {
 			//Only applied to first argument at this time, but that seems fine.
 			if (args.length > 0) {
@@ -220,6 +225,15 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	}
 	
 	/**
+	 * The error message for when no help available.
+	 */
+	private static final String nonexistantHelpMessage = 
+			"§c: " + "There is no help for this subcommand.  It may be " + 
+			"an invalid command, or it may be that help has not been " +
+			"written.  Note: If you are including a parameter, don't do " +
+			"that.  Try removing each parameter, one at a time.  ";
+	
+	/**
 	 * Alternative help system.
 	 * 
 	 * @param sender
@@ -229,6 +243,184 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 */
 	public void help2(CommandSender sender, Command cmd, 
 			String label, String args[]) {
-		//TODO
+		if (args.length == 0) {
+			//Shouldn't happen.
+			return;
+		}
+		String[] helpArgs = Arrays.copyOfRange(args, 1, args.length);
+		if (helpArgs.length == 0) {
+			//Message prepended to each message.
+			final String preface = "§7/" + label + " ";
+			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
+				
+				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" +
+						entry.getValue()));
+			}
+			return;
+		}
+		if (helpArgs.length == 1) {
+			//Message prepended to each message.
+			final String preface = "§7/" + label + " " + helpArgs[0] + " ";
+			
+			//If there is no help message...
+			if (!subCommands.containsKey(helpArgs[0])) {
+				sender.sendMessage(preface + nonexistantHelpMessage);
+				return;
+			}
+		    
+			//Send the root message if it exists
+			sender.sendMessage(getColorPreface(helpArgs[0], helpArgs, 
+					sender, cmd, preface, helpArgs) + "§f: " + 
+					subCommands.get(helpArgs[0]));
+			return;
+		}
+		sender.sendMessage(nonexistantHelpMessage);
+	}
+	
+	/**
+	 * Gets the preface for the specific HelpData, including 
+	 * processing whether the command is accessible.
+	 * @param helpData
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 * @return
+	 * @throws IllegalArgumentException when PlayerInfo can't be obtained.
+	 */
+	private String getColorPreface(String helpCommand, String[] helpData,
+			CommandSender sender, Command cmd, 
+			String label, String args[]) throws IllegalArgumentException {
+		
+		String commandText = "/" + label + " ";
+		
+		if (!(sender instanceof Player)) {
+			return "§c" + commandText;
+		}
+		Player player = (Player) sender;
+		PlayerInfo playerInfo = IslandUtils.getPlayerInfo(player);
+		if (playerInfo == null) {
+			throw new IllegalArgumentException("§cCouldn't get player " +
+					"info for " + player.toString() + "!");
+		}
+		
+		if (helpData.length >= 2) {
+			for (String perm : helpData) {
+				if (perm.startsWith("_")) {
+					perm = perm.substring(1);
+					switch (perm.toLowerCase(Locale.ENGLISH)) {
+					case "has_island": {
+						if (!playerInfo.getHasIsland()) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "!has_island": {
+						if (playerInfo.getHasIsland()) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "has_party": {
+						if (!playerInfo.getHasParty()) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "!has_party": {
+						if (playerInfo.getHasParty()) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "is_owner": {
+						if (!playerInfo.getPartyLeader()
+								.equalsIgnoreCase(sender.getName())) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "!is_owner": {
+						if (playerInfo.getPartyLeader()
+								.equalsIgnoreCase(sender.getName())) {
+							return "§c" + commandText; 
+						}
+						break;
+					}
+					case "is_member": {
+						//TODO
+						break;
+					}
+					case "!is_member": {
+						//TODO
+						break;
+					}
+					case "has_invite": {
+						if (!getInviteList().containsKey(sender.getName())) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					case "!has_invite": {
+						if (getInviteList().containsKey(sender.getName())) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					case "on_skyblock_world": {
+						if (!uSkyBlock.getSkyBlockWorld().equals(
+								player.getWorld())) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					case "!on_skyblock_world": {
+						if (uSkyBlock.getSkyBlockWorld().equals(
+								player.getWorld())) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					case "on_ultimateskyblock": {
+						if (!Bukkit.getServer().getServerId()
+								.equalsIgnoreCase("UltimateSkyblock")) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					case "!on_ultimateskyblock": {
+						if (Bukkit.getServer().getServerId()
+								.equalsIgnoreCase("UltimateSkyblock")) {
+							return "§c" + commandText;
+						}
+						break;
+					}
+					}
+					continue;
+				} else {
+					
+					continue;
+				}
+			}
+		}
+		return "§a" + commandText;
+	}
+	
+	/**
+	 * Gets the invite list, which is private and must be obtained 
+	 * with reflection.
+	 * @return
+	 * @throws RuntimeException when any exception is thrown, eg 
+	 * SecurityException.
+	 */
+	@SuppressWarnings("unchecked")
+	protected HashMap<String, String> getInviteList() 
+			throws RuntimeException {
+		try {
+		return (HashMap<String, String>) super.getClass()
+				.getDeclaredField("inviteList").get(this);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
