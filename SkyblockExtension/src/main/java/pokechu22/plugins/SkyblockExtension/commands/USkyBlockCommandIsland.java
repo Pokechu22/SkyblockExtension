@@ -116,11 +116,36 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * This controls args[0]'s effects.
 	 * 
 	 * Internally, the array represents this: 
-	 * [0]: The help message.
-	 * [1]: The needed permission.
-	 * [2]: Required value in config.  The first value should be either 
-	 * <samp>sbe</samp> or <samp>uSkyBlock</samp>, followed by the full
-	 * config key path. 
+	 * <h1>[0]:</h1> The help message.
+	 * 
+	 * <h1>[1]:</h1> The needed permission.  This is comma-separated, if
+	 * multiple permissions are needed.  One can also prepend an entry with
+	 * <code>!</code> to inverse it. This will usually be a permission 
+	 * string, but if it starts with a <code>_</code>, it is A) assumed 
+	 * to be <code>usb.island.create</code> (as that's normally needed) 
+	 * and B) processed based on if it's one of the following: 
+	 * <h2><code>has_island</code></h2>
+	 * The player must have an island.
+	 * <h2><code>has_party</code></h2>
+	 * The player must have a party.
+	 * <h2><code>is_owner</code></h2>
+	 * You must be the owner of your island.
+	 * <h2><code>is_member</code></h2>
+	 * You must be at least a member.  (Includes owner; 
+	 * if you want to exclude owner add <code>!is_owner</code>.)
+	 * <h2><code>has_invite</code></h2>
+	 * You must have an invite to an island.
+	 * <h2><code>on_skyblock_world</code></h2>
+	 * You must be on the Skyblock world.
+	 * <h2><code>on_ultimateskyblock</code></h2>
+	 * You must be on the server <code>UltimateSkyblock</code>.
+	 * I'm not kidding.  This is a real requirement in the plugin.
+	 * 
+	 * <h1>[2]:</h1> Required value in config.  The first value should be 
+	 * either <code>sbe</code> or <code>uSkyBlock</code>, followed by the
+	 * full config key path.  Or empty.  As with before, this can be 
+	 * comma-separated and using an <code>!</code> will inverse it.
+	 * <hr>
 	 * These parameters can be missing, as needed.
 	 */
 	private static final Map<String, String[]> subCommands;
@@ -163,7 +188,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		map.put("kick", new String[]{});
 		map.put("makeleader", new String[]{});
 		map.put("checkparty", new String[]{});
-		
+		//And overridden, custom commands.
+		map.put("help2", new String[]{});
 		
 		
 		subCommands = Collections.unmodifiableMap(map);
