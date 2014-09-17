@@ -245,6 +245,14 @@ public class CommandPokechu22 {
 					return returned;
 				}
 			}
+			if (args[0].equalsIgnoreCase("help")) {
+				if (args[1].equalsIgnoreCase("test")) {
+					return TabLimit(tests.keySet(), args[2]);
+				}
+				if (args[1].equalsIgnoreCase("crashes")) {
+					return TabLimit(crashesCommands.keySet(), args[2]);
+				}
+			}
 		}
 		
 		return new ArrayList<String>();
