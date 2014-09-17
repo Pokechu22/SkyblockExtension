@@ -305,6 +305,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		}
 		
 		if (helpData.length >= 2) {
+			loop: //Goto-like label, to make actions logical.
 			for (String perm : helpData) {
 				if (perm.startsWith("_")) {
 					perm = perm.substring(1);
@@ -313,87 +314,87 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 						if (!playerInfo.getHasIsland()) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "!has_island": {
 						if (playerInfo.getHasIsland()) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "has_party": {
 						if (!playerInfo.getHasParty()) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "!has_party": {
 						if (playerInfo.getHasParty()) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "is_owner": {
 						if (!playerInfo.getPartyLeader()
 								.equalsIgnoreCase(sender.getName())) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "!is_owner": {
 						if (playerInfo.getPartyLeader()
 								.equalsIgnoreCase(sender.getName())) {
 							return "§c" + commandText; 
 						}
-						break;
+						continue loop;
 					}
 					case "is_member": {
 						//TODO
-						break;
+						continue loop;
 					}
 					case "!is_member": {
 						//TODO
-						break;
+						continue loop;
 					}
 					case "has_invite": {
 						if (!getInviteList().containsKey(sender.getName())) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					case "!has_invite": {
 						if (getInviteList().containsKey(sender.getName())) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					case "on_skyblock_world": {
 						if (!uSkyBlock.getSkyBlockWorld().equals(
 								player.getWorld())) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					case "!on_skyblock_world": {
 						if (uSkyBlock.getSkyBlockWorld().equals(
 								player.getWorld())) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					case "on_ultimateskyblock": {
 						if (!Bukkit.getServer().getServerId()
 								.equalsIgnoreCase("UltimateSkyblock")) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					case "!on_ultimateskyblock": {
 						if (Bukkit.getServer().getServerId()
 								.equalsIgnoreCase("UltimateSkyblock")) {
 							return "§c" + commandText;
 						}
-						break;
+						continue loop;
 					}
 					}
 					continue;
