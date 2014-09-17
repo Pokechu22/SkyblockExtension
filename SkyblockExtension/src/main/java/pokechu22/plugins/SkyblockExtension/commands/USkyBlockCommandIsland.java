@@ -90,6 +90,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	
 	public static boolean enableHelp2 = true;
 	
+	public static boolean allowIgnoreCase = true;
+	
 	/**
 	 * Registers all hooks on this command, overriding uSkyBlock code.
 	 */

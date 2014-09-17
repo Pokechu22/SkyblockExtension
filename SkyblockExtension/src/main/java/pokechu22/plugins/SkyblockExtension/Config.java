@@ -71,6 +71,8 @@ public class Config {
 				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
 		USkyBlockCommandIsland.enableHelp2 = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.enableHelp2", true);
+		USkyBlockCommandIsland.allowIgnoreCase = getDefaultConfig().getBoolean(
+				"uSkyBlockOverrides.islandCommand.allowIgnoreCase", true);
 		
 		getLogger().info("Configuration loaded!");
 	}
@@ -94,6 +96,9 @@ public class Config {
 		getDefaultConfig().set(
 				"uSkyBlockOverrides.islandCommand.enableHelp2",
 				USkyBlockCommandIsland.enableHelp2);
+		getDefaultConfig().set(
+				"uSkyBlockOverrides.islandCommand.allowIgnoreCase",
+				USkyBlockCommandIsland.allowIgnoreCase);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}
