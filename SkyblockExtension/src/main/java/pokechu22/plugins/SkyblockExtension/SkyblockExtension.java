@@ -18,7 +18,9 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
+import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -26,6 +28,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 /**
  * 
@@ -43,12 +46,27 @@ public class SkyblockExtension extends JavaPlugin {
 	private static SkyblockExtension inst;
 
 	/**
+	 * Using metrics to do stuff.
+	 * Please see <a href="http://mcstats.org">mcstats.org</a>.
+	 */
+	private static Metrics metrics;
+	
+	/**
 	 * Gets the instance of this plugin.
 	 * 
 	 * @return The instance of this plugin.
 	 */
 	public static SkyblockExtension inst() {
 		return inst;
+	}
+	
+	/**
+	 * Gets the instance of metrics.
+	 *
+	 * @return
+	 */
+	public static Metrics metrics() {
+		return metrics;
 	}
 
 	/**
@@ -76,6 +94,23 @@ public class SkyblockExtension extends JavaPlugin {
 		USkyBlockCommandIsland.registerHooks();
 		
 		this.saveDefaultVersionsOfAllConfigs();
+
+	    try {
+	        metrics = new Metrics(this);
+	        metrics.start();
+	    } catch (IOException e) {
+	        metrics = null;
+	        Bukkit.getConsoleSender().sendMessage("§c[SBE] An error " +
+	        		"occured whilst initializing pluginmetrics: ");
+	        Bukkit.getConsoleSender().sendMessage("§c" + e.toString());
+	        PlayerPrintStream output = new PlayerPrintStream(
+	        		Bukkit.getConsoleSender(), "§c");
+	        e.printStackTrace(output);
+	        Bukkit.getConsoleSender().sendMessage("§cWhile the plugin " +
+	        		"will still be run, there may be other errors due " +
+	        		"to attempting to access a null metrics.  " + 
+	        		"Please keep this in mind.");
+	    }
 
 		inst = this;
 		
