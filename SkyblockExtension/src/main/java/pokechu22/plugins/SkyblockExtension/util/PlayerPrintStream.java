@@ -27,12 +27,22 @@ public class PlayerPrintStream extends PrintStream {
 		private CommandSender player;
 		
 		/**
+		 * A string to prepend the text, intended for coloration.
+		 */
+		private String prepend = "";
+		
+		/**
 		 * The message to send.
 		 */
 		StringBuilder cachedMessage = new StringBuilder();
 		
 		public PlayerOutputStream(CommandSender player) {
 			this.player = player;
+		}
+		
+		public PlayerOutputStream(CommandSender player, String prepend) {
+			this.player = player;
+			this.prepend = prepend;
 		}
 		
 		/**
@@ -55,7 +65,7 @@ public class PlayerPrintStream extends PrintStream {
 		
 		@Override
 		public void flush() throws IOException {
-			player.sendMessage(cachedMessage.toString());
+			player.sendMessage(prepend + cachedMessage.toString());
 			//Clear the output.
 			cachedMessage = new StringBuilder();
 		}
@@ -63,5 +73,9 @@ public class PlayerPrintStream extends PrintStream {
 	
 	public PlayerPrintStream(CommandSender sender) {
 		super(new PlayerOutputStream(sender), false);
+	}
+	
+	public PlayerPrintStream(CommandSender player, String prepend) {
+		super(new PlayerOutputStream(player, prepend), false);
 	}
 }
