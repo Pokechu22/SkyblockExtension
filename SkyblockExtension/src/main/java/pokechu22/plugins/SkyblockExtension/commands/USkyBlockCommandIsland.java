@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,6 +33,13 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (allowIgnoreCase) {
+			//Only applied to first argument at this time, but that seems fine.
+			if (args.length > 0) {
+				args[0] = args[0].toLowerCase(Locale.ENGLISH);
+			}
+		}
+		
 		if (enableHelp2) {
 			//This override needs to occur beforehand.
 			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
