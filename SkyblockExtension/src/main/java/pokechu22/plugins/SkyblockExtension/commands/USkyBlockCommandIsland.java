@@ -399,7 +399,9 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 					}
 					continue;
 				} else {
-					
+					if (!sender.hasPermission(perm)) {
+						return "§c" + commandText;
+					}
 					continue;
 				}
 			}
