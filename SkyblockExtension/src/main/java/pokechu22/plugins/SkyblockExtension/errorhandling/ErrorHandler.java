@@ -63,8 +63,8 @@ public class ErrorHandler {
 		int mainIndex = 0;
 		
 		for (int i = 0; i < ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2; i ++) {
-			mainIndex ++;
 			int currentIndex = mainIndex + first;
+			mainIndex ++;
 			if (currentIndex >= errors.size()) {
 				sender.sendMessage(""); //Due to no message, just skip.
 				continue;
