@@ -260,14 +260,20 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 					label, args);
 			
 			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
-				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" +
-						entry.getValue()));
+				String value;
+				if (entry.getValue().length != 0) {
+					value = entry.getValue()[0];
+				} else {
+					value = "";
+				}
+				sender.sendMessage(trailOff(preface + entry.getKey() + 
+						"§f:" + value));
 			}
 			return;
 		}
 		if (helpArgs.length == 1) {
 			//Message prepended to each message.
-			final String preface = "§7/" + label + " " + helpArgs[0] + " ";
+			final String preface = helpArgs[0] + " ";
 			
 			//If there is no help message...
 			if (!subCommands.containsKey(helpArgs[0])) {
@@ -275,10 +281,17 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				return;
 			}
 		    
+			String value;
+			if (subCommands.get(helpArgs[0]).length != 0) {
+				value = subCommands.get(helpArgs[0])[0];
+			} else {
+				value = "";
+			}
+			
 			//Send the root message if it exists
 			sender.sendMessage(getColorPreface(subCommands.get(helpArgs[0]), 
 					sender, cmd, preface, args) + "§f: " + 
-					subCommands.get(helpArgs[0]));
+					value);
 			return;
 		}
 		sender.sendMessage(nonexistantHelpMessage);
