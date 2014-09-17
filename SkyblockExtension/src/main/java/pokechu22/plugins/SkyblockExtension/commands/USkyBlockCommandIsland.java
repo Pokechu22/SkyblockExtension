@@ -167,7 +167,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		
 		//TODO
 		//These were all taken from the decompilation.
-		map.put("restart", new String[]{});
+		map.put("restart", new String[]{""});
 		map.put("reset", new String[]{});
 		map.put("sethome", new String[]{});
 		map.put("tpset", new String[]{});
@@ -204,7 +204,11 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		subCommands = Collections.unmodifiableMap(map);
 	}
 	
-	private static final String[] rootHelp = {};
+	private static final String[] rootHelp = {
+		"Start your island, or teleport back to one you have.\n" + 
+		"§fUsage: \n§6/island§f.",
+		"usb.island.create"
+	};
 	
 	/**
 	 * Tab-completion.  This wasn't part of the vanilla system!
@@ -259,6 +263,19 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 			final String preface = getColorPreface(rootHelp, sender, cmd,
 					label, args);
 			
+			String value_main;
+			if (rootHelp.length != 0) {
+				value_main = rootHelp[0];
+			} else {
+				value_main = "";
+			}
+			
+			sender.sendMessage(getColorPreface(rootHelp, 
+					sender, cmd, preface, args) + "§f: " + 
+					value_main);
+			
+			
+			
 			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
 				String value;
 				if (entry.getValue().length != 0) {
@@ -273,7 +290,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		}
 		if (helpArgs.length == 1) {
 			//Message prepended to each message.
-			final String preface = helpArgs[0] + " ";
+			final String preface = helpArgs[0];
 			
 			//If there is no help message...
 			if (!subCommands.containsKey(helpArgs[0])) {
