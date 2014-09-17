@@ -145,6 +145,21 @@ public class CommandPokechu22 {
 				"§e/pokechu22 crashes reset§f - Provides you with your magic number.\n" + 
 				"§e/pokechu22 crashes reset <magicNumber>§f - actually resets the crashes.\n" + 
 				"The magic number is obtained via a hashcode of your name-string.");
+		map.put("viewraw", "Views the raw YAML markup of a crash report.\n" +
+				"This may seem useless, but it can be used to access " +
+				"information not provided normally.\nUsage:\n"+ 
+				"§e/pokechu22 crashes viewraw <crashID>§f.");
+		map.put("markread", "Marks a crash report as having been read.\nUsage: \n" + 
+				"§e/pokechu22 crashes markread <crashID>§f - marks said crash as read.");
+		map.put("markunread", "Marks a crash report as not having been read.\nUsage: \n" + 
+				"§e/pokechu22 crashes markunread <crashID>§f - marks said crash as read.");
+		map.put("hide", "Hides a crash report from view.\nUsage: \n" + 
+				"§e/pokechu22 crashes hide <crashID>§f - hides said crash report.");
+		map.put("unhide", "Returns a crash report to your view.\nUsage: \n" + 
+				"§e/pokechu22 crashes unhide <crashID>§f - unhides said crash report.");
+		map.put("markallread", "Marks all reports as read.\nUsage: \n" + 
+				"§e/pokechu22 crashes markallread <crashID>§f.");
+		
 		
 		
 		crashesCommands = Collections.unmodifiableMap(map);
