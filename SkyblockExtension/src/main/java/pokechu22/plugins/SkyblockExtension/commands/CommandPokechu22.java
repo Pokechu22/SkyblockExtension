@@ -563,7 +563,7 @@ public class CommandPokechu22 {
 			try {
 				ErrorHandler.getReportByID(args[2], 
 						"§cUsage: /" + label + " help crashes unhide")
-						.hideFrom(sender.getName());
+						.unhideFrom(sender.getName());
 				sender.sendMessage("§aYou can now see report " + args[2] + " again.");
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(e.getMessage());
