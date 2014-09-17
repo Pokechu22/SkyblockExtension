@@ -52,6 +52,7 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		this.loggedDate = new Date(); //Current time.
 		this.localStackTrace = new Throwable().getStackTrace();
 		this.readers = new HashSet<String>();
+		this.hiders = new HashSet<String>();
 	}
 	
 	/**
@@ -259,6 +260,7 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		}
 		
 		this.readers = (HashSet<String>)map.get("Readers");
+		this.hiders = (HashSet<String>)map.get("Hiders");
 	}
 	
 	/**
@@ -282,6 +284,7 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		map.put("LoggedDate", this.loggedDate.getTime());
 		
 		map.put("Readers", this.readers);
+		map.put("Hiders", this.hiders);
 		
 		return map;
 	}
