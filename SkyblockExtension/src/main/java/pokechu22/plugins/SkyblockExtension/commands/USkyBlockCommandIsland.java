@@ -32,13 +32,17 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (enableHelp2) {
+			//This override needs to occur beforehand.
+			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
+				help2(sender, command, label, args);
+				return true;
+			}
+		}
 		boolean superResult = super.onCommand(sender, command, label, args);
 		if (enableHelp2) {
 			if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 				alertAboutNewHelp(sender);
-			}
-			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
-				help2(sender, command, label, args);
 			}
 		}
 		return superResult;
@@ -100,27 +104,57 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	/**
 	 * Information for when help is created.
 	 * This controls args[0]'s effects.
+	 * 
+	 * Internally, the array represents this: 
+	 * [0]: The help message.
+	 * [1]: The needed permission.
+	 * [2]: Required value in config.  The first value should be either 
+	 * <samp>sbe</samp> or <samp>uSkyBlock</samp>, followed by the full
+	 * config key path. 
+	 * These parameters can be missing, as needed.
 	 */
-	private static final Map<String, String> subCommands;
+	private static final Map<String, String[]> subCommands;
 	/*
 	 * Static initializer for subCommands.
 	 */
 	static {
-		TreeMap<String, String> map = new TreeMap<String, String>(
+		TreeMap<String, String[]> map = new TreeMap<String, String[]>(
 				String.CASE_INSENSITIVE_ORDER);
 		
 		//TODO
-		map.put("test", "Various tests for debuging purposes.  " +
-				"Most of these commands will be of no useless to " + 
-				"actual players.  \nUsage: \n" + 
-				"§e/pokechu22 test <TestName>§f.");
-		map.put("crashes", "Handles any error reports that may occur." +
-				"\nUsage: \nSee §e/pokechu22 help crashes§f.");
-		map.put("logo", "Shows a rather pointless logo.\nUsage: \n" + 
-				"§e/pokechu22 logo§f.");
-		map.put("help", "View this help.  It is clear you understand.\n" +
-				"Usage: \n§e/pokechu22 help [commandName, subCommand, " + 
-				"...]§f.");
+		//These were all taken from the decompilation.
+		map.put("restart", new String[]{});
+		map.put("reset", new String[]{});
+		map.put("sethome", new String[]{});
+		map.put("tpset", new String[]{});
+		map.put("lock", new String[]{});
+		map.put("unlock", new String[]{});
+		map.put("help", new String[]{});
+		map.put("top", new String[]{});
+		map.put("info", new String[]{});
+		map.put("level", new String[]{});
+		map.put("invite", new String[]{});
+		map.put("accept", new String[]{});
+		map.put("reject", new String[]{});
+		//These all seem like disabled debug commands, but some work.
+		map.put("partypurge", new String[]{});
+		map.put("partyclean", new String[]{});
+		map.put("purgeinvites", new String[]{});
+		map.put("partylist", new String[]{});
+		map.put("invitelist", new String[]{});
+		//More normal commands.
+		map.put("leave", new String[]{});
+		map.put("party", new String[]{});
+		//3-args commands, now.  Some are duplicates, which are commented out.
+		//map.put("info", new String[]{});
+		//map.put("level", new String[]{});
+		//map.put("invite", new String[]{});
+		map.put("remove", new String[]{});
+		map.put("kick", new String[]{});
+		map.put("makeleader", new String[]{});
+		map.put("checkparty", new String[]{});
+		
+		
 		
 		subCommands = Collections.unmodifiableMap(map);
 	}
