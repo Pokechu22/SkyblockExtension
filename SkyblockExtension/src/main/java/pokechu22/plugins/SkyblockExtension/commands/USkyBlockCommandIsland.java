@@ -254,9 +254,9 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		String[] helpArgs = Arrays.copyOfRange(args, 1, args.length);
 		if (helpArgs.length == 0) {
 			//Message prepended to each message.
-			final String preface = "§7/" + label + " ";
+			final String preface = getColorPreface("", helpArgs, sender, cmd, preface, helpArgs);
+			
 			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
-				
 				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" +
 						entry.getValue()));
 			}
@@ -295,7 +295,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * @return
 	 * @throws IllegalArgumentException when PlayerInfo can't be obtained.
 	 */
-	private String getColorPreface(String helpCommand, String[] helpData,
+	private String getColorPreface(String[] helpData,
 			CommandSender sender, Command cmd, 
 			String label, String args[]) throws IllegalArgumentException {
 		
