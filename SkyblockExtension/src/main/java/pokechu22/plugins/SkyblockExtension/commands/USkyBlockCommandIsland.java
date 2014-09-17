@@ -204,6 +204,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		subCommands = Collections.unmodifiableMap(map);
 	}
 	
+	private static final String[] rootHelp = {};
+	
 	/**
 	 * Tab-completion.  This wasn't part of the vanilla system!
 	 * @param sender
@@ -254,7 +256,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		String[] helpArgs = Arrays.copyOfRange(args, 1, args.length);
 		if (helpArgs.length == 0) {
 			//Message prepended to each message.
-			final String preface = getColorPreface("", helpArgs, sender, cmd, preface, helpArgs);
+			final String preface = getColorPreface(rootHelp, sender, cmd,
+					label, args);
 			
 			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
 				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" +
@@ -273,8 +276,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 			}
 		    
 			//Send the root message if it exists
-			sender.sendMessage(getColorPreface(helpArgs[0], helpArgs, 
-					sender, cmd, preface, helpArgs) + "§f: " + 
+			sender.sendMessage(getColorPreface(subCommands.get(helpArgs[0]), 
+					sender, cmd, preface, args) + "§f: " + 
 					subCommands.get(helpArgs[0]));
 			return;
 		}
