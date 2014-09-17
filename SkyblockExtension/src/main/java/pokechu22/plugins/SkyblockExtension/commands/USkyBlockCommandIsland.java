@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
@@ -149,9 +150,10 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * I'm not kidding.  This is a real requirement in the plugin.
 	 * 
 	 * <h1>[2]:</h1> Required value in config.  The first value should be 
-	 * either <code>sbe</code> or <code>uSkyBlock</code>, followed by the
-	 * full config key path.  Or empty.  As with before, this can be 
-	 * comma-separated and using an <code>!</code> will inverse it.
+	 * either <code>sbe</code> or <code>uskyblock</code>, followed by the
+	 * full config key path, followed by a <code>=</code>, followed by the
+	 * expected value.  Expected value is a string.  As with before, this
+	 * can be comma-separated and using an <code>!</code> will inverse it.
 	 * <hr>
 	 * These parameters can be missing, as needed.
 	 */
@@ -282,6 +284,9 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	/**
 	 * Gets the preface for the specific HelpData, including 
 	 * processing whether the command is accessible.
+	 * 
+	 * This uses color green (§a) for available, red for unavailable (§c),
+	 * and gray (§7) for commands not enabled (via config).
 	 * @param helpData
 	 * @param sender
 	 * @param cmd
@@ -421,6 +426,65 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		}
 		
 		//Config tests.
+
+		if (helpData.length >= 3) {
+			loop: 
+			for (String val : helpData[2].split(",")) {
+				String[] subVals = val.split(".", 2);
+				if (subVals.length != 2) {
+					ErrorHandler.logError(
+							new GenericReport("Failed to process help " +
+									"value for /" + label + " with args " +
+									Arrays.toString(args) + ": Spliting " +
+									val + " with '.' produced an array " +
+									" of length other than 2 (" + subVals
+									.length + "): " + Arrays.toString(
+											subVals) + "."));
+					continue;
+				}
+				String[] confVals = subVals[1].split("=", 2);
+				if (confVals.length != 2) {
+					ErrorHandler.logError(
+							new GenericReport("Failed to process help " +
+									"value for /" + label + " with args " +
+									Arrays.toString(args) + ": Spliting " +
+									subVals[0] + " with '=' produced an " +
+									"array of length other than 2 (" + 
+									confVals.length + "): " + Arrays
+									.toString(confVals) + ".  This " +
+									"is part of " + Arrays.toString(
+											subVals) + "."));
+					continue;
+				}
+				switch (subVals[0].toLowerCase(Locale.ENGLISH)) {
+				case "sbe": {
+					if (SkyblockExtension.inst().getConfig()
+							.get(confVals[0], "null").toString()
+							.equalsIgnoreCase(confVals[1])) {
+						return "§7" + commandText;
+					}
+					continue loop;
+				}
+				case "uskyblock": {
+					if (uSkyBlock.getInstance().getConfig()
+							.get(confVals[0], "null").toString()
+							.equalsIgnoreCase(confVals[1])) {
+						return "§7" + commandText;
+					}
+					continue loop;
+				}
+				default: {
+					ErrorHandler.logError(
+							new GenericReport("Failed to process help " +
+									"value for /" + label +" with args " +
+									Arrays.toString(args) + ": Unknown " +
+									"configuration file " + subVals[0] +
+									" (of " + Arrays.toString(subVals) +
+									")."));
+				}
+				}
+			}
+		}
 		
 		return "§a" + commandText;
 	}
