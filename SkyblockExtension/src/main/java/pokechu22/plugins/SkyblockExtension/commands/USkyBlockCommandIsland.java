@@ -237,9 +237,24 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				""
 				});
 		map.put("accept", new String[]{
+				//Help
+				"Accepts an existing invite.  You will lose your own " +
+				"island if you have one.  \nUsage: \n§6/island accept§f.",
+				//Perm
+				"usb.party.join" +
+				"_has_invite",
+				//Conf
 				""
 		});
-		map.put("reject", new String[]{});
+		map.put("reject", new String[]{
+				//Help
+				"Rejects an existing invite.\n" +
+				"Usage: \n§6/island accept§f.",
+				//Perm
+				"_has_invite",
+				//Conf
+				""
+		});
 		//These all seem like disabled debug commands, but some work.
 		map.put("partypurge", new String[]{});
 		map.put("partyclean", new String[]{});
