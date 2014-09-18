@@ -174,11 +174,71 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		map.put("lock", new String[]{});
 		map.put("unlock", new String[]{});
 		map.put("help", new String[]{});
-		map.put("top", new String[]{});
-		map.put("info", new String[]{});
-		map.put("level", new String[]{});
-		map.put("invite", new String[]{});
-		map.put("accept", new String[]{});
+		map.put("top", new String[]{
+				//Help
+				"Display the top 10 ranked islands.\n" + 
+				"Usage: §6/island top§f.",
+				//Perm
+				"usb.island.topten",
+				//Conf
+				"uskyblock.options.island.useTopTen"
+				});
+		map.put("info", new String[]
+				{
+				//Help
+				"Check your own or another player's island level.\n" + 
+				"Usage: \n§6/island info§f: Get your own island's level " +
+				"(only usable on your own island, for odd reasons)\n" +
+				"§6/island info <player>§f: Get the level of " +
+				"<player>'s island.  (Can even be used to get your " +
+				"own level on other islands).  \n" +
+				"Note that this command can behave strangely at times, " +
+				"such as giving level 0 for someone really high level.  " +
+				"It is also §lrequired§r that you run this command " +
+				"before completing any challenge that requires island " +
+				"level to be at least some number.\n" +
+				"Aliases: \n· §6/island level§f.",
+				//Perm
+				"usb.island.info",
+				//Conf
+				"uskyblock.options.island.useIslandLevel"
+				});
+		map.put("level", new String[]
+				{
+				//Help
+				"Check your own or another player's island level.\n" + 
+				"Usage: \n§6/island level§f: Get your own island's level " +
+				"(only usable on your own island, for odd reasons)\n" +
+				"§6/island level <player>§f: Get the level of " +
+				"<player>'s island.  (Can even be used to get your " +
+				"own level on other islands).  \n" +
+				"Note that this command can behave strangely at times, " +
+				"such as giving level 0 for someone really high level.  " +
+				"It is also §lrequired§r that you run this command " +
+				"before completing any challenge that requires island " +
+				"level to be at least some number.\n" +
+				"Aliases: \n· §6/island info§f.",
+				//Perm
+				"usb.island.info",
+				//Conf
+				"uskyblock.options.island.useIslandLevel"
+				});
+		map.put("invite", new String[]{
+				//Help
+				"Invites a player to your island.  The other player " +
+				"lose their island if they accept.\n" +
+				"Usage: \n§6/island invite <player>§f: Invite <player>" +
+				"to your island.\n§6/island invite§f: View how many " +
+				"more people you can invite and stuff like that.",
+				//Perm
+				"usb.party.create," +
+				"_is_owner",
+				//Conf
+				""
+				});
+		map.put("accept", new String[]{
+				""
+		});
 		map.put("reject", new String[]{});
 		//These all seem like disabled debug commands, but some work.
 		map.put("partypurge", new String[]{});
