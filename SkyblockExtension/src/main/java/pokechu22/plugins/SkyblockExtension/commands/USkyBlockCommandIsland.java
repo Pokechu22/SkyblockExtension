@@ -344,8 +344,40 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		//map.put("info", new String[]{});
 		//map.put("level", new String[]{});
 		//map.put("invite", new String[]{});
-		map.put("remove", new String[]{});
-		map.put("kick", new String[]{});
+		map.put("remove", new String[]{
+				//Help
+				"Forcibly removes another player from your island.\n" +
+				"This applies only to people who were invited; neither " +
+				"visitors nor guests are included.  \n" +
+				"You must be owner to use this command.  Attempting to " +
+				"use this with no party results in a " + 
+				"sarcastic comment.  Usage:\n" +
+				"§6/island remove <player>§r: Removes <player>.\n" +
+				"Aliases: \n· §6/island kick§f.",
+				//Perm
+				"usb.party.kick," +
+				"_is_owner" + 
+				"_has_party",
+				//Conf
+				""
+		});
+		map.put("kick", new String[]{
+				//Help
+				"Forcibly removes another player from your island.\n" +
+				"This applies only to people who were invited; neither " +
+				"visitors nor guests are included.  \n" +
+				"You must be owner to use this command.  Attempting to " +
+				"use this with no party results in a " + 
+				"sarcastic comment.  Usage:\n" +
+				"§6/island kick <player>§r: Removes <player>.\n" +
+				"Aliases: \n· §6/island remove§f.",
+				//Perm
+				"usb.party.kick," +
+				"_is_owner" + 
+				"_has_party",
+				//Conf
+				""
+		});
 		map.put("makeleader", new String[]{});
 		map.put("checkparty", new String[]{});
 		//And overridden, custom commands.
