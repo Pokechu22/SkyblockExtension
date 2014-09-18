@@ -296,7 +296,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				//Help
 				"Disabled moderator command.  Cannot be used.\n" +
 				"There may be a similar command in §6/dev§f, but that" +
-				"is out of the scope of help.  Sorry.  Too bad.",
+				"is out of the scope of help.  Sorry.  Too bad.\n" +
+				"However, §6/island checkparty§f may be helpful.",
 				//Perm
 				"usb.mod.party," +
 				"_false",
@@ -378,8 +379,34 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				//Conf
 				""
 		});
-		map.put("makeleader", new String[]{});
-		map.put("checkparty", new String[]{});
+		map.put("makeleader", new String[]{
+				//Help
+				"Transfers ownership of your island to another player.\n" +
+				"§lRequirements:§r\n" +
+				"  · You must be the current owner\n" +
+				"  · The other player must be a member of your island\n" +
+				"  · There must be no other players in your island party" +
+				"\nUsage:\n§6/island makeleader <player>§r: " +
+				"Makes <player> the leader of your island.",
+				//Perm
+				"usb.party.makeleader," +
+				"_has_party," +
+				"_is_owner",
+				//Conf
+				""
+		});
+		map.put("checkparty", new String[]{
+				//Help
+				"Provides a list of player in another player's party.\n" +
+				"Usage:\n§6/island checkparty <player>§r: Lists " +
+				"players in <player>'s party.\n" +
+				"NOTE: There is a similar, but disabled, command: " +
+				"§6/island partylist§f.  That cannot be used.", 
+				//Perm
+				"usb.mod.party",
+				//Conf
+				""
+		});
 		//And overridden, custom commands.
 		map.put("help2", new String[]{});
 		
