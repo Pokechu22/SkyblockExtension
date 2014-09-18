@@ -227,7 +227,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				"usb.island.info",
 				//Conf
 				"uskyblock.options.island.useIslandLevel"
-				});
+		});
 		map.put("invite", new String[]{
 				//Help
 				"Invites a player to your island.  The other player " +
@@ -240,7 +240,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				"_is_owner",
 				//Conf
 				""
-				});
+		});
 		map.put("accept", new String[]{
 				//Help
 				"Accepts an existing invite.  You will lose your own " +
@@ -261,11 +261,57 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				""
 		});
 		//These all seem like disabled debug commands, but some work.
-		map.put("partypurge", new String[]{});
-		map.put("partyclean", new String[]{});
-		map.put("purgeinvites", new String[]{});
-		map.put("partylist", new String[]{});
-		map.put("invitelist", new String[]{});
+		map.put("partypurge", new String[]{
+				//Help
+				"Disabled moderator command.  Cannot be used.\n" +
+				"There may be a similar command in §6/dev§f, but that" +
+				"is out of the scope of help.  Sorry.  Too bad.",
+				//Perm
+				"usb.mod.party," +
+				"_false",
+				//Conf
+				""
+		});
+		map.put("partyclean", new String[]{
+				//Help
+				"Disabled moderator command.  Cannot be used.\n" +
+				"There may be a similar command in §6/dev§f, but that" +
+				"is out of the scope of help.  Sorry.  Too bad.",
+				//Perm
+				"usb.mod.party," +
+				"_false",
+				//Conf
+				""
+		});
+		map.put("purgeinvites", new String[]{
+				//Help
+				"Moderator command that resets all invites.\n" +
+				"Usage:\n§6/island purgeinvites§f.",
+				//Perm
+				"usb.mod.party",
+				//Conf
+				""
+		});
+		map.put("partylist", new String[]{
+				//Help
+				"Disabled moderator command.  Cannot be used.\n" +
+				"There may be a similar command in §6/dev§f, but that" +
+				"is out of the scope of help.  Sorry.  Too bad.",
+				//Perm
+				"usb.mod.party," +
+				"_false",
+				//Conf
+				""
+		});
+		map.put("invitelist", new String[]{
+				//Help
+				"Moderator command that lists all invites.\n" +
+				"Usage:\n§6/island invitelist§f.",
+				//Perm
+				"usb.mod.party",
+				//Conf
+				""
+		});
 		//More normal commands.
 		map.put("leave", new String[]{});
 		map.put("party", new String[]{});
