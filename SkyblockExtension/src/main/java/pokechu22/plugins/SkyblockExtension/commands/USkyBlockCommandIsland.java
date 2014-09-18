@@ -148,6 +148,11 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * <h2><code>on_ultimateskyblock</code></h2>
 	 * You must be on the server <code>UltimateSkyblock</code>.
 	 * I'm not kidding.  This is a real requirement in the plugin.
+	 * <h2><code>false</code></h2>
+	 * Automatically fails.  This is usefull for commands which are 
+	 * disabled and thus unusable.  
+	 * <code>!false</code> automatically succeeds, but that's pointless.
+	 * Both of these use gray text rather than red text on failure.
 	 * 
 	 * <h1>[2]:</h1> Required value in config.  The first value should be 
 	 * either <code>sbe</code> or <code>uskyblock</code>, followed by the
@@ -480,6 +485,13 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 								.equalsIgnoreCase("UltimateSkyblock")) {
 							return "§c" + commandText;
 						}
+						continue loop;
+					}
+					case "false": {
+						return "§7" + commandText;
+					}
+					case "!false": {
+						//Seems utterly pointless
 						continue loop;
 					}
 					default: {
