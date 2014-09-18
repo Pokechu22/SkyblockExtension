@@ -313,8 +313,33 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				""
 		});
 		//More normal commands.
-		map.put("leave", new String[]{});
-		map.put("party", new String[]{});
+		map.put("leave", new String[]{
+				//Help
+				"Leaves your current island.  Cannot be used by the " +
+				"owner of the island; use §6/island kick§r for that.  " +
+				"Also cannot be used if you are the only person.  In " +
+				"that case, use §6/island restart§r.\nUsage:\n" +
+				"§6/island leave§r.",
+				//Perm
+				"usb.party.join," +
+				"_has_party," +
+				"_!is_owner",
+				//Conf
+				""
+		});
+		map.put("party", new String[]{
+				//Help
+				"Gives you a list of who is in your party.  \nUsage:\n" +
+				"§6/island party§f.\n" +
+				"Note that this CAN also be used when you don't have a " +
+				"party - if you have an invite it will show you who " +
+				"invited you.  ",
+				//TODO: If I make a raw alternative, link it here?
+				//Perm
+				"_has_party",
+				//Conf
+				""
+		});
 		//3-args commands, now.  Some are duplicates, which are commented out.
 		//map.put("info", new String[]{});
 		//map.put("level", new String[]{});
