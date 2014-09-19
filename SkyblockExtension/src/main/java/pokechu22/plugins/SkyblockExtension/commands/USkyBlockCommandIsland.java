@@ -212,8 +212,38 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				//Conf
 				""
 		});
-		map.put("sethome", new String[]{});
-		map.put("tpset", new String[]{});
+		map.put("sethome", new String[]{
+				//Help
+				"Sets the home location of your island.\n" +
+				"This is where you go when you do §6/island§r.  It " +
+				"must be on your own island.\nUsage:\n" +
+				"§6/island sethome§r.\n" +
+				"Aliases: \n· §6/island tpset§f.",
+				//TODO Does this work when you are not the owner?
+				//And is it player-dependent or independent?
+				//Perm
+				"usb.island.sethome," +
+				"on_skyblock_world",
+				//TODO On island.
+				//Conf
+				""
+		});
+		map.put("tpset", new String[]{
+				//Help
+				"Sets the home location of your island.\n" +
+				"This is where you go when you do §6/island§r.  It " +
+				"must be on your own island.\nUsage:\n" +
+				"§6/island tpset§r.\n" +
+				"Aliases: \n· §6/island sethome§f.",
+				//TODO Does this work when you are not the owner?
+				//And is it player-dependent or independent?
+				//Perm
+				"usb.island.sethome," +
+				"on_skyblock_world",
+				//TODO On island.
+				//Conf
+				""
+		});
 		map.put("lock", new String[]{});
 		map.put("unlock", new String[]{});
 		map.put("help", new String[]{});
