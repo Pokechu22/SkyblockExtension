@@ -225,8 +225,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				//And is it player-dependent or independent?
 				//Perm
 				"usb.island.sethome," +
-				"on_skyblock_world",
-				//TODO On island.
+				"on_skyblock_world," +
+				"on_own_island",
 				//Conf
 				""
 		});
@@ -241,7 +241,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				//And is it player-dependent or independent?
 				//Perm
 				"usb.island.sethome," +
-				"on_skyblock_world",
+				"on_skyblock_world," +
+				"on_own_island",
 				//TODO On island.
 				//Conf
 				""
