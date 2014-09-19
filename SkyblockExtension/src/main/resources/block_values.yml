@@ -1,0 +1,25 @@
+#Contains various block values.  This can be set to whatever is wanted.
+#It is only used when useCustomBlockValues is set to true in config.yml.
+
+#Default value of a block.
+defaultBlockValue: 1
+
+#Pools of maximums
+maximumPools: 
+  cobbleCount: 
+    max: 10000
+
+#Actual values
+blockValues:
+  #Air 
+  0: 0
+  #Water and lava, flowing and nonflowing
+  8: 0
+  9: 0
+  10: 0
+  11: 0
+  #Cobble
+  4: 
+    value: 1
+    maximumPool: 'cobbleCount'
+    
