@@ -243,13 +243,53 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				"usb.island.sethome," +
 				"on_skyblock_world," +
 				"on_own_island",
-				//TODO On island.
 				//Conf
 				""
 		});
-		map.put("lock", new String[]{});
-		map.put("unlock", new String[]{});
-		map.put("help", new String[]{});
+		map.put("lock", new String[]{
+				//Help
+				"Locks your island, which prevents players who are not " +
+				"members of your island from entering it.\n" +
+				"This is only functional when the server uses " +
+				"WorldGaurd for permissions.  \nUsage:\n" +
+				"§6/island lock§r: locks your own island.\n" +
+				"See also §6/island unlock§r.",
+				//Perm
+				"usb.lock," +
+				"_is_owner",
+				//Conf
+				"uskyblock.options.island.allowIslandLock," +
+				"uskyblock.options.island.protectWithWorldGuard"
+		});
+		map.put("unlock", new String[]{
+				//Help
+				"Unlocks your island, which allows players who are not " +
+				"members of your island to enter it.\n" +
+				"This is only functional when the server uses " +
+				"WorldGaurd for permissions.  \nUsage:\n" +
+				"§6/island unlock§r: unlocks your own island.\n" +
+				"See also §6/island lock§r.",
+				//Perm
+				"usb.lock," +
+				"_is_owner",
+				//Conf
+				"uskyblock.options.island.allowIslandLock," +
+				"uskyblock.options.island.protectWithWorldGuard"
+		});
+		map.put("help", new String[]{
+				//Help
+				"Older help information, which is not ideal but can be " +
+				"helpful.  Use §6/island help2§r instead, as it is " +
+				"better (this totally isn't biassed...)\nUsage:\n" +
+				"§6/island help§r: provides 1 meager sentence of help " +
+				"for the specific command, or just ignores it if you " +
+				"cannot use the command in the first place.\n" +
+				"There is no extended help for any command.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
 		map.put("top", new String[]{
 				//Help
 				"Display the top 10 ranked islands.\n" + 
