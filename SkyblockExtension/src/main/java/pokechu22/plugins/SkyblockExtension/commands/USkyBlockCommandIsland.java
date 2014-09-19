@@ -172,8 +172,46 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		
 		//TODO
 		//These were all taken from the decompilation.
-		map.put("restart", new String[]{""});
-		map.put("reset", new String[]{});
+		map.put("restart", new String[]{
+				//Help
+				"Restarts your island.\n" +
+				"Your inventory will be cleared, and everything " +
+				"reset.  You cannot use this command if you aren't " +
+				"the island owner, nor can you use it if you have " +
+				"other players in your party.  §6/island kick§r them " +
+				"if you must.  \nUsage\n:§6/island reset§r: reset " +
+				"your island.\nNote: this command operates on a " +
+				"cooldown; you cannot spam it.  Also note that " +
+				"§l§ochallenges will NOT be reset§r, and thus you " +
+				"may end up not being able to recomplete 1-time " +
+				"challenges.  You have been warned.\n" +
+				"Aliases: \n· §6/island reset§f.",
+				//Perm
+				"_is_owner," +
+				"_!has_party",
+				//Conf
+				""
+		});
+		map.put("reset", new String[]{
+				//Help
+				"Restarts your island.\n" +
+				"Your inventory will be cleared, and everything " +
+				"reset.  You cannot use this command if you aren't " +
+				"the island owner, nor can you use it if you have " +
+				"other players in your party.  §6/island kick§r them " +
+				"if you must.  \nUsage\n:§6/island restart§r: reset " +
+				"your island.\nNote: this command operates on a " +
+				"cooldown; you cannot spam it.  Also note that " +
+				"§l§ochallenges will NOT be reset§r, and thus you " +
+				"may end up not being able to recomplete 1-time " +
+				"challenges.  You have been warned.\n" +
+				"Aliases: \n· §6/island restart§f.",
+				//Perm
+				"_is_owner," +
+				"_!has_party",
+				//Conf
+				""
+		});
 		map.put("sethome", new String[]{});
 		map.put("tpset", new String[]{});
 		map.put("lock", new String[]{});
@@ -187,7 +225,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				"usb.island.topten",
 				//Conf
 				"uskyblock.options.island.useTopTen"
-				});
+		});
 		map.put("info", new String[]
 				{
 				//Help
@@ -207,7 +245,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				"usb.island.info",
 				//Conf
 				"uskyblock.options.island.useIslandLevel"
-				});
+		});
 		map.put("level", new String[]
 				{
 				//Help
