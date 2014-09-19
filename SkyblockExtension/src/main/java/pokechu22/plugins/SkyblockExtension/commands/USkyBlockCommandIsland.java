@@ -145,6 +145,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * You must have an invite to an island.
 	 * <h2><code>on_skyblock_world</code></h2>
 	 * You must be on the Skyblock world.
+	 * <h2><code>on_own_island</code></h2>
+	 * You must be on your own island.
 	 * <h2><code>on_ultimateskyblock</code></h2>
 	 * You must be on the server <code>UltimateSkyblock</code>.
 	 * I'm not kidding.  This is a real requirement in the plugin.
@@ -697,6 +699,20 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 					case "!on_skyblock_world": {
 						if (uSkyBlock.getSkyBlockWorld().equals(
 								player.getWorld())) {
+							return "§c" + commandText;
+						}
+						continue loop;
+					}
+					case "on_own_island": {
+						if (!uSkyBlock.getInstance()
+								.playerIsOnIsland(player)) {
+							return "§c" + commandText;
+						}
+						continue loop;
+					}
+					case "!on_own_island": {
+						if (uSkyBlock.getInstance()
+								.playerIsOnIsland(player)) {
 							return "§c" + commandText;
 						}
 						continue loop;
