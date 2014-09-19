@@ -172,7 +172,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		
 		//TODO
 		//These were all taken from the decompilation.
-		map.put("restart", new String[]{});
+		map.put("restart", new String[]{""});
 		map.put("reset", new String[]{});
 		map.put("sethome", new String[]{});
 		map.put("tpset", new String[]{});
@@ -414,7 +414,11 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		subCommands = Collections.unmodifiableMap(map);
 	}
 	
-	private static final String[] rootHelp = {};
+	private static final String[] rootHelp = {
+		"Start your island, or teleport back to one you have.\n" + 
+		"§fUsage: \n§6/island§f.",
+		"usb.island.create"
+	};
 	
 	/**
 	 * Tab-completion.  This wasn't part of the vanilla system!
@@ -469,15 +473,34 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 			final String preface = getColorPreface(rootHelp, sender, cmd,
 					label, args);
 			
+			String value_main;
+			if (rootHelp.length != 0) {
+				value_main = rootHelp[0];
+			} else {
+				value_main = "";
+			}
+			
+			sender.sendMessage(getColorPreface(rootHelp, 
+					sender, cmd, preface, args) + "§f: " + 
+					value_main);
+			
+			
+			
 			for (Map.Entry<String, String[]> entry : subCommands.entrySet()) {
-				sender.sendMessage(trailOff(preface + entry.getKey() + "§f:" +
-						entry.getValue()));
+				String value;
+				if (entry.getValue().length != 0) {
+					value = entry.getValue()[0];
+				} else {
+					value = "";
+				}
+				sender.sendMessage(trailOff(preface + entry.getKey() + 
+						"§f:" + value));
 			}
 			return;
 		}
 		if (helpArgs.length == 1) {
 			//Message prepended to each message.
-			final String preface = "§7/" + label + " " + helpArgs[0] + " ";
+			final String preface = helpArgs[0];
 			
 			//If there is no help message...
 			if (!subCommands.containsKey(helpArgs[0])) {
@@ -485,10 +508,17 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				return;
 			}
 		    
+			String value;
+			if (subCommands.get(helpArgs[0]).length != 0) {
+				value = subCommands.get(helpArgs[0])[0];
+			} else {
+				value = "";
+			}
+			
 			//Send the root message if it exists
 			sender.sendMessage(getColorPreface(subCommands.get(helpArgs[0]), 
 					sender, cmd, preface, args) + "§f: " + 
-					subCommands.get(helpArgs[0]));
+					value);
 			return;
 		}
 		sender.sendMessage(nonexistantHelpMessage);
