@@ -143,8 +143,25 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 */
 	protected static class AsyncIslandLevelCalculator implements Runnable {
 
+		/**
+		 * The player that receives initiated the request and thus 
+		 * receives associated chat messages.
+		 */
 		private Player player;
+		/**
+		 * The player who's island is being calculated.
+		 */
 		private String islandPlayer;
+		
+		/**
+		 * The mapping for different block values.
+		 * TODO: use.
+		 */
+		public static Map<Integer, Integer> blockValues;
+		/**
+		 * The maximum amount of cobble that will be counted.
+		 */
+		public static int maximumCobble = 10000;
 		
 		public AsyncIslandLevelCalculator(Player player, String islandPlayer) {
 			this.player = player;
