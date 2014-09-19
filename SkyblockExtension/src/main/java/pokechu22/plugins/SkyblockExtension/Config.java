@@ -73,6 +73,8 @@ public class Config {
 				"uSkyBlockOverrides.islandCommand.enableHelp2", true);
 		USkyBlockCommandIsland.allowIgnoreCase = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.allowIgnoreCase", true);
+		USkyBlockCommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
+				"uSkyBlockOverrides.islandCommand.useCustomBlockValues", true);
 		
 		getLogger().info("Configuration loaded!");
 	}
@@ -99,6 +101,9 @@ public class Config {
 		getDefaultConfig().set(
 				"uSkyBlockOverrides.islandCommand.allowIgnoreCase",
 				USkyBlockCommandIsland.allowIgnoreCase);
+		getDefaultConfig().set(
+				"uSkyBlockOverrides.islandCommand.useCustomBlockValues",
+				USkyBlockCommandIsland.useCustomBlockValues);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}

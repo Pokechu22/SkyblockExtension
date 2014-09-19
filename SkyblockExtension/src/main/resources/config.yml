@@ -10,6 +10,8 @@ uSkyBlockOverrides:
     #As of right now that isn't an issue, but this should be disabled only
     #if it becomes an issue.
     allowIgnoreCase: true
+    #Use custom block values?  (See block_values.yml)
+    useCustomBlockValues: true
 
 errorHandling: 
   #Broadcast an error to all players who have the permission 
