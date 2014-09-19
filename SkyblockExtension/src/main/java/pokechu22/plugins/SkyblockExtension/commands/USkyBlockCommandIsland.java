@@ -153,89 +153,88 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		
 		@Override
 		public void run() {
-			/* 1399 */           System.out.print("Calculating island level in async thread");
-			/*      */           try {
-			/* 1401 */             String playerName = player.getName();
-			/*      */             Location l;
-			/* 1409 */             if (((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getHasParty())
-			/*      */             {
-			/* 1411 */               l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getPartyIslandLocation();
-			/*      */             }
-			/*      */             else
-			/* 1414 */               l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getIslandLocation();
-			/* 1415 */             int blockcount = 0;
-			/* 1416 */             if (playerName.equalsIgnoreCase(islandPlayer))
-			/*      */             {
-			/* 1418 */               int cobblecount = 0;
-			/* 1419 */               int px = l.getBlockX();
-			/* 1420 */               int py = l.getBlockY();
-			/* 1421 */               int pz = l.getBlockZ();
-			/* 1422 */               for (int x = -50; x <= 50; x++) {
-			/* 1423 */                 for (int y = Settings.island_height * -1; y <= 255 - Settings.island_height; y++) {
-			/* 1424 */                   for (int z = -50; z <= 50; z++)
-			/*      */                   {
-			/* 1426 */                     Block b = new Location(l.getWorld(), px + x, py + y, pz + z).getBlock();
-			/* 1427 */                     if (b.getTypeId() == 57)
-			/* 1428 */                       blockcount += 300;
-			/* 1429 */                     if ((b.getTypeId() == 41) || (b.getTypeId() == 116) || (b.getTypeId() == 122))
-			/* 1430 */                       blockcount += 150;
-			/* 1431 */                     if ((b.getTypeId() == 49) || (b.getTypeId() == 42))
-			/* 1432 */                       blockcount += 10;
-			/* 1433 */                     if ((b.getTypeId() == 47) || (b.getTypeId() == 84))
-			/* 1434 */                       blockcount += 5;
-			/* 1435 */                     if ((b.getTypeId() == 79) || (b.getTypeId() == 82) || (b.getTypeId() == 112) || (b.getTypeId() == 2) || (b.getTypeId() == 110))
-			/* 1436 */                       blockcount += 3;
-			/* 1437 */                     if ((b.getTypeId() == 98) || (b.getTypeId() == 45) || (b.getTypeId() == 35) || (b.getTypeId() == 24) || 
-			/* 1438 */                       (b.getTypeId() == 121) || (b.getTypeId() == 108) || (b.getTypeId() == 109) || (b.getTypeId() == 43) || 
-			/* 1439 */                       (b.getTypeId() == 20))
-			/* 1440 */                       blockcount += 2;
-			/* 1441 */                     if (((b.getTypeId() != 0) && (b.getTypeId() != 8) && (b.getTypeId() != 9) && (b.getTypeId() != 10) && (b.getTypeId() != 11) && (b.getTypeId() != 4)) || ((b.getTypeId() == 4) && (cobblecount < 10000)))
-			/*      */                     {
-			/* 1443 */                       blockcount++;
-			/* 1444 */                       if (b.getTypeId() == 4)
-			/*      */                       {
-			/* 1446 */                         cobblecount++;
-			/*      */                       }
-			/*      */                     }
-			/*      */                   }
-			/*      */                 }
-			/*      */               }
-			/*      */             }
-			/*      */ 
-			/* 1454 */             if (playerName.equalsIgnoreCase(islandPlayer))
-			/*      */             {
-			/* 1456 */               ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).setIslandLevel(blockcount / 100);
-			/*      */             }
-			/*      */           } catch (Exception e) {
-			/* 1459 */             System.out.print("Error while calculating Island Level: " + e);
-			/*      */           }
-			/* 1462 */           System.out.print("Finished async info thread");
-			/*      */ 
-//			/* 1465 */           uSkyBlock.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(uSkyBlock.getInstance(), new Runnable()
-//			/*      */           {
-//			/*      */             public void run()
-//			/*      */             {
-//			/* 1471 */               System.out.print("Back to sync thread for info");
-//			/* 1472 */               if (Bukkit.getPlayer(this) != null)
-//			/*      */               {
-//			/* 1474 */                 Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.YELLOW + "Information about " + this.val$islandPlayerx + "'s Island:");
-//			/* 1475 */                 if (this.val$playerx.equalsIgnoreCase(this.val$islandPlayerx))
-//			/*      */                 {
-//			/* 1477 */                   Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(this.val$playerx)).getIslandLevel());
-//			/*      */                 }
-//			/*      */                 else {
-//			/* 1480 */                   PlayerInfo pi = uSkyBlock.getInstance().readPlayerFile(this.val$islandPlayerx);
-//			/* 1481 */                   if (pi != null)
-//			/* 1482 */                     Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + pi.getIslandLevel());
-//			/*      */                   else
-//			/* 1484 */                     Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.RED + "Error: Invalid Player");
-//			/*      */                 }
-//			/*      */               }
-//			/* 1487 */               System.out.print("Finished with sync thread for info");
-//			/*      */             }
-//			/*      */           }
-//			/*      */           , 0L);
-			/*      */         
+			System.out.print("Calculating island level in async thread");
+			try {
+				String playerName = player.getName();
+				Location l;
+				if (((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getHasParty())
+				{
+					l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getPartyIslandLocation();
+				}
+				else
+					l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getIslandLocation();
+				int blockcount = 0;
+				if (playerName.equalsIgnoreCase(islandPlayer))
+				{
+					int cobblecount = 0;
+					int px = l.getBlockX();
+					int py = l.getBlockY();
+					int pz = l.getBlockZ();
+					for (int x = -50; x <= 50; x++) {
+						for (int y = Settings.island_height * -1; y <= 255 - Settings.island_height; y++) {
+							for (int z = -50; z <= 50; z++)
+							{
+								Block b = new Location(l.getWorld(), px + x, py + y, pz + z).getBlock();
+								if (b.getTypeId() == 57)
+									blockcount += 300;
+								if ((b.getTypeId() == 41) || (b.getTypeId() == 116) || (b.getTypeId() == 122))
+									blockcount += 150;
+								if ((b.getTypeId() == 49) || (b.getTypeId() == 42))
+									blockcount += 10;
+								if ((b.getTypeId() == 47) || (b.getTypeId() == 84))
+									blockcount += 5;
+								if ((b.getTypeId() == 79) || (b.getTypeId() == 82) || (b.getTypeId() == 112) || (b.getTypeId() == 2) || (b.getTypeId() == 110))
+									blockcount += 3;
+								if ((b.getTypeId() == 98) || (b.getTypeId() == 45) || (b.getTypeId() == 35) || (b.getTypeId() == 24) || 
+										(b.getTypeId() == 121) || (b.getTypeId() == 108) || (b.getTypeId() == 109) || (b.getTypeId() == 43) || 
+										(b.getTypeId() == 20))
+									blockcount += 2;
+								if (((b.getTypeId() != 0) && (b.getTypeId() != 8) && (b.getTypeId() != 9) && (b.getTypeId() != 10) && (b.getTypeId() != 11) && (b.getTypeId() != 4)) || ((b.getTypeId() == 4) && (cobblecount < 10000)))
+								{
+									blockcount++;
+									if (b.getTypeId() == 4)
+									{
+										cobblecount++;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if (playerName.equalsIgnoreCase(islandPlayer))
+				{
+					((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).setIslandLevel(blockcount / 100);
+				}
+			} catch (Exception e) {
+				System.out.print("Error while calculating Island Level: " + e);
+			}
+			System.out.print("Finished async info thread");
+
+//			uSkyBlock.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(uSkyBlock.getInstance(), new Runnable()
+//			{
+//				public void run()
+//				{
+//					System.out.print("Back to sync thread for info");
+//					if (Bukkit.getPlayer(this) != null)
+//					{
+//						Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.YELLOW + "Information about " + this.val$islandPlayerx + "'s Island:");
+//						if (this.val$playerx.equalsIgnoreCase(this.val$islandPlayerx))
+//						{
+//							Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(this.val$playerx)).getIslandLevel());
+//						}
+//						else {
+//							PlayerInfo pi = uSkyBlock.getInstance().readPlayerFile(this.val$islandPlayerx);
+//							if (pi != null)
+//								Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + pi.getIslandLevel());
+//							else
+//								Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.RED + "Error: Invalid Player");
+//						}
+//					}
+//					System.out.print("Finished with sync thread for info");
+//				}
+//			}
+//			, 0L);
 		}
 		
 	}
