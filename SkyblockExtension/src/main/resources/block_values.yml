@@ -22,4 +22,32 @@ blockValues:
   4: 
     value: 1
     maximumPool: 'cobbleCount'
-    
+  #Diamond block
+  57: 300
+  #Gold block, enchantment table, Dragon egg (!)
+  41: 150
+  116: 150
+  122: 150
+  #Iron block, Obsidian: 
+  42: 10
+  49: 10
+  #Bookshelf, jukebox 
+  47: 5
+  84: 5
+  #Ice, clay, nether brick, grass, mycelium (mycel? wat bukkit)
+  79: 3
+  82: 3
+  112: 3
+  2: 3
+  110: 3
+  #Stone brick (smooth brick?), brick, wool, sandstone, end stone, 
+  #brick stairs, stone stairs, double stone-based slabs, glass
+  98: 2
+  45: 2
+  35: 2
+  24: 2
+  121: 2
+  108: 2
+  109: 2
+  43: 2
+  20: 2
