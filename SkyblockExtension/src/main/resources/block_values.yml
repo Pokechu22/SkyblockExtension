@@ -10,6 +10,11 @@ maximumPools:
     max: 10000
   endCount: 
     max: 5000
+  #-1 means that it is infinite.
+  #You can reference it explicitly if needed.
+  #DO NOT REMOVE IT, however.  Doing so WILL CAUSE ISSUES.
+  default: 
+    max: -1
 
 #Actual values
 blockValues:
@@ -57,7 +62,15 @@ blockValues:
     value: 1
     maximumPool: 'cobbleCount'
   #End stone
-  4: 
+  121: 
     value: 3
     postPoolValue: 2
-    maximumPool: 'cobbleCount'
+    maximumPool: 'endCount'
+    
+#For reference, this can be done to make only certain data values work:
+#This example uses wool.  Obvously, it is not a good thing for use on an 
+#actual server, but it is a good example.
+# 43: 
+#   value: -1000
+#   data0: 0
+#   data15: 1000000000

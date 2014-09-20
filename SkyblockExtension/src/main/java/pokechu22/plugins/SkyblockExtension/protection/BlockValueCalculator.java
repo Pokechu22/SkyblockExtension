@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -19,23 +20,98 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
  * Calculates the values of blocks in an island.
  * 1 should be created per calculation.
  * 
- * TODO: Is this the propper package?
+ * TODO: Is this the proper package?
  * 
  * @author Pokechu22
  *
  */
 public class BlockValueCalculator {
+	/**
+	 * The default value for blocks.
+	 */
+	private final int defaultBlockValue;
 	
-	private Map<String, Integer> usedItems = 
+	/**
+	 * Pool of used values.
+	 */
+	private Map<String, Integer> poolValues = 
 			new HashMap<String, Integer>();
+	
 	public int islandPoints;
 	
 	public BlockValueCalculator() {
 		islandPoints = 0;
+		
+		defaultBlockValue = getBlockValuesConfig()
+				.getInt("defaultBlockValue");
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void addBlock(Block block) {
+		final String keyName = "blockValues." + block.getTypeId();
+		final String data = ".data" + block.getData();
+		Object object = getBlockValuesConfig().get(keyName);
+		if (object == null) {
+			islandPoints += defaultBlockValue;
+			return;
+		}
+		if (object instanceof Integer) {
+			islandPoints += ((Integer) object).intValue();
+			return;
+		}
+		//If not an integer, treat it as a map.
+		int value = getBlockValuesConfig().getInt(keyName + 
+				".value", defaultBlockValue);
+		int postPoolValue = getBlockValuesConfig().getInt(
+				keyName + ".postPoolValue", 0);
+		String maximumPool = getBlockValuesConfig().getString(
+				keyName + ".maximumPool", "default");
 		
+		//For any unspecified values, it uses the generalized value.
+		//It's an odd-looking method, but it's equivilant to doing
+		//int dataSpecificValue = getBlockValuesConfig().getInt(
+		//keyName + data);
+		//if (dataSpecificValue != null) {
+		//    value = dataSpecificValue)
+		//}
+		//Except this is clearer, and it actually probably wouldn't
+		//return null if I use getInt()...
+		
+		Object dataSpecificObject = getBlockValuesConfig().get(
+				keyName + data);
+		if (dataSpecificObject instanceof Integer) {
+			islandPoints += ((Integer) dataSpecificObject).intValue();
+			return;
+		}
+		
+		int dataSpecificValue = getBlockValuesConfig().getInt(
+				keyName + data, value);
+		int dataSpecificPostPoolValue = getBlockValuesConfig().getInt(
+				keyName + data, postPoolValue);
+		String dataSpecificMaximumPool = getBlockValuesConfig().getString(
+				keyName + data, maximumPool);
+		
+		//OK, actual process now.
+		if (!poolValues.containsKey(dataSpecificMaximumPool)) {
+			poolValues.put(dataSpecificMaximumPool, 0);
+		}
+		if (poolValues.get(dataSpecificMaximumPool) < 
+				getBlockValuesConfig().getInt("maximumPools." + 
+						dataSpecificMaximumPool + ".max")) {
+			islandPoints += dataSpecificValue;
+			//I don't know if using ++ is safe here, so this is done.
+			Integer currentPoolValue = poolValues.get(
+					dataSpecificMaximumPool);
+			currentPoolValue ++;
+			poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+		} else {
+			islandPoints += dataSpecificPostPoolValue;
+			//I don't know if using ++ is safe here, so this is done.
+			Integer currentPoolValue = poolValues.get(
+					dataSpecificMaximumPool);
+			currentPoolValue ++;
+			poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+		}
 	}
 	
 	/**
@@ -47,7 +123,7 @@ public class BlockValueCalculator {
 	 */
 	private File blockValuesConfigFile = null;
 	
-	private void reloadblockValuesConfig() {
+	private void reloadBlockValuesConfig() {
 		if (blockValuesConfigFile == null) {
 			blockValuesConfigFile = new File(SkyblockExtension.inst()
 					.getDataFolder(), "block_values.yml");
@@ -78,25 +154,25 @@ public class BlockValueCalculator {
 	}
 
 	/**
-	 * Gets the blockValues config.
-	 * @return the blockValues config.
+	 * Gets the BlockValues config.
+	 * @return the BlockValues config.
 	 */
-	private FileConfiguration getblockValuesConfig() {
+	private FileConfiguration getBlockValuesConfig() {
 		if (blockValuesConfig == null) {
-			reloadblockValuesConfig();
+			reloadBlockValuesConfig();
 		}
 		return blockValuesConfig;
 	}
 
 	/**
-	 * Saves the blockValues config.
+	 * Saves the BlockValues config.
 	 */
-	private void saveblockValuesConfig() {
+	private void saveBlockValuesConfig() {
 		if (blockValuesConfig == null || blockValuesConfigFile == null) {
 			return;
 		}
 		try {
-			getblockValuesConfig().save(blockValuesConfigFile);
+			getBlockValuesConfig().save(blockValuesConfigFile);
 		} catch (IOException ex) {
 			SkyblockExtension.inst().getLogger().log(Level.SEVERE,
 					"Could not save config to " + blockValuesConfigFile, 
@@ -105,9 +181,9 @@ public class BlockValueCalculator {
 	}
 
 	/**
-	 * Saves the default blockValues config.
+	 * Saves the default BlockValues config.
 	 */
-	private void saveDefaultblockValuesConfig() {
+	private void saveDefaultBlockValuesConfig() {
 		
 		if (blockValuesConfigFile == null) {
 			blockValuesConfigFile = new File(SkyblockExtension.inst()
