@@ -74,8 +74,8 @@ public class CommandTpCancel {
 		
 		Player player = (Player) sender;
 		
-		Bukkit.getScheduler().runTaskLater(SkyblockExtension.inst(), 
-				new AsyncTpCanceler(player), 4L);
+		Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), 
+				new AsyncTpCanceler(player));
 	}
 	
 	public static List<String> onTabComplete(CommandSender sender, 
