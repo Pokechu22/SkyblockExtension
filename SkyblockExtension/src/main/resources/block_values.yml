@@ -8,6 +8,8 @@ defaultBlockValue: 1
 maximumPools: 
   cobbleCount: 
     max: 10000
+  endCount: 
+    max: 5000
 
 #Actual values
 blockValues:
@@ -20,10 +22,6 @@ blockValues:
   11: 0
   #Vine
   106: 0
-  #Cobble
-  4: 
-    value: 1
-    maximumPool: 'cobbleCount'
   #Diamond block
   57: 300
   #Gold block, enchantment table, Dragon egg (!)
@@ -47,7 +45,6 @@ blockValues:
   45: 2
   35: 2
   24: 2
-  121: 2
   108: 2
   109: 2
   43: 2
@@ -55,3 +52,12 @@ blockValues:
   89: 2
   155: 2
   156: 2
+  #Cobble
+  4: 
+    value: 1
+    maximumPool: 'cobbleCount'
+  #End stone
+  4: 
+    value: 3
+    postPoolValue: 2
+    maximumPool: 'cobbleCount'
