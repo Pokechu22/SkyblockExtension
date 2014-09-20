@@ -18,6 +18,8 @@ blockValues:
   9: 0
   10: 0
   11: 0
+  #Vine
+  106: 0
   #Cobble
   4: 
     value: 1
@@ -40,9 +42,8 @@ blockValues:
   112: 3
   2: 3
   110: 3
-  #Stone brick (smooth brick?), brick, wool, sandstone, end stone, 
-  #brick stairs, stone stairs, double stone-based slabs, glass
-  98: 2
+  #Brick, wool, sandstone, end stone, brick and stone brick stairs, 
+  #Double stone-based slabs, glass, glowstone, quartz block, quartz stairs
   45: 2
   35: 2
   24: 2
@@ -51,3 +52,6 @@ blockValues:
   109: 2
   43: 2
   20: 2
+  89: 2
+  155: 2
+  156: 2
