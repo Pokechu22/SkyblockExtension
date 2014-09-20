@@ -184,6 +184,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				if (playerName.equalsIgnoreCase(islandPlayer))
 				{
 					int cobblecount = 0;
+					int endcount = 0;
 					int px = l.getBlockX();
 					int py = l.getBlockY();
 					int pz = l.getBlockZ();
@@ -192,26 +193,34 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 							for (int z = -50; z <= 50; z++)
 							{
 								Block b = new Location(l.getWorld(), px + x, py + y, pz + z).getBlock();
-								if (b.getTypeId() == 57)
+								if (b.getTypeId() == 57) {
 									blockcount += 300;
-								if ((b.getTypeId() == 41) || (b.getTypeId() == 116) || (b.getTypeId() == 122))
+								}
+								if ((b.getTypeId() == 41) || (b.getTypeId() == 116) || (b.getTypeId() == 122)) {
 									blockcount += 150;
-								if ((b.getTypeId() == 49) || (b.getTypeId() == 42))
+								}
+								if ((b.getTypeId() == 49) || (b.getTypeId() == 42)) {
 									blockcount += 10;
-								if ((b.getTypeId() == 47) || (b.getTypeId() == 84))
+								}
+								if ((b.getTypeId() == 47) || (b.getTypeId() == 84)) {
 									blockcount += 5;
-								if ((b.getTypeId() == 79) || (b.getTypeId() == 82) || (b.getTypeId() == 112) || (b.getTypeId() == 2) || (b.getTypeId() == 110))
+								}
+								if ((b.getTypeId() == 79) || (b.getTypeId() == 82) || (b.getTypeId() == 112) || (b.getTypeId() == 2) || (b.getTypeId() == 110)) {
 									blockcount += 3;
-								if ((b.getTypeId() == 98) || (b.getTypeId() == 45) || (b.getTypeId() == 35) || (b.getTypeId() == 24) || 
+								}
+								if ((b.getTypeId() == 45) || (b.getTypeId() == 35) || (b.getTypeId() == 24) || 
 										(b.getTypeId() == 121) || (b.getTypeId() == 108) || (b.getTypeId() == 109) || (b.getTypeId() == 43) || 
-										(b.getTypeId() == 20))
+										(b.getTypeId() == 20) || (b.getTypeId() == 89) || (b.getTypeId() == 155) || (b.getTypeId() == 156)) {
 									blockcount += 2;
-								if (((b.getTypeId() != 0) && (b.getTypeId() != 8) && (b.getTypeId() != 9) && (b.getTypeId() != 10) && (b.getTypeId() != 11) && (b.getTypeId() != 4)) || ((b.getTypeId() == 4) && (cobblecount < 10000)))
+								}
+								if (((b.getTypeId() != 0) && (b.getTypeId() != 8) && (b.getTypeId() != 106) && (b.getTypeId() != 9) && (b.getTypeId() != 10) && (b.getTypeId() != 11) && (b.getTypeId() != 4)) || ((b.getTypeId() == 4) && (cobblecount < 10000)) || ((b.getTypeId() == 121) && (endcount < 5000)))
 								{
 									blockcount++;
-									if (b.getTypeId() == 4)
-									{
+									if (b.getTypeId() == 4) {
 										cobblecount++;
+									}
+									if (b.getTypeId() == 121) {
+										endcount++;
 									}
 								}
 							}
