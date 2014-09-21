@@ -692,7 +692,12 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				""
 		});
 		//And overridden, custom commands.
-		map.put("help2", new String[]{});
+		map.put("help2", new String[]{
+				//Help
+				"Nicer help system.\nIMPORTANT NOTE: This command is " +
+				"infinitely better than §6/island help§f.\n" +
+				"Usage:\n§6/island help2 [subCommands]§f."
+		});
 		
 		
 		subCommands = Collections.unmodifiableMap(map);
@@ -764,8 +769,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 				value_main = "";
 			}
 			
-			sender.sendMessage(getColorPreface(rootHelp, 
-					sender, cmd, preface, args) + "§f: " + 
+			sender.sendMessage(preface + "§f: " + 
 					value_main);
 			
 			
@@ -784,7 +788,8 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 		}
 		if (helpArgs.length == 1) {
 			//Message prepended to each message.
-			final String preface = helpArgs[0];
+			final String preface = getColorPreface(subCommands.get(helpArgs[0]), 
+					sender, cmd, label, args) + " " + helpArgs[0];
 			
 			//If there is no help message...
 			if (!subCommands.containsKey(helpArgs[0])) {
@@ -800,8 +805,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 			}
 			
 			//Send the root message if it exists
-			sender.sendMessage(getColorPreface(subCommands.get(helpArgs[0]), 
-					sender, cmd, preface, args) + "§f: " + 
+			sender.sendMessage(preface + "§f: " + 
 					value);
 			return;
 		}
