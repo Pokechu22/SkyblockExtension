@@ -240,7 +240,6 @@ public class BlockValueCalculatorTest {
 				case 4: addedD++; break;
 				default: addedA++; break;
 				}
-				System.out.println(calc.islandPoints + "\t" + expectedValue + "\t" + i + "\t" + data + "\t" + calc.poolValues.toString() + "\t{addedA=" + addedA + ", addedB=" + addedB + ", addedC=" + addedC + ", addedD=" + addedD + "}");
 				assertThat(calc.islandPoints, is(expectedValue));
 			}
 		}
