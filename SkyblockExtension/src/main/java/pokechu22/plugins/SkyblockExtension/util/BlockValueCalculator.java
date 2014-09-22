@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension.protection;
+package pokechu22.plugins.SkyblockExtension.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +19,6 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 /**
  * Calculates the values of blocks in an island.
  * 1 should be created per calculation.
- * 
- * TODO: Is this the proper package?
  * 
  * @author Pokechu22
  *
