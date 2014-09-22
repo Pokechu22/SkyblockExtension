@@ -134,4 +134,18 @@ public class BlockValueCalculatorTest {
 		calc.addBlock(1000);
 		assertThat(calc.islandPoints, is(1));
 	}
+	
+	/**
+	 * Standard blocks.
+	 */
+	@Test
+	public void standardBlockTest() {
+		BlockValueCalculator calc = getCalculator();
+		assertThat(calc.islandPoints, is(0));
+		
+		for (int i = 1; i <= 5000; i++) {
+			calc.addBlock(Material.WOOD);
+			assertThat(calc.islandPoints, is(i));
+		}
+	}
 }

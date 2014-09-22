@@ -144,29 +144,36 @@ public class BlockValueCalculator {
 				keyName + data, maximumPool);
 		
 		//OK, actual process now.
-		if (!poolValues.containsKey(dataSpecificMaximumPool)) {
-			poolValues.put(dataSpecificMaximumPool, 0);
-		}
-		if (poolValues.get(dataSpecificMaximumPool) < 
-				getBlockValuesConfig().getInt("maximumPools." + 
-						dataSpecificMaximumPool + ".max")) {
-			islandPoints += dataSpecificValue;
-			//I don't know if using ++ is safe here, so this is done.
-			Integer currentPoolValue = poolValues.get(
-					dataSpecificMaximumPool);
-			currentPoolValue ++;
-			poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+		if (usesPool(dataSpecificMaximumPool)) {
+			if (!poolValues.containsKey(dataSpecificMaximumPool)) {
+				poolValues.put(dataSpecificMaximumPool, 0);
+			}
+			if (poolValues.get(dataSpecificMaximumPool) < 
+					getBlockValuesConfig().getInt("maximumPools." + 
+							dataSpecificMaximumPool + ".max")) {
+				islandPoints += dataSpecificValue;
+				//I don't know if using ++ is safe here, so this is done.
+				Integer currentPoolValue = poolValues.get(
+						dataSpecificMaximumPool);
+				currentPoolValue ++;
+				poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+			} else {
+				islandPoints += dataSpecificPostPoolValue;
+				//I don't know if using ++ is safe here, so this is done.
+				Integer currentPoolValue = poolValues.get(
+						dataSpecificMaximumPool);
+				currentPoolValue ++;
+				poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+			}
 		} else {
-			islandPoints += dataSpecificPostPoolValue;
-			//I don't know if using ++ is safe here, so this is done.
-			Integer currentPoolValue = poolValues.get(
-					dataSpecificMaximumPool);
-			currentPoolValue ++;
-			poolValues.put(dataSpecificMaximumPool, currentPoolValue);
+			islandPoints += dataSpecificValue;
 		}
 	}
 	
-	
+	public boolean usesPool(String dataSpecificMaximumPool) {
+		return getBlockValuesConfig().getInt("maximumPools." + 
+				dataSpecificMaximumPool + ".max") != -1;
+	}
 	
 	/**
 	 * Custom configuration for block values.
