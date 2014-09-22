@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,10 +43,51 @@ public class BlockValueCalculator {
 				.getInt("defaultBlockValue");
 	}
 	
+	/**
+	 * Adds the value of the specified block.
+	 * 
+	 * @param block
+	 */
 	@SuppressWarnings("deprecation")
 	public void addBlock(Block block) {
-		final String keyName = "blockValues." + block.getTypeId();
-		final String data = ".data" + block.getData();
+		addBlock(block.getTypeId(), block.getData());
+	}
+	
+	/**
+	 * Adds the value of the specified material, assuming data value of 0.
+	 * @param material
+	 */
+	@SuppressWarnings("deprecation")
+	public void addBlock(Material material) {
+		addBlock(material.getId(), (byte) 0);
+	}
+
+	/**
+	 * Adds the value of the specified material with the specified
+	 * data value.
+	 * @param material
+	 */
+	@SuppressWarnings("deprecation")
+	public void addBlock(Material material, byte dataValue) {
+		addBlock(material.getId(), dataValue);
+	}
+
+	/**
+	 * Adds the value of the specified material, assuming data value of 0.
+	 * @param material
+	 */
+	public void addBlock(int materialId) {
+		addBlock(materialId, (byte) 0);
+	}
+
+	/**
+	 * Adds the value of the specified material with the specified
+	 * data value.
+	 * @param material
+	 */
+	public void addBlock(int materialId, byte dataValue) {
+		final String keyName = "blockValues." + materialId;
+		final String data = ".data" + dataValue;
 		Object object = getBlockValuesConfig().get(keyName);
 		if (object == null) {
 			islandPoints += defaultBlockValue;
@@ -110,10 +152,12 @@ public class BlockValueCalculator {
 		}
 	}
 	
+	
+	
 	/**
 	 * Custom configuration for block values.
 	 */
-	private FileConfiguration blockValuesConfig = null;
+	protected FileConfiguration blockValuesConfig = null;
 	/**
 	 * And the file associated with {@linkplain #blockValuesConfig it}.
 	 */
