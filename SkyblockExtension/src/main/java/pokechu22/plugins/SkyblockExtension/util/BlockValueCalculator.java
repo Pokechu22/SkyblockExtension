@@ -1,6 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.util;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -38,6 +39,19 @@ public class BlockValueCalculator {
 	
 	public BlockValueCalculator() {
 		islandPoints = 0;
+		
+		defaultBlockValue = getBlockValuesConfig()
+				.getInt("defaultBlockValue");
+	}
+	
+	/**
+	 * Creates a calculator from the stream as a config.
+	 */
+	@SuppressWarnings("deprecation")
+	public BlockValueCalculator(InputStream stream) {
+		islandPoints = 0;
+		
+		this.blockValuesConfig = YamlConfiguration.loadConfiguration(stream);
 		
 		defaultBlockValue = getBlockValuesConfig()
 				.getInt("defaultBlockValue");
@@ -161,7 +175,7 @@ public class BlockValueCalculator {
 	/**
 	 * And the file associated with {@linkplain #blockValuesConfig it}.
 	 */
-	private File blockValuesConfigFile = null;
+	protected File blockValuesConfigFile = null;
 	
 	protected void reloadBlockValuesConfig() {
 		if (blockValuesConfigFile == null) {
