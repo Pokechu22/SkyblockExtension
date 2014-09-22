@@ -131,17 +131,23 @@ public class BlockValueCalculator {
 		
 		Object dataSpecificObject = getBlockValuesConfig().get(
 				keyName + data);
-		if (dataSpecificObject instanceof Integer) {
-			islandPoints += ((Integer) dataSpecificObject).intValue();
-			return;
-		}
 		
-		int dataSpecificValue = getBlockValuesConfig().getInt(
-				keyName + data + ".value", value);
-		int dataSpecificPostPoolValue = getBlockValuesConfig().getInt(
-				keyName + data + ".postPoolValue", postPoolValue);
-		String dataSpecificMaximumPool = getBlockValuesConfig().getString(
-				keyName + data + ".maximumPool", maximumPool);
+		int dataSpecificValue;
+		int dataSpecificPostPoolValue;
+		String dataSpecificMaximumPool;
+		
+		if (dataSpecificObject instanceof Integer) {
+			dataSpecificValue = ((Integer) dataSpecificObject).intValue();
+			dataSpecificPostPoolValue = postPoolValue;
+			dataSpecificMaximumPool = maximumPool;
+		} else {
+			dataSpecificValue = getBlockValuesConfig().getInt(
+					keyName + data + ".value", value);
+			dataSpecificPostPoolValue = getBlockValuesConfig().getInt(
+					keyName + data + ".postPoolValue", postPoolValue);
+			dataSpecificMaximumPool = getBlockValuesConfig().getString(
+					keyName + data + ".maximumPool", maximumPool);
+		}
 		
 		//OK, actual process now.
 		if (usesPool(dataSpecificMaximumPool)) {
@@ -152,6 +158,7 @@ public class BlockValueCalculator {
 					getBlockValuesConfig().getInt("maximumPools." + 
 							dataSpecificMaximumPool + ".max")) {
 				islandPoints += dataSpecificValue;
+				
 				//I don't know if using ++ is safe here, so this is done.
 				Integer currentPoolValue = poolValues.get(
 						dataSpecificMaximumPool);
@@ -159,6 +166,7 @@ public class BlockValueCalculator {
 				poolValues.put(dataSpecificMaximumPool, currentPoolValue);
 			} else {
 				islandPoints += dataSpecificPostPoolValue;
+				
 				//I don't know if using ++ is safe here, so this is done.
 				Integer currentPoolValue = poolValues.get(
 						dataSpecificMaximumPool);
