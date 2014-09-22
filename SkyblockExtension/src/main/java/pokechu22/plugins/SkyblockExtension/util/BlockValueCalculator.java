@@ -119,7 +119,7 @@ public class BlockValueCalculator {
 	 */
 	private File blockValuesConfigFile = null;
 	
-	private void reloadBlockValuesConfig() {
+	protected void reloadBlockValuesConfig() {
 		if (blockValuesConfigFile == null) {
 			blockValuesConfigFile = new File(SkyblockExtension.inst()
 					.getDataFolder(), "block_values.yml");
@@ -153,7 +153,7 @@ public class BlockValueCalculator {
 	 * Gets the BlockValues config.
 	 * @return the BlockValues config.
 	 */
-	private FileConfiguration getBlockValuesConfig() {
+	protected FileConfiguration getBlockValuesConfig() {
 		if (blockValuesConfig == null) {
 			reloadBlockValuesConfig();
 		}
