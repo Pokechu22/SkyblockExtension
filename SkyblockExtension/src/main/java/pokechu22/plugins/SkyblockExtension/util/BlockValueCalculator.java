@@ -137,11 +137,11 @@ public class BlockValueCalculator {
 		}
 		
 		int dataSpecificValue = getBlockValuesConfig().getInt(
-				keyName + data, value);
+				keyName + data + ".value", value);
 		int dataSpecificPostPoolValue = getBlockValuesConfig().getInt(
-				keyName + data, postPoolValue);
+				keyName + data + ".postPoolValue", postPoolValue);
 		String dataSpecificMaximumPool = getBlockValuesConfig().getString(
-				keyName + data, maximumPool);
+				keyName + data + ".maximumPool", maximumPool);
 		
 		//OK, actual process now.
 		if (usesPool(dataSpecificMaximumPool)) {
