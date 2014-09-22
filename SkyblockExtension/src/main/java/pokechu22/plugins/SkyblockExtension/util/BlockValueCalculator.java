@@ -1,7 +1,6 @@
 package pokechu22.plugins.SkyblockExtension.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -10,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -160,36 +158,5 @@ public class BlockValueCalculator {
 			reloadBlockValuesConfig();
 		}
 		return blockValuesConfig;
-	}
-
-	/**
-	 * Saves the BlockValues config.
-	 */
-	private void saveBlockValuesConfig() {
-		if (blockValuesConfig == null || blockValuesConfigFile == null) {
-			return;
-		}
-		try {
-			getBlockValuesConfig().save(blockValuesConfigFile);
-		} catch (IOException ex) {
-			SkyblockExtension.inst().getLogger().log(Level.SEVERE,
-					"Could not save config to " + blockValuesConfigFile, 
-					ex);
-		}
-	}
-
-	/**
-	 * Saves the default BlockValues config.
-	 */
-	private void saveDefaultBlockValuesConfig() {
-		
-		if (blockValuesConfigFile == null) {
-			blockValuesConfigFile = new File(SkyblockExtension.inst()
-					.getDataFolder(), "block_values.yml");
-		}
-		if (!blockValuesConfigFile.exists()) {
-			SkyblockExtension.inst()
-					.saveResource("block_values.yml", false);
-		}
 	}
 }
