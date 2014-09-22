@@ -28,35 +28,35 @@ blockValues:
   #Vine
   106: 0
   #Diamond block
-  57: 300
+  57: 301
   #Gold block, enchantment table, Dragon egg (!)
-  41: 150
-  116: 150
-  122: 150
+  41: 151
+  116: 151
+  122: 151
   #Iron block, Obsidian: 
-  42: 10
-  49: 10
+  42: 11
+  49: 11
   #Bookshelf, jukebox 
-  47: 5
-  84: 5
+  47: 6
+  84: 6
   #Ice, clay, nether brick, grass, mycelium (mycel? wat bukkit)
-  79: 3
-  82: 3
-  112: 3
-  2: 3
-  110: 3
+  79: 4
+  82: 4
+  112: 4
+  2: 4
+  110: 4
   #Brick, wool, sandstone, end stone, brick and stone brick stairs, 
   #Double stone-based slabs, glass, glowstone, quartz block, quartz stairs
-  45: 2
-  35: 2
-  24: 2
-  108: 2
-  109: 2
-  43: 2
-  20: 2
-  89: 2
-  155: 2
-  156: 2
+  45: 3
+  35: 3
+  24: 3
+  108: 3
+  109: 3
+  43: 3
+  20: 3
+  89: 3
+  155: 3
+  156: 3
   #Cobble
   4: 
     value: 1
