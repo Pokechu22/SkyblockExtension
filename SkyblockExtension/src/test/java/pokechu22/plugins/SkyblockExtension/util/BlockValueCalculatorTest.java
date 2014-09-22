@@ -240,7 +240,7 @@ public class BlockValueCalculatorTest {
 					break;
 				}
 				}
-				System.out.println(calc.islandPoints + "\t" + expectedValue + "\t" + i + "\t" + data);
+				System.out.println(calc.islandPoints + "\t" + expectedValue + "\t" + i + "\t" + data + "\t" + calc.poolValues.toString());
 				//assertThat(calc.islandPoints, is(expectedValue));
 			}
 		}

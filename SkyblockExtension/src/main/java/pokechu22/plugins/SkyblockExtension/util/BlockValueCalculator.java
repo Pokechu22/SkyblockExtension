@@ -32,7 +32,7 @@ public class BlockValueCalculator {
 	/**
 	 * Pool of used values.
 	 */
-	private Map<String, Integer> poolValues = 
+	protected Map<String, Integer> poolValues = 
 			new HashMap<String, Integer>();
 	
 	public int islandPoints;
