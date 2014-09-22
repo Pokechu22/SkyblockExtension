@@ -70,7 +70,7 @@ blockValues:
 #For reference, this can be done to make only certain data values work:
 #This example uses wool.  Obvously, it is not a good thing for use on an 
 #actual server, but it is a good example.
-# 43: 
+# 35: 
 #   value: -1000
 #   data0: 0
 #   data15: 1000000000
