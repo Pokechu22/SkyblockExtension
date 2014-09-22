@@ -191,14 +191,6 @@ public class BlockValueCalculatorTest {
 		for (int i = 1; i <= 20; i++) {
 			for (byte data = 0; data < 16; data++) {
 				calc.addBlock(36, data);
-				//Which set was added?
-				switch (data) {
-				case 1: addedB++; break;
-				case 2: addedC++; break;
-				case 3: addedD++; break;
-				case 4: addedD++; break;
-				default: addedA++; break;
-				}
 				//How much?
 				switch (data) {
 				case 1: {
@@ -239,6 +231,14 @@ public class BlockValueCalculatorTest {
 					}
 					break;
 				}
+				}
+				//Which set was added?
+				switch (data) {
+				case 1: addedB++; break;
+				case 2: addedC++; break;
+				case 3: addedD++; break;
+				case 4: addedD++; break;
+				default: addedA++; break;
 				}
 				System.out.println(calc.islandPoints + "\t" + expectedValue + "\t" + i + "\t" + data + "\t" + calc.poolValues.toString() + "\t{addedA=" + addedA + ", addedB=" + addedB + ", addedC=" + addedC + ", addedD=" + addedD + "}");
 				assertThat(calc.islandPoints, is(expectedValue));
