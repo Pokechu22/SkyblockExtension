@@ -148,4 +148,101 @@ public class BlockValueCalculatorTest {
 			assertThat(calc.islandPoints, is(i));
 		}
 	}
+	
+	/**
+	 * Data values. 
+	 * Wool is customized to work like this.  (43)
+	 */
+	@Test
+	public void dataValueTest() {
+		for (byte data = 0; data < 16; data++) {
+			BlockValueCalculator calc = getCalculator();
+			assertThat(calc.islandPoints, is(0));
+			int specificDataValue = 10;
+			if (data == 0) {
+				specificDataValue = 0;
+			} else if (data == 15) {
+				specificDataValue = 100;
+			}
+			for (int i = 1; i <= 20; i++) {
+				calc.addBlock(Material.WOOL, data);
+				assertThat(calc.islandPoints, is(i * specificDataValue));
+			}
+		}
+	}
+	
+	/**
+	 * Data values and caps.
+	 * Block 36 (Piston thingy) is customized to work like this.  
+	 */
+	@Test
+	public void dataValueCapTest() {
+		BlockValueCalculator calc = getCalculator();
+		assertThat(calc.islandPoints, is(0));
+		
+		//What value is expected.
+		int expectedValue = 0;
+		//Number of times things have been added.
+		int addedA = 0;
+		int addedB = 0;
+		int addedC = 0;
+		int addedD = 0;
+		
+		for (int i = 1; i <= 20; i++) {
+			for (byte data = 0; data < 16; data++) {
+				calc.addBlock(36, data);
+				//Which set was added?
+				switch (data) {
+				case 1: addedB++; break;
+				case 2: addedC++; break;
+				case 3: addedD++; break;
+				case 4: addedD++; break;
+				default: addedA++; break;
+				}
+				//How much?
+				switch (data) {
+				case 1: {
+					if (addedB < 16) {
+						expectedValue += 5;
+					}
+					break;
+				}
+				case 2: {
+					if (addedC < 16) {
+						expectedValue += 20;
+					}
+					break;
+				}
+				case 3: {
+					if (addedD < 16) {
+						expectedValue += 100;
+					}
+					break;
+				}
+				case 4: {
+					if (addedD < 16) {
+						expectedValue += 50;
+					} else {
+						expectedValue += 2;
+					}
+					break;
+				}
+				case 5: {
+					if (addedA < 16) {
+						expectedValue += 1;
+					}
+					break;
+				}
+				default: {
+					if (addedA < 16) {
+						expectedValue += 10;
+					}
+					break;
+				}
+				}
+				System.out.println(calc.islandPoints + "\t" + expectedValue + "\t" + i + "\t" + data);
+				//assertThat(calc.islandPoints, is(expectedValue));
+			}
+		}
+	}
 }
