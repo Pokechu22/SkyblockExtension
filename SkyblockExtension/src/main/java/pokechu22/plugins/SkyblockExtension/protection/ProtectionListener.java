@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -131,6 +133,70 @@ public class ProtectionListener {
 			e.setCancelled(true);
 			e.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 			return;
+		}
+	}
+	
+	/**
+	 * Called when a player breaks a block.
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBlockBreak(BlockBreakEvent event) {
+		if (hasModOverride(event.getPlayer())) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(event.getPlayer(), 
+				event.getBlock().getLocation());
+		
+		if (set.breakBannedBlocks.getValue().contains(event.getBlock().getType())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canBreakAllBlocks.getValue()) {
+				return;
+			} else {
+				if (set.breakAllowedBlocks.getValue().contains(event.getBlock().getType())) {
+					return;
+				} else {
+					event.setCancelled(true);
+					event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Called when a player places a block.
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBlockPlace(BlockPlaceEvent event) {
+		if (hasModOverride(event.getPlayer())) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(event.getPlayer(), 
+				event.getBlock().getLocation());
+		
+		if (set.buildAllowedBlocks.getValue().contains(event.getBlock().getType())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canBuildAllBlocks.getValue()) {
+				return;
+			} else {
+				if (set.buildBannedBlocks.getValue().contains(event.getBlock().getType())) {
+					return;
+				} else {
+					event.setCancelled(true);
+					event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
 		}
 	}
 	
