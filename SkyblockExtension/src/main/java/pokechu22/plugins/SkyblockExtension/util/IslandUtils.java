@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.util;
 
+import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getIslandInfo;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
@@ -194,5 +197,16 @@ public class IslandUtils {
 		}
 		//No info.
 		return null;
+	}
+	
+	/**
+	 * Gets the IslandProtectionDataSet that applies to that player in the specific area.
+	 * 
+	 * @param player
+	 * @param at The location of the island to check.
+	 * @return
+	 */
+	public static IslandProtectionDataSet getDataSetFor(Player player, Location at) {
+		return getIslandInfo(at).getDataSetForPlayer(player);
 	}
 }
