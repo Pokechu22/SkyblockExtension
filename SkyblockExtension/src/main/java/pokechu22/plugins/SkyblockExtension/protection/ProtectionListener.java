@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
 
@@ -289,6 +290,48 @@ public class ProtectionListener {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 			return;
+		}
+	}
+	
+	/**
+	 * Called when a player "interacts" with a block.
+	 * The block may be air, and the item may be nothing.
+	 * 
+	 * TODO: Food should be specifically overwritten.
+	 * TODO: The IslandProtectionDataSet is weird here.  
+	 *       This event will only handle blocks at this time, but it's 
+	 *       supposed to also read items and discriminate based off of
+	 *       both values.
+	 * @param event
+	 */
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (hasModOverride(event.getPlayer())) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(event.getPlayer(), 
+				event.getClickedBlock().getLocation());
+		
+		if (set.useBannedBlocks.getValue().contains(event.getMaterial())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canUseAllItems.getValue()) {
+				//TODO this is not the best value.
+				//It should be changed to canUseAllBlocks.
+				//And that crazy stuff mentioned in the javadoc is als
+				//needed.  Yay.
+				return;
+			} else {
+				if (set.useAllowedBlocks.getValue().contains(event.getMaterial())) {
+					return;
+				} else {
+					event.setCancelled(true);
+					event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
 		}
 	}
 	
