@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
 
@@ -358,6 +360,81 @@ public class ProtectionListener {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 			return;
+		}
+	}
+	
+	/**
+	 * Called when a player attacks a vehicle.
+	 * 
+	 * @param event
+	 */
+	public void onPlayerVehicleDamage(VehicleDamageEvent event) {
+		if (!(event.getAttacker() instanceof Player)) {
+			//Only handle players.
+			return;
+		}
+		Player player = (Player) event.getAttacker();
+		
+		if (hasModOverride(player)) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(player, 
+				event.getVehicle().getLocation());
+		
+		if (set.damageBannedVehicles.getValue().contains(VehicleType.getVehicleType(event.getVehicle().getType()))) {
+			event.setCancelled(true);
+			player.sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canDamageAllVehicles.getValue()) {
+				return;
+			} else {
+				if (set.damageAllowedVehicles.getValue().contains(VehicleType.getVehicleType(event.getVehicle().getType()))) {
+					return;
+				} else {
+					event.setCancelled(true);
+					player.sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Called when a player enters a vehicle.
+	 * @param event
+	 */
+	public void onPlayerEnterVehicle(VehicleEnterEvent event) {
+		if (!(event.getEntered() instanceof Player)) {
+			//Only handle players.
+			return;
+		}
+		Player player = (Player) event.getEntered();
+		
+		if (hasModOverride(player)) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(player, 
+				event.getVehicle().getLocation());
+		
+		if (set.enterBannedVehicles.getValue().contains(VehicleType.getVehicleType(event.getVehicle().getType()))) {
+			event.setCancelled(true);
+			player.sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canEnterAllVehicles.getValue()) {
+				return;
+			} else {
+				if (set.enterAllowedVehicles.getValue().contains(VehicleType.getVehicleType(event.getVehicle().getType()))) {
+					return;
+				} else {
+					event.setCancelled(true);
+					player.sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
 		}
 	}
 	
