@@ -113,6 +113,28 @@ public class ProtectionListener {
 	}
 	
 	/**
+	 * Called when a player enters a bed. 
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBedEnter(PlayerBedEnterEvent e) {
+		if (hasModOverride(e.getPlayer())) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(e.getPlayer(), 
+				e.getBed().getLocation());
+		
+		if (set.canUseBeds.getValue()) {
+			return;
+		} else {
+			e.setCancelled(true);
+			e.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		}
+	}
+	
+	/**
 	 * Tests if the player has the specified override.
 	 * 
 	 * If they have the override, ("usb.mod.bypassprotection"), they get
