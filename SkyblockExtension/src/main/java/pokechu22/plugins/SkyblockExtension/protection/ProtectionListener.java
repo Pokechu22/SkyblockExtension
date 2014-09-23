@@ -48,13 +48,6 @@ public class ProtectionListener {
 	 * a warning but are allowed. 
 	 */
 	private boolean hasModOverride(Player player) {
-		if (player.hasPermission("usb.mod.bypassprotection")) {
-			player.sendMessage("§eYou normally wouldn't be allowed to " +
-					"do that, but you have a moderator override and " +
-					"thus are allowed.");
-			return true;
-		} else {
-			return false;
-		}
+		return (player.hasPermission("usb.mod.bypassprotection"));
 	}
 }
