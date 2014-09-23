@@ -514,6 +514,60 @@ public class IslandInfo {
 	}
 	
 	/**
+	 * Gets whether the specified player is the owner.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean isOwner(Player player) {
+		return player.getUniqueId().equals(ownerInfo.playerUUID);
+	}
+	
+	/**
+	 * Gets whether the specified player is a member.
+	 * If the player is an owner, this returns false.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean isMember(Player player) {
+		for (MemberInfo info : this.members) {
+			if (player.getUniqueId().equals(info.playerUUID)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Gets whether the specified player is a member.
+	 * If the player is an owner or guest, this returns false.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean isGuest(Player player) {
+		for (GuestInfo info : this.guests) {
+			if (player.getUniqueId().equals(info.playerUUID)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public IslandProtectionDataSet getDataSetForPlayer(Player player) {
+		if (isOwner(player)) {
+			return this.permissions.get("owner");
+		} else if (isMember(player)) {
+			return this.permissions.get("member");
+		} else if (isGuest(player)) {
+			return this.permissions.get("guest");
+		} else {
+			return this.permissions.get("nonmember");
+		}
+	}
+	
+	/**
 	 * Serializes this to a NBT tag.
 	 * @return
 	 */
