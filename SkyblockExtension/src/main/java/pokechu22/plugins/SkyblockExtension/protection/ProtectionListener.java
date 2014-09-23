@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.*;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -14,25 +15,46 @@ public class ProtectionListener {
 	 */
 	@EventHandler(priority=EventPriority.NORMAL)
 	public void onEntityInteract(PlayerInteractEntityEvent e) {
+		if (hasModOverride(e.getPlayer())) {
+			return;
+		}
+		
 		IslandProtectionDataSet set = getDataSetFor(e.getPlayer(), 
 				e.getRightClicked().getLocation());
-		//I know that == true is pointless, but it makes things clearer.
-		//Especially since the other locations might have == false.
-		//(! could be used there, but clarity in this case...)
+		
 		if (set.useBannedEntities.getValue().contains(e.getRightClicked().getType())) {
 			e.setCancelled(true);
+			e.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 			return;
 		} else {
-			if (set.canUseAllEntities.getValue() == true) {
+			if (set.canUseAllEntities.getValue()) {
 				return;
 			} else {
 				if (set.useAllowedEntities.getValue().contains(e.getRightClicked().getType())) {
 					return;
 				} else {
 					e.setCancelled(true);
+					e.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 					return;
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Tests if the player has the specified override/
+	 * 
+	 * If they have the override, ("usb.mod.bypassprotection"), they get
+	 * a warning but are allowed. 
+	 */
+	private boolean hasModOverride(Player player) {
+		if (player.hasPermission("usb.mod.bypassprotection")) {
+			player.sendMessage("§eYou normally wouldn't be allowed to " +
+					"do that, but you have a moderator override and " +
+					"thus are allowed.");
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
