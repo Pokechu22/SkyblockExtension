@@ -241,4 +241,9 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 		}
 		return true;
 	}
+
+	@Override
+	public ArrayList<VehicleType> getValue() {
+		return value;
+	}
 }

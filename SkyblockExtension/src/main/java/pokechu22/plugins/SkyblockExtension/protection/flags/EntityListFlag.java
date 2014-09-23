@@ -288,4 +288,9 @@ public class EntityListFlag extends IslandProtectionDataSetFlag {
 		}
 		return true;
 	}
+
+	@Override
+	public ArrayList<EntityType> getValue() {
+		return value;
+	}
 }
