@@ -14,7 +14,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
  * @author Pokechu22
  *
  */
-public class WorldGuardProtectionHandler extends ProtectionHandler {
+public class WorldGuardProtectionHandler extends ProtectionHandler_OLD {
 
 	/**
 	 * Is the area protected?
