@@ -11,6 +11,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
@@ -238,6 +240,56 @@ public class ProtectionListener {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Called when a player empties a bucket.
+	 * TODO: Does this get called when milk is drunk?
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+		Player player = (Player) event.getPlayer();
+		
+		if (hasModOverride(player)) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(player, 
+				event.getBlockClicked().getLocation());
+		
+		if (set.canEmptyBuckets.getValue()) {
+			return;
+		} else {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		}
+	}
+	
+	/**
+	 * Called when a player empties a bucket.
+	 * TODO: Does this get called when a cow is milked?
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+		Player player = (Player) event.getPlayer();
+		
+		if (hasModOverride(player)) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(player, 
+				event.getBlockClicked().getLocation());
+		
+		if (set.canFillBuckets.getValue()) {
+			return;
+		} else {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		}
 	}
 	
 	/**
