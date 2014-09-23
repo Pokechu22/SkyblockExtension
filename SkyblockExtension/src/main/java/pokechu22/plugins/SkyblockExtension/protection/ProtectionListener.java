@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
 
@@ -332,6 +333,31 @@ public class ProtectionListener {
 					return;
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Called on a player shearing sheep.
+	 * 
+	 * TODO: Rename canSheerSheep to canSheerEntities, or make it expanded.
+	 * Mooshrooms can be sheered as well.
+	 * 
+	 * @param event
+	 */
+	public void onPlayerShearEntity(PlayerShearEntityEvent event) {
+		if (hasModOverride(event.getPlayer())) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(event.getPlayer(), 
+				event.getEntity().getLocation());
+		
+		if (set.canShearSheep.getValue()) {
+			return;
+		} else {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
 		}
 	}
 	
