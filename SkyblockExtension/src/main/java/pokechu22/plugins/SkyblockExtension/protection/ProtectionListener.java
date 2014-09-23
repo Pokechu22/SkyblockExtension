@@ -61,6 +61,7 @@ public class ProtectionListener {
 	 * 
 	 * @param e
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onEntityAttackEntity(EntityDamageByEntityEvent e) {
 		//Do some stuff to check if the attacker is a player.
 		Player attacker = null;
@@ -126,6 +127,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBedEnter(PlayerBedEnterEvent e) {
 		if (hasModOverride(e.getPlayer())) {
 			return;
@@ -148,6 +150,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBlockBreak(BlockBreakEvent event) {
 		if (hasModOverride(event.getPlayer())) {
 			return;
@@ -180,6 +183,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBlockPlace(BlockPlaceEvent event) {
 		if (hasModOverride(event.getPlayer())) {
 			return;
@@ -212,6 +216,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBreakHanging(HangingBreakByEntityEvent event) {
 		if (!(event.getRemover() instanceof Player)) {
 			//Only handle players.
@@ -252,6 +257,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 		Player player = (Player) event.getPlayer();
 		
@@ -277,6 +283,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
 		Player player = (Player) event.getPlayer();
 		
@@ -307,6 +314,7 @@ public class ProtectionListener {
 	 *       both values.
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (hasModOverride(event.getPlayer())) {
 			return;
@@ -346,6 +354,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerShearEntity(PlayerShearEntityEvent event) {
 		if (hasModOverride(event.getPlayer())) {
 			return;
@@ -368,6 +377,7 @@ public class ProtectionListener {
 	 * 
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerVehicleDamage(VehicleDamageEvent event) {
 		if (!(event.getAttacker() instanceof Player)) {
 			//Only handle players.
@@ -405,6 +415,7 @@ public class ProtectionListener {
 	 * Called when a player enters a vehicle.
 	 * @param event
 	 */
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerEnterVehicle(VehicleEnterEvent event) {
 		if (!(event.getEntered() instanceof Player)) {
 			//Only handle players.
