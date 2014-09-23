@@ -7,6 +7,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
@@ -45,6 +46,12 @@ public class ProtectionListener {
 		}
 	}
 	
+	/**
+	 * Called when an entity attacks another; used to check for player
+	 * hurting mobs.
+	 * 
+	 * @param e
+	 */
 	public void onEntityAttackEntity(EntityDamageByEntityEvent e) {
 		//Do some stuff to check if the attacker is a player.
 		Player attacker = null;
@@ -106,7 +113,7 @@ public class ProtectionListener {
 	}
 	
 	/**
-	 * Tests if the player has the specified override/
+	 * Tests if the player has the specified override.
 	 * 
 	 * If they have the override, ("usb.mod.bypassprotection"), they get
 	 * a warning but are allowed. 
