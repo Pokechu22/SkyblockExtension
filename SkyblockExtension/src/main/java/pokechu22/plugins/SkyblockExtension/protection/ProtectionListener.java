@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -198,6 +199,45 @@ public class ProtectionListener {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Called when a player breaks a hanging.
+	 * 
+	 * @param event
+	 */
+	public void onPlayerBreakHanging(HangingBreakByEntityEvent event) {
+		if (!(event.getRemover() instanceof Player)) {
+			//Only handle players.
+			return;
+		}
+		Player player = (Player) event.getRemover();
+		
+		if (hasModOverride(player)) {
+			return;
+		}
+		
+		IslandProtectionDataSet set = getDataSetFor(player, 
+				event.getEntity().getLocation());
+		
+		if (set.breakBannedHangings.getValue().contains(HangingType.getHangingType(event.getEntity().getType()))) {
+			event.setCancelled(true);
+			player.sendMessage("§cYou aren't allowed to do that in this area!");
+			return;
+		} else {
+			if (set.canBreakAllHanging.getValue()) {
+				return;
+			} else {
+				if (set.breakAllowedHangings.getValue().contains(HangingType.getHangingType(event.getEntity().getType()))) {
+					return;
+				} else {
+					event.setCancelled(true);
+					player.sendMessage("§cYou aren't allowed to do that in this area!");
+					return;
+				}
+			}
+		}
+		
 	}
 	
 	/**
