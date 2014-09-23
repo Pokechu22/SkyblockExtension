@@ -242,4 +242,9 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 		}
 		return true;
 	}
+
+	@Override
+	public ArrayList<HangingType> getValue() {
+		return value;
+	}
 }

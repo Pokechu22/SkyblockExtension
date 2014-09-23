@@ -145,6 +145,12 @@ public abstract class IslandProtectionDataSetFlag {
 	public abstract boolean canAddToValue();
 	
 	/**
+	 * Gets the raw value of the flag.
+	 * Implementations are encouraged to specify this further. 
+	 */
+	public abstract Object getValue();
+	
+	/**
 	 * Adds to the value.
 	 * 
 	 * @param addition The thing to add.

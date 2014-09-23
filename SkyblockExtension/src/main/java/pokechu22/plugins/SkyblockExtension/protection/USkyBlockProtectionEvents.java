@@ -42,7 +42,7 @@ public class USkyBlockProtectionEvents {
 			final Player player = event.getPlayer();
 			if (player.getWorld().getName()
 					.equalsIgnoreCase(Settings.general_worldName)) {
-				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+				if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 						player, event.getRightClicked().getLocation())
 						&& !uSkyBlock.getInstance().playerIsInSpawn(
 								event.getPlayer())
@@ -114,7 +114,7 @@ public class USkyBlockProtectionEvents {
 	public boolean onPlayerBlockBreak(final BlockBreakEvent event) {
 		if (event.getPlayer().getWorld().getName()
 				.equalsIgnoreCase(Settings.general_worldName)) {
-			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+			if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 					event.getPlayer(), event.getBlock().getLocation())
 					&& !VaultHandler.checkPerk(event.getPlayer().getName(),
 							"usb.mod.bypassprotection", event.getPlayer()
@@ -128,7 +128,7 @@ public class USkyBlockProtectionEvents {
 	public boolean onPlayerBlockPlace(final BlockPlaceEvent event) {
 		if (event.getPlayer().getWorld().getName()
 				.equalsIgnoreCase(Settings.general_worldName)) {
-			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+			if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 					event.getPlayer(), event.getBlock().getLocation())
 					&& !VaultHandler.checkPerk(event.getPlayer().getName(),
 							"usb.mod.bypassprotection", event.getPlayer()
@@ -144,7 +144,7 @@ public class USkyBlockProtectionEvents {
 			breaker = (Player) event.getRemover();
 			if (breaker.getWorld().getName()
 					.equalsIgnoreCase(Settings.general_worldName)) {
-				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+				if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 						breaker, event.getEntity().getLocation())
 						&& !VaultHandler.checkPerk(breaker.getName(),
 								"usb.mod.bypassprotection", breaker.getWorld())
@@ -159,7 +159,7 @@ public class USkyBlockProtectionEvents {
 	public boolean onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
 		if (event.getPlayer().getWorld().getName()
 				.equalsIgnoreCase(Settings.general_worldName)) {
-			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+			if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 					event.getPlayer(), event.getBlockClicked().getLocation())
 					&& !VaultHandler.checkPerk(event.getPlayer().getName(),
 							"usb.mod.bypassprotection", event.getPlayer()
@@ -173,7 +173,7 @@ public class USkyBlockProtectionEvents {
 	public boolean onPlayerBucketFill(final PlayerBucketFillEvent event) {
 		if (event.getPlayer().getWorld().getName()
 				.equalsIgnoreCase(Settings.general_worldName)) {
-			if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+			if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 					event.getPlayer(), event.getBlockClicked().getLocation())
 					&& !VaultHandler.checkPerk(event.getPlayer().getName(),
 							"usb.mod.bypassprotection", event.getPlayer()
@@ -227,7 +227,7 @@ public class USkyBlockProtectionEvents {
 			breaker = (Player) event.getAttacker();
 			if (breaker.getWorld().getName()
 					.equalsIgnoreCase(Settings.general_worldName)) {
-				if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+				if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 						breaker, event.getVehicle().getLocation())
 						&& !VaultHandler.checkPerk(breaker.getName(),
 								"usb.mod.bypassprotection", breaker.getWorld())
@@ -255,7 +255,7 @@ public class USkyBlockProtectionEvents {
 			return false;
 		}
 
-		if (!ProtectionHandler.getProtectionHandler().hasPermissionsIn(player,
+		if (!ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(player,
 				event.getVehicle().getLocation())) {
 			return true;
 		}
@@ -272,7 +272,7 @@ public class USkyBlockProtectionEvents {
 			return false;
 		}
 
-		if (ProtectionHandler.getProtectionHandler().hasPermissionsIn(
+		if (ProtectionHandler_OLD.getProtectionHandler().hasPermissionsIn(
 				event.getPlayer(), event.getPlayer().getLocation())) {
 			return false;
 		}

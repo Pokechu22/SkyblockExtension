@@ -241,4 +241,9 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 		}
 		return true;
 	}
+
+	@Override
+	public ArrayList<Material> getValue() {
+		return value;
+	}
 }

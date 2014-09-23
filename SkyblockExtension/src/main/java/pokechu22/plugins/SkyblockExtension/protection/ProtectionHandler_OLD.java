@@ -13,7 +13,7 @@ import us.talabrek.ultimateskyblock.Settings;
  * @author Pokechu22
  *
  */
-public abstract class ProtectionHandler {
+public abstract class ProtectionHandler_OLD {
 	
 	/**
 	 * Gets the ProtectionHanlder that should be used in this context.
@@ -22,7 +22,7 @@ public abstract class ProtectionHandler {
 	 * 
 	 * @return
 	 */
-	public static ProtectionHandler getProtectionHandler() {
+	public static ProtectionHandler_OLD getProtectionHandler() {
 		if (Settings.island_protectWithWorldGuard) {
 			return new WorldGuardProtectionHandler();
 		} else {

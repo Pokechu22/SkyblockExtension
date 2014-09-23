@@ -110,4 +110,9 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 		}
 		return true;
 	}
+
+	@Override
+	public Boolean getValue() {
+		return new Boolean(value);
+	}
 }

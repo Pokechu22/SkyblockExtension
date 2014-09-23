@@ -398,7 +398,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 * Gets all values of this IslandProtectionDataSet.
 	 * <br>
 	 * <h1>Examples:</h1>
-	 * <i>(With only a 2 flags - both booleans, Foo and Bar)
+	 * <i>(With only a 2 flags - both booleans, Foo and Bar)</i>
 	 * <dt><code>getAllValues("Example - ", "{", ": ", "}", ", ", ".")</code></dt> 
 	 * <dd><samp>Example - {Foo: false}, {Bar: true}.</samp></dd>
 	 * <dt><code>getAllValues("", "§1", "§7: §b", "", "\n", "")</code></dt>

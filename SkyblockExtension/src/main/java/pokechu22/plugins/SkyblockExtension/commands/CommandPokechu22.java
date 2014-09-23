@@ -24,7 +24,7 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
-import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler;
+import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler_OLD;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
@@ -743,7 +743,7 @@ public class CommandPokechu22 {
 				return;
 			}
 			Player player = (Player) sender;
-			if (ProtectionHandler.getProtectionHandler().isProtected(
+			if (ProtectionHandler_OLD.getProtectionHandler().isProtected(
 					player.getLocation(), player)) {
 				sender.sendMessage("You have permission in this area.");
 			} else {

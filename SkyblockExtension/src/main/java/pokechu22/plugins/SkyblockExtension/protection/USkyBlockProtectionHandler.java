@@ -17,7 +17,7 @@ import us.talabrek.ultimateskyblock.uSkyBlock;
  * @author Pokechu22
  *
  */
-public class USkyBlockProtectionHandler extends ProtectionHandler {
+public class USkyBlockProtectionHandler extends ProtectionHandler_OLD {
 
 	/**
 	 * Is the area protected?  
