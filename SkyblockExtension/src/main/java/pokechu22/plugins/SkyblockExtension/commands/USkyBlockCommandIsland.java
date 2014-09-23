@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
+import pokechu22.plugins.SkyblockExtension.protection.BlockValueCalculator;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
@@ -174,63 +175,24 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 			try {
 				String playerName = player.getName();
 				Location l;
-				if (((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getHasParty())
-				{
+				if (((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getHasParty()) {
 					l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getPartyIslandLocation();
-				}
-				else
+				} else {
 					l = ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).getIslandLocation();
-				int blockcount = 0;
-				if (playerName.equalsIgnoreCase(islandPlayer))
-				{
-					int cobblecount = 0;
-					int endcount = 0;
-					int px = l.getBlockX();
-					int py = l.getBlockY();
-					int pz = l.getBlockZ();
-					for (int x = -50; x <= 50; x++) {
-						for (int y = Settings.island_height * -1; y <= 255 - Settings.island_height; y++) {
-							for (int z = -50; z <= 50; z++)
-							{
-								Block b = new Location(l.getWorld(), px + x, py + y, pz + z).getBlock();
-								if (b.getTypeId() == 57) {
-									blockcount += 300;
-								}
-								if ((b.getTypeId() == 41) || (b.getTypeId() == 116) || (b.getTypeId() == 122)) {
-									blockcount += 150;
-								}
-								if ((b.getTypeId() == 49) || (b.getTypeId() == 42)) {
-									blockcount += 10;
-								}
-								if ((b.getTypeId() == 47) || (b.getTypeId() == 84)) {
-									blockcount += 5;
-								}
-								if ((b.getTypeId() == 79) || (b.getTypeId() == 82) || (b.getTypeId() == 112) || (b.getTypeId() == 2) || (b.getTypeId() == 110)) {
-									blockcount += 3;
-								}
-								if ((b.getTypeId() == 45) || (b.getTypeId() == 35) || (b.getTypeId() == 24) || 
-										(b.getTypeId() == 121) || (b.getTypeId() == 108) || (b.getTypeId() == 109) || (b.getTypeId() == 43) || 
-										(b.getTypeId() == 20) || (b.getTypeId() == 89) || (b.getTypeId() == 155) || (b.getTypeId() == 156)) {
-									blockcount += 2;
-								}
-								if (((b.getTypeId() != 0) && (b.getTypeId() != 8) && (b.getTypeId() != 106) && (b.getTypeId() != 9) && (b.getTypeId() != 10) && (b.getTypeId() != 11) && (b.getTypeId() != 4)) || ((b.getTypeId() == 4) && (cobblecount < 10000)) || ((b.getTypeId() == 121) && (endcount < 5000)))
-								{
-									blockcount++;
-									if (b.getTypeId() == 4) {
-										cobblecount++;
-									}
-									if (b.getTypeId() == 121) {
-										endcount++;
-									}
-								}
+				}
+				//Apparently you can only recalculate your own island's level.
+				if (playerName.equalsIgnoreCase(islandPlayer)) {
+					BlockValueCalculator calc = new BlockValueCalculator();
+					
+					for (int x = -(Settings.island_protectionRange / 2); x <= Settings.island_protectionRange / 2; x++) {
+						for (int y = 0; y < l.getWorld().getMaxHeight(); y++) {
+							for (int z = -(Settings.island_protectionRange / 2); z <= Settings.island_protectionRange / 2; z++) {
+								calc.addBlock(l.getWorld().getBlockAt(l.getBlockX() + x, y, l.getBlockZ() + z));
 							}
 						}
 					}
-				}
-
-				if (playerName.equalsIgnoreCase(islandPlayer))
-				{
-					((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).setIslandLevel(blockcount / 100);
+					
+					((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).setIslandLevel(calc.islandPoints / 100);
 				}
 			} catch (Exception e) {
 				System.out.print("Error while calculating Island Level: " + e);
