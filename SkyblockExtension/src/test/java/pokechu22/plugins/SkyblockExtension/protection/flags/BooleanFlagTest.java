@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag.FlagType;
-
 /**
  * Tests the functionality of BooleanFlags.
  *
@@ -20,7 +18,7 @@ public class BooleanFlagTest {
 	@Test
 	public void flagTypeShouldBeCorrect() {
 		BooleanFlag flag = new BooleanFlag("false");
-		assertThat(flag.getType(), is(FlagType.BOOLEAN));
+		assertThat(flag.getType(), is(IslandProtectionDataSetFlag.FlagType.BOOLEAN));
 	}
 	
 	/**
