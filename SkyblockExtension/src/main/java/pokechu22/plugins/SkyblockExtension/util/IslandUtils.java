@@ -1,7 +1,5 @@
 package pokechu22.plugins.SkyblockExtension.util;
 
-import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getIslandInfo;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
