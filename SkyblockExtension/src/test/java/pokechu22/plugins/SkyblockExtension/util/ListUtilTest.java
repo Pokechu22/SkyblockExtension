@@ -3,9 +3,14 @@ package pokechu22.plugins.SkyblockExtension.util;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.bukkit.entity.EntityType;
 import org.bukkit.Material;
 
@@ -13,6 +18,15 @@ import pokechu22.plugins.SkyblockExtension.protection.HangingType;
 import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 
 public class ListUtilTest {
+	/**
+	 * Used to ensure proper exceptions are thrown in certain cases,
+	 * without exiting the test.
+	 * 
+	 * @see http://stackoverflow.com/a/2935935/3991344
+	 */
+	@Rule
+	public ExpectedException expected = ExpectedException.none();
+	
 	/**
 	 * An enum intended for testing purposes.
 	 * 
@@ -122,6 +136,77 @@ public class ListUtilTest {
 			assertThat(ListUtil.matchEnumValue(e.name() + " ", VehicleType.class), is(e));
 			//With whitespace on both sides.
 			assertThat(ListUtil.matchEnumValue(" " + e.name() + " ", VehicleType.class), is(e));
+		}
+	}
+	
+	/**
+	 * Attempts to parse a list.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void listParseTest() throws ParseException {
+		String listValue = "[TEST1, TEST2]";
+		
+		List<TestEnum> expectedValue = new ArrayList<>();
+		expectedValue.add(TestEnum.TEST1);
+		expectedValue.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.parseList(listValue, TestEnum.class), is(expectedValue));
+	}
+	
+	/**
+	 * Attempts to parse a list with duplicate values.
+	 */
+	@Test
+	public void duplicateValuesShouldFail() throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(startsWith("§c" + TestEnum.class.getSimpleName() +
+				" \"TEST1\" is already entered.  (Repeat entries " +
+				"are not allowed)."));
+		ListUtil.parseList("[TEST1, TEST1]", TestEnum.class);
+		
+		fail();
+	}
+	
+	/**
+	 * Attempts to parse a list with unknown values.
+	 */
+	@Test
+	public void unknownValuesShouldFail() throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(startsWith("§c" + TestEnum.class.getSimpleName() +
+				" \"INVALIDTEST\" is not recognised."));
+		ListUtil.parseList("[TEST1, INVALIDTEST]", TestEnum.class);
+		
+		fail();
+	}
+	
+	/**
+	 * Attempts to parse several lists with broken brackets.
+	 */
+	@Test
+	public void invalidListFromatShouldFail() {		
+		final String[] tests = {
+				"[[]",
+				"[]]",
+				"[] hi",
+				"hi",
+				"[h]i",
+				"[hi []",
+				"[[]]"
+		};
+		
+		for(String toTest : tests) {
+			try {
+				ListUtil.parseList(toTest, TestEnum.class);
+			} catch (ParseException e) {
+				assertThat(e.getMessage(), startsWith(
+						"§cList format is invalid: It must start with " +
+						"'[' and end with ']', and not have any '['" + 
+						" or ']' anywhere else in it."));
+				continue;
+			}
+			fail("Exception was not thrown for " + toTest + "!");
 		}
 	}
 }
