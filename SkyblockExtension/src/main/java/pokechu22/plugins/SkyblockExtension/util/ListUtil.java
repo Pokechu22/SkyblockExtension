@@ -129,6 +129,7 @@ public class ListUtil {
 	 * @param type
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> T matchEnumValue(String s, Class<T> type) {
 		T result = null;
 		
