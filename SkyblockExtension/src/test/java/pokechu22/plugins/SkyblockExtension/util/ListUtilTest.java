@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.util;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static junitparams.JUnitParamsRunner.$;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -206,5 +207,62 @@ public class ListUtilTest {
 				" or ']' anywhere else in it."));
 		
 		ListUtil.parseList(toTest, TestEnum.class);
+	}
+	
+	/**
+	 * Checks duplicate values that don't share an exact name.
+	 * Capitalization and numeric IDs are tested.  All are using
+	 * EntityType for the enum.
+	 * 
+	 * Note that the warning message won't quite work right.
+	 * 
+	 * (Note: may break if they fully remove the deprecated numeric ID
+	 * stuff.  Some of these use it).
+	 */
+	@Test
+	@Parameters(
+			method="paramsFor_duplicateValuesWithDifferentNamesShouldFail"
+			)
+	public void duplicateValuesWithDifferentNamesShouldFail(String toTest)
+			throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(allOf(startsWith("§c" + EntityType.class.getSimpleName() +
+				" \""), containsString(" is already entered.  (Repeat entries " +
+				"are not allowed).")));
+		
+		ListUtil.parseList(toTest, EntityType.class);
+	}
+	
+	/**
+	 * Retrieves parameters for 
+	 * {@link #duplicateValuesWithDifferentNamesShouldFail(String)}.
+	 * 
+	 * Needed because of commas in the string.
+	 * 
+	 * Called via reflection, so this is actually used, but it doesn't
+	 * look like it.
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	private Object[] paramsFor_duplicateValuesWithDifferentNamesShouldFail() {
+		return $(
+			$("[PIG,PIG]"),
+			$("[PIG,pig]"),
+			$("[PIG,Pig]"),
+			$("[pig,pig]"),
+			$("[pIG,Pig]"),
+			$("[  PIG ,   pig          ]"),
+			$("[90, 90]"),
+			$("[90, Pig]"),
+			$("[Pig, 90]"),
+			$("[Pig, PIG, 90, Pig, pIG, 90]"),
+			$("[Cow, Pig, Chicken, Creeper, 90]"),
+			//Magma cube is known as LavaSlime by saveid.  Also 62
+			$("[MAGMA_CUBE, PIG_ZOMBIE, Magma_Cube]"),
+			$("[Magma_cube, lavaSlime]"),
+			$("[magma_CUBE, LAVAslime]"),
+			$("[Magma_Cube, 62]"),
+			$("[62, PIG_ZOMBIE, PIG, MINECART_MOB_SPAWNER, MAGMA_CUBE]")
+		);
 	}
 }
