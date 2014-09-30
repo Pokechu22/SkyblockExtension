@@ -6,6 +6,7 @@ import static junitparams.JUnitParamsRunner.$;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -264,5 +265,38 @@ public class ListUtilTest {
 			$("[Magma_Cube, 62]"),
 			$("[62, PIG_ZOMBIE, PIG, MINECART_MOB_SPAWNER, MAGMA_CUBE]")
 		);
+	}
+	
+	/**
+	 * Ensures empty values are ignored.
+	 * Yes, this looks ugly, but it's accepted behavior.  Mainly for 
+	 * the trailing comma, but other parts too.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void emptyValuesShouldBeIgnored() throws ParseException {
+		List<TestEnum> expectedValue = new ArrayList<>();
+		//Is empty
+		assertThat(ListUtil.parseList("[]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[ ]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[,]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[, ]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[ , ]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[,,]", TestEnum.class), is(expectedValue));
+		
+		//Has only Test1
+		expectedValue.add(TestEnum.TEST1);
+		
+		assertThat(ListUtil.parseList("[TEST1]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[TEST1,]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[TEST1, ]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[TEST1 ,]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[TEST1 , ]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[,TEST1]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[, TEST1]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[ ,TEST1]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[ , TEST1]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[,TEST1,]", TestEnum.class), is(expectedValue));
+		assertThat(ListUtil.parseList("[,,,TEST1,,,]", TestEnum.class), is(expectedValue));
 	}
 }
