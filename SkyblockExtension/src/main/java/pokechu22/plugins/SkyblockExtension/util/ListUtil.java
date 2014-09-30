@@ -134,19 +134,19 @@ public class ListUtil {
 		
 		s = s.trim();
 		
-		if (result instanceof EntityType) {
+		if (type.equals(EntityType.class)) {
 			result = (T) matchEntityType(s);
 			return result;
 		}
-		if (result instanceof Material) {
+		if (type.equals(Material.class)) {
 			result = (T) Material.matchMaterial(s);
 			return result;
 		}
-		if (result instanceof HangingType) {
+		if (type.equals(HangingType.class)) {
 			result = (T) HangingType.matchHangingType(s);
 			return result;
 		}
-		if (result instanceof VehicleType) {
+		if (type.equals(VehicleType.class)) {
 			result = (T) VehicleType.matchVehicleType(s);
 			return result;
 		}
