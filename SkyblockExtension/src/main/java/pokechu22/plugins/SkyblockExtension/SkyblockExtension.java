@@ -18,11 +18,8 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
-import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
-import pokechu22.plugins.SkyblockExtension.util.mcstats.Metrics;
 import pokechu22.plugins.SkyblockExtension.util.mcstats.MetricsHandler;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
