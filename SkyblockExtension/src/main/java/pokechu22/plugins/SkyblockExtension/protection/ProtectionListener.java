@@ -2,10 +2,15 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.*;
 
+import java.util.ArrayList;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -18,10 +23,43 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.plugin.RegisteredListener;
 
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.util.EntityPasivityUtil;
+import us.talabrek.ultimateskyblock.ProtectionEvents;
+import us.talabrek.ultimateskyblock.Settings;
+import us.talabrek.ultimateskyblock.uSkyBlock;
 
-public class ProtectionListener {
+public class ProtectionListener implements Listener {
+	public static void replaceDefaultPermissions() {
+		//Incompatible with WG.
+		if (Settings.island_protectWithWorldGuard) {
+			SkyblockExtension.inst().getLogger().warning("Cannot use " + 
+					"overriden protections when USkyBlock is using " +
+					"WorldGaurd protections!  Please go to its config, " +
+					"and dissable options.island.protectWithWorldGuard!" +
+					"\n(or you can disable the SkyblockExtension " +
+					"protection extensions in that config...)");
+			return;
+		}
+		ArrayList<RegisteredListener> uSkyBlockListeners = 
+				HandlerList.getRegisteredListeners(uSkyBlock.getInstance());
+
+		for (RegisteredListener registeredListener : uSkyBlockListeners) {
+			Listener listener = registeredListener.getListener();
+
+			if (listener instanceof ProtectionEvents) {
+				HandlerList.unregisterAll(listener);
+			}
+		}
+		
+		//Yep, I'm registering my code for another plugin.  It makes sense
+		//here, as this code is used to do the same thing.
+		Bukkit.getPluginManager().registerEvents(new ProtectionListener(),
+				uSkyBlock.getInstance());
+	}
+	
 	/**
 	 * Called when a player interacts with (EG right-clicks) an entity.
 	 * 
