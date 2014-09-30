@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.bukkit.entity.EntityType;
 import org.bukkit.Material;
 
 import pokechu22.plugins.SkyblockExtension.protection.HangingType;
 import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 
+@RunWith(JUnitParamsRunner.class)
 public class ListUtilTest {
 	/**
 	 * Used to ensure proper exceptions are thrown in certain cases,
@@ -33,6 +38,7 @@ public class ListUtilTest {
 	 * @author Pokechu22
 	 *
 	 */
+	@Parameters
 	public static enum TestEnum {
 		TEST1,
 		TEST2,
@@ -183,30 +189,22 @@ public class ListUtilTest {
 	
 	/**
 	 * Attempts to parse several lists with broken brackets.
+	 * @throws ParseException 
 	 */
 	@Test
-	public void invalidListFromatShouldFail() {		
-		final String[] tests = {
-				"[[]",
+	@Parameters({"[[]",
 				"[]]",
 				"[] hi",
 				"hi",
 				"[h]i",
 				"[hi []",
-				"[[]]"
-		};
+				"[[]]"})
+	public void invalidListFromatShouldFail(String toTest) throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(startsWith("§cList format is invalid: It must start with " +
+				"'[' and end with ']', and not have any '['" + 
+				" or ']' anywhere else in it."));
 		
-		for(String toTest : tests) {
-			try {
-				ListUtil.parseList(toTest, TestEnum.class);
-			} catch (ParseException e) {
-				assertThat(e.getMessage(), startsWith(
-						"§cList format is invalid: It must start with " +
-						"'[' and end with ']', and not have any '['" + 
-						" or ']' anywhere else in it."));
-				continue;
-			}
-			fail("Exception was not thrown for " + toTest + "!");
-		}
+		ListUtil.parseList(toTest, TestEnum.class);
 	}
 }
