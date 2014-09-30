@@ -24,9 +24,7 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
-import pokechu22.plugins.SkyblockExtension.protection.ProtectionHandler_OLD;
 import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
-import pokechu22.plugins.SkyblockExtension.protection.USkyBlockProtectionListener;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
 import us.talabrek.ultimateskyblock.PlayerInfo;
@@ -738,7 +736,9 @@ public class CommandPokechu22 {
 				return;
 			}
 			
-			if (!(sender instanceof Player)) {
+			//TODO replace/remove these
+			sender.sendMessage("§cThis test is disabled; why are you even running this build?");
+			/*if (!(sender instanceof Player)) {
 				sender.sendMessage("§cYou must be a player.");
 				return;
 			}
@@ -749,14 +749,16 @@ public class CommandPokechu22 {
 			} else {
 				sender.sendMessage("You do not have permission in this area.");
 			}
-			return;
+			return;*/
 		}
 		
 		if (args[1].equalsIgnoreCase("ReplaceDefaultProtections")) {
 			if (!PermissionHandler.HasPermision(sender, "sbe.debug.test.ReplaceDefaultProtections")) {
 				return;
 			}
-			sender.sendMessage("Removing default uSkyBlock protection system.");
+			//TODO replace/remove these
+			sender.sendMessage("§cThis test is disabled; why are you even running this build?");
+			/*sender.sendMessage("Removing default uSkyBlock protection system.");
 			USkyBlockProtectionListener.removeExistingProtectionEvents();
 			sender.sendMessage("Installing new protection system.");
 			SkyblockExtension
@@ -766,7 +768,7 @@ public class CommandPokechu22 {
 					.registerEvents(new USkyBlockProtectionListener(),
 							SkyblockExtension.inst());
 			sender.sendMessage("Done!");
-			return;
+			return;*/
 		}
 		
 		if (args[1].equalsIgnoreCase("MyIslandLocation")) {
