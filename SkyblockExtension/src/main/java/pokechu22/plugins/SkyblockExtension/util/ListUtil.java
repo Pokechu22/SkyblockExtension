@@ -75,13 +75,13 @@ public class ListUtil {
 		
 		ArrayList<T> tempList = new ArrayList<T>();
 		for (int i = 0; i < stringValues.length; i++) {
+			//Trim the value.
+			stringValues[i] = stringValues[i].trim();
+			
 			//Skip empty values.
 			if (stringValues[i].isEmpty()) {
 				continue;
 			}
-			
-			//Trim the value.
-			stringValues[i] = stringValues[i].trim();
 			
 			T value = matchEnumValue(stringValues[i], type);
 			if (value == null) {
