@@ -35,6 +35,16 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	 */
 	static class SecondHalfData {
 		/**
+		 * Is this a negative/inverse one?
+		 */
+		public boolean isNegative;
+		
+		/**
+		 * What values?
+		 */
+		public EnumSet<Material> values;
+		
+		/**
 		 * Gets a serialized reperenstentation.
 		 * 
 		 * @return
