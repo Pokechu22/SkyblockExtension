@@ -43,7 +43,12 @@ public abstract class IslandProtectionDataSetFlag {
 		/**
 		 * Represents a list of all vehicles.
 		 */
-		VEHICLELIST(VehicleListFlag.class, true);
+		VEHICLELIST(VehicleListFlag.class, true),
+		/**
+		 * Represents a map between a material and a set of materials.
+		 * (EG: Item in hand interacting with a range of blocks)
+		 */
+		MaterialToMatierialListMapFlag(MaterialToMatierialListMapFlag.class, true);
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
 		private boolean canBeAddedTo;
