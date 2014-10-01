@@ -298,4 +298,21 @@ public class ListUtilTest {
 		assertThat(ListUtil.parseList("[,TEST1,]", TestEnum.class), is(expectedValue));
 		assertThat(ListUtil.parseList("[,,,TEST1,,,]", TestEnum.class), is(expectedValue));
 	}
+	
+	/**
+	 * Tests use of different list seperators.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void differentListSeperatorsShouldWork() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.parseList("[TEST1, TEST2]", TestEnum.class, ","), is(expected));
+		assertThat(ListUtil.parseList("[TEST1; TEST2]", TestEnum.class, ";"), is(expected));
+		assertThat(ListUtil.parseList("[TEST1! TEST2]", TestEnum.class, "!"), is(expected));
+		assertThat(ListUtil.parseList("[TEST1z TEST2]", TestEnum.class, "z"), is(expected));
+		assertThat(ListUtil.parseList("[TEST1= TEST2]", TestEnum.class, "="), is(expected));
+	}
 }

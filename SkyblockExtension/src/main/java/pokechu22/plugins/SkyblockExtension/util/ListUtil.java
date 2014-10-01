@@ -38,12 +38,7 @@ public class ListUtil {
 			throw new ParseException("§cValue cannot be null!", -1);
 		}
 		
-		StringBuilder actualData = new StringBuilder();
-		for (String value : listData) {
-			actualData.append(value);
-		}
-		
-		return parseList(actualData.toString(), type);
+		return parseList(listData, type, ",");
 	}
 	
 	/**
@@ -59,8 +54,51 @@ public class ListUtil {
 	 */
 	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type)
 			throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		return parseList(listData, type, ",");
+	}
+	
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData All data, with each value separated as
+	 *                 specified below.  Spaces are ignored.
+	 * @param type The enum to use for the list.
+	 * @param seperator The separator to use.
+	 * @return The list.
+	 * @throws ParseException when given invalid list.  This contains
+	 *         information that can be sent to a player, including
+	 *         color formating.
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String[] listData, Class<T> type, 
+			String seperator) throws ParseException {
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		return parseList(actualData.toString(), type, ",");
+	}
+	
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData All data, with each value separated as
+	 *                 specified below.  Spaces are ignored.
+	 * @param type The enum to use for the list.
+	 * @param seperator The separator to use.
+	 * @return The list.
+	 * @throws ParseException when given invalid list.  This contains
+	 *         information that can be sent to a player, including
+	 *         color formating.
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
+			String seperator) throws ParseException {
 		//If there is only 1 [ and 1 ], and both are at the start 
-		//and end of the strings...
+				//and end of the strings...
 		if (!((listData.indexOf("[") == 0) 
 				&& (listData.indexOf("[", 1) == -1)
 				&& (listData.indexOf("]") == (listData.length() - 1)))) {
@@ -71,7 +109,7 @@ public class ListUtil {
 		
 		String[] stringValues = 
 				listData.substring(1, listData.length() - 1)
-				.split(",");
+				.split(seperator);
 		
 		ArrayList<T> tempList = new ArrayList<T>();
 		for (int i = 0; i < stringValues.length; i++) {
