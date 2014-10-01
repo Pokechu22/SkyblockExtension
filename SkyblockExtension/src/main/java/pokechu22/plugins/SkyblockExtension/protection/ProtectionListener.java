@@ -387,6 +387,14 @@ public class ProtectionListener implements Listener {
 			event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
 			return;
 		} else {
+			//Food handling.  (If it fails, individual foods still can be tested below)
+			if (event.getMaterial().isEdible()) {
+				if (set.canEat.getValue()) {
+					return;
+				}
+			}
+			
+			//Normal.
 			if (set.canUseAllItems.getValue()) {
 				//TODO this is not the best value.
 				//It should be changed to canUseAllBlocks.
@@ -398,7 +406,11 @@ public class ProtectionListener implements Listener {
 					return;
 				} else {
 					event.setCancelled(true);
-					event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+					if (event.getMaterial().isEdible()) {
+						event.getPlayer().sendMessage("§cYou aren't allowed to eat in this area D:");
+					} else {
+						event.getPlayer().sendMessage("§cYou aren't allowed to do that in this area!");
+					}
 					return;
 				}
 			}
