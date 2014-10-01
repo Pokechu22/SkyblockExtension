@@ -131,7 +131,20 @@ public class ProtectionListener implements Listener {
 			if (!set.canPVP.getValue()) {
 				e.setCancelled(true);
 				attacker.sendMessage("§cYou aren't allowed PVP in this area!");
+				return;
 			}
+			Player attacked = (Player) e.getEntity();
+			
+			IslandProtectionDataSet attackedSet = getDataSetFor(attacked, 
+					e.getEntity().getLocation());
+			
+			if (!attackedSet.canPVP.getValue()) {
+				e.setCancelled(true);
+				attacker.sendMessage("§cThe other player isn't allowed " +
+						"PVP, and as such you cannot attack them!");
+				return;
+			}
+			
 			return;
 		}
 		
