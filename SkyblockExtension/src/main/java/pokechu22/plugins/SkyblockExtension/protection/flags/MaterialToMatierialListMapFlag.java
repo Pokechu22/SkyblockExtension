@@ -44,6 +44,17 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		public boolean allows(Material m) {
 			return (this.isInverted ^ items.contains(m));
 		}
+		
+		/**
+		 * Gets the value for chat.
+		 * @return
+		 */
+		public String getDisplayValue() {
+			//Red or green.
+			final String header = (this.isInverted ? "§c" : "§a");
+			//TODO
+			return header + "§r";
+		}
 	}
 	
 	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
