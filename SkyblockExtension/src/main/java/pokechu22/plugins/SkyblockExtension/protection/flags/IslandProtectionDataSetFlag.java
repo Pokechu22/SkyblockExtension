@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.naming.ConfigurationException;
+
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.util.nbt.StringTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
 
 /**
  * Represents a single flag.
@@ -253,6 +257,30 @@ public abstract class IslandProtectionDataSetFlag {
 							" using " + serialized + ".");
 		}
 		return null;
+	}
+	
+	/**
+	 * Serializes this flag to an NBT value.
+	 * @param name
+	 * @return
+	 */
+	public Tag serializeToNBT(String name) {
+		return new StringTag(name, this.getSerializedValue());
+	}
+	
+	/**
+	 * Deserializes the flag from an NBT value.
+	 * @param value
+	 * @throws ConfigurationException 
+	 */
+	public void deserializeFromNBT(Tag value) throws ConfigurationException {
+		if (!(value instanceof StringTag)) {
+			throw new ConfigurationException("Expected StringTag, got " + 
+					value.getClass().getName() + ".  (Value: " +
+					value.toString() + ")");
+		}
+		StringTag tag = (StringTag) value;
+		this.setValue(tag.data);
 	}
 	
 	/**
