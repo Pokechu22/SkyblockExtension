@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.protection.flags;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public String getDispayValue() {
+	public String getDisplayValue() {
 		return Boolean.toString(value);
 	}
 
@@ -59,13 +60,28 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public boolean canAddToValue() {
-		return false;
+	public List<String> getActions() {
+		return Arrays.asList(new String[]{"set", "get"});
 	}
 
 	@Override
-	public String addToValue(String addition, boolean force) {
-		return "§cBooleans cannot be added to!";
+	public String preformAction(String action, String[] args) {
+		switch (action) {
+		case "set": {
+			StringBuilder m = new StringBuilder();
+			for (int i = 0; i < args.length; i++) {
+				m.append(args[i]);
+				if (i == args.length - 1) {
+					m.append(" ");
+				}
+			}
+			return setValue(m.toString());
+		}
+		case "get": {
+			return getDisplayValue();
+		}
+		}
+		return "§c" + action + " is not a valid action for this flag!";
 	}
 	
 	@Override

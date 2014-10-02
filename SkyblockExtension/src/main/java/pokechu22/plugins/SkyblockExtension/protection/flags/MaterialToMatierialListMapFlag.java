@@ -52,7 +52,7 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	}
 
 	@Override
-	public String getDispayValue() {
+	public String getDisplayValue() {
 		return "§cNot Yet Implemented";
 	}
 
@@ -64,9 +64,14 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	}
     
     @Override
-	public boolean canAddToValue() {
-		return true;
+	public List<String> getActions() {
+		return null;
 	}
+    
+    @Override
+    public String preformAction(String action, String[] args) {
+    	return "";
+    }
 
 	@Override
 	public List<String> tabComplete(String action, String[] partialValues) {

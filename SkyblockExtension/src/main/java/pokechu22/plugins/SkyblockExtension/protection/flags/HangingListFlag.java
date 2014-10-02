@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.protection.flags;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pokechu22.plugins.SkyblockExtension.protection.HangingType;
@@ -38,7 +39,7 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public String getDispayValue() {
+	public String getDisplayValue() {
 		return value.toString();
 	}
 
@@ -100,11 +101,42 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public boolean canAddToValue() {
-		return true;
+	public List<String> getActions() {
+		return Arrays.asList(new String[]{"set", "get", "add", "add-f"});
 	}
 
 	@Override
+	public String preformAction(String action, String[] args) {
+		String singleArgs;
+		//Wrapping to control visibility!
+		{
+			StringBuilder m = new StringBuilder();
+			for (int i = 0; i < args.length; i++) {
+				m.append(args[i]);
+				if (i == args.length - 1) {
+					m.append(" ");
+				}
+			}
+			singleArgs = m.toString();
+		}
+		
+		switch (action) {
+		case "set": {
+			return setValue(singleArgs);
+		}
+		case "get": {
+			return getDisplayValue();
+		}
+		case "add": {
+			return addToValue(singleArgs, false);
+		}
+		case "add-f": {
+			return addToValue(singleArgs, true);
+		}
+		}
+		return "§c" + action + " is not a valid action for this flag!";
+	}
+
 	public String addToValue(String addition, boolean force) {
 		//If there is only 1 [ and 1 ], and both are at the start 
 		//and end of the strings...

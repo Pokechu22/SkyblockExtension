@@ -131,7 +131,7 @@ public abstract class IslandProtectionDataSetFlag {
 	 *
 	 * @return The value, or an error message.  
 	 */
-	public abstract String getDispayValue();
+	public abstract String getDisplayValue();
 	
 	/**
 	 * Sets the value of the flag, fit for being sent to a player.
@@ -145,32 +145,29 @@ public abstract class IslandProtectionDataSetFlag {
 	public abstract String setValue(String value);
 	
 	/**
-	 * Does this type support adding to the flag?
+	 * Gets the list of possible actions.
+	 * 
+	 * @return
 	 */
-	public abstract boolean canAddToValue();
+	public abstract List<String> getActions();
+	
+	/**
+	 * Performs one of the available actions.
+	 * 
+	 * @param action
+	 * @param args
+	 * @returns A message relating to success or failure.  
+	 * 			If you want to know if there was success, check the second 
+	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
+	 * 			success.  (Interpret anything other than a as a fail)
+	 */
+	public abstract String preformAction(String action, String[] args);
 	
 	/**
 	 * Gets the raw value of the flag.
 	 * Implementations are encouraged to specify this further. 
 	 */
 	public abstract Object getValue();
-	
-	/**
-	 * Adds to the value.
-	 * 
-	 * @param addition The thing to add.
-	 * @param force Force merging.  (If not present, it is an error to add
-	 *        something already present.  Otherwise, it is allowed, but a 
-	 *        warning)
-	 * @returns A message relating to success or failure.  
-	 * 			If you want to know if there was success, check the second 
-	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
-	 * 			success.
-	 */
-	public String addToValue(String addition, boolean force) {
-		return "§cAdding to flags of type " + getType().toString() + 
-				"is not allowed!";
-	}
 	
 	/**
 	 * For tab-completion.  
