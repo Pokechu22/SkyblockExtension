@@ -315,4 +315,24 @@ public class ListUtilTest {
 		assertThat(ListUtil.parseList("[TEST1z TEST2]", TestEnum.class, "z"), is(expected));
 		assertThat(ListUtil.parseList("[TEST1= TEST2]", TestEnum.class, "="), is(expected));
 	}
+	
+	/**
+	 * Tests use of different list openings/closings.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void differentListOpeningsShouldWork() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.parseList("[TEST1, TEST2]", TestEnum.class, "[", "]"), 
+				is(expected));
+		assertThat(ListUtil.parseList("{TEST1, TEST2}", TestEnum.class, "{", "}"), 
+				is(expected));
+		assertThat(ListUtil.parseList("jTEST1, TEST2l", TestEnum.class, "j", "l"), 
+				is(expected));
+		assertThat(ListUtil.parseList("]TEST1, TEST2[", TestEnum.class, "]", "["), 
+				is(expected));
+	}
 }

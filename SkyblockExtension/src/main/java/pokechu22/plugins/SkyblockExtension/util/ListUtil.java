@@ -75,6 +75,10 @@ public class ListUtil {
 	 */
 	public static <T extends Enum<T>> List<T> parseList(String[] listData, Class<T> type, 
 			String seperator) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
 		StringBuilder actualData = new StringBuilder();
 		for (String value : listData) {
 			actualData.append(value);
@@ -97,14 +101,106 @@ public class ListUtil {
 	 */
 	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
 			String seperator) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		return parseList(listData, type, seperator, "[", "]");
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData[], Class<T> type, 
+			String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		return parseList(actualData.toString(), type, ",", opening, closing);
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
+			String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		return parseList(listData, type, ",", opening, closing);
+	}
+	
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param seperator The separator between values
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData[], Class<T> type, 
+			String seperator, String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		return parseList(actualData.toString(), type, seperator, opening, closing);
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param seperator The separator between values
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
+			String seperator, String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
 		//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
-		if (!((listData.indexOf("[") == 0) 
-				&& (listData.indexOf("[", 1) == -1)
-				&& (listData.indexOf("]") == (listData.length() - 1)))) {
-			throw new ParseException("§cList format is invalid: It must start with " +
-					"'[' and end with ']', and not have any '['" + 
-					" or ']' anywhere else in it.", 0);
+		if (!((listData.indexOf(opening) == 0) 
+				&& (listData.indexOf(opening, 1) == -1)
+				&& (listData.indexOf(closing) == (listData.length() - 1)))) {
+			throw new ParseException("§cList format is invalid: It must start with '" +
+					opening + "' and end with '" + closing + "', and not have any '" +
+					opening + "' or '" + closing + "' anywhere else in it.", 0);
 		}
 		
 		String[] stringValues = 
