@@ -21,17 +21,43 @@ import org.bukkit.Material;
  *
  */
 public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag {
+	/**
+	 * A value corresponding to a single Material.
+	 * 
+	 * @author Pokechu22
+	 */
+	public class Value {
+		public EnumSet<Material> items;
+		public boolean isInverted;
+		
+		public Value() {
+			this.items = EnumSet.noneOf(Material.class);
+			this.isInverted = false;
+		}
+		
+		/**
+		 * Does this value allow use of the specific material?
+		 * 
+		 * @param m
+		 * @return
+		 */
+		public boolean allows(Material m) {
+			if (this.isInverted) {
+				return !items.contains(m);
+			} else {
+				return items.contains(m);
+			}
+		}
+	}
 	
-	protected EnumMap<Material, EnumSet<Material>> valueAllowed;
-	protected EnumMap<Material, EnumSet<Material>> valueBanned;
+	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
 	
 	/**
 	 * Deserialization.
 	 */
 	public MaterialToMatierialListMapFlag(String serialized)
 			throws IllegalArgumentException {
-		valueAllowed = new EnumMap<Material, EnumSet<Material>>(Material.class);
-		valueBanned = new EnumMap<Material, EnumSet<Material>>(Material.class);
+		values = new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(Material.class);
 		
 		String result = this.setValue(serialized);
 		if (result.startsWith("§a")) {
