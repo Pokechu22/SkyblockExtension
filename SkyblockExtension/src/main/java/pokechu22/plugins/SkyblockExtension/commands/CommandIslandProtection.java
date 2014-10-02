@@ -5,6 +5,7 @@ import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.command.Command;
@@ -19,7 +20,7 @@ public class CommandIslandProtection {
 	 * Subcommands, belonging to args[0].
 	 */
 	private static final String[] subCommands = new String[] {
-		"view", //Shows a flag's value.
+		"get", //Shows a flag's value.
 		"add", //Adds to a flag's value.
 		"add-f", //Forcibly adds to a flag's value.
 		"set" //Sets a flag's value.
@@ -53,42 +54,19 @@ public class CommandIslandProtection {
 			return TabLimit(Arrays.asList(subCommands), args[0]);
 		}
 		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-			case "view": //Fall thru to next
-			case "add": //Fall thru to next
-			case "add-f": //Fall thru to next
-			case "set": {
+			if (Arrays.asList(subCommands).contains(args[0].toLowerCase(Locale.ENGLISH))) {
 				return TabLimit(Arrays.asList(membershipTiers), args[1]);
-			}
 			}
 		}
 		if (args.length == 3) {
-			switch (args[0].toLowerCase()) {
-			case "view": //Fall thru to next
-			case "set": {
-				return TabLimit(IslandProtectionDataSet.flags, args[2]);
-			}
-			case "add-f": //Fall thru to next
-			case "add": {
-				ArrayList<String> returned = new ArrayList<String>();
-				for (Map.Entry<String, IslandProtectionDataSetFlag.FlagType> e : 
+			ArrayList<String> ret = new ArrayList<>();
+			for (Map.Entry<String, IslandProtectionDataSetFlag.FlagType> e : 
 					IslandProtectionDataSetFlag.flagTypes.entrySet()) {
-					switch (e.getValue()) {
-					case BOOLEAN:
-						break;
-					case ENTITYLIST: //Fall thru
-					case HANGINGLIST: //Fall thru
-					case MATERIALLIST: //Fall thru
-					case VEHICLELIST:
-						returned.add(e.getKey());
-						break;
-					default:
-						break;
-					}
+				if (e.getValue().canPreformAction(args[1].toLowerCase(Locale.ENGLISH))) {
+					ret.add(e.getKey());
 				}
-				return TabLimit(returned, args[2]);
 			}
-			}
+			return TabLimit(ret, args[2]);
 		}
 		
 		if (args.length >= 4) {
@@ -134,7 +112,7 @@ public class CommandIslandProtection {
 		
 		IslandProtectionDataSet relevantDataSet = tieredValues.get(parsedTier.name());
 		
-		if (args.length >= 4) {
+		if (args.length >= 3) {
 			String longParam = "";
 			for (int i = 3; i < args.length; i++) {
 				longParam += args[i];
@@ -142,23 +120,11 @@ public class CommandIslandProtection {
 			}
 			longParam = longParam.trim();
 			
-			if (args[0].equalsIgnoreCase("set")) {
-				sender.sendMessage(relevantDataSet.setFlagValue(args[2], longParam));
-			}
-			if (args[0].equalsIgnoreCase("add")) {
-				sender.sendMessage(relevantDataSet.addToFlagValue(args[2], longParam, false));
-			}
-			if (args[0].equalsIgnoreCase("add-f")) {
-				sender.sendMessage(relevantDataSet.addToFlagValue(args[2], longParam, true));
-			}
-		}
-		if (args.length == 3) {
-			if (args[0].equalsIgnoreCase("view")) {
-				sender.sendMessage(relevantDataSet.getFlagValue(args[2]));
-			}
+			relevantDataSet.preformActionOnFlag(args[2], args[0], 
+					Arrays.copyOfRange(args, 3, args.length));
 		}
 		if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("view")) {
+			if (args[0].equalsIgnoreCase("get")) {
 				sender.sendMessage(relevantDataSet.getAllValuesForChat());
 			}
 		}
