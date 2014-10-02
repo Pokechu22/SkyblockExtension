@@ -891,7 +891,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			for (String flagName : flags) {
 				IslandProtectionDataSetFlag flag = 
 						IslandProtectionDataSetFlag.deserialize(flagName, 
-								tag.getString(flagName));
+								tag.get(flagName));
 				if (flag != null) {
 					this.setFlag(flagName, flag);
 				} else {
@@ -915,9 +915,9 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				//TODO Add default value otherwise
 				continue;
 			}
-			String value = flag.getSerializedValue();
+			Tag value = flag.serializeToNBT(flagName);
 			if (value != null) {
-				tag.putString(flagName, value);
+				tag.put(flagName, value);
 			} // else { //TODO Add default value otherwise
 			
 			// }
