@@ -2,8 +2,10 @@ package pokechu22.plugins.SkyblockExtension.protection.flags;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
@@ -27,44 +29,75 @@ public abstract class IslandProtectionDataSetFlag {
 		/**
 		 * Flag that requires a boolean value of either true or false.
 		 */
-		BOOLEAN(BooleanFlag.class, false),
+		BOOLEAN(BooleanFlag.class, new String[]{"get", "set"}),
 		/**
 		 * Represents list of materials: Both blocks and items.
 		 */
-		MATERIALLIST(MaterialListFlag.class, true),
+		MATERIALLIST(MaterialListFlag.class, new String[]{"get", "set", "add", "add-f"}),
 		/**
 		 * Represents a list of all entities.
 		 */
-		ENTITYLIST(EntityListFlag.class, true),
+		ENTITYLIST(EntityListFlag.class, new String[]{"get", "set", "add", "add-f"}),
 		/**
 		 * Represents a list of all hangings.
 		 */
-		HANGINGLIST(HangingListFlag.class, true),
+		HANGINGLIST(HangingListFlag.class, new String[]{"get", "set", "add", "add-f"}),
 		/**
 		 * Represents a list of all vehicles.
 		 */
-		VEHICLELIST(VehicleListFlag.class, true),
+		VEHICLELIST(VehicleListFlag.class, new String[]{"get", "set", "add", "add-f"}),
 		/**
 		 * Represents a map between a material and a set of materials.
 		 * (EG: Item in hand interacting with a range of blocks)
+		 * TODO: NYF
 		 */
-		MaterialToMatierialListMapFlag(MaterialToMatierialListMapFlag.class, true);
+		MaterialToMatierialListMapFlag(MaterialToMatierialListMapFlag.class, new String[]{});
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
-		private boolean canBeAddedTo;
+		private String[] allowedActions;
+		
+		private static HashMap<String, EnumSet<FlagType>> byAction = new HashMap<>();
+		
+		static {
+			for (FlagType f : values()) {
+				for (String action : f.allowedActions) {
+					EnumSet<FlagType> val = byAction.get(action.toLowerCase(Locale.ENGLISH));
+					if (val == null) {
+						val = EnumSet.noneOf(FlagType.class);
+					}
+					val.add(f);
+					byAction.put(action.toLowerCase(Locale.ENGLISH), val);
+				}
+			}
+		}
 		
 		private FlagType(Class<? extends IslandProtectionDataSetFlag> clazz,
-				boolean canBeAddedTo) {
+				String[] allowedActions) {
 			this.clazz = clazz;
-			this.canBeAddedTo = canBeAddedTo;
+			this.allowedActions = allowedActions;
 		}
 		
 		public Class<? extends IslandProtectionDataSetFlag> getFlagClass() {
 			return clazz;
 		}
 		
-		public boolean canBeAddedTo() {
-			return this.canBeAddedTo;
+		public boolean canPreformAction(String action) {
+			for (String allowed : allowedActions) {
+				if (allowed.equalsIgnoreCase(action)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		/**
+		 * Gets a set of FlagTypes capable of performing said action.
+		 * 
+		 * @param action
+		 * @return
+		 */
+		public static EnumSet<FlagType> preformingAction(String action) {
+			return byAction.get(action.toLowerCase(Locale.ENGLISH));
 		}
 	}
 	/**
