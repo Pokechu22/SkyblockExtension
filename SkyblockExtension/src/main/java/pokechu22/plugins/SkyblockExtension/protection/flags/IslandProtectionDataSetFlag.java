@@ -219,6 +219,50 @@ public abstract class IslandProtectionDataSetFlag {
 	}
 	
 	/**
+	 * Deserializes from NBT.  Handles making sure that the type is right,  
+	 * by using reflection.
+	 * 
+	 * @param flag
+	 * @param serialized
+	 * @return
+	 */
+	public static IslandProtectionDataSetFlag deserialize(String flag, 
+			Tag serialized) {
+		try {
+			IslandProtectionDataSetFlag f;
+			f = flagTypes.get(flag).clazz.getConstructor(String.class)
+				.newInstance(serialized);
+			f.deserializeFromNBT(serialized);
+			return f;
+		} catch (IllegalArgumentException e) {
+			ErrorHandler.logError(new ConfigurationErrorReport(e, 
+					flagTypes.get(flag).clazz.getName(), false).setContext(
+							"Failed to deserialize " + 
+									"IslandProtectionDataSetFlag " + flag + 
+									" of type " +  
+									flagTypes.get(flag).clazz.getName() 
+									+ " using " + serialized + "."));
+			SkyblockExtension.inst().getLogger().severe(
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + ".");
+		} catch (Exception e) {
+			ErrorHandler.logError(new ThrowableReport(e, 
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + "."));
+			SkyblockExtension.inst().getLogger().severe(
+					"Failed to deserialize IslandProtectionDataSetFlag " + 
+							flag + " of type " + 
+							flagTypes.get(flag).clazz.getName() + 
+							" using " + serialized + ".");
+		}
+		return null;
+	}
+	
+	/**
 	 * Deserializes.  Handles making sure that the type is right, by using 
 	 * reflection.
 	 * 
@@ -275,7 +319,7 @@ public abstract class IslandProtectionDataSetFlag {
 	 */
 	public void deserializeFromNBT(Tag value) throws ConfigurationException {
 		if (!(value instanceof StringTag)) {
-			throw new ConfigurationException("Expected StringTag, got " + 
+			throw new IllegalArgumentException("Expected StringTag, got " + 
 					value.getClass().getName() + ".  (Value: " +
 					value.toString() + ")");
 		}
