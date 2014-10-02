@@ -1,6 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -246,7 +247,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public String getFlagValue(String flag) {
 		try {
 			return ((IslandProtectionDataSetFlag)(this.getClass()
-					.getField(flag).get(this))).getDispayValue();
+					.getField(flag).get(this))).getDisplayValue();
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
 					"Failed to use reflection to get field.  Flag: " + 
@@ -277,48 +278,50 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	}
 	
 	/**
-	 * Adds additional data to an existing flag.
+	 * Performs an action to an existing flag.
+	 * 
 	 * @param flag
 	 * @param addition
-	 * @param force
-	 * 			Whether to force it - If false, returns an error when trying
-	 * 			to add a value that exists in the flag already.  Otherwise,
-	 * 			it gives a warning, but still merges. 
 	 * @returns A message relating to success or failure.  
 	 * 			If you want to know if there was success, check the second 
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.
 	 */
-	public String addToFlagValue(String flag, String addition, 
-			boolean force) {
+	public String preformActionOnFlag(String flag, String action, 
+			String[] args) {
 		try {
 			return ((IslandProtectionDataSetFlag)(this.getClass()
-					.getField(flag).get(this))).addToValue(addition, force);
+					.getField(flag).get(this))).preformAction(action, args);
 		} catch (IllegalArgumentException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to add to field.  Flag: " + 
-							flag + "; Addition: " + addition + "."));
+					"Failed to use reflection to preform action on " +
+							"field.  Flag: " + flag + "; Action: " +
+							action + "; args: " + Arrays.toString(args)));
 			return "§cAn error occured: " + e.toString();
 		} catch (IllegalAccessException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to add ti field.  Flag: " + 
-							flag + "; Addition: " + addition + "."));
+					"Failed to use reflection to preform action on " +
+							"field.  Flag: " + flag + "; Action: " +
+							action + "; args: " + Arrays.toString(args)));
 			return "§cAn error occured: " + e.toString();
 		} catch (NoSuchFieldException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to find relevant field.  " + 
-							"Flag: " + flag + "; Addition: " + addition +  
+					"Failed to use reflection to find relavant " +
+							"field.  Flag: " + flag + "; Action: " +
+							action + "; args: " + Arrays.toString(args) + 
 					".  This probably means that flags is incorect."));
 			return "§cAn error occured: " + e.toString();
 		} catch (SecurityException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to add to field.  Flag: " + 
-							flag + "; Addition: " + addition + "."));
+					"Failed to use reflection to preform action on " +
+							"field.  Flag: " + flag + "; Action: " +
+							action + "; args: " + Arrays.toString(args)));
 			return "§cAn error occured: " + e.toString();
 		} catch (NullPointerException e) {
 			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to use reflection to add to field.  Flag: " + 
-							flag + "; Addition: " + addition + "."));
+					"Failed to use reflection to preform action on " +
+							"field.  Flag: " + flag + "; Action: " +
+							action + "; args: " + Arrays.toString(args)));
 			return "§cAn error occured: " + e.toString();
 		}
 	}
