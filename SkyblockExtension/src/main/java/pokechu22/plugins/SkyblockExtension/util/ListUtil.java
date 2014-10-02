@@ -251,6 +251,71 @@ public class ListUtil {
 	}
 	
 	/**
+	 * Converts a list to a comma-separated string.
+	 * This method uses the {@link java.util.AbstractCollection#toString()}
+	 * method to create the list.  It starts and ends with brackets.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>[EGGS, MILK]</samp>.
+	 * @param value
+	 * @return
+	 */
+	public <T> String convertListToString(List<T> value) {
+		//Creating an ArrayList in case there is no AbstractCollection.
+		return new ArrayList<T>(value).toString();
+	}
+	
+	/**
+	 * Converts a list to a string, using that separator.
+	 * The list starts and ends with brackets.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>[EGGS; MILK]</samp>
+	 * when separator ";" is used.
+	 * 
+	 * @param value
+	 * @param separator
+	 * @return
+	 */
+	public <T> String convertListToString(List<T> value, String separator) {
+		return convertListToString(value, separator, "[", "]");
+	}
+	
+	/**
+	 * Converts a list to a string, using the provided symbols.
+	 * It is comma-separated.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>{EGGS, MILK}</samp>
+	 * when using "{" and "}".
+	 * 
+	 * @param value
+	 * @param openingSymbol
+	 * @param closingSymbol
+	 * @return
+	 */
+	public <T> String convertListToString(List<T> value, 
+			String openingSymbol, String closingSymbol) {
+		return convertListToString(value, ",", closingSymbol, openingSymbol);
+	}
+	
+	/**
+	 * Converts a list to a string, using the provided symbols.
+	 * It is comma-separated.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>{EGGS; MILK}</samp>
+	 * when using "{" and "}" for symbols and ";" for separator.
+	 * 
+	 * @param value
+	 * @param separator
+	 * @param openingSymbol
+	 * @param closingSymbol
+	 * @return
+	 */
+	public <T> String convertListToString(List<T> value, String separator, 
+			String openingSymbol, String closingSymbol) {
+		//TODO
+		return null;
+	}
+	
+	/**
 	 * Matches an enum value.
 	 * <br>
 	 * For a few specific enums, the value is obtained with a different
