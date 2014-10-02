@@ -5,7 +5,9 @@ import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
 
@@ -19,58 +21,17 @@ import org.bukkit.Material;
  *
  */
 public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag {
-
-	/**
-	 * Data for the individual values, eg things that can be placed on.
-	 * 
-	 * It's a []-based list, but it has the following special conditions:
-	 * [*] = all values allowed.  [*, -DIRT] bans placement of dirt only.
-	 * If it uses *, it is invalid to have any non-minus values; without
-	 * the * it is illegal to have any minus values.
-	 * 
-	 * TODO: This is a worse name :(
-	 * 
-	 * @author Pokechu22
-	 *
-	 */
-	static class SecondHalfData {
-		/**
-		 * Is this a negative/inverse one?
-		 */
-		public boolean isNegative;
-		
-		/**
-		 * What values?
-		 */
-		public EnumSet<Material> values;
-		
-		/**
-		 * Gets a serialized reperenstentation.
-		 * 
-		 * @return
-		 */
-		public String serialize() {
-			return null; //TODO
-		}
-		
-		/**
-		 * Loads the values from the serialized version into this.
-		 * 
-		 * @param serialized
-		 */
-		public void deserialize(String serialized) {
-			//TODO
-		}
-	}
 	
-	protected EnumMap<Material, EnumSet<Material>> value;
+	protected EnumMap<Material, EnumSet<Material>> valueAllowed;
+	protected EnumMap<Material, EnumSet<Material>> valueBanned;
 	
 	/**
 	 * Deserialization.
 	 */
 	public MaterialToMatierialListMapFlag(String serialized)
 			throws IllegalArgumentException {
-		value = new EnumMap<Material, EnumSet<Material>>(Material.class);
+		valueAllowed = new EnumMap<Material, EnumSet<Material>>(Material.class);
+		valueBanned = new EnumMap<Material, EnumSet<Material>>(Material.class);
 		
 		String result = this.setValue(serialized);
 		if (result.startsWith("§a")) {
@@ -87,12 +48,12 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 
 	@Override
 	public String getSerializedValue() {
-		return value.toString();
+		return "§cNot Yet Implemented";
 	}
 
 	@Override
 	public String getDispayValue() {
-		return value.toString();
+		return "§cNot Yet Implemented";
 	}
 
 	@Override
@@ -119,14 +80,19 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 
 	@Override
 	public int hashCode() {
+		Object value = null; //TODO
+		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public boolean equals(Object obj) {
+		Object value = null; //TODO
+		
 		if (this == obj) {
 			return true;
 		}
@@ -138,10 +104,10 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		}
 		MaterialToMatierialListMapFlag other = (MaterialToMatierialListMapFlag) obj;
 		if (value == null) {
-			if (other.value != null) {
+			if (null/*other.value*/ != null) {
 				return false;
 			}
-		} else if (!value.equals(other.value)) {
+		} else if (!value.equals(null/*other.value*/)) {
 			return false;
 		}
 		return true;
@@ -149,6 +115,42 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 
 	@Override
 	public Object getValue() {
-		return value;
+		return null;
+	}
+	
+	/**
+	 * Converts the map value to a formated string.
+	 */
+	private String valueToString(EnumMap<Material, EnumSet<Material>> value) {
+		StringBuilder returned = new StringBuilder();
+		returned.append("[");
+		
+		for (Map.Entry<Material, EnumSet<Material>> entry : value.entrySet()) {
+			returned.append(entry.getKey().name());
+			returned.append("->");
+			
+			if (entry.getValue() == null) {
+				returned.append("*");
+			} else {
+				returned.append("{");
+				
+				Iterator<Material> i = entry.getValue().iterator();
+				
+				while (i.hasNext()) {
+					Material m = i.next();
+					returned.append(m.name());
+					if (i.hasNext()) {
+						returned.append(". ");
+					}
+				}
+				
+				returned.append("}");
+			}
+			
+			returned.append(", ");
+		}
+		
+		returned.append("]");
+		return returned.toString();
 	}
 }
