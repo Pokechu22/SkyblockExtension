@@ -42,11 +42,7 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		 * @return
 		 */
 		public boolean allows(Material m) {
-			if (this.isInverted) {
-				return !items.contains(m);
-			} else {
-				return items.contains(m);
-			}
+			return (this.isInverted ^ items.contains(m));
 		}
 	}
 	
