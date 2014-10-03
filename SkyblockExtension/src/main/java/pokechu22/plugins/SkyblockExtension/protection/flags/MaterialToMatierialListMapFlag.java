@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.protection.flags;
 
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
+
+import pokechu22.plugins.SkyblockExtension.util.ListUtil;
 
 /**
  * Flag mapping materials (EG in hand) to a list of materials 
@@ -52,12 +55,39 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		public String getDisplayValue() {
 			//Red or green.
 			final String header = (this.isInverted ? "§c" : "§a");
-			//TODO
-			return header + "§r";
+			final String contents = ListUtil.convertListToString(
+					new ArrayList<Material>(this.items), "; ", "{", "}");
+			return header + contents + "§r";
+		}
+		
+		/**
+		 * Gets the value for serialization.
+		 */
+		public String getSerializedValue() {
+			final String contents = ListUtil.convertListToString(
+					new ArrayList<Material>(this.items), "; ", "{", "}");
+			return contents;
+		}
+		
+		/**
+		 * Deserializes, or sets the value from a string.
+		 */
+		public String setValue(String value) {
+			try {
+				List<Material> m = ListUtil.parseList(value, Material.class, "; ", "{", "}");
+				
+				this.items = EnumSet.noneOf(Material.class);
+				this.items.addAll(m);
+				
+				return "§aValue set sucessfully";
+			} catch (ParseException e) {
+				return e.toString();
+			}
 		}
 	}
 	
 	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
+	
 	
 	/**
 	 * Deserialization.
