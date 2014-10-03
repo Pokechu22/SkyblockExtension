@@ -194,6 +194,9 @@ public class ListUtil {
 			throw new ParseException("§cValue cannot be null!", -1);
 		}
 		
+		//Needed to allow for spacing.
+		seperator = seperator.trim();
+		
 		//If there is only 1 [ and 1 ], and both are at the start 
 				//and end of the strings...
 		if (!((listData.indexOf(opening) == 0) 
