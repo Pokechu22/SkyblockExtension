@@ -169,7 +169,28 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 
 	@Override
 	public String getSerializedValue() {
-		return "§cNot Yet Implemented";
+		//Slightly redundant but not quite.
+		StringBuilder returned = new StringBuilder();
+		returned.append("[");
+		
+		Iterator<Map.Entry<Material, MaterialToMatierialListMapFlag.Value>>
+				itr = values.entrySet().iterator();
+		
+		while (itr.hasNext()) {
+			Map.Entry<Material, MaterialToMatierialListMapFlag.Value> e
+					= itr.next();
+			
+			returned.append(e.getKey().name());
+			returned.append("->");
+			returned.append(e.getValue().getSerializedValue());
+			
+			if (itr.hasNext()) {
+				returned.append(", ");
+			}
+		}
+		
+		returned.append("]");
+		return returned.toString();
 	}
 
 	@Override
@@ -240,8 +261,8 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	}
 
 	@Override
-	public Object getValue() {
-		return null;
+	public EnumMap<Material, MaterialToMatierialListMapFlag.Value> getValue() {
+		return new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(this.values);
 	}
 	
 	/**
