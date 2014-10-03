@@ -39,7 +39,6 @@ public class ListUtilTest {
 	 * @author Pokechu22
 	 *
 	 */
-	@Parameters
 	public static enum TestEnum {
 		TEST1,
 		TEST2,
