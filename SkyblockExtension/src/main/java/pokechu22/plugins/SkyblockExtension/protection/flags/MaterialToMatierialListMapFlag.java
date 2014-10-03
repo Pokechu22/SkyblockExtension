@@ -13,6 +13,11 @@ import java.util.Map;
 import org.bukkit.Material;
 
 import pokechu22.plugins.SkyblockExtension.util.ListUtil;
+import pokechu22.plugins.SkyblockExtension.util.nbt.CompoundTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.IntTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.ListTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.StringTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
 
 /**
  * Flag mapping materials (EG in hand) to a list of materials 
@@ -82,6 +87,53 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 				return "§aValue set sucessfully";
 			} catch (ParseException e) {
 				return e.toString();
+			}
+		}
+		
+		/**
+		 * Serializes to an NBT tag.
+		 */
+		@SuppressWarnings("deprecation")
+		public CompoundTag serializeToNBT(String tagName) {
+			CompoundTag returned = new CompoundTag(tagName);
+			returned.putBoolean("isInverted", this.isInverted);
+			
+			ListTag<IntTag> list = new ListTag<IntTag>("items");
+			for (Material m : this.items) {
+				list.add(new IntTag(null, m.getId()));
+			}
+			
+			return returned;
+		}
+		
+		/**
+		 * Sets the values of this from a tag.
+		 * @param tag
+		 * @throws IllegalArgumentException when given an unrecognised tag.
+		 */
+		@SuppressWarnings("deprecation")
+		public void deserializeFromNBT(Tag tag) throws IllegalArgumentException {
+			if (tag instanceof StringTag) {
+				this.setValue(((StringTag) tag).data);
+				
+				return;
+			} else if (tag instanceof CompoundTag) {
+				this.isInverted = ((CompoundTag) tag).getBoolean("isInverted");
+				this.items = EnumSet.noneOf(Material.class);
+				
+				ListTag<?> list = (ListTag<?>)(((CompoundTag) tag).getList("items"));
+				
+				for (int i = 0; i < list.size(); i++) {
+					IntTag _int = (IntTag) list.get(i);
+					
+					items.add(Material.getMaterial(_int.data));
+				}
+				
+				return;
+			} else {
+				throw new IllegalArgumentException("Failed to deseialize:\n" +
+						"Expected StringTag or CompoundTag, got " + 
+						tag.getClass().getName() + ".  Data: " + tag.toString());
 			}
 		}
 	}
