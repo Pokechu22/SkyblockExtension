@@ -6,10 +6,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class BooleanFlag extends IslandProtectionDataSetFlag {
 
 	protected boolean value;
+	
+	/**
+	 * Package-Protected constructor for use with deserialization.
+	 */
+	BooleanFlag() {
+		value = false;
+	}
 	
 	/**
 	 * Deserialization constructor.

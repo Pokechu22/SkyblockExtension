@@ -13,6 +13,13 @@ public class EntityListFlag extends IslandProtectionDataSetFlag {
 	protected ArrayList<EntityType> value;
 	
 	/**
+	 * Package-Protected constructor for use with deserialization.
+	 */
+	EntityListFlag() {
+		value = new ArrayList<EntityType>();
+	}
+	
+	/**
 	 * Deserialization.
 	 */
 	public EntityListFlag(String serialized)

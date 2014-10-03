@@ -13,6 +13,13 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 	public ArrayList<HangingType> value;
 	
 	/**
+	 * Package-Protected constructor for use with deserialization.
+	 */
+	HangingListFlag() {
+		value = new ArrayList<HangingType>();
+	}
+	
+	/**
 	 * Deserialization.
 	 * 
 	 * @throws IllegalArgumentException When given an invalid input.

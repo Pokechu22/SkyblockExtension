@@ -88,6 +88,12 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	
 	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
 	
+	/**
+	 * Protected constructor for use with deserialization.
+	 */
+	MaterialToMatierialListMapFlag() {
+		values = new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(Material.class);
+	}
 	
 	/**
 	 * Deserialization.

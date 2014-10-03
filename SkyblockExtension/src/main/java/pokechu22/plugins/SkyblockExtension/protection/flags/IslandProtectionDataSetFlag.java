@@ -230,8 +230,8 @@ public abstract class IslandProtectionDataSetFlag {
 			Tag serialized) {
 		try {
 			IslandProtectionDataSetFlag f;
-			f = flagTypes.get(flag).clazz.getConstructor(String.class)
-				.newInstance(serialized);
+			f = flagTypes.get(flag).clazz.getConstructor()
+				.newInstance();
 			f.deserializeFromNBT(serialized);
 			return f;
 		} catch (IllegalArgumentException e) {

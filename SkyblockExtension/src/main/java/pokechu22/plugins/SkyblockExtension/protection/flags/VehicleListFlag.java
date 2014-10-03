@@ -13,6 +13,13 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 	protected ArrayList<VehicleType> value;
 	
 	/**
+	 * Package-Protected constructor for use with deserialization.
+	 */
+	VehicleListFlag() {
+		value = new ArrayList<VehicleType>();
+	}
+	
+	/**
 	 * Deserialization.
 	 * 
 	 * @throws IllegalArgumentException when given invalid data.

@@ -13,6 +13,13 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 	protected ArrayList<Material> value;
 	
 	/**
+	 * Package-Protected constructor for use with deserialization.
+	 */
+	MaterialListFlag() {
+		value = new ArrayList<Material>();
+	}
+	
+	/**
 	 * Deserialization.
 	 * 
 	 * @throws IllegalArgumentException when given an invalid value.
