@@ -294,7 +294,7 @@ public class ListUtil {
 	 */
 	public static <T> String convertListToString(List<T> value, 
 			String openingSymbol, String closingSymbol) {
-		return convertListToString(value, ", ", closingSymbol, openingSymbol);
+		return convertListToString(value, ", ", openingSymbol, closingSymbol);
 	}
 	
 	/**
