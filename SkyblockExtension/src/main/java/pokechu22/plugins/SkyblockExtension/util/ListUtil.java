@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.util;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -259,7 +260,7 @@ public class ListUtil {
 	 * @param value
 	 * @return
 	 */
-	public <T> String convertListToString(List<T> value) {
+	public static <T> String convertListToString(List<T> value) {
 		//Creating an ArrayList in case there is no AbstractCollection.
 		return new ArrayList<T>(value).toString();
 	}
@@ -269,13 +270,13 @@ public class ListUtil {
 	 * The list starts and ends with brackets.
 	 * <br>
 	 * EG A list containing EGGS and MILK gives <samp>[EGGS; MILK]</samp>
-	 * when separator ";" is used.
+	 * when separator "; " is used.
 	 * 
 	 * @param value
 	 * @param separator
 	 * @return
 	 */
-	public <T> String convertListToString(List<T> value, String separator) {
+	public static <T> String convertListToString(List<T> value, String separator) {
 		return convertListToString(value, separator, "[", "]");
 	}
 	
@@ -291,9 +292,9 @@ public class ListUtil {
 	 * @param closingSymbol
 	 * @return
 	 */
-	public <T> String convertListToString(List<T> value, 
+	public static <T> String convertListToString(List<T> value, 
 			String openingSymbol, String closingSymbol) {
-		return convertListToString(value, ",", closingSymbol, openingSymbol);
+		return convertListToString(value, ", ", closingSymbol, openingSymbol);
 	}
 	
 	/**
@@ -301,7 +302,7 @@ public class ListUtil {
 	 * It is comma-separated.
 	 * <br>
 	 * EG A list containing EGGS and MILK gives <samp>{EGGS; MILK}</samp>
-	 * when using "{" and "}" for symbols and ";" for separator.
+	 * when using "{" and "}" for symbols and "; " for separator.
 	 * 
 	 * @param value
 	 * @param separator
@@ -309,10 +310,22 @@ public class ListUtil {
 	 * @param closingSymbol
 	 * @return
 	 */
-	public <T> String convertListToString(List<T> value, String separator, 
+	public static <T> String convertListToString(List<T> value, String separator, 
 			String openingSymbol, String closingSymbol) {
-		//TODO
-		return null;
+		StringBuilder ret = new StringBuilder();
+		ret.append(openingSymbol);
+		
+		Iterator<T> itr = value.iterator();
+		while(itr.hasNext()) {
+			ret.append(itr.next());
+			//Append the separator only if there is another value.
+			if (itr.hasNext()) {
+				ret.append(separator);
+			}
+		}
+		
+		ret.append(closingSymbol);
+		return ret.toString();
 	}
 	
 	/**
