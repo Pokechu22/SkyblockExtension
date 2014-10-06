@@ -302,13 +302,16 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	}
 	
 	/**
-	 * Check allowence of specific action.
+	 * Check allowance of specific action.
 	 * @param held
 	 * @param on
 	 * @return
 	 */
-	public boolean allows(Material held, Material on) {
-		//TODO
-		return false;
+	public boolean allows(Material held, Material on) { 
+		if (!this.values.containsKey(held)) {
+			return false;
+		}
+		Value v = values.get(held);
+		return v.allows(on);
 	}
 }
