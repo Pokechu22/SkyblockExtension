@@ -300,4 +300,15 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		returned.append("]");
 		return returned.toString();
 	}
+	
+	/**
+	 * Check allowence of specific action.
+	 * @param held
+	 * @param on
+	 * @return
+	 */
+	public boolean allows(Material held, Material on) {
+		//TODO
+		return false;
+	}
 }
