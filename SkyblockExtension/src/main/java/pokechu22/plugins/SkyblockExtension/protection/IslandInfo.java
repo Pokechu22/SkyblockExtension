@@ -620,7 +620,7 @@ public class IslandInfo {
 		xPos = (int)(this.islandCenter.getX() / Settings.island_distance);
 		zPos = (int)(this.islandCenter.getZ() / Settings.island_distance);
 		
-		return xPos + "x" + zPos + "z";
+		return xPos + "x" + zPos + "z" + ".nbt";
 	}
 	
 	/**
@@ -630,8 +630,8 @@ public class IslandInfo {
 	 */
 	public void saveToDisk() throws FileNotFoundException, IOException {
 		NbtIo.writeCompressed((CompoundTag) this.serializeToNBT(), 
-				new FileOutputStream(new File(SkyblockExtension.inst()
-						.getDataFolder(), (this.getFileName() + ".nbt"))));
+				new FileOutputStream(new File(SkyblockExtension
+						.getIslandInfoDirectory(), (this.getFileName()))));
 	}
 	
 	/**
@@ -659,8 +659,8 @@ public class IslandInfo {
 		IslandInfo returned = new IslandInfo();
 		
 		returned.deserializeFromNBT(NbtIo.readCompressed(
-				new FileInputStream(new File(SkyblockExtension.inst()
-				.getDataFolder(), fileName))));
+				new FileInputStream(new File(SkyblockExtension
+						.getIslandInfoDirectory(), fileName))));
 		
 		return returned;
 	}
