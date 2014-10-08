@@ -381,7 +381,6 @@ public class SkyblockExtension extends JavaPlugin {
 		returned = new File((new File(SkyblockExtension.class.getResource("/plugin.yml")
 				.getFile())).getParentFile().getParentFile(), "test-classes");
 		
-		System.out.println(returned.getAbsolutePath());
 		return returned;
 	}
 }
