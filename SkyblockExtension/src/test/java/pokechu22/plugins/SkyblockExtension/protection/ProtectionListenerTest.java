@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -28,9 +30,8 @@ public class ProtectionListenerTest {
 		Player mockPlayer = mock(Player.class);
 		when(mockPlayer.getLocation()).thenReturn(location);
 		
-		//TODO this is due to saved files.
-		//Won't work right on other computers.
-		when(mockPlayer.getName()).thenReturn("pokechu22"); 
+		when(mockPlayer.getName()).thenReturn("owner");
+		when(mockPlayer.getUniqueId()).thenReturn(new UUID(0, 0)); 
 		when(mockPlayer.hasPermission("usb.mod.bypassprotection")).thenReturn(false);
 		
 		return mockPlayer;

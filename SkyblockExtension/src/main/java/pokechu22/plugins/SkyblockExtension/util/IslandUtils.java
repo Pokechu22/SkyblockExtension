@@ -156,8 +156,7 @@ public class IslandUtils {
 			return IslandInfo.readFromDisk(getNearestIslandName(location) + ".nbt");
 		} catch (FileNotFoundException e) {
 			//None existing at this time, OK to return null.
-			throw new RuntimeException(e);
-			//return null;
+			return null;
 		} catch (IOException e) {
 			//This is more of a problem.
 			SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
