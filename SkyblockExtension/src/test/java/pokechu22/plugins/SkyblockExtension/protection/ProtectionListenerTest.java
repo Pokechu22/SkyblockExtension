@@ -7,7 +7,9 @@ import static org.mockito.Mockito.*;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.junit.Test;
@@ -43,9 +45,10 @@ public class ProtectionListenerTest {
 	 * @param location
 	 * @return
 	 */
-	private Entity getMockEntity(Location location) {
+	private Entity getMockEntity(Location location, EntityType type) {
 		Entity mockEntity = mock(Entity.class);
 		when(mockEntity.getLocation()).thenReturn(location);
+		when(mockEntity.getType()).thenReturn(type);
 		
 		return mockEntity;
 	}
@@ -54,12 +57,18 @@ public class ProtectionListenerTest {
 	 * Tests the 
 	 * {@link ProtectionListener#onEntityInteract(PlayerInteractEntityEvent)}
 	 * method.
+	 * @throws InvalidConfigurationException 
 	 */
 	@Test
-	public void onEntityInteractTest() {
+	public void onEntityInteractTest() throws InvalidConfigurationException {
+		IslandProtectionDataSetFactory.init();
+		for (IslandProtectionDataSet s : IslandProtectionDataSetFactory.getDefaultValues().values()) {
+			s.serializeToNBT().print(System.out);
+		}
+		
 		Player mockPlayer = getMockPlayer(new Location(null, 0, 0, 100));
 		
-		Entity mockEntity = getMockEntity(new Location(null, 0, 0, 0));
+		Entity mockEntity = getMockEntity(new Location(null, 0, 0, 0), EntityType.SHEEP);
 		
 		ProtectionListener l = new ProtectionListener();
 		

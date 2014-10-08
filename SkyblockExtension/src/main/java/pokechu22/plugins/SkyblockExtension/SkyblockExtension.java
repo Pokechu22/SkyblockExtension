@@ -371,8 +371,8 @@ public class SkyblockExtension extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public static File getIslandInfoDirectory() {
-		File returned = inst() != null ? inst().getDataFolder() : null;
+	public static File getRealDataFolder() {
+		File returned = inst() != null ? getRealDataFolder() : null;
 		if (returned != null) {
 			return returned;
 		}

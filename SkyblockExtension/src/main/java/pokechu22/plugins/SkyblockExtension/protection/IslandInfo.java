@@ -640,7 +640,7 @@ public class IslandInfo {
 	public void saveToDisk() throws FileNotFoundException, IOException {
 		NbtIo.writeCompressed((CompoundTag) this.serializeToNBT(), 
 				new FileOutputStream(new File(SkyblockExtension
-						.getIslandInfoDirectory(), (this.getFileName()))));
+						.getRealDataFolder(), (this.getFileName()))));
 	}
 	
 	/**
@@ -669,7 +669,7 @@ public class IslandInfo {
 		
 		returned.deserializeFromNBT(NbtIo.readCompressed(
 				new FileInputStream(new File(SkyblockExtension
-						.getIslandInfoDirectory(), fileName))));
+						.getRealDataFolder(), fileName))));
 		
 		return returned;
 	}

@@ -194,8 +194,7 @@ public class BlockValueCalculator {
 	
 	protected void reloadBlockValuesConfig() {
 		if (blockValuesConfigFile == null) {
-			blockValuesConfigFile = new File(SkyblockExtension.inst()
-					.getDataFolder(), "block_values.yml");
+			blockValuesConfigFile = new File(SkyblockExtension.getRealDataFolder(), "block_values.yml");
 		}
 		blockValuesConfig = YamlConfiguration
 				.loadConfiguration(blockValuesConfigFile);

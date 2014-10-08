@@ -72,8 +72,8 @@ public class IslandProtectionDataSetFactory {
 		FileConfiguration defaultProtectionConfig;
 		File defaultProtectionConfigFile;
 		
-		defaultProtectionConfigFile = new File(SkyblockExtension.inst()
-				.getDataFolder(), "default_protection.yml");
+		defaultProtectionConfigFile = new File(SkyblockExtension.getRealDataFolder(), 
+				"default_protection.yml");
 		
 		if (!defaultProtectionConfigFile.exists()) {
 			SkyblockExtension.inst().saveResource("default_protection.yml"
