@@ -13,9 +13,13 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 	protected ArrayList<VehicleType> value;
 	
 	/**
-	 * Package-Protected constructor for use with deserialization.
+	 * Constructor for use with deserialization.
+	 * 
+	 * @deprecated Not really, but this should NOT be called normally;
+	 * 				only through reflection.
 	 */
-	VehicleListFlag() {
+	@Deprecated
+	public VehicleListFlag() {
 		value = new ArrayList<VehicleType>();
 	}
 	

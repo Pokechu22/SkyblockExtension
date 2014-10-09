@@ -141,9 +141,13 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
 	
 	/**
-	 * Protected constructor for use with deserialization.
+	 * Constructor for use with deserialization.
+	 * 
+	 * @deprecated Not really, but this should NOT be called normally;
+	 * 				only through reflection.
 	 */
-	MaterialToMatierialListMapFlag() {
+	@Deprecated
+	public MaterialToMatierialListMapFlag() {
 		values = new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(Material.class);
 	}
 	

@@ -11,9 +11,13 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	protected boolean value;
 	
 	/**
-	 * Package-Protected constructor for use with deserialization.
+	 * Constructor for use with deserialization.
+	 * 
+	 * @deprecated Not really, but this should NOT be called normally;
+	 * 				only through reflection.
 	 */
-	BooleanFlag() {
+	@Deprecated
+	public BooleanFlag() {
 		value = false;
 	}
 	

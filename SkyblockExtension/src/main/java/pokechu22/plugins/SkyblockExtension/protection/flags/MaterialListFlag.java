@@ -13,9 +13,13 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 	protected ArrayList<Material> value;
 	
 	/**
-	 * Package-Protected constructor for use with deserialization.
+	 * Constructor for use with deserialization.
+	 * 
+	 * @deprecated Not really, but this should NOT be called normally;
+	 * 				only through reflection.
 	 */
-	MaterialListFlag() {
+	@Deprecated
+	public MaterialListFlag() {
 		value = new ArrayList<Material>();
 	}
 	
