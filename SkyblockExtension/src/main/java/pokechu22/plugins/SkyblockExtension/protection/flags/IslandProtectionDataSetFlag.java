@@ -235,29 +235,37 @@ public abstract class IslandProtectionDataSetFlag {
 			f.deserializeFromNBT(serialized);
 			return f;
 		} catch (IllegalArgumentException e) {
-			ErrorHandler.logError(new ConfigurationErrorReport(e, 
-					flagTypes.get(flag).clazz.getName(), false).setContext(
-							"Failed to deserialize " + 
-									"IslandProtectionDataSetFlag " + flag + 
-									" of type " +  
-									flagTypes.get(flag).clazz.getName() 
-									+ " using " + serialized + "."));
-			SkyblockExtension.inst().getLogger().severe(
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + ".");
+			try {
+				ErrorHandler.logError(new ConfigurationErrorReport(e, 
+						flagTypes.get(flag).clazz.getName(), false).setContext(
+								"Failed to deserialize " + 
+										"IslandProtectionDataSetFlag " + flag + 
+										" of type " +  
+										flagTypes.get(flag).clazz.getName() 
+										+ " using " + serialized + "."));
+				SkyblockExtension.inst().getLogger().severe(
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + ".");
+			} catch (Exception f) {
+				throw new RuntimeException(e); //If an error occurred in reporting
+			}
 		} catch (Exception e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + "."));
-			SkyblockExtension.inst().getLogger().severe(
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + ".");
+			try {
+				ErrorHandler.logError(new ThrowableReport(e, 
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + "."));
+				SkyblockExtension.inst().getLogger().severe(
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + ".");
+			} catch (Exception f) {
+				throw new RuntimeException(e); //If an error occurred in reporting
+			}
 		}
 		return null;
 	}
@@ -276,29 +284,37 @@ public abstract class IslandProtectionDataSetFlag {
 			return flagTypes.get(flag).clazz.getConstructor(String.class)
 				.newInstance(serialized);
 		} catch (IllegalArgumentException e) {
-			ErrorHandler.logError(new ConfigurationErrorReport(e, 
-					flagTypes.get(flag).clazz.getName(), false).setContext(
-							"Failed to deserialize " + 
-									"IslandProtectionDataSetFlag " + flag + 
-									" of type " +  
-									flagTypes.get(flag).clazz.getName() 
-									+ " using " + serialized + "."));
-			SkyblockExtension.inst().getLogger().severe(
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + ".");
+			try {
+				ErrorHandler.logError(new ConfigurationErrorReport(e, 
+						flagTypes.get(flag).clazz.getName(), false).setContext(
+								"Failed to deserialize " + 
+										"IslandProtectionDataSetFlag " + flag + 
+										" of type " +  
+										flagTypes.get(flag).clazz.getName() 
+										+ " using " + serialized + "."));
+				SkyblockExtension.inst().getLogger().severe(
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + ".");
+			} catch (Exception f) {
+				throw new RuntimeException(e); //If an error occurred in reporting
+			}
 		} catch (Exception e) {
-			ErrorHandler.logError(new ThrowableReport(e, 
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + "."));
-			SkyblockExtension.inst().getLogger().severe(
-					"Failed to deserialize IslandProtectionDataSetFlag " + 
-							flag + " of type " + 
-							flagTypes.get(flag).clazz.getName() + 
-							" using " + serialized + ".");
+			try {
+				ErrorHandler.logError(new ThrowableReport(e, 
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + "."));
+				SkyblockExtension.inst().getLogger().severe(
+						"Failed to deserialize IslandProtectionDataSetFlag " + 
+								flag + " of type " + 
+								flagTypes.get(flag).clazz.getName() + 
+								" using " + serialized + ".");
+			} catch (Exception f) {
+				throw new RuntimeException(e); //If an error occurred in reporting
+			}
 		}
 		return null;
 	}
