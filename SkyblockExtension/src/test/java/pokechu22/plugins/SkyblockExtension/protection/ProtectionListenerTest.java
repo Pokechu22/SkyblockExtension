@@ -2,9 +2,8 @@ package pokechu22.plugins.SkyblockExtension.protection;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
 
-import java.util.UUID;
+import static pokechu22.plugins.SkyblockExtension.testutil.MockEventUtil.*;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -22,38 +21,6 @@ import org.junit.Test;
  */
 public class ProtectionListenerTest {
 	/**
-	 * Gets a mock player at the specified location.
-	 * Also specifies permissions and stuff like that.
-	 * 
-	 * @param location
-	 * @return
-	 */
-	private Player getMockPlayer(Location location) {
-		Player mockPlayer = mock(Player.class);
-		when(mockPlayer.getLocation()).thenReturn(location);
-		
-		when(mockPlayer.getName()).thenReturn("owner");
-		when(mockPlayer.getUniqueId()).thenReturn(new UUID(0, 0)); 
-		when(mockPlayer.hasPermission("usb.mod.bypassprotection")).thenReturn(false);
-		
-		return mockPlayer;
-	}
-	
-	/**
-	 * Gets a mock entity at the specified location.
-	 * 
-	 * @param location
-	 * @return
-	 */
-	private Entity getMockEntity(Location location, EntityType type) {
-		Entity mockEntity = mock(Entity.class);
-		when(mockEntity.getLocation()).thenReturn(location);
-		when(mockEntity.getType()).thenReturn(type);
-		
-		return mockEntity;
-	}
-	
-	/**
 	 * Tests the 
 	 * {@link ProtectionListener#onEntityInteract(PlayerInteractEntityEvent)}
 	 * method.
@@ -66,7 +33,7 @@ public class ProtectionListenerTest {
 			s.serializeToNBT().print(System.out);
 		}
 		
-		Player mockPlayer = getMockPlayer(new Location(null, 0, 0, 100));
+		Player mockPlayer = getMockNobody(new Location(null, 0, 0, 100));
 		
 		Entity mockEntity = getMockEntity(new Location(null, 0, 0, 0), EntityType.SHEEP);
 		
