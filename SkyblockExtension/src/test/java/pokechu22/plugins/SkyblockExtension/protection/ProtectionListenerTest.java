@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.junit.Test;
 
@@ -29,22 +28,46 @@ public class ProtectionListenerTest {
 	@Test
 	public void onEntityInteractTest() throws InvalidConfigurationException {
 		IslandProtectionDataSetFactory.init();
-		for (IslandProtectionDataSet s : IslandProtectionDataSetFactory.getDefaultValues().values()) {
-			s.serializeToNBT().print(System.out);
-		}
-		
-		Player mockPlayer = getMockNobody(new Location(null, 0, 0, 100));
 		
 		Entity mockEntity = getMockEntity(new Location(null, 0, 0, 0), EntityType.SHEEP);
 		
 		ProtectionListener l = new ProtectionListener();
 		
-		PlayerInteractEntityEvent event = new PlayerInteractEntityEvent(
-				mockPlayer, mockEntity);
+		PlayerInteractEntityEvent event;
+		
+		//Nobody
+		event = new PlayerInteractEntityEvent(getMockNobody(
+				new Location(null, 0, 0, 100)), mockEntity);
 		event.setCancelled(false);
-		
 		l.onEntityInteract(event);
-		
 		assertThat(event.isCancelled(), is(true));
+		
+		//Guest
+		event = new PlayerInteractEntityEvent(getMockGuest(
+				new Location(null, 0, 0, 100)), mockEntity);
+		event.setCancelled(false);
+		l.onEntityInteract(event);
+		assertThat(event.isCancelled(), is(true));
+		
+		//Member
+		event = new PlayerInteractEntityEvent(getMockMember(
+				new Location(null, 0, 0, 100)), mockEntity);
+		event.setCancelled(false);
+		l.onEntityInteract(event);
+		assertThat(event.isCancelled(), is(false));
+		
+		//Owner
+		event = new PlayerInteractEntityEvent(getMockOwner(
+				new Location(null, 0, 0, 100)), mockEntity);
+		event.setCancelled(false);
+		l.onEntityInteract(event);
+		assertThat(event.isCancelled(), is(false));
+		
+		//Nobody
+		event = new PlayerInteractEntityEvent(getMockAdmin(
+				new Location(null, 0, 0, 100)), mockEntity);
+		event.setCancelled(false);
+		l.onEntityInteract(event);
+		assertThat(event.isCancelled(), is(false));
 	}
 }
