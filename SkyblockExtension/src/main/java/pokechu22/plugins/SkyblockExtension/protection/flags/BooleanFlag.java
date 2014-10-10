@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import pokechu22.plugins.SkyblockExtension.util.nbt.ByteTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.StringTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
+
 public class BooleanFlag extends IslandProtectionDataSetFlag {
 
 	protected boolean value;
@@ -140,5 +144,27 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	@Override
 	public Boolean getValue() {
 		return new Boolean(value);
+	}
+	
+	@Override
+	public ByteTag serializeToNBT(String name) {
+		return new ByteTag(name, this.value ? (byte)1 : (byte)0);
+	}
+	
+	@Override
+	public void deserializeFromNBT(Tag value) {
+		if (value instanceof StringTag) {
+			StringTag tag = (StringTag) value;
+			this.setValue(tag.data);
+			return;
+		} else if (value instanceof ByteTag) {
+			ByteTag tag = (ByteTag) value;
+			this.value = (tag.data == 1);
+			return;
+		}
+		
+		throw new IllegalArgumentException("Expected StringTag Or ByteTag, got " + 
+				value.getClass().getName() + ".  (Value: " +
+				value.toString() + ")");
 	}
 }
