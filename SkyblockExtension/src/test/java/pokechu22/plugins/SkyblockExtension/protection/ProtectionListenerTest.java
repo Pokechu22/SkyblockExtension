@@ -63,7 +63,7 @@ public class ProtectionListenerTest {
 		l.onEntityInteract(event);
 		assertThat(event.isCancelled(), is(false));
 		
-		//Nobody
+		//Admin
 		event = new PlayerInteractEntityEvent(getMockAdmin(
 				new Location(null, 0, 0, 100)), mockEntity);
 		event.setCancelled(false);
