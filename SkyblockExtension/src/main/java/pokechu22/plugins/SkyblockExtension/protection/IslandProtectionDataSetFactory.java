@@ -21,6 +21,11 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 public class IslandProtectionDataSetFactory {
 	
 	/**
+	 * For auto-initiation.
+	 */
+	private static boolean initiated = false;
+	
+	/**
 	 * The text before the actual value to get.  
 	 * For example: "permissions.".  This means that it searches for 
 	 * "permissions.owner". 
@@ -38,6 +43,15 @@ public class IslandProtectionDataSetFactory {
 	 */
 	public static Map<String, IslandProtectionDataSet> 
 			getDefaultValues() {
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
+		
 		//No longer using EnumMaps, because that makes serialization tough.
 		Map<String, IslandProtectionDataSet> returned = 
 				new HashMap<String, IslandProtectionDataSet>(
@@ -57,6 +71,14 @@ public class IslandProtectionDataSetFactory {
 	 * @return
 	 */
 	public static IslandProtectionDataSet getDefaultValue(MembershipTier m){
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
 		return defaultValues.get(m);
 	}
 
