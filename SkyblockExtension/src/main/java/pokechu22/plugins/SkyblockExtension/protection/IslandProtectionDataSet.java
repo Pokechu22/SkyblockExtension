@@ -24,6 +24,12 @@ import pokechu22.plugins.SkyblockExtension.util.nbt.*;
  */
 @SerializableAs("IslandProtectionDataSet")
 public class IslandProtectionDataSet implements ConfigurationSerializable {
+	
+	/**
+	 * The tier of this DataSet. 
+	 */
+	private MembershipTier tier;
+	
 	/**
 	 * List of all flags.  A copy of 
 	 * {@link IslandProtectionDataSetFlag#flagTypes}.
@@ -196,10 +202,19 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	public VehicleListFlag enterBannedVehicles;
 	
 	/**
-	 * Default constructor.
+	 * Deserialization-based constructor.
+	 * Do not call through normal methods; only reflection.
 	 */
+	@Deprecated
 	public IslandProtectionDataSet() {
 		//TODO
+	}
+	
+	/**
+	 * Tier-based constructor.
+	 */
+	public IslandProtectionDataSet(MembershipTier tier) {
+		this.tier = tier;
 	}
 	
 	/**
@@ -856,9 +871,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			if (flag != null) {
 				this.setFlag(flagName, flag);
 			} else {
-				//TODO Need to get the right default values.
 				this.setFlag(flagName, IslandProtectionDataSetFactory
-						.getDefaultValue(MembershipTier.guest, flagName));
+						.getDefaultValue(this.tier, flagName));
 				System.out.println("Recreating value for flag " + flagName);
 			}
 		}
@@ -905,9 +919,8 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				if (flag != null) {
 					this.setFlag(flagName, flag);
 				} else {
-					//TODO Need to get the right default values.
 					this.setFlag(flagName, IslandProtectionDataSetFactory
-							.getDefaultValue(MembershipTier.guest, flagName));
+							.getDefaultValue(this.tier, flagName));
 					System.out.println("Recreating value for flag " + flagName);
 				}
 			}
