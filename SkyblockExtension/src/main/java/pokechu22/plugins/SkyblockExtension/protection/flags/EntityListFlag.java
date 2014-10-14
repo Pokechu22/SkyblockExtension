@@ -6,7 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.EntityType;
+
+import pokechu22.plugins.SkyblockExtension.util.ListUtil;
+import pokechu22.plugins.SkyblockExtension.util.nbt.ListTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.StringTag;
+import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
 
 public class EntityListFlag extends IslandProtectionDataSetFlag {
 
@@ -335,5 +341,69 @@ public class EntityListFlag extends IslandProtectionDataSetFlag {
 	@Override
 	public ArrayList<EntityType> getValue() {
 		return value;
+	}
+	
+	@Override
+	public ListTag<StringTag> serializeToNBT(String name) {
+		ListTag<StringTag> returned = new ListTag<>(name);
+		
+		for (EntityType type : this.value) {
+			returned.add(new StringTag(type.name()));
+		}
+		
+		return returned;
+	}
+	
+	@Override
+	public void deserializeFromNBT(Tag value) throws InvalidConfigurationException {
+		if (value == null) {
+			throw new InvalidConfigurationException("Expected StringTag or ListTag, got " + 
+					"null value");
+		}
+		
+		if (value instanceof StringTag) {
+			StringTag tag = (StringTag) value;
+			this.setValue(tag.data);
+			return;
+		} else if (value instanceof ListTag) {
+			this.value = new ArrayList<EntityType>();
+			
+			//Ensure that it is actually a ListTag<StringTag>.
+			if (((ListTag<?>) value).size() > 0) {
+				Object at0 = ((ListTag<?>)value).get(0); 
+				if (!(at0 instanceof StringTag)) {
+					throw new InvalidConfigurationException("Expected StringTag or " +
+							"ListTag<StringTag>, got " + 
+							value.getClass().getName() + "<" + at0.getClass().getName() + 
+							">.  (Value: " + value.toString() + ")");
+				}
+			} else {
+				return;
+			}
+			
+			//Actually get the values.
+			@SuppressWarnings("unchecked")
+			ListTag<StringTag> values = (ListTag<StringTag>) value;
+			
+			for (int i = 0; i < values.size(); i++) {
+				EntityType type = ListUtil
+						.matchEnumValue(values.get(i).data, EntityType.class);
+				
+				if (type == null) {
+					throw new InvalidConfigurationException("Failed to parse ListTag - " + 
+							"Failed to match enum value for " + values.get(i).data + 
+							".  Index: " + i + ".  (Full Value: " +
+							value.toString() + ")");
+				} else {
+					this.value.add(type);
+				}
+			}
+			
+			return;
+		}
+		
+		throw new InvalidConfigurationException("Expected StringTag Or ListTag, got " + 
+				value.getClass().getName() + ".  (Value: " +
+				value.toString() + ")");
 	}
 }
