@@ -334,6 +334,10 @@ public abstract class IslandProtectionDataSetFlag {
 	 * @throws ConfigurationException 
 	 */
 	public void deserializeFromNBT(Tag value) throws ConfigurationException {
+		if (value == null) {
+			throw new IllegalArgumentException("Expected StringTag, got " + 
+					"null value");
+		}
 		if (!(value instanceof StringTag)) {
 			throw new IllegalArgumentException("Expected StringTag, got " + 
 					value.getClass().getName() + ".  (Value: " +

@@ -153,6 +153,11 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	
 	@Override
 	public void deserializeFromNBT(Tag value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Expected StringTag, got " + 
+					"null value");
+		}
+		
 		if (value instanceof StringTag) {
 			StringTag tag = (StringTag) value;
 			this.setValue(tag.data);
