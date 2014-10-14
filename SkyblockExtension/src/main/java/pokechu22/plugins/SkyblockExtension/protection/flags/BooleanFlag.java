@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.configuration.InvalidConfigurationException;
+
 import pokechu22.plugins.SkyblockExtension.util.nbt.ByteTag;
 import pokechu22.plugins.SkyblockExtension.util.nbt.StringTag;
 import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
@@ -152,9 +154,9 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	}
 	
 	@Override
-	public void deserializeFromNBT(Tag value) {
+	public void deserializeFromNBT(Tag value) throws InvalidConfigurationException {
 		if (value == null) {
-			throw new IllegalArgumentException("Expected StringTag, got " + 
+			throw new InvalidConfigurationException("Expected StringTag, got " + 
 					"null value");
 		}
 		
@@ -168,7 +170,7 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 			return;
 		}
 		
-		throw new IllegalArgumentException("Expected StringTag Or ByteTag, got " + 
+		throw new InvalidConfigurationException("Expected StringTag Or ByteTag, got " + 
 				value.getClass().getName() + ".  (Value: " +
 				value.toString() + ")");
 	}

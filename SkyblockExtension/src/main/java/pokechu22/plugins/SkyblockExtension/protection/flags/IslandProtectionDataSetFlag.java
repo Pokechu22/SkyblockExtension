@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.naming.ConfigurationException;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
@@ -331,15 +331,15 @@ public abstract class IslandProtectionDataSetFlag {
 	/**
 	 * Deserializes the flag from an NBT value.
 	 * @param value
-	 * @throws ConfigurationException 
+	 * @throws InvalidConfigurationException 
 	 */
-	public void deserializeFromNBT(Tag value) throws ConfigurationException {
+	public void deserializeFromNBT(Tag value) throws InvalidConfigurationException {
 		if (value == null) {
-			throw new IllegalArgumentException("Expected StringTag, got " + 
+			throw new InvalidConfigurationException("Expected StringTag, got " + 
 					"null value");
 		}
 		if (!(value instanceof StringTag)) {
-			throw new IllegalArgumentException("Expected StringTag, got " + 
+			throw new InvalidConfigurationException("Expected StringTag, got " + 
 					value.getClass().getName() + ".  (Value: " +
 					value.toString() + ")");
 		}
