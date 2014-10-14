@@ -844,15 +844,22 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	 */
 	public IslandProtectionDataSet(Map<String, Object> map) {
 		for (String flagName : flags) {
-			IslandProtectionDataSetFlag flag = 
-					IslandProtectionDataSetFlag.deserialize(flagName, 
-							(String) map.get(flagName));
+			IslandProtectionDataSetFlag flag = null; 
+			
+			try {
+				flag = IslandProtectionDataSetFlag.deserialize(flagName, 
+						(String) map.get(flagName));
+			} catch (Exception e) {
+				e.printStackTrace(); //TODO better handling - might not want to print anything?
+			}
+			
 			if (flag != null) {
 				this.setFlag(flagName, flag);
 			} else {
 				//TODO Need to get the right default values.
 				this.setFlag(flagName, IslandProtectionDataSetFactory
 						.getDefaultValue(MembershipTier.guest, flagName));
+				System.out.println("Recreating value for flag " + flagName);
 			}
 		}
 	}
@@ -886,15 +893,22 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			CompoundTag tag = (CompoundTag) serialized;
 			
 			for (String flagName : flags) {
-				IslandProtectionDataSetFlag flag = 
-						IslandProtectionDataSetFlag.deserialize(flagName, 
-								tag.get(flagName));
+				IslandProtectionDataSetFlag flag = null;
+				
+				try {
+					flag = IslandProtectionDataSetFlag.deserialize(flagName, 
+							tag.get(flagName));
+				} catch (Exception e) {
+					e.printStackTrace(); //TODO better handling - might not want to print anything?
+				}
+				
 				if (flag != null) {
 					this.setFlag(flagName, flag);
 				} else {
 					//TODO Need to get the right default values.
 					this.setFlag(flagName, IslandProtectionDataSetFactory
 							.getDefaultValue(MembershipTier.guest, flagName));
+					System.out.println("Recreating value for flag " + flagName);
 				}
 			}
 		}
