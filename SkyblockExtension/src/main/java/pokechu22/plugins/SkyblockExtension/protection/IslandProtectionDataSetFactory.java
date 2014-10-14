@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 /**
  * Tool that provides IslandProtectionDataSets with the default values.
  *
@@ -80,6 +81,18 @@ public class IslandProtectionDataSetFactory {
 			initiated = true;
 		}
 		return defaultValues.get(m);
+	}
+	
+	/**
+	 * Gets the default value for an individual flag.  
+	 * 
+	 * @param tier
+	 * @param flag
+	 * @return
+	 */
+	public static IslandProtectionDataSetFlag 
+			getDefaultValue(MembershipTier tier, String flag) {
+		return defaultValues.get(tier).getFlag(flag);
 	}
 
 	/**

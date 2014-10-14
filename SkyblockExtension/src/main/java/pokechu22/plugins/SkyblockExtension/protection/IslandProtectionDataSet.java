@@ -850,12 +850,9 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 			if (flag != null) {
 				this.setFlag(flagName, flag);
 			} else {
-				//TODO Add the default value otherwise.
-				//result = this.setFlagRaw(flag, (String) 
-				// 			/*getDefaultFlagSomehow(flag)*/ "");
-				//if (result == false) {
-				//	//TODO ConfigurationErrorReport?
-				//}
+				//TODO Need to get the right default values.
+				this.setFlag(flagName, IslandProtectionDataSetFactory
+						.getDefaultValue(MembershipTier.guest, flagName));
 			}
 		}
 	}
@@ -895,12 +892,9 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 				if (flag != null) {
 					this.setFlag(flagName, flag);
 				} else {
-					//TODO Add the default value otherwise.
-					//result = this.setFlagRaw(flag, (String) 
-					// 			/*getDefaultFlagSomehow(flag)*/ "");
-					//if (result == false) {
-					//	//TODO ConfigurationErrorReport?
-					//}
+					//TODO Need to get the right default values.
+					this.setFlag(flagName, IslandProtectionDataSetFactory
+							.getDefaultValue(MembershipTier.guest, flagName));
 				}
 			}
 		}
