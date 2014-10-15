@@ -22,6 +22,89 @@ import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
 public class ListUtil {
 	
 	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * Assumes list starts with '[' and ends with ']'.  For other chars,
+	 * use the other functions.
+	 * 
+	 * @param listData 
+	 * @throws ParseException when list is invalid.
+	 */
+	public static void validateList(String[] listData) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		validateList(listData, "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * Assumes list starts with '[' and ends with ']'.  For other chars,
+	 * use the other functions.
+	 * 
+	 * @param listData
+	 * @throws ParseException when list is invalid.
+	 */
+	public static void validateList(String listData) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		validateList(listData, "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * @param listData
+	 * @param opening The opening character.
+	 * @param closing The closing character.
+	 * @throws ParseException when the list is invalid.
+	 */
+	public static void validateList(String[] listData, String opening, String closing) 
+			throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		validateList(actualData.toString(), "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * @param listData
+	 * @param opening The opening character.
+	 * @param closing The closing character.
+	 * @throws ParseException when the list is invalid.
+	 */
+	public static void validateList(String listData, String opening, String closing) 
+			throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		if (!((listData.indexOf(opening) == 0) 
+				&& (listData.indexOf(opening, 1) == -1)
+				&& (listData.indexOf(closing) == (listData.length() - 1)))) {
+			throw new ParseException("§cList format is invalid: It must start with '" +
+					opening + "' and end with '" + closing + "', and not have any '" +
+					opening + "' or '" + closing + "' anywhere else in it.", 0);
+		}
+	}
+	
+	/**
 	 * Parses a list of the specified type.
 	 * 
 	 * @param listData an array of all data.  Each value is joined together.
@@ -197,15 +280,8 @@ public class ListUtil {
 		//Needed to allow for spacing.
 		seperator = seperator.trim();
 		
-		//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-		if (!((listData.indexOf(opening) == 0) 
-				&& (listData.indexOf(opening, 1) == -1)
-				&& (listData.indexOf(closing) == (listData.length() - 1)))) {
-			throw new ParseException("§cList format is invalid: It must start with '" +
-					opening + "' and end with '" + closing + "', and not have any '" +
-					opening + "' or '" + closing + "' anywhere else in it.", 0);
-		}
+		//Ensure list is valid.
+		validateList(listData, opening, closing);
 		
 		String[] stringValues = 
 				listData.substring(1, listData.length() - 1)

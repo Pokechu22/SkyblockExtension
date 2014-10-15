@@ -404,4 +404,24 @@ public class ListUtilTest {
 		assertThat(ListUtil.parseList(ListUtil.convertListToString(expected,
 				"; ", "{", "}"), TestEnum.class, "; ", "{", "}"), is(expected));
 	}
+	
+	/**
+	 * Tests the validation of list methods.
+	 */
+	@Test
+	@Parameters({"[[]",
+		"[]]",
+		"[] hi",
+		"hi",
+		"[h]i",
+		"[hi []",
+		"[[]]"})
+	public void listValidationTest(String toTest) throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(startsWith("§cList format is invalid: It must start with " +
+				"'[' and end with ']', and not have any '['" + 
+				" or ']' anywhere else in it."));
+		
+		ListUtil.validateList(toTest);
+	}
 }
