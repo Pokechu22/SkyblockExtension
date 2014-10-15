@@ -69,7 +69,9 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		 * Gets the value for serialization.
 		 */
 		public String getSerializedValue() {
-			final String contents = ListUtil.convertListToString(
+			final String invertedHeader = (this.isInverted ? "!" : "");
+			
+			final String contents = invertedHeader + ListUtil.convertListToString(
 					new ArrayList<Material>(this.items), "; ", "{", "}");
 			return contents;
 		}
@@ -79,6 +81,11 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		 */
 		public String setValue(String value) {
 			try {
+				this.isInverted = value.startsWith("!");
+				if (this.isInverted) {
+					value = value.substring(1); //Remove leading "!".
+				}
+				
 				List<Material> m = ListUtil.parseList(value, Material.class, "; ", "{", "}");
 				
 				this.items = EnumSet.noneOf(Material.class);
@@ -204,9 +211,74 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 
 	@Override
 	public String setValue(String value) {
-		//TODO
-		return "§cNot Yet Implemented";
-		//return "§aFlag set successfully.";
+		//Ensure valid formating.
+		try {
+			ListUtil.validateList(value, "[", "]");
+		} catch (ParseException e) {
+			return e.toString();
+		}
+		final String subValues = value.substring(1, value.length() - 1);
+		String[] individualValues = subValues.split(",");
+		
+		//Trim each value.
+		for (int i = 0; i < individualValues.length; i++) {
+			individualValues[i] = individualValues[i].trim();
+		}
+		
+		EnumMap<Material, Value> newValues = new EnumMap<>(Material.class);
+		
+		for (String individual : individualValues) {
+			final String materialString;
+			final String dataString;
+			
+			final Material material;
+			final Value val = new Value();
+			
+			//Individual block for some quick processing.
+			{
+				final String[] split = individual.split("->");
+				//Validate that the length is propper.
+				if (split.length != 2) {
+					return "§cInvalid maping value - Each individual " + 
+							"entry must have exactly 1 \"->\" in it.  " +
+							"Error index: \n" + 
+							value.replace(individual, "§4§l" + individual +
+									"§r§c");
+				}
+				
+				materialString = split[0];
+				dataString = split[1];
+			}
+			
+			material = ListUtil
+					.matchEnumValue(materialString, Material.class);
+			
+			//If invalid material.
+			if (material == null) {
+				return ("§c" + "Material" + " \"" + 
+						materialString + "\" is not recognised.\n(Location: " + 
+						//Bolds the error.
+						value.replaceAll(materialString, 
+								"§4§l" + materialString + 
+								"§r§c") + ")\n" + 
+						"§cTry using tab completion next time.");
+			}
+			
+			String valueResult = val.setValue(dataString);
+			//Ensure valid.
+			if (!valueResult.startsWith("§a")) {
+				return "§cInvalid mapped value - " + valueResult + "\n" + 
+						"§c(Location: " + value.replaceAll(dataString, 
+								"§4§l" + dataString + "§r§c") + ")";
+			}
+			
+			//Ok, that is good.
+			newValues.put(material, val);
+		}
+		
+		this.values = newValues;
+		
+		return "§aFlag set successfully.";
 	}
     
     @Override
