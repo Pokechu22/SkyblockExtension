@@ -55,7 +55,7 @@ public abstract class IslandProtectionDataSetFlag {
 		 * (EG: Item in hand interacting with a range of blocks)
 		 * TODO: NYF
 		 */
-		MaterialToMatierialListMapFlag(MaterialToMatierialListMapFlag.class, new String[]{});
+		MaterialToMatierialListMapFlag(MaterialToMaterialListMapFlag.class, new String[]{});
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
 		private String[] allowedActions;

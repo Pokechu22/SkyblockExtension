@@ -28,7 +28,7 @@ import pokechu22.plugins.SkyblockExtension.util.nbt.Tag;
  * @author Pokechu22
  *
  */
-public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag {
+public class MaterialToMaterialListMapFlag extends IslandProtectionDataSetFlag {
 	/**
 	 * A value corresponding to a single Material.
 	 * 
@@ -145,7 +145,7 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		}
 	}
 	
-	protected EnumMap<Material, MaterialToMatierialListMapFlag.Value> values;
+	protected EnumMap<Material, MaterialToMaterialListMapFlag.Value> values;
 	
 	/**
 	 * Constructor for use with deserialization.
@@ -154,16 +154,16 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	 * 				only through reflection.
 	 */
 	@Deprecated
-	public MaterialToMatierialListMapFlag() {
-		values = new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(Material.class);
+	public MaterialToMaterialListMapFlag() {
+		values = new EnumMap<Material, MaterialToMaterialListMapFlag.Value>(Material.class);
 	}
 	
 	/**
 	 * Deserialization.
 	 */
-	public MaterialToMatierialListMapFlag(String serialized)
+	public MaterialToMaterialListMapFlag(String serialized)
 			throws IllegalArgumentException {
-		values = new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(Material.class);
+		values = new EnumMap<Material, MaterialToMaterialListMapFlag.Value>(Material.class);
 		
 		String result = this.setValue(serialized);
 		if (result.startsWith("§a")) {
@@ -184,11 +184,11 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		StringBuilder returned = new StringBuilder();
 		returned.append("[");
 		
-		Iterator<Map.Entry<Material, MaterialToMatierialListMapFlag.Value>>
+		Iterator<Map.Entry<Material, MaterialToMaterialListMapFlag.Value>>
 				itr = values.entrySet().iterator();
 		
 		while (itr.hasNext()) {
-			Map.Entry<Material, MaterialToMatierialListMapFlag.Value> e
+			Map.Entry<Material, MaterialToMaterialListMapFlag.Value> e
 					= itr.next();
 			
 			returned.append(e.getKey().name());
@@ -325,7 +325,7 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		MaterialToMatierialListMapFlag other = (MaterialToMatierialListMapFlag) obj;
+		MaterialToMaterialListMapFlag other = (MaterialToMaterialListMapFlag) obj;
 		if (value == null) {
 			if (null/*other.value*/ != null) {
 				return false;
@@ -337,8 +337,8 @@ public class MaterialToMatierialListMapFlag extends IslandProtectionDataSetFlag 
 	}
 
 	@Override
-	public EnumMap<Material, MaterialToMatierialListMapFlag.Value> getValue() {
-		return new EnumMap<Material, MaterialToMatierialListMapFlag.Value>(this.values);
+	public EnumMap<Material, MaterialToMaterialListMapFlag.Value> getValue() {
+		return new EnumMap<Material, MaterialToMaterialListMapFlag.Value>(this.values);
 	}
 	
 	/**
