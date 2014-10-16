@@ -234,6 +234,11 @@ public class MaterialToMaterialListMapFlag extends IslandProtectionDataSetFlag {
 			final Material material;
 			final Value val = new Value();
 			
+			if (individual.trim().isEmpty()) {
+				//If no value is provided continue in the loop.
+				continue;
+			}
+			
 			//Individual block for some quick processing.
 			{
 				final String[] split = individual.split("->");
