@@ -363,4 +363,24 @@ public class SkyblockExtension extends JavaPlugin {
 		saveDefaultConfig();
 		saveDefaultCrashesConfig();
 	}
+	
+	/**
+	 * Gets the directory for island info.
+	 * This is, by default, the same as the dataFolder, but it will
+	 * use a different location during unit testing.  
+	 * 
+	 * @return
+	 */
+	public static File getRealDataFolder() {
+		File returned = inst() != null ? getRealDataFolder() : null;
+		if (returned != null) {
+			return returned;
+		}
+		
+		//Ugly...
+		returned = new File((new File(SkyblockExtension.class.getResource("/plugin.yml")
+				.getFile())).getParentFile().getParentFile(), "test-classes");
+		
+		return returned;
+	}
 }

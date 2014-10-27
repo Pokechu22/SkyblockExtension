@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
@@ -482,10 +483,14 @@ public class IslandInfo {
 		CompoundTag tag = (CompoundTag) serialized;
 		
 		CompoundTag location = tag.getCompound("Location");
-		this.islandCenter = new Location(SkyblockExtension.inst()
-				.getServer().getWorld(location.getString("World")), 
-				location.getDouble("X"), location.getDouble("Y"), 
-				location.getDouble("Z"));
+		
+		World w = null;
+		try {
+			w = Bukkit.getWorld(location.getString("World"));
+		} catch (NullPointerException e) {}
+		
+		this.islandCenter = new Location(w, location.getDouble("X"), 
+				location.getDouble("Y"), location.getDouble("Z"));
 		
 		this.ownerInfo = new MemberInfo(tag.getCompound("OwnerInfo"));
 		
@@ -575,7 +580,11 @@ public class IslandInfo {
 		CompoundTag tag = new CompoundTag();
 		
 		CompoundTag location = new CompoundTag("Location");
-		location.putString("World", this.islandCenter.getWorld().getName());
+		try {
+			location.putString("World", this.islandCenter.getWorld().getName());
+		} catch (NullPointerException e) {
+			location.putString("World", "null");
+		}
 		location.putDouble("X", this.islandCenter.getX());
 		location.putDouble("Y", this.islandCenter.getY());
 		location.putDouble("Z", this.islandCenter.getZ());
@@ -620,7 +629,7 @@ public class IslandInfo {
 		xPos = (int)(this.islandCenter.getX() / Settings.island_distance);
 		zPos = (int)(this.islandCenter.getZ() / Settings.island_distance);
 		
-		return xPos + "x" + zPos + "z";
+		return xPos + "x" + zPos + "z" + ".nbt";
 	}
 	
 	/**
@@ -630,8 +639,8 @@ public class IslandInfo {
 	 */
 	public void saveToDisk() throws FileNotFoundException, IOException {
 		NbtIo.writeCompressed((CompoundTag) this.serializeToNBT(), 
-				new FileOutputStream(new File(SkyblockExtension.inst()
-						.getDataFolder(), (this.getFileName() + ".nbt"))));
+				new FileOutputStream(new File(SkyblockExtension
+						.getRealDataFolder(), (this.getFileName()))));
 	}
 	
 	/**
@@ -659,8 +668,8 @@ public class IslandInfo {
 		IslandInfo returned = new IslandInfo();
 		
 		returned.deserializeFromNBT(NbtIo.readCompressed(
-				new FileInputStream(new File(SkyblockExtension.inst()
-				.getDataFolder(), fileName))));
+				new FileInputStream(new File(SkyblockExtension
+						.getRealDataFolder(), fileName))));
 		
 		return returned;
 	}

@@ -39,7 +39,6 @@ public class ListUtilTest {
 	 * @author Pokechu22
 	 *
 	 */
-	@Parameters
 	public static enum TestEnum {
 		TEST1,
 		TEST2,
@@ -314,5 +313,115 @@ public class ListUtilTest {
 		assertThat(ListUtil.parseList("[TEST1! TEST2]", TestEnum.class, "!"), is(expected));
 		assertThat(ListUtil.parseList("[TEST1z TEST2]", TestEnum.class, "z"), is(expected));
 		assertThat(ListUtil.parseList("[TEST1= TEST2]", TestEnum.class, "="), is(expected));
+	}
+	
+	/**
+	 * Tests use of different list openings/closings.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void differentListOpeningsShouldWork() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.parseList("[TEST1, TEST2]", TestEnum.class, "[", "]"), 
+				is(expected));
+		assertThat(ListUtil.parseList("{TEST1, TEST2}", TestEnum.class, "{", "}"), 
+				is(expected));
+		assertThat(ListUtil.parseList("jTEST1, TEST2l", TestEnum.class, "j", "l"), 
+				is(expected));
+		assertThat(ListUtil.parseList("]TEST1, TEST2[", TestEnum.class, "]", "["), 
+				is(expected));
+	}
+	
+	//Now for the ListToString methods!
+	/**
+	 * Tests the basic conversion of a list, and being able to parse
+	 * the returned list.
+	 * @throws ParseException 
+	 */
+	@Test
+	public void listToStringTest() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.convertListToString(expected), is("[TEST1, TEST2]"));
+		assertThat(ListUtil.parseList(ListUtil.convertListToString(expected),
+				TestEnum.class), is(expected));
+	}
+	
+	/**
+	 * Tests the basic conversion of a list, and being able to parse
+	 * the returned list, while using custom separators.
+	 * 
+	 * @throws ParseException 
+	 */
+	@Test
+	public void listToStringCustomSeperatorTest() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.convertListToString(expected, "; "), is("[TEST1; TEST2]"));
+		assertThat(ListUtil.parseList(ListUtil.convertListToString(expected, "; "),
+				TestEnum.class, "; "), is(expected));
+	}
+	
+	/**
+	 * Tests the basic conversion of a list, and being able to parse
+	 * the returned list, while using custom beginnings and ends.
+	 * 
+	 * @throws ParseException 
+	 */
+	@Test
+	public void listToStringCustomEndsTest() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.convertListToString(expected, "{", "}"), is("{TEST1, TEST2}"));
+		assertThat(ListUtil.parseList(ListUtil.convertListToString(expected, "{", "}"),
+				TestEnum.class, "{", "}"), is(expected));
+	}
+	
+	/**
+	 * Tests the basic conversion of a list, and being able to parse
+	 * the returned list, while using custom separators, beginnings, 
+	 * and ends.
+	 * 
+	 * @throws ParseException 
+	 */
+	@Test
+	public void listToStringCustomEndsAndSeparatorsTest() throws ParseException {
+		List<TestEnum> expected = new ArrayList<>();
+		expected.add(TestEnum.TEST1);
+		expected.add(TestEnum.TEST2);
+		
+		assertThat(ListUtil.convertListToString(expected, "; ", "{", "}"),
+				is("{TEST1; TEST2}"));
+		assertThat(ListUtil.parseList(ListUtil.convertListToString(expected,
+				"; ", "{", "}"), TestEnum.class, "; ", "{", "}"), is(expected));
+	}
+	
+	/**
+	 * Tests the validation of list methods.
+	 */
+	@Test
+	@Parameters({"[[]",
+		"[]]",
+		"[] hi",
+		"hi",
+		"[h]i",
+		"[hi []",
+		"[[]]"})
+	public void listValidationTest(String toTest) throws ParseException {
+		expected.expect(ParseException.class);
+		expected.expectMessage(startsWith("§cList format is invalid: It must start with " +
+				"'[' and end with ']', and not have any '['" + 
+				" or ']' anywhere else in it."));
+		
+		ListUtil.validateList(toTest);
 	}
 }

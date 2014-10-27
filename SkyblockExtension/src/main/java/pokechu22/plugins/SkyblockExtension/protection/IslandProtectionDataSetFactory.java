@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
 /**
  * Tool that provides IslandProtectionDataSets with the default values.
  *
@@ -19,6 +20,11 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
  *
  */
 public class IslandProtectionDataSetFactory {
+	
+	/**
+	 * For auto-initiation.
+	 */
+	private static boolean initiated = false;
 	
 	/**
 	 * The text before the actual value to get.  
@@ -38,6 +44,15 @@ public class IslandProtectionDataSetFactory {
 	 */
 	public static Map<String, IslandProtectionDataSet> 
 			getDefaultValues() {
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
+		
 		//No longer using EnumMaps, because that makes serialization tough.
 		Map<String, IslandProtectionDataSet> returned = 
 				new HashMap<String, IslandProtectionDataSet>(
@@ -57,7 +72,27 @@ public class IslandProtectionDataSetFactory {
 	 * @return
 	 */
 	public static IslandProtectionDataSet getDefaultValue(MembershipTier m){
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
 		return defaultValues.get(m);
+	}
+	
+	/**
+	 * Gets the default value for an individual flag.  
+	 * 
+	 * @param tier
+	 * @param flag
+	 * @return
+	 */
+	public static IslandProtectionDataSetFlag 
+			getDefaultValue(MembershipTier tier, String flag) {
+		return defaultValues.get(tier).getFlag(flag);
 	}
 
 	/**
@@ -72,8 +107,8 @@ public class IslandProtectionDataSetFactory {
 		FileConfiguration defaultProtectionConfig;
 		File defaultProtectionConfigFile;
 		
-		defaultProtectionConfigFile = new File(SkyblockExtension.inst()
-				.getDataFolder(), "default_protection.yml");
+		defaultProtectionConfigFile = new File(SkyblockExtension.getRealDataFolder(), 
+				"default_protection.yml");
 		
 		if (!defaultProtectionConfigFile.exists()) {
 			SkyblockExtension.inst().saveResource("default_protection.yml"

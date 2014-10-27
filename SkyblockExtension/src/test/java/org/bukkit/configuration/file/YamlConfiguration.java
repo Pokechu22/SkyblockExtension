@@ -13,10 +13,17 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
+
+import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 
 /**
  * An implementation of {@link Configuration} which saves all files in Yaml.
@@ -32,6 +39,22 @@ public class YamlConfiguration extends FileConfiguration {
     private final Representer yamlRepresenter = new YamlRepresenter();
     private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions);
 
+    /**
+     * Poke change - Register SBE stuff.
+     */
+    static {
+    	ConfigurationSerialization.registerClass(CrashReport.class,
+				"CrashReport");
+		ConfigurationSerialization.registerClass(ThrowableReport.class,
+				"ThrowableReport");
+		ConfigurationSerialization.registerClass(ConfigurationErrorReport.class,
+				"ConfigurationErrorReport");
+		ConfigurationSerialization.registerClass(GenericReport.class,
+				"GenericReport");
+		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
+				"IslandProtectionDataSet");
+    }
+    
     @SuppressWarnings("deprecation")
 	@Override
     public String saveToString() {

@@ -2,6 +2,7 @@ package pokechu22.plugins.SkyblockExtension.util;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,6 +20,89 @@ import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
  * @author Pokechu22
  */
 public class ListUtil {
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * Assumes list starts with '[' and ends with ']'.  For other chars,
+	 * use the other functions.
+	 * 
+	 * @param listData 
+	 * @throws ParseException when list is invalid.
+	 */
+	public static void validateList(String[] listData) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		validateList(listData, "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * Assumes list starts with '[' and ends with ']'.  For other chars,
+	 * use the other functions.
+	 * 
+	 * @param listData
+	 * @throws ParseException when list is invalid.
+	 */
+	public static void validateList(String listData) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		validateList(listData, "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * @param listData
+	 * @param opening The opening character.
+	 * @param closing The closing character.
+	 * @throws ParseException when the list is invalid.
+	 */
+	public static void validateList(String[] listData, String opening, String closing) 
+			throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		validateList(actualData.toString(), "[", "]");
+	}
+	
+	/**
+	 * Checks the formating of a list to ensure that it is valid.
+	 * If no exception is thrown, it is valid.
+	 * 
+	 * @param listData
+	 * @param opening The opening character.
+	 * @param closing The closing character.
+	 * @throws ParseException when the list is invalid.
+	 */
+	public static void validateList(String listData, String opening, String closing) 
+			throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		if (!((listData.indexOf(opening) == 0) 
+				&& (listData.indexOf(opening, 1) == -1)
+				&& (listData.indexOf(closing) == (listData.length() - 1)))) {
+			throw new ParseException("§cList format is invalid: It must start with '" +
+					opening + "' and end with '" + closing + "', and not have any '" +
+					opening + "' or '" + closing + "' anywhere else in it.", 0);
+		}
+	}
 	
 	/**
 	 * Parses a list of the specified type.
@@ -75,6 +159,10 @@ public class ListUtil {
 	 */
 	public static <T extends Enum<T>> List<T> parseList(String[] listData, Class<T> type, 
 			String seperator) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
 		StringBuilder actualData = new StringBuilder();
 		for (String value : listData) {
 			actualData.append(value);
@@ -97,15 +185,103 @@ public class ListUtil {
 	 */
 	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
 			String seperator) throws ParseException {
-		//If there is only 1 [ and 1 ], and both are at the start 
-				//and end of the strings...
-		if (!((listData.indexOf("[") == 0) 
-				&& (listData.indexOf("[", 1) == -1)
-				&& (listData.indexOf("]") == (listData.length() - 1)))) {
-			throw new ParseException("§cList format is invalid: It must start with " +
-					"'[' and end with ']', and not have any '['" + 
-					" or ']' anywhere else in it.", 0);
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
 		}
+		
+		return parseList(listData, type, seperator, "[", "]");
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData[], Class<T> type, 
+			String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		return parseList(actualData.toString(), type, ",", opening, closing);
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
+			String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		return parseList(listData, type, ",", opening, closing);
+	}
+	
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param seperator The separator between values
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData[], Class<T> type, 
+			String seperator, String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		StringBuilder actualData = new StringBuilder();
+		for (String value : listData) {
+			actualData.append(value);
+		}
+		
+		return parseList(actualData.toString(), type, seperator, opening, closing);
+	}
+
+	/**
+	 * Parses a list of the specified type.
+	 * 
+	 * @param listData The data to parse.
+	 * @param type The type to use
+	 * @param seperator The separator between values
+	 * @param opening The opening symbol of the list
+	 * @param closing The closing symbol of the list
+	 * @return The list
+	 * @throws ParseException When list format is invalid
+	 */
+	public static <T extends Enum<T>> List<T> parseList(String listData, Class<T> type, 
+			String seperator, String opening, String closing) throws ParseException {
+		if (listData == null) {
+			throw new ParseException("§cValue cannot be null!", -1);
+		}
+		
+		//Needed to allow for spacing.
+		seperator = seperator.trim();
+		
+		//Ensure list is valid.
+		validateList(listData, opening, closing);
 		
 		String[] stringValues = 
 				listData.substring(1, listData.length() - 1)
@@ -152,6 +328,83 @@ public class ListUtil {
 		}
 		
 		return tempList;
+	}
+	
+	/**
+	 * Converts a list to a comma-separated string.
+	 * This method uses the {@link java.util.AbstractCollection#toString()}
+	 * method to create the list.  It starts and ends with brackets.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>[EGGS, MILK]</samp>.
+	 * @param value
+	 * @return
+	 */
+	public static <T> String convertListToString(List<T> value) {
+		//Creating an ArrayList in case there is no AbstractCollection.
+		return new ArrayList<T>(value).toString();
+	}
+	
+	/**
+	 * Converts a list to a string, using that separator.
+	 * The list starts and ends with brackets.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>[EGGS; MILK]</samp>
+	 * when separator "; " is used.
+	 * 
+	 * @param value
+	 * @param separator
+	 * @return
+	 */
+	public static <T> String convertListToString(List<T> value, String separator) {
+		return convertListToString(value, separator, "[", "]");
+	}
+	
+	/**
+	 * Converts a list to a string, using the provided symbols.
+	 * It is comma-separated.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>{EGGS, MILK}</samp>
+	 * when using "{" and "}".
+	 * 
+	 * @param value
+	 * @param openingSymbol
+	 * @param closingSymbol
+	 * @return
+	 */
+	public static <T> String convertListToString(List<T> value, 
+			String openingSymbol, String closingSymbol) {
+		return convertListToString(value, ", ", openingSymbol, closingSymbol);
+	}
+	
+	/**
+	 * Converts a list to a string, using the provided symbols.
+	 * It is comma-separated.
+	 * <br>
+	 * EG A list containing EGGS and MILK gives <samp>{EGGS; MILK}</samp>
+	 * when using "{" and "}" for symbols and "; " for separator.
+	 * 
+	 * @param value
+	 * @param separator
+	 * @param openingSymbol
+	 * @param closingSymbol
+	 * @return
+	 */
+	public static <T> String convertListToString(List<T> value, String separator, 
+			String openingSymbol, String closingSymbol) {
+		StringBuilder ret = new StringBuilder();
+		ret.append(openingSymbol);
+		
+		Iterator<T> itr = value.iterator();
+		while(itr.hasNext()) {
+			ret.append(itr.next());
+			//Append the separator only if there is another value.
+			if (itr.hasNext()) {
+				ret.append(separator);
+			}
+		}
+		
+		ret.append(closingSymbol);
+		return ret.toString();
 	}
 	
 	/**

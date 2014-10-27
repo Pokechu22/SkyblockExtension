@@ -140,8 +140,8 @@ public class IslandUtils {
 	 * @return
 	 */
 	public static String getNearestIslandName(Location location) {
-		return "x" + getNearestIslandLocalX(location) + 
-				"z" + getNearestIslandLocalZ(location);
+		return getNearestIslandLocalX(location) + "x" + 
+				getNearestIslandLocalZ(location) + "z";
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public class IslandUtils {
 	 */
 	public static IslandInfo getIslandInfo(Location location) {
 		try {
-			return IslandInfo.readFromDisk(getNearestIslandName(location));
+			return IslandInfo.readFromDisk(getNearestIslandName(location) + ".nbt");
 		} catch (FileNotFoundException e) {
 			//None existing at this time, OK to return null.
 			return null;
