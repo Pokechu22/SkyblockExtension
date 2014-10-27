@@ -12,7 +12,7 @@ softdepend: [Essentials, WorldEdit, WorldGuard]
 
 commands: 
   pokechu22:
-    description: General SkyblockExtension configuration
+    description: General SkyblockExtension stuff.
     usage: |
           /pokechu22 help
     aliases: [skyblockextension, sbe, psbe]
@@ -30,7 +30,7 @@ commands:
     aliases: [isprot]
 
   tpcancel: 
-    description: Configure custom protections for your island!
+    description: Cancel a /tpa that you sent earlier but has not been accepted.
     usage: |
           /<command> [player]
     aliases: [tpacancel, tpc, tpac]
