@@ -134,6 +134,11 @@ permissions:
       sbe.debug.test.ThrowableReport: true
       sbe.debug.test.ProtectionHandler: true
       sbe.debug.test.ReplaceDefaultProtections: true
+      sbe.debug.test.MyIslandLocation: true
+      sbe.debug.test.NearestIslandLocation: true
+      sbe.debug.test.IslandInfoSerialization: true
+      sbe.debug.test.USkyBlockPlayerInfoConversion: true
+      sbe.debug.test.MyIslandInfoData: true
   
   sbe.debug.test.ThrowableReport: 
     description: A test of ThrowableReports.
@@ -155,7 +160,7 @@ permissions:
     description: A test that displays various information about the executor's island.
     default: op
     
-  sbe.debug.test.MyIslandLocation: 
+  sbe.debug.test.NearestIslandLocation: 
     description: A test that displays the island location nearest to the player.
     default: op
     
