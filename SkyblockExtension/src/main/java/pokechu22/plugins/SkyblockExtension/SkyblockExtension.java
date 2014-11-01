@@ -372,7 +372,7 @@ public class SkyblockExtension extends JavaPlugin {
 	 * @return
 	 */
 	public static File getRealDataFolder() {
-		File returned = inst() != null ? getRealDataFolder() : null;
+		File returned = inst() != null ? inst().getDataFolder() : null;
 		if (returned != null) {
 			return returned;
 		}
