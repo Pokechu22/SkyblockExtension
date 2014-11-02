@@ -95,6 +95,14 @@ public abstract class IslandProtectionDataSetFlag {
 		}
 		
 		/**
+		 * Gets the actions that can be performed.
+		 * @return
+		 */
+		public String[] getAllowedActions() {
+			return allowedActions;
+		}
+		
+		/**
 		 * Gets a set of FlagTypes capable of performing said action.
 		 * 
 		 * @param action
