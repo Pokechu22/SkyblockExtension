@@ -34,6 +34,11 @@ commands:
     usage: |
           /<command> [player]
     aliases: [tpacancel, tpc, tpac]
+  
+  expunge: 
+    description: Removes a visiting player from your island and returns them to their island.
+    usage: |
+          /<command> <player>
     
 
 permissions: 
@@ -54,6 +59,10 @@ permissions:
       Allows access to the /multichallenge command, which lets one complete the 
       same challenge multiple times quickly.
     default: true
+  
+  sbe.island.expunge: 
+    description: 
+      Allows access to the /expunge command, which lets one force a player back to their island if they are staying on the user's.
   
   sbe.debug.*: 
     description: Gives access to all SkyblockExtension debug functions.
