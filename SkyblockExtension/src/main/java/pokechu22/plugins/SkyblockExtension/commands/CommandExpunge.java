@@ -56,8 +56,8 @@ public class CommandExpunge {
 		final PlayerInfo senderInfo;
 		final PlayerInfo sentInfo;
 		
-		final Location sentIslandLoc;
-		final Location senderIslandLoc;
+		Location sentIslandLoc;
+		Location senderIslandLoc;
 		
 		//All of the sender stuff.
 		
@@ -113,14 +113,38 @@ public class CommandExpunge {
 			return;
 		}
 		
-		//Validate that the sent player is on the other player's island.
-		if (!(IslandUtils.getOccupyingIsland(sent.getLocation())
-				.equals(senderInfo.getIslandLocation()) || 
-				IslandUtils.getOccupyingIsland(sent.getLocation())
-				.equals(senderInfo.getPartyIslandLocation()))) {
-			sender.sendMessage("§cPlayer " + args[0] + " is not currently on your island.");
+		sentInfo = IslandUtils.getPlayerInfo(sent);
+		
+		//Get the island location of the sender.
+		senderIslandLoc = senderInfo.getHomeLocation();
+		if (senderIslandLoc == null) {
+			senderIslandLoc = senderInfo.getPartyIslandLocation();
+		}
+		
+		if (senderIslandLoc == null) {
+			sender.sendMessage("§cCould not identify your island location.");
 			return;
 		}
+		
+		//Process the location of the other player.
+		if (sentInfo != null) {
+			sentIslandLoc = sentInfo.getIslandLocation();
+			if (sentIslandLoc == null) {
+				sentIslandLoc = sentInfo.getPartyIslandLocation();
+			}
+			
+			if (senderIslandLoc.equals(sentIslandLoc)) {
+				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
+				return;
+			}
+			
+			//Validate that the sent player is on the other player's island.
+			if (!IslandUtils.getOccupyingIsland(sent.getLocation())
+					.equals(senderIslandLoc)) {
+				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
+				return;
+			}
+		} //If sentInfo is null, we allow transport.
 		
 		sender.sendMessage("§aSending " + args[0] + " to their island.");
 		uSkyBlock.getInstance().homeTeleport(sent);
