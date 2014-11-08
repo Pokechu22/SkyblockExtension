@@ -104,7 +104,12 @@ public class CommandExpunge {
 		
 		//Validate that the sent player is online.
 		if (sent == null) {
-			sender.sendMessage("§cPlayer " + args[0] + " is offline.");
+			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			return;
+		}
+		if (!sent.getName().equalsIgnoreCase(args[0])) {
+			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			sender.sendMessage("§cDid you mean " + sent.getName() + "?");
 			return;
 		}
 		
