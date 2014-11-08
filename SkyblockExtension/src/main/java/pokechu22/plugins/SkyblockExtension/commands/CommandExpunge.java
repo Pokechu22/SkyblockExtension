@@ -112,6 +112,11 @@ public class CommandExpunge {
 			return;
 		}
 		
+		if (PermissionHandler.HasPermision(sent, "sbe.mod.noexpunge")) {
+			sender.sendMessage(sent.getDisplayName() + "§c is a moderator and cannot be sent.");
+			return;
+		}
+		
 		sentInfo = IslandUtils.getPlayerInfo(sent);
 		
 		//Get the island location of the sender.

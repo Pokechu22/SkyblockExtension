@@ -65,6 +65,11 @@ permissions:
       Allows access to the /expunge command, which lets one force a player back to their island if they are staying on the user's.
     default: true
   
+  sbe.mod.noexpunge: 
+    description:
+      Disables players from using /expunge on you
+    default: op
+  
   sbe.debug.*: 
     description: Gives access to all SkyblockExtension debug functions.
     children: 
