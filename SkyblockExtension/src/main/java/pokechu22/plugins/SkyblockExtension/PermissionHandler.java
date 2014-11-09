@@ -38,4 +38,18 @@ public class PermissionHandler {
 			return false;
 		}
 	}
+
+	/**
+	 * Checks if a player has a permission.  
+	 * 
+	 * If it fails, the player receives no indication.
+	 * 
+	 * Currently a (Fairly pointless) wrapper for CommandSender.hasPermision(String),
+	 * but will have a use in a bit.
+	 * @param sender The CommandSender to test.
+	 * @param permission The permission to check.
+	 */
+	public static boolean HasPermissionSilent(CommandSender sender, String permission) {
+		return sender.hasPermission(permission);
+	}
 }
