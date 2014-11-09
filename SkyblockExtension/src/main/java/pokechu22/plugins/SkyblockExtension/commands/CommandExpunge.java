@@ -83,7 +83,7 @@ public class CommandExpunge {
 		
 		//Validate that the sender owns their island, if only the owner can perform this command.
 		if (!membersCanExpunge) {
-			if (!senderInfo.getPartyLeader().equalsIgnoreCase(sender.getName())) {
+			if (!sender.getName().equalsIgnoreCase(senderInfo.getPartyLeader())) {
 				sender.sendMessage("§cOnly the owner can remove people from their island!");
 				return;
 			}
