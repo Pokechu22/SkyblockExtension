@@ -24,7 +24,7 @@ import us.talabrek.ultimateskyblock.uSkyBlock;
  *
  */
 public class CommandExpunge {
-	public static boolean membersCanExpunge = false;
+	public static boolean membersCanExpunge = true;
 	
 	/**
 	 * Tab-completion.  
@@ -76,7 +76,7 @@ public class CommandExpunge {
 		}
 		
 		//Validate that the sender actually has an island
-		if (senderInfo == null) {
+		if (senderInfo == null || (!senderInfo.getHasIsland() && !senderInfo.getHasParty())) {
 			sender.sendMessage("§cYou cannot remove people from an island that you don't have!");
 			return;
 		}
