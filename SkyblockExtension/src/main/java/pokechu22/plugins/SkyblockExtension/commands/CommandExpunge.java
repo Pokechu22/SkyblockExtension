@@ -70,7 +70,7 @@ public class CommandExpunge {
 		senderInfo = IslandUtils.getPlayerInfo(sender);
 		
 		//Validate that the sender has permission.
-		if (!PermissionHandler.HasPermision(sender, "sbe.island.expunge")) {
+		if (!PermissionHandler.HasPermission(sender, "sbe.island.expunge")) {
 			sender.sendMessage("§cYou don't have permission to use this command!");
 			return;
 		}

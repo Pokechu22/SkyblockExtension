@@ -122,7 +122,7 @@ public class CommandMultiChallenge {
 			return;
 		}
 		
-		if (!PermissionHandler.HasPermision(sender, "sbe.challenges.multicomplete")) {
+		if (!PermissionHandler.HasPermission(sender, "sbe.challenges.multicomplete")) {
 			return;
 		}
 		

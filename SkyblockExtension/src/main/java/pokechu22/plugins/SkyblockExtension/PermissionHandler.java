@@ -18,7 +18,7 @@ public class PermissionHandler {
 	 * sbe.permission.example</font>"
 	 */
 	protected static final String permissionErrorMessage = 
-			"§cYou don't have the needed permision: ";
+			"§cYou don't have the needed permission: ";
 	
 	/**
 	 * Checks if a player has a permission.  
@@ -30,7 +30,7 @@ public class PermissionHandler {
 	 * @param sender The CommandSender to test.
 	 * @param permission The permission to check.
 	 */
-	public static boolean HasPermision(CommandSender sender, String permission) {
+	public static boolean HasPermission(CommandSender sender, String permission) {
 		if (sender.hasPermission(permission)) {
 			return true;
 		} else {

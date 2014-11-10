@@ -273,7 +273,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("list")) {
-			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.list")) {
+			if (PermissionHandler.HasPermission(sender, "sbe.debug.crashes.list")) {
 				if (args.length == 2) {
 					ErrorHandler.listCrashes(sender, 0);
 					return;
@@ -312,7 +312,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("show")) {
-			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.show")) {
+			if (PermissionHandler.HasPermission(sender, "sbe.debug.crashes.show")) {
 				if (args.length == 2) {
 					sender.sendMessage("§cError: Too few parameters.");
 					sender.sendMessage("For usage, do /" + label + " crashes help");
@@ -413,7 +413,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("remove")) {
-			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.remove")) {
+			if (PermissionHandler.HasPermission(sender, "sbe.debug.crashes.remove")) {
 				if (args.length <= 2) {
 					sender.sendMessage("§cError: Too few parameters.  ");
 					sender.sendMessage("For usage, do /" + label + " crashes help");
@@ -467,7 +467,7 @@ public class CommandPokechu22 {
 		}
 		if (args[1].equalsIgnoreCase("reset")) {
 			//There's some checking here involving string hash codes.  It forces confirmation.
-			if (PermissionHandler.HasPermision(sender, "sbe.debug.crashes.reset")) {
+			if (PermissionHandler.HasPermission(sender, "sbe.debug.crashes.reset")) {
 				if (args.length >= 4) {
 					sender.sendMessage("§cError: Too many parameters.");
 					sender.sendMessage("For usage, do /" + label + " crashes help");
@@ -504,7 +504,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("viewraw")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.viewraw")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.viewraw")) {
 				return;
 			}
 			if (args.length != 3) {
@@ -522,7 +522,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("markread")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markread")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.markread")) {
 				return;
 			}
 			if (args.length != 3) {
@@ -540,7 +540,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("markunread")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markunread")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.markunread")) {
 				return;
 			}
 			if (args.length != 3) {
@@ -558,7 +558,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("hide")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.hide")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.hide")) {
 				return;
 			}
 			if (args.length != 3) {
@@ -575,7 +575,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("unhide")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.unhide")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.unhide")) {
 				return;
 			}
 			if (args.length != 3) {
@@ -592,7 +592,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("markallread")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.crashes.markallread")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.crashes.markallread")) {
 				return;
 			}
 			if (args.length != 2) {
@@ -630,14 +630,14 @@ public class CommandPokechu22 {
 		}
 		
 		if (args[1].equalsIgnoreCase("ThrowableReport")) {
-			if (PermissionHandler.HasPermision(sender, "sbe.debug.test.ThrowableReport")) {
+			if (PermissionHandler.HasPermission(sender, "sbe.debug.test.ThrowableReport")) {
 				throw new RuntimeException("Test");
 			}
 			return;
 		}
 		
 		if (args[1].equalsIgnoreCase("ConfigurationErrorReport")) {
-			if (PermissionHandler.HasPermision(sender,"sbe.debug.test.ConfigErrorReport")) {
+			if (PermissionHandler.HasPermission(sender,"sbe.debug.test.ConfigErrorReport")) {
 				//Test ALL the constructors!
 				sender.sendMessage("Testing all configurationerrorreport constructors.");
 				sender.sendMessage("Check /pokechu22 crashes list.");
@@ -732,7 +732,7 @@ public class CommandPokechu22 {
 		}
 		
 		if (args[1].equalsIgnoreCase("IsProtected")) {
-			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.IsProtected")) {
+			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.IsProtected")) {
 				return;
 			}
 			
@@ -753,7 +753,7 @@ public class CommandPokechu22 {
 		}
 		
 		if (args[1].equalsIgnoreCase("ReplaceDefaultProtections")) {
-			if (!PermissionHandler.HasPermision(sender, "sbe.debug.test.ReplaceDefaultProtections")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.debug.test.ReplaceDefaultProtections")) {
 				return;
 			}
 			//TODO replace/remove these
@@ -773,7 +773,7 @@ public class CommandPokechu22 {
 		
 		if (args[1].equalsIgnoreCase("MyIslandLocation")) {
 			//Provides location of own island.
-			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.MyIslandLocation")) {
+			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.MyIslandLocation")) {
 				return;
 			}
 			
@@ -799,7 +799,7 @@ public class CommandPokechu22 {
 		
 		if (args[1].equalsIgnoreCase("NearestIslandLocation")) {
 			//Provides location of nearest island.
-			if (!PermissionHandler.HasPermision(sender,"sbe.debug.test.NearestIslandLocation")) {
+			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.NearestIslandLocation")) {
 				return;
 			}
 			
@@ -818,7 +818,7 @@ public class CommandPokechu22 {
 			return;
 		}
 		if (args[1].equalsIgnoreCase("IslandInfoSerialization")) {
-			if (!PermissionHandler.HasPermision(sender,
+			if (!PermissionHandler.HasPermission(sender,
 					"sbe.debug.test.IslandInfoSerialization")) {
 				return;
 			}
@@ -851,7 +851,7 @@ public class CommandPokechu22 {
 		}
 		if (args[1].equalsIgnoreCase("USkyBlockPlayerInfoConversion")) {
 			//Very light test of conversion.
-			if (!PermissionHandler.HasPermision(sender,
+			if (!PermissionHandler.HasPermission(sender,
 					"sbe.debug.test.USkyBlockPlayerInfoConversion")) {
 				return;
 			}
@@ -870,7 +870,7 @@ public class CommandPokechu22 {
 		}
 		if (args[1].equalsIgnoreCase("MyIslandInfoData")) {
 			//Very light test of conversion.
-			if (!PermissionHandler.HasPermision(sender,
+			if (!PermissionHandler.HasPermission(sender,
 					"sbe.debug.test.MyIslandInfoData")) {
 				return;
 			}
