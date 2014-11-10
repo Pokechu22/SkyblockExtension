@@ -560,6 +560,31 @@ public class IslandInfo {
 		return false;
 	}
 	
+	/**
+	 * Gets the membership tier that the specified player has.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public MembershipTier getMembershipTierOfPlayer(Player player) {
+		if (isOwner(player)) {
+			return MembershipTier.owner;
+		} else if (isMember(player)) {
+			return MembershipTier.member;
+		} else if (isGuest(player)) {
+			return MembershipTier.guest;
+		} else {
+			return MembershipTier.nonmember;
+		}
+	}
+	
+	/**
+	 * Gets the {@link IslandProtectionDataSet} that should be used for
+	 * the specified player.
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public IslandProtectionDataSet getDataSetForPlayer(Player player) {
 		if (isOwner(player)) {
 			return this.permissions.get("owner");
