@@ -164,7 +164,7 @@ public class SkyblockExtension extends JavaPlugin {
 		} catch (Throwable e) {
 
 			// Tell the player that an error occurred.
-			sender.sendMessage("§4A unhandled error occoured while preforming this command.");
+			sender.sendMessage("§4An unhandled error occoured while preforming this command.");
 			sender.sendMessage("§4" + e.toString());
 
 			// Put the error message in the console / log file.
@@ -242,7 +242,7 @@ public class SkyblockExtension extends JavaPlugin {
 		} catch (Throwable e) {
 
 			// Tell the player that an error occurred.
-			sender.sendMessage("§4A unhandled error occoured while tab completing.");
+			sender.sendMessage("§4An unhandled error occoured while tab completing.");
 			sender.sendMessage("§4" + e.toString());
 
 			// Put the error message in the console / log file.
