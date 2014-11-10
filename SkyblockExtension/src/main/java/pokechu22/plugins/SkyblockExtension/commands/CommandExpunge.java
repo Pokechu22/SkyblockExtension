@@ -112,7 +112,7 @@ public class CommandExpunge {
 			return;
 		}
 		
-		if (PermissionHandler.HasPermision(sent, "sbe.mod.noexpunge")) {
+		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.noexpunge")) {
 			sender.sendMessage(sent.getDisplayName() + "§c is a moderator and cannot be sent.");
 			return;
 		}
