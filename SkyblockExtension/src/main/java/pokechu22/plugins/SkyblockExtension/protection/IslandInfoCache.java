@@ -1,11 +1,16 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.mockito.asm.tree.TryCatchBlockNode;
 
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
+import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
  * Contains a cache of all existing IslandInfos.
@@ -120,4 +125,25 @@ public class IslandInfoCache {
 	}
 	
 	private static HashMap<IslandLocation, IslandInfo> cache;
+	
+	/**
+	 * Trims the cache of IslandInfo's by removing offline players.
+	 */
+	protected static void trimCache() {
+		//Players in the skyblock World.
+		Set<Player> players = new HashSet<>();
+		
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getWorld().equals(uSkyBlock.getSkyBlockWorld())) {
+				players.add(player);
+			}
+		}
+		
+		
+		
+		for (IslandInfo info : cache.values()) {
+			//Validate that the info is still in use.
+			boolean inUse = false;
+		}
+	}
 }
