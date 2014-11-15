@@ -1,14 +1,20 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.mockito.asm.tree.TryCatchBlockNode;
 
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.GuestInfo;
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.MemberInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
@@ -127,23 +133,90 @@ public class IslandInfoCache {
 	private static HashMap<IslandLocation, IslandInfo> cache;
 	
 	/**
-	 * Trims the cache of IslandInfo's by removing offline players.
+	 * Trims the cache; can be run asynchronously.
+	 * 
+	 * @author Pokechu22
 	 */
-	protected static void trimCache() {
-		//Players in the skyblock World.
-		Set<Player> players = new HashSet<>();
+	private static class CacheTrimmer implements Runnable {
+		/**
+		 * Currently in use (and therefore inaccessable)?
+		 */
+		private static volatile boolean inUse = false;
 		
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getWorld().equals(uSkyBlock.getSkyBlockWorld())) {
-				players.add(player);
+		/**
+		 * The list of players in the uSkyBlock world.
+		 */
+		private Set<UUID> playersOnWorld = new HashSet<>();
+		
+		public CacheTrimmer() {
+			initPlayersList();
+		}
+		
+		/**
+		 * Creates the list of players that are to be checked.
+		 */
+		private void initPlayersList() {
+			Player[] allPlayers = Bukkit.getOnlinePlayers();
+			for (Player player : allPlayers) {
+				if (player.getWorld().equals(uSkyBlock.getSkyBlockWorld())) {
+					playersOnWorld.add(player.getUniqueId());
+				}
 			}
 		}
 		
-		
-		
-		for (IslandInfo info : cache.values()) {
-			//Validate that the info is still in use.
-			boolean inUse = false;
+		/**
+		 * Is the item currently in use? 
+		 * @param item
+		 * @return Whether the item is in use.  If false, it can be removed.
+		 */
+		private boolean itemInUse(IslandInfo item) {
+			if (playersOnWorld.contains(item.ownerInfo.playerUUID)) {
+				return true;
+			}
+			for (MemberInfo info : item.members) {
+				if (playersOnWorld.contains(info.playerUUID)) {
+					return true;
+				}
+			}
+			for (GuestInfo info : item.guests) {
+				if (playersOnWorld.contains(info.playerUUID)) {
+					return true;
+				}
+			}
+			
+			return false;
 		}
+		
+		@Override
+		public void run() {
+			if (inUse) {
+				throw new IllegalStateException("Already in use!");
+			}
+			inUse = true;
+			
+			try {
+				Set<IslandInfoCache.IslandLocation> toRemove = new HashSet<>();
+				for (Map.Entry<IslandInfoCache.IslandLocation, IslandInfo> entry : IslandInfoCache.cache.entrySet()) {
+					if (!itemInUse(entry.getValue())) {
+						toRemove.add(entry.getKey());
+					}
+				}
+				
+				for (IslandLocation location : toRemove) {
+					cache.remove(location);
+				}
+			} finally {
+				inUse = false;
+			}
+		}
+		
+	}
+	
+	/**
+	 * Trims the cache of IslandInfo's by removing offline players.
+	 */
+	protected static void trimCache() {
+		CacheTrimmer trimmer = new CacheTrimmer();
+		Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), trimmer);
 	}
 }
