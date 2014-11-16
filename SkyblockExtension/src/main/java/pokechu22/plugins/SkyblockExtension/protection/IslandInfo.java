@@ -643,18 +643,37 @@ public class IslandInfo {
 	}
 	
 	/**
-	 * Gets the file name, but not the extension or path.
-	 * It's of the form 0x0z, which is the island location.
+	 * Gets the X-coordinate of this island.
+	 * @return
+	 */
+	public int getXID() {
+		return (int)(this.islandCenter.getX() / Settings.island_distance);
+	}
+	
+	/**
+	 * Gets the Z-coordinate of this island.
+	 * @return
+	 */
+	public int getZID() {
+		return (int)(this.islandCenter.getZ() / Settings.island_distance);
+	}
+	
+	/**
+	 * Gets the island location name.
+	 * It's of the form #x#z.
+	 * @return
+	 */
+	public String getIslandName() {
+		return getXID() + "x" + getZID() + "z";
+	}
+	
+	/**
+	 * Gets the name of the file used for saving (but not the path).
+	 * EG <code>0x0z.nbt</code>
 	 * @return
 	 */
 	public String getFileName() {
-		int xPos;
-		int zPos;
-		
-		xPos = (int)(this.islandCenter.getX() / Settings.island_distance);
-		zPos = (int)(this.islandCenter.getZ() / Settings.island_distance);
-		
-		return xPos + "x" + zPos + "z" + ".nbt";
+		return getIslandName() + ".nbt";
 	}
 	
 	/**
