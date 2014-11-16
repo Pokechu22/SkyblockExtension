@@ -1,6 +1,5 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.mockito.asm.tree.TryCatchBlockNode;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.GuestInfo;
@@ -33,11 +31,23 @@ public class IslandInfoCache {
 		private int x;
 		private int z;
 		
+		/**
+		 * Creates an IslandLocation at those islandX and islandZ coords.
+		 * 
+		 * @param x
+		 * @param z
+		 */
 		public IslandLocation(int x, int z) {
 			this.x = x;
 			this.z = z;
 		}
 		
+		/**
+		 * Creates an IslandLocation from that LocationString (formated <code>#x#z</code>).
+		 * 
+		 * @param x
+		 * @param z
+		 */
 		public IslandLocation(String locationString) {
 			//Validate the format.
 			if (!(locationString.contains("x") && 
@@ -92,8 +102,24 @@ public class IslandInfoCache {
 			}
 		}
 		
+		/**
+		 * Creates an IslandLocation located based off of the IslandCoords from there.
+		 * 
+		 * @param x
+		 * @param z
+		 */
 		public IslandLocation(Location islandLocation) {
 			this(IslandUtils.getNearestIslandName(islandLocation));
+		}
+		
+		/**
+		 * Creates an IslandLocation based off of the location of that {@link IslandInfo}.
+		 * 
+		 * @param x
+		 * @param z
+		 */
+		public IslandLocation(IslandInfo info) {
+			this(info.getXID(), info.getZID());
 		}
 
 		@Override
@@ -218,5 +244,59 @@ public class IslandInfoCache {
 	protected static void trimCache() {
 		CacheTrimmer trimmer = new CacheTrimmer();
 		Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), trimmer);
+	}
+	
+	/**
+	 * Gets the IslandInfo used that the specified location and adds
+	 * it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfo(Location location) {
+		IslandLocation loc = new IslandLocation(location);
+		return getIslandInfo(loc);
+	}
+	
+	/**
+	 * Gets the IslandInfo for the island with the specified ID, and adds
+	 * it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfo(String islandID) {
+		IslandLocation loc = new IslandLocation(islandID);
+		return getIslandInfo(loc);
+	}
+	
+	/**
+	 * Gets the IslandInfo used that those specific island ID coords, and
+	 * adds it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfo(int islandX, int islandY) {
+		IslandLocation loc = new IslandLocation(islandX, islandY);
+		return getIslandInfo(loc);
+	}
+	
+	/**
+	 * Gets the island info located at that location, and adds it to 
+	 * the cache. 
+	 * @param location
+	 * @return
+	 */
+	private static IslandInfo getIslandInfo(IslandLocation location) {
+		if (cache.containsKey(location)) {
+			return cache.get(location);
+		}
+		return null;
+	}
+	
+	private static void addToCache(IslandInfo info) {
+		IslandLocation location = new IslandLocation(info);
+		cache.put(location, info);
 	}
 }
