@@ -295,6 +295,61 @@ public class IslandInfoCache {
 		return null;
 	}
 	
+	/**
+	 * Gets the IslandInfo used that the specified location but does not
+	 * add it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfoNoAddToCache(Location location) {
+		IslandLocation loc = new IslandLocation(location);
+		return getIslandInfoNoAddToCache(loc);
+	}
+
+	/**
+	 * Gets the IslandInfo for the island with the specified ID but does not
+	 * add it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfoNoAddToCache(String islandID) {
+		IslandLocation loc = new IslandLocation(islandID);
+		return getIslandInfoNoAddToCache(loc);
+	}
+
+	/**
+	 * Gets the IslandInfo used that those specific island ID coords but
+	 * does not add it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static IslandInfo getIslandInfoNoAddToCache(int islandX, int islandY) {
+		IslandLocation loc = new IslandLocation(islandX, islandY);
+		return getIslandInfoNoAddToCache(loc);
+	}
+
+	/**
+	 * Gets the island info located at that location but does not
+	 * add it to the cache.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	private static IslandInfo getIslandInfoNoAddToCache(IslandLocation location) {
+		if (cache.containsKey(location)) {
+			return cache.get(location);
+		}
+		return null; //TODO: Get from file.
+	}
+
+	/**
+	 * Adds said island info to the cache.
+	 * 
+	 * @param info
+	 */
 	private static void addToCache(IslandInfo info) {
 		IslandLocation location = new IslandLocation(info);
 		cache.put(location, info);
