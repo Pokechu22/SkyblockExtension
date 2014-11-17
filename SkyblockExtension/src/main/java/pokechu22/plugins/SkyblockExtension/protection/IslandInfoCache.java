@@ -147,6 +147,11 @@ public class IslandInfoCache {
 			}
 			return true;
 		}
+		
+		@Override
+		public String toString() {
+			return x + "x" + z + "z";
+		}
 	}
 	
 	/**
