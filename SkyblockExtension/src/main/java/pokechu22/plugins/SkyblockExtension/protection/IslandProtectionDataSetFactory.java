@@ -37,6 +37,8 @@ public class IslandProtectionDataSetFactory {
 			defaultValues = new EnumMap<MembershipTier, 
 					IslandProtectionDataSet>(MembershipTier.class); 
 	
+	private static IslandProtectionDataSet outsideIslandInfo;
+	
 	/**
 	 * Gets all default values for all tiers.
 	 * 
@@ -81,6 +83,25 @@ public class IslandProtectionDataSetFactory {
 			initiated = true;
 		}
 		return defaultValues.get(m);
+	}
+	
+	/**
+	 * Gets the IslandProtectionDataSet used in areas that are not part
+	 * of any island 
+	 * are not
+	 * @return
+	 */
+	public static IslandProtectionDataSet getUnprotectedAreaValue() {
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
+		
+		return outsideIslandInfo;
 	}
 	
 	/**
@@ -166,6 +187,59 @@ public class IslandProtectionDataSetFactory {
 			//Put the enum value and the corresponding 
 			//IslandProectionDatSet in the map.
 			defaultValues.put(t, i);
+		}
+		
+		//Default file, modifiable, in plugin data folder.
+		FileConfiguration externalProtectionConfig;
+		File externalProtectionConfigFile;
+		
+		externalProtectionConfigFile = new File(SkyblockExtension.getRealDataFolder(), 
+				"unprotected_areas.yml");
+		
+		if (!externalProtectionConfigFile.exists()) {
+			SkyblockExtension.inst().saveResource("unprotected_areas.yml"
+					, false);
+		}
+		
+		externalProtectionConfig = YamlConfiguration
+				.loadConfiguration(defaultProtectionConfigFile);
+		
+		try {
+			outsideIslandInfo = (IslandProtectionDataSet)
+					externalProtectionConfig.get(config_prepender + "unprotected");
+		} catch (Exception e) {
+			ErrorHandler.logError(new ConfigurationErrorReport(e, 
+					"unprotected", "unprotected_areas.yml", 
+					IslandProtectionDataSetFactory.class.getName(), 
+					false).setContext("An exception was caught.  " + 
+					"Loading the default IslandProtectionDataSet for "+ 
+					"defaultValues." + "unprotected" + ".  " + 
+					"The configuration is probably broken."));
+			SkyblockExtension.inst().getLogger().severe(
+					"An error occured while loading the default " + 
+					"protection configuration: Exception thrown while "+
+					"reading defaultValues." + "unprotected" + ".");
+			throw new InvalidConfigurationException(
+					"An error occured while loading the default " + 
+					"protection configuration: Exception thrown while "+
+					"reading defaultValues." + "unprotected" + ".", e);
+		}
+		if (outsideIslandInfo == null) {
+			ErrorHandler.logError(new ConfigurationErrorReport( 
+					"unprotected", "unprotected_areas.yml", 
+					IslandProtectionDataSetFactory.class.getName(), 
+					false).setContext("Value was null.  " + 
+					"Loading the default IslandProtectionDataSet for " +
+					"defaultValues." +"unprotected" + ".  " + 
+					"The configuration is probably broken."));
+			SkyblockExtension.inst().getLogger().severe(
+					"An error occured while loading the default " + 
+					"protection configuration: defaultValues." + 
+					"unprotected" + "is null!");
+			throw new InvalidConfigurationException(
+					"An error occured while loading the default " + 
+					"protection configuration: defaultValues." +
+					"unprotected" + "is null!");
 		}
 	}
 }
