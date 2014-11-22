@@ -756,4 +756,16 @@ public class IslandInfo {
 		
 		return returned;
 	}
+	
+	/**
+	 * Gets the IslandInfo used in all zones without a normal IslandInfo.
+	 * @return
+	 */
+	public static IslandInfo getUnprotectedIslandInfo() {
+		IslandInfo returned = new IslandInfo();
+		
+		returned.permissions = IslandProtectionDataSetFactory.getUnprotectedValues();
+		
+		return returned;
+	}
 }

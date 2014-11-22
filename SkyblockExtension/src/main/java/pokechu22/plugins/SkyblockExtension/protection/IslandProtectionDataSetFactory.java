@@ -115,6 +115,34 @@ public class IslandProtectionDataSetFactory {
 			getDefaultValue(MembershipTier tier, String flag) {
 		return defaultValues.get(tier).getFlag(flag);
 	}
+	
+	/**
+	 * Gets all of the unprotected values, suitable for using in a map.
+	 * 
+	 * @return
+	 */
+	public static Map<String, IslandProtectionDataSet>
+			getUnprotectedValues() {
+		if (!initiated) {
+			try {
+				init();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			initiated = true;
+		}
+		
+		//No longer using EnumMaps, because that makes serialization tough.
+		Map<String, IslandProtectionDataSet> returned = 
+				new HashMap<String, IslandProtectionDataSet>(
+						defaultValues.size());
+		for (Map.Entry<MembershipTier, IslandProtectionDataSet> m : 
+			defaultValues.entrySet()) {
+			returned.put(m.getKey().name(), getUnprotectedAreaValue());
+		}
+		
+		return returned;
+	}
 
 	/**
 	 * Saves the default configs, as needed.
