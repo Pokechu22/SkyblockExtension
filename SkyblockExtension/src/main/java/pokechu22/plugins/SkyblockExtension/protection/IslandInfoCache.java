@@ -1,5 +1,6 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -297,7 +298,18 @@ public class IslandInfoCache {
 		if (cache.containsKey(location)) {
 			return cache.get(location);
 		}
-		return null;
+		
+		IslandInfo info = null;
+		
+		try {
+			info = IslandInfo.readFromDisk(location.x, location.z);
+			cache.put(location, info);
+		} catch (FileNotFoundException e) {
+			return IslandInfo.getUnprotectedIslandInfo();
+		} catch (Exception e) {
+			return null;
+		}
+		return info;
 	}
 	
 	/**
