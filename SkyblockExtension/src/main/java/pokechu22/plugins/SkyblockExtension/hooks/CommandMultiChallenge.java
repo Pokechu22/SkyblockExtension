@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension.commands;
+package pokechu22.plugins.SkyblockExtension.hooks;
 
 import java.util.ArrayList;
 import java.util.List;

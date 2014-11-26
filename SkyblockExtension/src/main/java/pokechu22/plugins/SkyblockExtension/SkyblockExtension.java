@@ -16,6 +16,7 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
+import pokechu22.plugins.SkyblockExtension.hooks.CommandMultiChallenge;
 import pokechu22.plugins.SkyblockExtension.hooks.USkyBlockCommandIsland;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
