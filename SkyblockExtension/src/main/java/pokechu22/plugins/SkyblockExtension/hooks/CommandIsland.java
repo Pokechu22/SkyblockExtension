@@ -37,8 +37,8 @@ import us.talabrek.ultimateskyblock.uSkyBlock;
  * @author Pokechu22
  *
  */
-public class USkyBlockCommandIsland extends IslandCommand implements TabCompleter {
-	public USkyBlockCommandIsland() {
+public class CommandIsland extends IslandCommand implements TabCompleter {
+	public CommandIsland() {
 		super();
 	}
 	
@@ -246,7 +246,7 @@ public class USkyBlockCommandIsland extends IslandCommand implements TabComplete
 	 * Registers all hooks on this command, overriding uSkyBlock code.
 	 */
 	public static void registerHooks() {
-		USkyBlockCommandIsland inst = new USkyBlockCommandIsland();
+		CommandIsland inst = new CommandIsland();
 		//Command itself.
 		uSkyBlock.getInstance().getCommand("island").setExecutor(inst);
 		//Tab completion.

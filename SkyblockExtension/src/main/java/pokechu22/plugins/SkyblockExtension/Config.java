@@ -13,7 +13,7 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorRepor
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
-import pokechu22.plugins.SkyblockExtension.hooks.USkyBlockCommandIsland;
+import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 
@@ -69,11 +69,11 @@ public class Config {
 				.getBoolean("errorHandling.broadcastOnError", true);
 		LoginErrorBroadcaster.broadcastOnLogin = getDefaultConfig()
 				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
-		USkyBlockCommandIsland.enableHelp2 = getDefaultConfig().getBoolean(
+		CommandIsland.enableHelp2 = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.enableHelp2", true);
-		USkyBlockCommandIsland.allowIgnoreCase = getDefaultConfig().getBoolean(
+		CommandIsland.allowIgnoreCase = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.allowIgnoreCase", true);
-		USkyBlockCommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
+		CommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.useCustomBlockValues", true);
 		
 		getLogger().info("Configuration loaded!");
@@ -97,13 +97,13 @@ public class Config {
 		
 		getDefaultConfig().set(
 				"uSkyBlockOverrides.islandCommand.enableHelp2",
-				USkyBlockCommandIsland.enableHelp2);
+				CommandIsland.enableHelp2);
 		getDefaultConfig().set(
 				"uSkyBlockOverrides.islandCommand.allowIgnoreCase",
-				USkyBlockCommandIsland.allowIgnoreCase);
+				CommandIsland.allowIgnoreCase);
 		getDefaultConfig().set(
 				"uSkyBlockOverrides.islandCommand.useCustomBlockValues",
-				USkyBlockCommandIsland.useCustomBlockValues);
+				CommandIsland.useCustomBlockValues);
 		
 		SkyblockExtension.inst().saveAllConfigs();
 	}

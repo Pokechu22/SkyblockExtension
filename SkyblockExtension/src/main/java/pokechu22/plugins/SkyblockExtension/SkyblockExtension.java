@@ -17,7 +17,7 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandMultiChallenge;
-import pokechu22.plugins.SkyblockExtension.hooks.USkyBlockCommandIsland;
+import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.util.mcstats.MetricsHandler;
@@ -76,7 +76,7 @@ public class SkyblockExtension extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new LoginErrorBroadcaster(), this);
 		
 		//Other registration.
-		USkyBlockCommandIsland.registerHooks();
+		CommandIsland.registerHooks();
 		
 		this.saveDefaultVersionsOfAllConfigs();
 
