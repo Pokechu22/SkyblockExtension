@@ -37,6 +37,17 @@ import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo
 public class CommandMultiChallenge {
 	
 	/**
+	 * Registers all hooks on this command, overriding uSkyBlock code.
+	 */
+	public static void registerHooks() {
+		CommandIsland inst = new CommandIsland();
+		//Command itself.
+		uSkyBlock.getInstance().getCommand("c").setExecutor(inst);
+		//Tab completion.
+		uSkyBlock.getInstance().getCommand("c").setTabCompleter(inst);
+	}
+	
+	/**
 	 * Challenge names.
 	 */
 	static List<String> challengeNames = null;
