@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,11 +42,23 @@ public class CommandMultiChallenge {
 	 * Registers all hooks on this command, overriding uSkyBlock code.
 	 */
 	public static void registerHooks() {
-		CommandIsland inst = new CommandIsland();
 		//Command itself.
-		uSkyBlock.getInstance().getCommand("c").setExecutor(inst);
+		uSkyBlock.getInstance().getCommand("c").setExecutor(new CommandExecutor() {
+			@Override
+			public boolean onCommand(CommandSender sender, Command cmd,
+					String label, String[] args) {
+				CommandMultiChallenge.Run(sender, cmd, label, args);
+				return true;
+			}
+		});
 		//Tab completion.
-		uSkyBlock.getInstance().getCommand("c").setTabCompleter(inst);
+		uSkyBlock.getInstance().getCommand("c").setTabCompleter(new TabCompleter() {
+			@Override
+			public List<String> onTabComplete(CommandSender sender, Command cmd,
+					String label, String[] args) {
+				return CommandMultiChallenge.onTabComplete(sender, cmd, label, args);
+			}
+		});
 	}
 	
 	/**
