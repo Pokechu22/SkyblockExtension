@@ -210,6 +210,10 @@ public class CommandMultiChallenge {
 				sender.sendMessage("§cChallenge " + challengeName + " does not exist!");
 				return;
 			}
+			if (!challengeUnlocked(player, challengeName)) {
+				sender.sendMessage("§cChallenge " + challengeName + " has not been unlocked!");
+				return;
+			}
 			if (!isChallengeRepeatable(challengeName)) {
 				sender.sendMessage("§cChallenge " + challengeName + " is not repeatable!");
 				return;
@@ -271,6 +275,20 @@ public class CommandMultiChallenge {
 	 */
 	public static boolean challengeExists(Player player, String challengeName) {
 		return getPlayerInfo(player).challengeExists(challengeName);
+	}
+	
+	/**
+	 * Checks if a challenge has had its rank unlocked.
+	 * 
+	 * @param player
+	 * @param challengeName
+	 * @return
+	 */
+	public static boolean challengeUnlocked(Player player, String challengeName) {
+		return (uSkyBlock.getInstance().isRankAvailable(
+				player, uSkyBlock.getInstance().getConfig()
+				.getString("options.challenges.challengeList." 
+				+ challengeName + ".rankLevel")));
 	}
 	
 	/**
