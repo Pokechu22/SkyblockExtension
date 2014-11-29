@@ -178,7 +178,12 @@ public class BlockValueCalculator {
 		}
 	}
 	
-	public boolean usesPool(String dataSpecificMaximumPool) {
+	/**
+	 * Gets whether or not the specified block has a value in the pool.
+	 * @param dataSpecificMaximumPool
+	 * @return
+	 */
+	protected boolean usesPool(String dataSpecificMaximumPool) {
 		return getBlockValuesConfig().getInt("maximumPools." + 
 				dataSpecificMaximumPool + ".max") != -1;
 	}
