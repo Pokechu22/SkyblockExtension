@@ -273,7 +273,7 @@ public class CommandMultiChallenge {
 	 * @param challengeName
 	 * @return
 	 */
-	public static boolean challengeExists(Player player, String challengeName) {
+	protected static boolean challengeExists(Player player, String challengeName) {
 		return getPlayerInfo(player).challengeExists(challengeName);
 	}
 	
@@ -284,7 +284,7 @@ public class CommandMultiChallenge {
 	 * @param challengeName
 	 * @return
 	 */
-	public static boolean challengeUnlocked(Player player, String challengeName) {
+	protected static boolean challengeUnlocked(Player player, String challengeName) {
 		return (uSkyBlock.getInstance().isRankAvailable(
 				player, uSkyBlock.getInstance().getConfig()
 				.getString("options.challenges.challengeList." 
@@ -301,7 +301,7 @@ public class CommandMultiChallenge {
 	 * @param challengeName
 	 * @return
 	 */
-	public static boolean isChallengeAvailable(Player player, String challengeName) {
+	protected static boolean isChallengeAvailable(Player player, String challengeName) {
 		PlayerInfo p = getPlayerInfo(player);
 		
 		//Player has completed the challenge once & challenge is repeatable.
@@ -317,7 +317,7 @@ public class CommandMultiChallenge {
 	 * @param challengeName
 	 * @return
 	 */
-	public static boolean isChallengeRepeatable(String challengeName) {
+	protected static boolean isChallengeRepeatable(String challengeName) {
 		//Will need to change getConfig() with getChallengeConfig() in the future
 		return (("onPlayer".equalsIgnoreCase(uSkyBlock
 				.getInstance()
@@ -343,7 +343,7 @@ public class CommandMultiChallenge {
 	 * @param label
 	 * @return
 	 */
-	public static List<String> getAvailableChallenges(Player sender) {
+	protected static List<String> getAvailableChallenges(Player sender) {
 		ArrayList<String> availableChallenges = new ArrayList<String>();
 		
 		PlayerInfo p = getPlayerInfo(sender);
@@ -372,7 +372,7 @@ public class CommandMultiChallenge {
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean canCompleteChallenge(Player player, String challengeName, int times) {
+	protected static boolean canCompleteChallenge(Player player, String challengeName, int times) {
 		//Will look something like "1:4 44:1:64", where the first number is the numeric ID,
 		//and the last one is the quantity.  If it exists, the middle number is the data value.
 		String[] requiredItemsList = uSkyBlock
