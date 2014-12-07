@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension.hooks;
+package pokechu22.plugins.SkyblockExtension.commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,29 +37,6 @@ import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo
  *
  */
 public class CommandMultiChallenge {
-	
-	/**
-	 * Registers all hooks on this command, overriding uSkyBlock code.
-	 */
-	public static void registerHooks() {
-		//Command itself.
-		uSkyBlock.getInstance().getCommand("c").setExecutor(new CommandExecutor() {
-			@Override
-			public boolean onCommand(CommandSender sender, Command cmd,
-					String label, String[] args) {
-				CommandMultiChallenge.Run(sender, cmd, label, args);
-				return true;
-			}
-		});
-		//Tab completion.
-		uSkyBlock.getInstance().getCommand("c").setTabCompleter(new TabCompleter() {
-			@Override
-			public List<String> onTabComplete(CommandSender sender, Command cmd,
-					String label, String[] args) {
-				return CommandMultiChallenge.onTabComplete(sender, cmd, label, args);
-			}
-		});
-	}
 	
 	/**
 	 * Challenge names.
