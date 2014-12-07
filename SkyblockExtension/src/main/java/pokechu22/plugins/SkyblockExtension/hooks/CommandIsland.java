@@ -480,7 +480,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		map.put("invite", new String[]{
 				//Help
 				"Invites a player to your island.  The other player " +
-				"lose their island if they accept.\n" +
+				"loses their island if they accept.\n" +
 				"Usage: \n§6/island invite <player>§f: Invite <player>" +
 				"to your island.\n§6/island invite§f: View how many " +
 				"more people you can invite and stuff like that.",
