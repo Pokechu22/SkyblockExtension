@@ -65,7 +65,11 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				alertAboutNewHelp(sender);
 			}
 		}
-		return superResult;
+		
+		if (superResult == false) {
+			sender.sendMessage("Syntax error; see /island help for usage.");
+		}
+		return true;
 	}
 	
 	/**
