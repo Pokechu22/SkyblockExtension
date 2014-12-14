@@ -157,16 +157,6 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		 */
 		private String islandPlayer;
 		
-		/**
-		 * The mapping for different block values.
-		 * TODO: use.
-		 */
-		public static Map<Integer, Integer> blockValues;
-		/**
-		 * The maximum amount of cobble that will be counted.
-		 */
-		public static int maximumCobble = 10000;
-		
 		public AsyncIslandLevelCalculator(Player player, String islandPlayer) {
 			this.player = player;
 			this.islandPlayer = islandPlayer;
@@ -200,32 +190,42 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			} catch (Exception e) {
 				System.out.print("Error while calculating Island Level: " + e);
 			}
-			System.out.print("Finished async info thread");
 
-//			uSkyBlock.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(uSkyBlock.getInstance(), new Runnable()
-//			{
-//				public void run()
-//				{
-//					System.out.print("Back to sync thread for info");
-//					if (Bukkit.getPlayer(this) != null)
-//					{
-//						Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.YELLOW + "Information about " + this.val$islandPlayerx + "'s Island:");
-//						if (this.val$playerx.equalsIgnoreCase(this.val$islandPlayerx))
-//						{
-//							Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(this.val$playerx)).getIslandLevel());
-//						}
-//						else {
-//							PlayerInfo pi = uSkyBlock.getInstance().readPlayerFile(this.val$islandPlayerx);
-//							if (pi != null)
-//								Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + pi.getIslandLevel());
-//							else
-//								Bukkit.getPlayer(this.val$playerx).sendMessage(ChatColor.RED + "Error: Invalid Player");
-//						}
-//					}
-//					System.out.print("Finished with sync thread for info");
-//				}
-//			}
-//			, 0L);
+			//Send information back.
+			
+			uSkyBlock.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(uSkyBlock.getInstance(), new Runnable()
+			{
+				public void run()
+				{
+					System.out.print("Back to sync thread for info");
+					
+					//Check if player still is online. 
+					//This is necessary as the player could have disconected while processing.
+					//If that happens, they are removed from uSkyBlock's active players, and
+					//thus a nullPointerException is thrown.
+					if (player.isOnline()) { 
+						
+						player.sendMessage(ChatColor.YELLOW + "Information about " + islandPlayer + "'s Island:");
+						
+						//I don't know why it works like this...  uSkyBlock, wat?
+						if (player.getName().equalsIgnoreCase(islandPlayer))
+						{
+							player.sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + ((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(player.getName())).getIslandLevel());
+						} else {
+							PlayerInfo pi = uSkyBlock.getInstance().readPlayerFile(islandPlayer);
+							if (pi != null) {
+								player.sendMessage(ChatColor.GREEN + "Island level is " + ChatColor.WHITE + pi.getIslandLevel());
+							} else {
+								player.sendMessage(ChatColor.RED + "Error: Invalid Player");
+							}
+						}
+					} else {
+						//Player left.
+					}
+					System.out.print("Finished with sync thread for info");
+				}
+			}
+			, 0L);
 		}
 		
 	}
