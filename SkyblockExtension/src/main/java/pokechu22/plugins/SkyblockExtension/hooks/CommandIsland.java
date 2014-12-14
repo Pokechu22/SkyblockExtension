@@ -188,7 +188,8 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 					((PlayerInfo)uSkyBlock.getInstance().getActivePlayers().get(playerName)).setIslandLevel(calc.islandPoints / 100);
 				}
 			} catch (Exception e) {
-				System.out.print("Error while calculating Island Level: " + e);
+				System.err.println("Error while calculating Island Level: " + e);
+				e.printStackTrace();
 			}
 
 			//Send information back.
