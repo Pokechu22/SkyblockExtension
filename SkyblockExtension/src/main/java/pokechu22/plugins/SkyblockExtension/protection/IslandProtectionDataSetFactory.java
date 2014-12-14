@@ -230,7 +230,7 @@ public class IslandProtectionDataSetFactory {
 		}
 		
 		externalProtectionConfig = YamlConfiguration
-				.loadConfiguration(defaultProtectionConfigFile);
+				.loadConfiguration(externalProtectionConfigFile);
 		
 		try {
 			outsideIslandInfo = (IslandProtectionDataSet)
