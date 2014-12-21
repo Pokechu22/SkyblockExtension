@@ -11,10 +11,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Throwables;
+
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.GuestInfo;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.MemberInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
+import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**
@@ -121,6 +124,33 @@ public class IslandInfoCache {
 		 */
 		public IslandLocation(IslandInfo info) {
 			this(info.getXID(), info.getZID());
+		}
+		
+		/**
+		 * Gets the IslandInfo used for a specific player's island.
+		 * 
+		 * @throws RuntimeException when a player has no island.
+		 * 
+		 * @return
+		 */
+		public static IslandLocation IslandInfoForPlayer(String player) {
+			Location location = uSkyBlock.getInstance().getPlayerIsland(player);
+			if (location == null) {
+				throw new RuntimeException("§cPlayer " + player + " does not appear to have an island.");
+			} else {
+				return new IslandLocation(location);
+			}
+		}
+		
+		/**
+		 * Gets the IslandInfo used for a specific player's island.
+		 * 
+		 * @throws RuntimeException when a player has no island.
+		 * 
+		 * @return
+		 */
+		public static IslandLocation IslandInfoForPlayer(Player player) {
+			return IslandInfoForPlayer(player.getName());
 		}
 
 		@Override
@@ -286,6 +316,23 @@ public class IslandInfoCache {
 	public static IslandInfo getIslandInfo(int islandX, int islandY) {
 		IslandLocation loc = new IslandLocation(islandX, islandY);
 		return getIslandInfo(loc);
+	}
+	
+	/**
+	 * Gets the island info for the specified player.
+	 * 
+	 * TODO: Other method taking a string.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static IslandInfo getIslandInfo(Player player) {
+		try {
+			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
+			return getIslandInfo(loc);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	/**
