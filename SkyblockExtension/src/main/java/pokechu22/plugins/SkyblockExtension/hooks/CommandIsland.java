@@ -164,7 +164,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		
 		@Override
 		public void run() {
-			System.out.print("Calculating island level in async thread");
+			System.out.println("Calculating island level in async thread");
 			try {
 				String playerName = player.getName();
 				Location l;
@@ -198,7 +198,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			{
 				public void run()
 				{
-					System.out.print("Back to sync thread for info");
+					System.out.println("Back to sync thread for info");
 					
 					//Check if player still is online. 
 					//This is necessary as the player could have disconected while processing.
