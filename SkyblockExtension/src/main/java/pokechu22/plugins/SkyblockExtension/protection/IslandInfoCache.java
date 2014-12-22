@@ -319,14 +319,27 @@ public class IslandInfoCache {
 	}
 	
 	/**
-	 * Gets the island info for the specified player.
-	 * 
-	 * TODO: Other method taking a string.
+	 * Gets the island info for the specified player. 
 	 * 
 	 * @param player
 	 * @return
 	 */
-	public static IslandInfo getIslandInfo(Player player) {
+	public static IslandInfo getPlayerIslandInfo(Player player) {
+		try {
+			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
+			return getIslandInfo(loc);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Gets the island info for the specified player. 
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static IslandInfo getPlayerIslandInfo(String player) {
 		try {
 			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
 			return getIslandInfo(loc);
