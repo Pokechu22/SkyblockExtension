@@ -76,6 +76,17 @@ public class Config {
 		CommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.useCustomBlockValues", true);
 		
+		WitherWarner.enabled = getDefaultConfig().getBoolean(
+				"witherWarning.enabled");
+		WitherWarner.warningText = getDefaultConfig().getString(
+				"witherWarning.warningText")
+				//Escaping.
+				.replace("\\&", "\uFFFF").replace("&", "§").replace("\uFFFF", "&");
+		WitherWarner.optOutText = getDefaultConfig().getString(
+				"witherWarning.optOutText")
+				//Escaping.
+				.replace("\\&", "\uFFFF").replace("&", "§").replace("\uFFFF", "&");
+		
 		getLogger().info("Configuration loaded!");
 	}
 	

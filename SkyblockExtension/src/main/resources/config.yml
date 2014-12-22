@@ -21,3 +21,13 @@ errorHandling:
   broadcastOnError: true
   #Similar to above, but only for logins.  The permission is 
   notifyOfExistingOnLogin: true
+  
+#The warning that is shown when someone places a wither skull, to remind
+#them of the true height of a wither - 4 blocks tall.
+witherWarning: 
+  #Enable/disable.
+  enabled: true
+  #The main message (displayed first)
+  warningText: "&fHey!  Be careful!  While the model to make a wither is 3 by 3, the actual wither is 1 by 4!  If you're trying to cage it, it's possible for it to escape unless your cage is 4 high!"
+  #The text that describes how to opt out (displayed next)
+  optOutText: "&7&oTo disable this message, do '&r&7/pokechu22 WitherWarning off&7&o'."
