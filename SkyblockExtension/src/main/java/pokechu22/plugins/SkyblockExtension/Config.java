@@ -101,21 +101,6 @@ public class Config {
 		
 		getLogger().info("Configuration saved!");
 		
-		getDefaultConfig().set("errorHandling.broadcastOnError", 
-				ErrorHandler.broadcastOnError);
-		getDefaultConfig().set("errorHandling.notifyOfExistingOnLogin", 
-				LoginErrorBroadcaster.broadcastOnLogin);
-		
-		getDefaultConfig().set(
-				"uSkyBlockOverrides.islandCommand.enableHelp2",
-				CommandIsland.enableHelp2);
-		getDefaultConfig().set(
-				"uSkyBlockOverrides.islandCommand.allowIgnoreCase",
-				CommandIsland.allowIgnoreCase);
-		getDefaultConfig().set(
-				"uSkyBlockOverrides.islandCommand.useCustomBlockValues",
-				CommandIsland.useCustomBlockValues);
-		
 		SkyblockExtension.inst().saveAllConfigs();
 	}
 	

@@ -361,7 +361,7 @@ public class SkyblockExtension extends JavaPlugin {
 	 * Saves all configs - Convenience method.
 	 */
 	public void saveAllConfigs() {
-		saveConfig();
+		//saveConfig(); //DISABLED - no need to save it, and would overwrite stuff anyways.
 		saveCrashesConfig();
 	}
 	
