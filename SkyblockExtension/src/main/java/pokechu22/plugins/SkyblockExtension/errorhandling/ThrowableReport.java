@@ -1,5 +1,10 @@
 package pokechu22.plugins.SkyblockExtension.errorhandling;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -186,37 +191,40 @@ public class ThrowableReport extends CrashReport {
 	 */
 	@Override
 	public Map<String, Object> serialize() {
-		SkyblockExtension.inst().getLogger().finest("Saving crash report to map.");
 		
 		Map<String, Object> map = super.serializeBase();
 		
-		//Serialize thrown as a map.
-		//map.put("Thrown", this.thrown);
-		Map<String, Object> thrownMap = serializeThrowable(thrown);
-		
-		//And now args.  (Apparently, configurations don't like String[]?)
-		ArrayList<String> argsList = new ArrayList<String>();
-		if (this.hasCommand) {
-			for (int i = 0; i < this.args.length; i++) {
-				argsList.add(this.args[i]);
+		try {
+			//And now args.  (Apparently, configurations don't like String[]?)
+			ArrayList<String> argsList = new ArrayList<String>();
+			if (this.hasCommand) {
+				for (int i = 0; i < this.args.length; i++) {
+					argsList.add(this.args[i]);
+				}
 			}
-		}
-	
 		
-		//The casts are useless but show the type.
-		map.put("Thrown", (Map<String, Object>) thrownMap);
-		map.put("HasCommand", this.hasCommand);
-		if (this.hasCommand) {
-			map.put("SenderClass", (String) senderClass);
-			map.put("SenderName", (String) senderName);
-			map.put("SenderIsOp", (boolean) senderIsOp);
-			map.put("Cmd", (String) this.cmd);
-			map.put("Label", (String) this.label);
-			map.put("Args", (ArrayList<String>) argsList);
-		}
-		map.put("HasContext", this.hasContext);
-		if (this.hasContext) {
-			map.put("Context", context);
+			//The casts are useless but show the type.
+			map.put("Thrown", (byte[]) serializeThrowable(this.thrown));
+			map.put("HasCommand", this.hasCommand);
+			if (this.hasCommand) {
+				map.put("SenderClass", (String) senderClass);
+				map.put("SenderName", (String) senderName);
+				map.put("SenderIsOp", (boolean) senderIsOp);
+				map.put("Cmd", (String) this.cmd);
+				map.put("Label", (String) this.label);
+				map.put("Args", (ArrayList<String>) argsList);
+			}
+			map.put("HasContext", this.hasContext);
+			if (this.hasContext) {
+				map.put("Context", context);
+			}
+		} catch (IOException e) {
+			SkyblockExtension.inst().getLogger().warning("Failed to safe crash report: " +
+					e.toString());
+			SkyblockExtension.inst().getLogger().log(Level.WARNING, "Exception: ", e);
+			ErrorHandler.logError(new ConfigurationErrorReport(e, this.getClass().getName(), 
+					true));
+			throw new RuntimeException(e);
 		}
 		
 		return map;
@@ -229,11 +237,10 @@ public class ThrowableReport extends CrashReport {
 	public ThrowableReport(Map<String, Object> map) {
 		super(map);
 		
-		SkyblockExtension.inst().getLogger().finest("Creating crash report from map.");
 		try {
 			
 			//Create thrown.
-			Throwable t = deserializeThrowable((Map<String, Object>) map.get("Thrown"));
+			Throwable t = deserializeThrowable((byte[]) map.get("Thrown"));
 			
 			//And convert args.
 			this.hasCommand = (boolean) map.get("HasCommand");
@@ -257,17 +264,14 @@ public class ThrowableReport extends CrashReport {
 			if (this.hasContext) {
 				this.context = (String) map.get("Context");
 			}
-		} catch (ClassCastException | InstantiationException | IllegalAccessException 
-				| IllegalArgumentException | InvocationTargetException | NoSuchMethodException 
-				| SecurityException | ClassNotFoundException e) {
-			SkyblockExtension.inst().getLogger().warning("Failed to create: " + e.toString());
+		} catch (Exception e) {
+			SkyblockExtension.inst().getLogger().warning("Failed to load crash report: " + 
+					e.toString());
 			SkyblockExtension.inst().getLogger().log(Level.WARNING, "Exception: ", e);
 			ErrorHandler.logError(new ConfigurationErrorReport(e, this.getClass().getName(), 
 					false));
-			return;
+			throw new RuntimeException(e);
 		}
-		
-		SkyblockExtension.inst().getLogger().finest("Succeeded!");
 	}
 	
 	/**
@@ -294,38 +298,24 @@ public class ThrowableReport extends CrashReport {
 	 * 
 	 * @param t
 	 * @return
+	 * @throws IOException 
 	 */
-	private static Map<String, Object> serializeThrowable(Throwable t) {
+	private static byte[] serializeThrowable(Throwable t) throws IOException {
 		if (t == null) {
 			return null;
 		}
 		
-		HashMap<String, Object> thrownMap = new HashMap<String, Object>();
-		thrownMap.put("Class", t.getClass().getName());
-		thrownMap.put("Message", t.getMessage());
+		byte[] result;
 		
-		ArrayList<HashMap<String, Object>> stackTraceList = 
-				new ArrayList<HashMap<String, Object>>();
-		
-		StackTraceElement[] stackTrace = t.getStackTrace();
-		for (int i = 0; i < stackTrace.length; i++) {
-			HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
-			stackTraceMap.put("ClassName", stackTrace[i].getClassName());
-			stackTraceMap.put("MethodName", stackTrace[i].getMethodName());
-			stackTraceMap.put("FileName", stackTrace[i].getFileName());
-			stackTraceMap.put("LineNumber", stackTrace[i].getLineNumber());
-			stackTraceList.add(stackTraceMap);
+		//Try-with-resources, similar to C#'s "using".
+		try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+			try (ObjectOutputStream output = new ObjectOutputStream(buffer)) {
+				output.writeObject(t);
+			}
+			result = buffer.toByteArray();
 		}
 		
-		thrownMap.put("StackTrace", stackTraceList);
-		
-		Map<String, Object> causeMap;
-		if (t.getCause() != null) {
-			causeMap = serializeThrowable(t.getCause());
-			thrownMap.put("Cause", causeMap);
-		}
-		
-		return thrownMap;
+		return result;
 	}
 	
 	/**
@@ -333,79 +323,19 @@ public class ThrowableReport extends CrashReport {
 	 * TODO Move to a better location.
 	 * 
 	 * @param t
-	 * @return
+	 * @return 
+	 * @throws IOException 
 	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
 	 */
-	@SuppressWarnings("unchecked")
-	private static Throwable deserializeThrowable(Map<String, Object> map) 
-			throws InstantiationException, IllegalAccessException, 
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, 
-			SecurityException, ClassNotFoundException {
-		if (map == null) {
+	private static Throwable deserializeThrowable(byte[] data) throws IOException, ClassNotFoundException {
+		if (data == null) {
 			return null;
 		}
 		
-		String thrownClass = (String) map.get("Class");
-		String thrownMessage = (String) map.get("Message");
-		
-		ArrayList<HashMap<String, Object>> stackTraceListOld = 
-				(ArrayList<HashMap<String, Object>>) map.get("StackTrace");
-		
-		StackTraceElement[] stackTrace = new StackTraceElement[stackTraceListOld.size()];
-		for (int i = 0; i < stackTraceListOld.size(); i++) {
-			HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
-			
-			stackTrace[i] = new StackTraceElement(
-					(String) stackTraceElementMap.get("ClassName"), //declaringClass
-					(String) stackTraceElementMap.get("MethodName"), //methodName
-					(String) stackTraceElementMap.get("FileName"), //fileName
-					(int) stackTraceElementMap.get("LineNumber") //lineNumber
-					);
+		//Try-with-resources, similar to C#'s "using".
+		try (ByteArrayInputStream buffer = new ByteArrayInputStream(data);
+				ObjectInputStream input = new ObjectInputStream(buffer)) {
+			return (Throwable) input.readObject();
 		}
-		
-		Map<String, Object> causeMap = (Map<String, Object>) map.get("Cause");
-		
-		Throwable t = null;
-		
-		if (causeMap != null) {
-			Throwable cause = deserializeThrowable(causeMap);
-			Constructor<?>[] constructors = Class.forName(thrownClass)
-					.getConstructors();
-			//Stupid issue with nonexistant message.
-			for (Constructor<?> c : constructors) {
-				if (c.getParameterTypes().length == 2 && 
-						c.getParameterTypes()[0].equals(String.class) &&
-						c.getParameterTypes()[1].equals(Throwable.class)) {
-					t = (Throwable) c.newInstance(thrownMessage, cause);
-				} else if (c.getParameterTypes().length == 2 && 
-						c.getParameterTypes()[0].equals(Throwable.class) &&
-						c.getParameterTypes()[1].equals(String.class)) {
-					//InvocationTargetException is like this...
-					t = (Throwable) c.newInstance(cause, thrownMessage);
-				} else if (c.getParameterTypes().length == 1 &&
-						c.getParameterTypes()[0].equals(Throwable.class)) {
-					t = (Throwable) c.newInstance(cause);
-				} else {
-					return null;
-				}
-			}
-			//t = (Throwable) Class.forName(thrownClass)
-			//		.getConstructor(String.class, Throwable.class)
-			//		.newInstance(thrownMessage, cause);
-		} else {
-			t = (Throwable) Class.forName(thrownClass)
-					.getConstructor(String.class)
-					.newInstance(thrownMessage);
-		}
-		
-		t.setStackTrace(stackTrace);
-		
-		return t;
 	}
 }
