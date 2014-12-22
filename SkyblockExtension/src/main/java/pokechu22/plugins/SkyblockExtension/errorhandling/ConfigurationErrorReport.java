@@ -1,5 +1,9 @@
 package pokechu22.plugins.SkyblockExtension.errorhandling;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -279,86 +283,64 @@ public class ConfigurationErrorReport extends CrashReport {
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = super.serializeBase();
 		
-		map.put("HasError", (boolean) this.hasError);
-		if (hasError) {
-			//Serialize error as a map.
+		try {
 			
-			HashMap<String, Object> errorMap = new HashMap<String, Object>();
-			errorMap.put("Class",this.error.getClass().getName());
-			errorMap.put("Message", this.error.getMessage());
-			
-			ArrayList<HashMap<String, Object>> stackTraceList = 
-					new ArrayList<HashMap<String, Object>>();
-			
-			StackTraceElement[] stackTrace = this.error.getStackTrace();
-			for (int i = 0; i < stackTrace.length; i++) {
-				HashMap<String, Object> stackTraceMap = new HashMap<String, Object>();
-				stackTraceMap.put("ClassName", stackTrace[i].getClassName());
-				stackTraceMap.put("MethodName", stackTrace[i].getMethodName());
-				stackTraceMap.put("FileName", stackTrace[i].getFileName());
-				stackTraceMap.put("LineNumber", stackTrace[i].getLineNumber());
-				stackTraceList.add(stackTraceMap);
+			map.put("HasError", (boolean) this.hasError);
+			if (hasError) {
+				byte[] errorData;
+				
+				//Try-with-resources, similar to C#'s "using".
+				try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+					try (ObjectOutputStream output = new ObjectOutputStream(buffer)) {
+						output.writeObject(this.error);
+					}
+					errorData = buffer.toByteArray();
+				}
+				
+				map.put("Error", (byte[]) errorData);
 			}
 			
-			errorMap.put("StackTrace", stackTraceList);
+			map.put("ConfigurationInfoKnown", (boolean) this.configurationInfoKnown);
+			if (this.configurationInfoKnown) {
+				map.put("Key", (String) this.key);
+				map.put("ConfigurationFile", this.configurationFile);
+			}
 			
-			map.put("Error", (HashMap<String, Object>) errorMap);
+			map.put("HasSerializingClass", (boolean) this.hasSerializingClass);
+			if (this.hasSerializingClass) {
+				map.put("SerializingClassName", this.serializingClassName);
+			}
+			
+			map.put("Saving", this.saving);
+			
+			map.put("Context", this.context);
+		} catch (Exception e) {
+			SkyblockExtension.inst().getLogger().warning("Failed to create " + 
+					"ConfigurationErrorReport: " + e.toString());
+			SkyblockExtension.inst().getLogger().log(Level.WARNING, "Exception: ", e);
+			//Well, this might cause an infinite loop, but it is still a good idea.
+			ErrorHandler.logError(new ConfigurationErrorReport(
+					e, this.getClass().getName(), false));
+			return null;
 		}
-		
-		map.put("ConfigurationInfoKnown", (boolean) this.configurationInfoKnown);
-		if (this.configurationInfoKnown) {
-			map.put("Key", (String) this.key);
-			map.put("ConfigurationFile", this.configurationFile);
-		}
-		
-		map.put("HasSerializingClass", (boolean) this.hasSerializingClass);
-		if (this.hasSerializingClass) {
-			map.put("SerializingClassName", this.serializingClassName);
-		}
-		
-		map.put("Saving", this.saving);
-		
-		map.put("Context", this.context);
-		
 		return map;
 	}
 	
 	/**
 	 * Deserializes the crashReport for configuration loading.
 	 */
-	@SuppressWarnings("unchecked")
 	public ConfigurationErrorReport(Map<String, Object> map) {
 		super(map);
 		
 		try {
 			this.hasError = (boolean) map.get("HasError");
 			if (this.hasError) {
-				//Create error.
-				HashMap<String,Object> errorMap = (HashMap<String, Object>) map.get("Error");
-				String errorClass = (String) errorMap.get("Class");
-				String errorMessage = (String) errorMap.get("Message");
-				
-				ArrayList<HashMap<String, Object>> stackTraceListOld = 
-						(ArrayList<HashMap<String, Object>>) errorMap.get("StackTrace");
-				
-				StackTraceElement[] stackTrace = new StackTraceElement[stackTraceListOld.size()];
-				for (int i = 0; i < stackTraceListOld.size(); i++) {
-					HashMap<String, Object> stackTraceElementMap = stackTraceListOld.get(i);
-					
-					stackTrace[i] = new StackTraceElement(
-							(String) stackTraceElementMap.get("ClassName"), //declaringClass
-							(String) stackTraceElementMap.get("MethodName"), //methodName
-							(String) stackTraceElementMap.get("FileName"), //fileName
-							(int) stackTraceElementMap.get("LineNumber") //lineNumber
-							);
+				byte[] data = (byte[]) map.get("Error");
+				//Try-with-resources, similar to C#'s "using".
+				try (ByteArrayInputStream buffer = new ByteArrayInputStream(data);
+						ObjectInputStream input = new ObjectInputStream(buffer)) {
+					this.error = (Throwable)input.readObject();
 				}
-				
-				Throwable t = (Throwable) Class.forName(errorClass)
-						.getConstructor(String.class)
-						.newInstance(errorMessage);
-				t.setStackTrace(stackTrace);
-				
-				this.error = t;
 			} else {
 				this.error = null;
 			}
