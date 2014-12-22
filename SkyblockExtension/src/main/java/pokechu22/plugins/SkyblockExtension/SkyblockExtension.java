@@ -85,6 +85,7 @@ public class SkyblockExtension extends JavaPlugin {
 		//Load the default protection.
 		try {
 			IslandProtectionDataSetFactory.init();
+			WitherWarner.load();
 		} catch (InvalidConfigurationException e) {
 			//If this fails, we want it to be fully thrown to stop loading.
 			throw new RuntimeException(e);
@@ -101,6 +102,7 @@ public class SkyblockExtension extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Config.saveConfig();
+		WitherWarner.save();
 	}
 
 	/**

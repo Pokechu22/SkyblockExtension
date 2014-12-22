@@ -21,6 +21,7 @@ import org.bukkit.util.ChatPaginator;
 
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.WitherWarner;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
@@ -194,6 +195,11 @@ public class CommandPokechu22 {
 			}
 			case "help": {
 				Help(sender, cmd, label, args);
+				return;
+			}
+			case "witherwarning": {
+				witherWarning(sender, cmd, label, args);
+				return;
 			}
 			}
 		}
@@ -1018,5 +1024,69 @@ public class CommandPokechu22 {
 			}
 			}
 		}
+	}
+	
+	/**
+	 * Sends the warning about withers ({@linkplain WitherWarner}).
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 */
+	protected static void witherWarning(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0) {
+			return;
+		}
+		if (!WitherWarner.enabled) {
+			sender.sendMessage("§cThis functionality has been disabled by " +
+					"a server administrator.");
+			return;
+		}
+		if (args.length == 1) {
+			//Inform the player about the usage.
+			sender.sendMessage("This functionality provides a notice when " +
+					"making a wither that withers are 4 blocks tall, not 3.");
+			sender.sendMessage("To opt out, do '/" + label + " WitherWarning off'.");
+			sender.sendMessage("To opt back in, do '/" + label + " WitherWarning on'.");
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				 
+				if (WitherWarner.optedOutPlayers.contains(player.getUniqueId())) {
+					player.sendMessage("You are currently §copted out§r.");
+				} else {
+					player.sendMessage("You are currently §aopted in§r.");
+				}
+			}
+			return;
+		}
+		if (args.length == 2) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cYou must be a player to use this command.");
+				return;
+			}
+			Player player = (Player)sender;
+			switch (args[1].toLowerCase()) {
+			case "off": {
+				if (WitherWarner.optedOutPlayers.contains(player.getUniqueId())) {
+					sender.sendMessage("§cYou are already opted out!");
+					return;
+				}
+				WitherWarner.optedOutPlayers.add(player.getUniqueId());
+				sender.sendMessage("You have been §copted out§r.");
+				return;
+			}
+			case "on": {
+				if (!WitherWarner.optedOutPlayers.contains(player.getUniqueId())) {
+					sender.sendMessage("§cYou are already opted in!");
+					return;
+				}
+				WitherWarner.optedOutPlayers.remove(player.getUniqueId());
+				sender.sendMessage("You have been §aopted in§r.");
+				return;
+			}
+			}
+		}
+		
+		sender.sendMessage("§cSyntax error!  Usage: /" + label + " WitherWarning [off/on]");
 	}
 }
