@@ -287,17 +287,7 @@ public class ConfigurationErrorReport extends CrashReport {
 			
 			map.put("HasError", (boolean) this.hasError);
 			if (hasError) {
-				byte[] errorData;
-				
-				//Try-with-resources, similar to C#'s "using".
-				try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-					try (ObjectOutputStream output = new ObjectOutputStream(buffer)) {
-						output.writeObject(this.error);
-					}
-					errorData = buffer.toByteArray();
-				}
-				
-				map.put("Error", (byte[]) errorData);
+				map.put("Error", (byte[]) serializeThrowable(this.error));
 			}
 			
 			map.put("ConfigurationInfoKnown", (boolean) this.configurationInfoKnown);
@@ -335,12 +325,7 @@ public class ConfigurationErrorReport extends CrashReport {
 		try {
 			this.hasError = (boolean) map.get("HasError");
 			if (this.hasError) {
-				byte[] data = (byte[]) map.get("Error");
-				//Try-with-resources, similar to C#'s "using".
-				try (ByteArrayInputStream buffer = new ByteArrayInputStream(data);
-						ObjectInputStream input = new ObjectInputStream(buffer)) {
-					this.error = (Throwable)input.readObject();
-				}
+				this.error = deserializeThrowable((byte[]) map.get("Error"));
 			} else {
 				this.error = null;
 			}

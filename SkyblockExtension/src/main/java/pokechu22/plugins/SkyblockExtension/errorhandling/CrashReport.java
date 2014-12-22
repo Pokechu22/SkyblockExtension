@@ -2,6 +2,11 @@ package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -287,5 +292,50 @@ public abstract class CrashReport implements ConfigurationSerializable {
 		map.put("Hiders", this.hiders);
 		
 		return map;
+	}
+	
+	/**
+	 * Serializes a throwable.
+	 * 
+	 * @param t The throwable to serialize
+	 * @return The serialized data.
+	 * @throws IOException 
+	 */
+	protected static byte[] serializeThrowable(Throwable t) throws IOException {
+		if (t == null) {
+			return null;
+		}
+		
+		byte[] result;
+		
+		//Try-with-resources, similar to C#'s "using".
+		try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+			try (ObjectOutputStream output = new ObjectOutputStream(buffer)) {
+				output.writeObject(t);
+			}
+			result = buffer.toByteArray();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Deserializes a throwable.
+	 * 
+	 * @param data The data to deserialize
+	 * @return The throwable.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	protected static Throwable deserializeThrowable(byte[] data) throws IOException, ClassNotFoundException {
+		if (data == null) {
+			return null;
+		}
+		
+		//Try-with-resources, similar to C#'s "using".
+		try (ByteArrayInputStream buffer = new ByteArrayInputStream(data);
+				ObjectInputStream input = new ObjectInputStream(buffer)) {
+			return (Throwable) input.readObject();
+		}
 	}
 }
