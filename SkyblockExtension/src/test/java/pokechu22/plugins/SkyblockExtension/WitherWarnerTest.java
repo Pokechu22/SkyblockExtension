@@ -15,8 +15,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-import pokechu22.plugins.SkyblockExtension.testutil.ChatLoggedPlayer;
-
 /**
  * Tests the WitherWarner.
  * 
@@ -49,7 +47,7 @@ public class WitherWarnerTest {
 	 */
 	@Test
 	public void witherSkullPlacementShouldGiveMessages() {
-		ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+		Player player = mock(Player.class);
 		when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 		
 		// SKULL_ITEM:1, AKA wither skull.
@@ -63,14 +61,8 @@ public class WitherWarnerTest {
 		WitherWarner w = new WitherWarner();
 		w.onWitherSkullPlaced(e);
 		
-		assertThat(player.messageQueue.size(), is(2));
-		
-		assertThat(player.messageQueue.peek(), is(warningText));
-		player.messageQueue.remove();
-		assertThat(player.messageQueue.peek(), is(optOutText));
-		player.messageQueue.remove();
-		
-		assertTrue(player.messageQueue.isEmpty());
+		verify(player, times(1)).sendMessage(warningText);
+		verify(player, times(1)).sendMessage(optOutText);
 	}
 	
 	/**
@@ -84,7 +76,7 @@ public class WitherWarnerTest {
 				continue; //Skip wither.
 			}
 			
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.SKULL_ITEM, 64, 
@@ -97,13 +89,14 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		
 		//Check a few other items.
 		//Dirt
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.DIRT, 64);
@@ -115,11 +108,12 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		//Flint and steel
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.FLINT_AND_STEEL, 64);
@@ -131,11 +125,12 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		//Flowing Lava block
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.LAVA, 64);
@@ -147,11 +142,12 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		//Stationary lava block
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.STATIONARY_LAVA, 64);
@@ -163,11 +159,12 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		//Air
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.AIR, 64);
@@ -179,11 +176,12 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 		//Dirt with data value of that of a wither skull
 		{
-			ChatLoggedPlayer player = mock(ChatLoggedPlayer.class);
+			Player player = mock(Player.class);
 			when(player.getUniqueId()).thenReturn(new UUID(0L, 0L));
 			
 			ItemStack stack = new ItemStack(Material.LAVA, 64,
@@ -196,7 +194,8 @@ public class WitherWarnerTest {
 			WitherWarner w = new WitherWarner();
 			w.onWitherSkullPlaced(e);
 			
-			assertTrue(player.messageQueue.isEmpty());
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
 		}
 	}
 }
