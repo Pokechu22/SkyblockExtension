@@ -139,7 +139,7 @@ public class WitherWarner implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWitherSkullPlaced(BlockPlaceEvent e) {
 		if (enabled) {
-			if (e.isCancelled()) {
+			if (e.isCancelled() || !e.canBuild()) {
 				return; //If canceled, no point in warning.
 			}
 			if (e.getItemInHand().getType() == Material.SKULL_ITEM) {
