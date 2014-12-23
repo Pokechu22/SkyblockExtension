@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -143,8 +144,7 @@ public class WitherWarner implements Listener {
 				return; //If canceled, no point in warning.
 			}
 			if (e.getItemInHand().getType() == Material.SKULL_ITEM) {
-				//I can't figure out how to do this properly.  DV 1 is that of wither skull.
-				if (e.getItemInHand().getData().getData() == (byte)1) {
+				if (e.getItemInHand().getData().getData() == (byte)SkullType.WITHER.ordinal()) {
 					if (!optedOutPlayers.contains(e.getPlayer().getUniqueId())) {
 						e.getPlayer().sendMessage(warningText);
 						e.getPlayer().sendMessage(optOutText);
