@@ -289,4 +289,160 @@ public class WitherWarnerTest {
 		}
 		WitherWarner.enabled = true;
 	}
+	
+	/**
+	 * Tests that opted out players do not receive the message, 
+	 * both with the WitherWarner enabled and disabled.
+	 * 
+	 * (Player with UUID of 1 is opted out)
+	 */
+	@Test
+	public void optedOutPlayersShouldNotReceiveMessages() {
+		WitherWarner.enabled = false;
+		
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// SKULL_ITEM:1, AKA wither skull.
+			ItemStack stack = new ItemStack(Material.SKULL_ITEM, 64, 
+					(short)SkullType.WITHER.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Regular skeleton skull
+			ItemStack stack = new ItemStack(Material.SKULL_ITEM, 64, 
+					(short)SkullType.SKELETON.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Regular dirt
+			ItemStack stack = new ItemStack(Material.DIRT, 64);
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Dirt with DV of wither skull.
+			ItemStack stack = new ItemStack(Material.DIRT, 64, 
+					(short)SkullType.WITHER.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		
+		WitherWarner.enabled = true;
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// SKULL_ITEM:1, AKA wither skull.
+			ItemStack stack = new ItemStack(Material.SKULL_ITEM, 64, 
+					(short)SkullType.WITHER.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Regular skeleton skull
+			ItemStack stack = new ItemStack(Material.SKULL_ITEM, 64, 
+					(short)SkullType.SKELETON.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Regular dirt
+			ItemStack stack = new ItemStack(Material.DIRT, 64);
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+		{
+			Player player = mock(Player.class);
+			when(player.getUniqueId()).thenReturn(new UUID(0L, 1L));
+			
+			// Dirt with DV of wither skull.
+			ItemStack stack = new ItemStack(Material.DIRT, 64, 
+					(short)SkullType.WITHER.ordinal());
+			
+			//The placed event used here.
+			BlockPlaceEvent e = new BlockPlaceEvent(null, null, null,
+					stack, player, true);
+			
+			WitherWarner w = new WitherWarner();
+			w.onWitherSkullPlaced(e);
+			
+			verify(player, never()).sendMessage(warningText);
+			verify(player, never()).sendMessage(optOutText);
+		}
+	}
 }
