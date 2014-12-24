@@ -286,7 +286,7 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getIslandInfo(Location location) {
+	public static IslandInfo getLocationIslandInfo(Location location) {
 		IslandLocation loc = new IslandLocation(location);
 		return getIslandInfo(loc);
 	}
@@ -298,7 +298,7 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getIslandInfo(String islandID) {
+	public static IslandInfo getLocationIslandInfo(String islandID) {
 		IslandLocation loc = new IslandLocation(islandID);
 		return getIslandInfo(loc);
 	}
@@ -310,7 +310,7 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getIslandInfo(int islandX, int islandY) {
+	public static IslandInfo getLocationIslandInfo(int islandX, int islandY) {
 		IslandLocation loc = new IslandLocation(islandX, islandY);
 		return getIslandInfo(loc);
 	}
