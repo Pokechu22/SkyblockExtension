@@ -1,9 +1,6 @@
 package pokechu22.plugins.SkyblockExtension;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import static pokechu22.plugins.SkyblockExtension.testutil.MockEventUtil.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
