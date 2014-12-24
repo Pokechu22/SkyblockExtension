@@ -11,13 +11,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Throwables;
-
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.GuestInfo;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo.MemberInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
-import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 /**

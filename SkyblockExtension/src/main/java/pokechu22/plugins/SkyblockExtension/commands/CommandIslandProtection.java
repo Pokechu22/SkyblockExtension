@@ -3,7 +3,6 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
