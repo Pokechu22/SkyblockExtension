@@ -213,6 +213,7 @@ public class WitherWarnerTest {
 	 * <li>With a block of dirt, with DV of that of a wither skull</li>
 	 * </ul>
 	 */
+	@Test
 	public void disabledWitherWarnerShouldNotDisplayMessages() {
 		WitherWarner.enabled = false;
 		{
