@@ -183,6 +183,79 @@ public class IslandInfoCache {
 	}
 	
 	/**
+	 * Controls what is returned when a non-existent island is found.
+	 */
+	public static interface NoIslandFoundBehavior {
+		/**
+		 * Gets the {@link IslandInfo} used with this behavior at specified location.
+		 * @param location The location that was attempted to have an info retrieved for.
+		 * @return
+		 */
+		public IslandInfo getIslandInfo(IslandLocation location) throws Exception;
+		
+		/**
+		 * Gets the {@link IslandInfo} used with this behavior for the specified player.
+		 * @param playerName the player who's island was being retrieved.
+		 * @return
+		 */
+		public IslandInfo getIslandInfo(String playerName) throws Exception;
+		
+		/**
+		 * Gets the {@link IslandInfo} used with this behavior.
+		 * @return
+		 */
+		public IslandInfo getIslandInfo() throws Exception;
+	}
+	
+	/**
+	 * Controls what is returned when a non-existent island is found.
+	 * 
+	 * This enum contains some default implementations of {@link NoIslandFoundBehavior}.
+	 */
+	public static enum NoIslandFoundBehaviors implements NoIslandFoundBehavior {
+		THROW_EXCEPTION {
+
+			@Override
+			public IslandInfo getIslandInfo(IslandLocation location)
+					throws Exception {
+				throw new IllegalArgumentException("There is no island at " + location);
+			}
+
+			@Override
+			public IslandInfo getIslandInfo(String playerName) throws Exception {
+				throw new IllegalArgumentException(playerName + " has no island!");
+			}
+
+			@Override
+			public IslandInfo getIslandInfo() throws Exception {
+				throw new IllegalArgumentException("There is no island at that location.");
+			}
+		},
+		
+		/**
+		 * Return null when no island is found.
+		 */
+		RETURN_NULL {
+
+			@Override
+			public IslandInfo getIslandInfo(IslandLocation location)
+					throws Exception {
+				return null;
+			}
+
+			@Override
+			public IslandInfo getIslandInfo(String playerName) throws Exception {
+				return null;
+			}
+
+			@Override
+			public IslandInfo getIslandInfo() throws Exception {
+				return null;
+			}
+		};
+	}
+	
+	/**
 	 * Private constructor - don't call this!
 	 */
 	private IslandInfoCache() {
