@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfoCache;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
@@ -18,7 +19,7 @@ import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionData
  * Island-protection configuration command.  
  * 
  * Format: 
- * /isprot [name|location] [tier] [flag] [action] [values...]
+ * /isprot [name|islandCode] [tier] [flag] [action] [values...]
  * 
  * @author Pokechu22
  *
@@ -30,7 +31,7 @@ public class CommandIslandProtection {
 	private static final List<String> tiers;
 	
 	/**
-	 * Different flags avaliable.
+	 * Different flags available.
 	 */
 	private static final List<String> flags;
 	
@@ -121,7 +122,11 @@ public class CommandIslandProtection {
 	 * @param args
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
-		//TODO
+		if (args.length >= 3) {
+			//IslandInfo info = IslandInfoCache.getIslandInfo(islandID)
+		} else {
+			sender.sendMessage("§cInvalid input"); //TODO
+		}
 	}
 	
 	/**

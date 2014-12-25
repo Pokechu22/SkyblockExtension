@@ -331,6 +331,33 @@ public class IslandInfoCache {
 	}
 	
 	/**
+	 * Gets the island info found for the specified location or player
+	 * name.  The purpose of this is for use in a command, as it
+	 * takes either a '1x1z' style number or a player's name.
+	 * 
+	 * @param playerOrLocation
+	 * @return
+	 */
+	public static IslandInfo getCommandIslandInfo(String playerOrLocation) {
+		IslandLocation location;
+		try {
+			//Try to parse it as an actual location.
+			location = new IslandLocation(playerOrLocation);
+		} catch (IllegalArgumentException e) {
+			//If the format for the location was invalid, try parsing
+			//it as a player's name.
+			try {
+				location = IslandLocation.IslandInfoForPlayer(
+						playerOrLocation);
+			} catch (Exception e_) {
+				return null; //No island.
+			}
+		}
+		
+		return getIslandInfo(location);
+	}
+	
+	/**
 	 * Gets the island info for the specified player. 
 	 * 
 	 * @param player
