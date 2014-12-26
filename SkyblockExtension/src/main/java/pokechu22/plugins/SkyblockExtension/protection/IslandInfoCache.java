@@ -359,9 +359,10 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getLocationIslandInfo(Location location) {
+	public static IslandInfo getLocationIslandInfo(Location location,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		IslandLocation loc = new IslandLocation(location);
-		return getIslandInfo(loc);
+		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
 	
 	/**
@@ -371,9 +372,10 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getLocationIslandInfo(String islandID) {
+	public static IslandInfo getLocationIslandInfo(String islandID,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		IslandLocation loc = new IslandLocation(islandID);
-		return getIslandInfo(loc);
+		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
 	
 	/**
@@ -383,9 +385,10 @@ public class IslandInfoCache {
 	 * @param location
 	 * @return
 	 */
-	public static IslandInfo getLocationIslandInfo(int islandX, int islandY) {
+	public static IslandInfo getLocationIslandInfo(int islandX, int islandY,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		IslandLocation loc = new IslandLocation(islandX, islandY);
-		return getIslandInfo(loc);
+		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
 	
 	/**
@@ -394,10 +397,11 @@ public class IslandInfoCache {
 	 * @param player
 	 * @return
 	 */
-	public static IslandInfo getPlayerIslandInfo(Player player) {
+	public static IslandInfo getPlayerIslandInfo(Player player,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		try {
 			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
-			return getIslandInfo(loc);
+			return getIslandInfo(loc, noIslandFoundBehavior);
 		} catch (Exception e) {
 			return null;
 		}
@@ -411,7 +415,8 @@ public class IslandInfoCache {
 	 * @param playerOrLocation
 	 * @return
 	 */
-	public static IslandInfo getCommandIslandInfo(String playerOrLocation) {
+	public static IslandInfo getCommandIslandInfo(String playerOrLocation,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		IslandLocation location;
 		try {
 			//Try to parse it as an actual location.
@@ -427,7 +432,7 @@ public class IslandInfoCache {
 			}
 		}
 		
-		return getIslandInfo(location);
+		return getIslandInfo(location, noIslandFoundBehavior);
 	}
 	
 	/**
@@ -436,10 +441,11 @@ public class IslandInfoCache {
 	 * @param player
 	 * @return
 	 */
-	public static IslandInfo getPlayerIslandInfo(String player) {
+	public static IslandInfo getPlayerIslandInfo(String player,
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		try {
 			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
-			return getIslandInfo(loc);
+			return getIslandInfo(loc, noIslandFoundBehavior);
 		} catch (Exception e) {
 			return null;
 		}
@@ -449,9 +455,10 @@ public class IslandInfoCache {
 	 * Gets the island info located at that location, and adds it to 
 	 * the cache. 
 	 * @param location
+	 * @param noIslandFoundBehavior TODO
 	 * @return
 	 */
-	private static IslandInfo getIslandInfo(IslandLocation location) {
+	private static IslandInfo getIslandInfo(IslandLocation location, NoIslandFoundBehavior noIslandFoundBehavior) {
 		if (cache.containsKey(location)) {
 			return cache.get(location);
 		}
