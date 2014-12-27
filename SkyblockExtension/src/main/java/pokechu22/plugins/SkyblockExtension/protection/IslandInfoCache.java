@@ -194,6 +194,14 @@ public class IslandInfoCache {
 		public IslandInfo performAction(IslandLocation location) throws Exception;
 		
 		/**
+		 * Performs the action for this behavior at specified location.
+		 * @param location The location that was attempted to have an info retrieved for.
+		 * @param cause The throwable that caused the island not to be found.
+		 * @return
+		 */
+		public IslandInfo performAction(IslandLocation location, Throwable cause) throws Exception;
+		
+		/**
 		 * Performs the action for this behavior for the specified player.
 		 * @param playerName the player who's island was being retrieved.
 		 * @return
@@ -201,10 +209,25 @@ public class IslandInfoCache {
 		public IslandInfo performAction(String playerName) throws Exception;
 		
 		/**
+		 * Performs the action for this behavior for the specified player.
+		 * @param playerName the player who's island was being retrieved.
+		 * @param cause The throwable that caused the island not to be found.
+		 * @return
+		 */
+		public IslandInfo performAction(String playerName, Throwable cause) throws Exception;
+		
+		/**
 		 * Performs the action for this behavior.
 		 * @return
 		 */
 		public IslandInfo performAction() throws Exception;
+		
+		/**
+		 * Performs the action for this behavior.
+		 * @param cause The throwable that caused the island not to be found.
+		 * @return
+		 */
+		public IslandInfo performAction(Throwable cause) throws Exception;
 	}
 	
 	/**
@@ -223,14 +246,30 @@ public class IslandInfoCache {
 					throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
+			
+			@Override
+			public IslandInfo performAction(IslandLocation location, Throwable cause)
+					throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
 
 			@Override
 			public IslandInfo performAction(String playerName) throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
+			
+			@Override
+			public IslandInfo performAction(String playerName, Throwable cause) throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
 
 			@Override
 			public IslandInfo performAction() throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
+			
+			@Override
+			public IslandInfo performAction(Throwable cause) throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
 			
@@ -246,15 +285,31 @@ public class IslandInfoCache {
 					throws Exception {
 				throw new IllegalArgumentException("There is no island at " + location);
 			}
+			
+			@Override
+			public IslandInfo performAction(IslandLocation location, Throwable cause)
+					throws Exception {
+				throw new IllegalArgumentException("There is no island at " + location, cause);
+			}
 
 			@Override
 			public IslandInfo performAction(String playerName) throws Exception {
 				throw new IllegalArgumentException(playerName + " has no island!");
 			}
+			
+			@Override
+			public IslandInfo performAction(String playerName, Throwable cause) throws Exception {
+				throw new IllegalArgumentException(playerName + " has no island!", cause);
+			}
 
 			@Override
 			public IslandInfo performAction() throws Exception {
 				throw new IllegalArgumentException("There is no island at that location.");
+			}
+			
+			@Override
+			public IslandInfo performAction(Throwable cause) throws Exception {
+				throw new IllegalArgumentException("There is no island at that location.", cause);
 			}
 		},
 		
@@ -268,14 +323,30 @@ public class IslandInfoCache {
 					throws Exception {
 				return null;
 			}
+			
+			@Override
+			public IslandInfo performAction(IslandLocation location, Throwable cause)
+					throws Exception {
+				return null;
+			}
 
 			@Override
 			public IslandInfo performAction(String playerName) throws Exception {
 				return null;
 			}
+			
+			@Override
+			public IslandInfo performAction(String playerName, Throwable cause) throws Exception {
+				return null;
+			}
 
 			@Override
 			public IslandInfo performAction() throws Exception {
+				return null;
+			}
+			
+			@Override
+			public IslandInfo performAction(Throwable cause) throws Exception {
 				return null;
 			}
 		};
