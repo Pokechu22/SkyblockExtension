@@ -213,6 +213,32 @@ public class IslandInfoCache {
 	 * This enum contains some default implementations of {@link NoIslandFoundBehavior}.
 	 */
 	public static enum NoIslandFoundBehaviors implements NoIslandFoundBehavior {
+		/**
+		 * Returns an unprotected area IslandInfo.
+		 */
+		RETURN_UNPROTECTED {
+
+			@Override
+			public IslandInfo getIslandInfo(IslandLocation location)
+					throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
+
+			@Override
+			public IslandInfo getIslandInfo(String playerName) throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
+
+			@Override
+			public IslandInfo getIslandInfo() throws Exception {
+				return IslandInfo.getUnprotectedIslandInfo();
+			}
+			
+		},
+		
+		/**
+		 * Throws an exception for trying to get a nonexistant island.
+		 */
 		THROW_EXCEPTION {
 
 			@Override
