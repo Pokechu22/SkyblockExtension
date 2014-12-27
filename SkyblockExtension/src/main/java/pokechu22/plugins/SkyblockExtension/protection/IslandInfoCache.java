@@ -28,7 +28,7 @@ public class IslandInfoCache {
 	 * @author Pokechu22
 	 *
 	 */
-	private static class IslandLocation {
+	static class IslandLocation {
 		private int x;
 		private int z;
 		
@@ -187,24 +187,24 @@ public class IslandInfoCache {
 	 */
 	public static interface NoIslandFoundBehavior {
 		/**
-		 * Gets the {@link IslandInfo} used with this behavior at specified location.
+		 * Performs the action for this behavior at specified location.
 		 * @param location The location that was attempted to have an info retrieved for.
 		 * @return
 		 */
-		public IslandInfo getIslandInfo(IslandLocation location) throws Exception;
+		public IslandInfo performAction(IslandLocation location) throws Exception;
 		
 		/**
-		 * Gets the {@link IslandInfo} used with this behavior for the specified player.
+		 * Performs the action for this behavior for the specified player.
 		 * @param playerName the player who's island was being retrieved.
 		 * @return
 		 */
-		public IslandInfo getIslandInfo(String playerName) throws Exception;
+		public IslandInfo performAction(String playerName) throws Exception;
 		
 		/**
-		 * Gets the {@link IslandInfo} used with this behavior.
+		 * Performs the action for this behavior.
 		 * @return
 		 */
-		public IslandInfo getIslandInfo() throws Exception;
+		public IslandInfo performAction() throws Exception;
 	}
 	
 	/**
@@ -219,18 +219,18 @@ public class IslandInfoCache {
 		RETURN_UNPROTECTED {
 
 			@Override
-			public IslandInfo getIslandInfo(IslandLocation location)
+			public IslandInfo performAction(IslandLocation location)
 					throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
 
 			@Override
-			public IslandInfo getIslandInfo(String playerName) throws Exception {
+			public IslandInfo performAction(String playerName) throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
 
 			@Override
-			public IslandInfo getIslandInfo() throws Exception {
+			public IslandInfo performAction() throws Exception {
 				return IslandInfo.getUnprotectedIslandInfo();
 			}
 			
@@ -242,18 +242,18 @@ public class IslandInfoCache {
 		THROW_EXCEPTION {
 
 			@Override
-			public IslandInfo getIslandInfo(IslandLocation location)
+			public IslandInfo performAction(IslandLocation location)
 					throws Exception {
 				throw new IllegalArgumentException("There is no island at " + location);
 			}
 
 			@Override
-			public IslandInfo getIslandInfo(String playerName) throws Exception {
+			public IslandInfo performAction(String playerName) throws Exception {
 				throw new IllegalArgumentException(playerName + " has no island!");
 			}
 
 			@Override
-			public IslandInfo getIslandInfo() throws Exception {
+			public IslandInfo performAction() throws Exception {
 				throw new IllegalArgumentException("There is no island at that location.");
 			}
 		},
@@ -264,18 +264,18 @@ public class IslandInfoCache {
 		RETURN_NULL {
 
 			@Override
-			public IslandInfo getIslandInfo(IslandLocation location)
+			public IslandInfo performAction(IslandLocation location)
 					throws Exception {
 				return null;
 			}
 
 			@Override
-			public IslandInfo getIslandInfo(String playerName) throws Exception {
+			public IslandInfo performAction(String playerName) throws Exception {
 				return null;
 			}
 
 			@Override
-			public IslandInfo getIslandInfo() throws Exception {
+			public IslandInfo performAction() throws Exception {
 				return null;
 			}
 		};
@@ -484,7 +484,8 @@ public class IslandInfoCache {
 	 * @param noIslandFoundBehavior TODO
 	 * @return
 	 */
-	private static IslandInfo getIslandInfo(IslandLocation location, NoIslandFoundBehavior noIslandFoundBehavior) {
+	private static IslandInfo getIslandInfo(IslandLocation location, 
+			NoIslandFoundBehavior noIslandFoundBehavior) {
 		if (cache.containsKey(location)) {
 			return cache.get(location);
 		}
