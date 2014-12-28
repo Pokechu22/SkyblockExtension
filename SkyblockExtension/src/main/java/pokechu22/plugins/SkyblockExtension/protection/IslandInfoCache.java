@@ -530,7 +530,7 @@ public class IslandInfoCache {
 				location = IslandLocation.IslandInfoForPlayer(
 						playerOrLocation);
 			} catch (Exception e_) {
-				return null; //No island.  TODO setup behavior
+				return noIslandFoundBehavior.performAction(playerOrLocation, e_);
 			}
 		}
 		
