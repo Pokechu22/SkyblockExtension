@@ -220,7 +220,7 @@ public class IslandProtectionDataSet implements ConfigurationSerializable {
 	/**
 	 * Gets the raw flag object.
 	 * 
-	 * @param Flag
+	 * @param flag
 	 * @return
 	 */
 	public IslandProtectionDataSetFlag getFlag(String flag) {
