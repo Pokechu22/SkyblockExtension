@@ -1,6 +1,5 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -455,9 +454,10 @@ public class IslandInfoCache {
 	 * 
 	 * @param location
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getLocationIslandInfo(Location location,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		IslandLocation loc = new IslandLocation(location);
 		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
@@ -468,9 +468,10 @@ public class IslandInfoCache {
 	 * 
 	 * @param location
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getLocationIslandInfo(String islandID,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		IslandLocation loc = new IslandLocation(islandID);
 		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
@@ -481,9 +482,10 @@ public class IslandInfoCache {
 	 * 
 	 * @param location
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getLocationIslandInfo(int islandX, int islandY,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		IslandLocation loc = new IslandLocation(islandX, islandY);
 		return getIslandInfo(loc, noIslandFoundBehavior);
 	}
@@ -493,14 +495,16 @@ public class IslandInfoCache {
 	 * 
 	 * @param player
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getPlayerIslandInfo(Player player,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		try {
 			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
 			return getIslandInfo(loc, noIslandFoundBehavior);
 		} catch (Exception e) {
-			return null;
+			return noIslandFoundBehavior.performAction(player != null ? player.getName() : ""
+				, e);
 		}
 	}
 	
@@ -511,9 +515,10 @@ public class IslandInfoCache {
 	 * 
 	 * @param playerOrLocation
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getCommandIslandInfo(String playerOrLocation,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		IslandLocation location;
 		try {
 			//Try to parse it as an actual location.
@@ -525,7 +530,7 @@ public class IslandInfoCache {
 				location = IslandLocation.IslandInfoForPlayer(
 						playerOrLocation);
 			} catch (Exception e_) {
-				return null; //No island.
+				return null; //No island.  TODO setup behavior
 			}
 		}
 		
@@ -537,14 +542,15 @@ public class IslandInfoCache {
 	 * 
 	 * @param player
 	 * @return
+	 * @throws Exception 
 	 */
 	public static IslandInfo getPlayerIslandInfo(String player,
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		try {
 			IslandLocation loc = IslandLocation.IslandInfoForPlayer(player);
 			return getIslandInfo(loc, noIslandFoundBehavior);
 		} catch (Exception e) {
-			return null;
+			return noIslandFoundBehavior.performAction(player, e);
 		}
 	}
 	
@@ -554,9 +560,10 @@ public class IslandInfoCache {
 	 * @param location
 	 * @param noIslandFoundBehavior TODO
 	 * @return
+	 * @throws Exception 
 	 */
 	private static IslandInfo getIslandInfo(IslandLocation location, 
-			NoIslandFoundBehavior noIslandFoundBehavior) {
+			NoIslandFoundBehavior noIslandFoundBehavior) throws Exception {
 		if (cache.containsKey(location)) {
 			return cache.get(location);
 		}
@@ -566,10 +573,8 @@ public class IslandInfoCache {
 		try {
 			info = IslandInfo.readFromDisk(location.x, location.z);
 			cache.put(location, info);
-		} catch (FileNotFoundException e) {
-			return IslandInfo.getUnprotectedIslandInfo();
 		} catch (Exception e) {
-			return null;
+			return noIslandFoundBehavior.performAction(location, e);
 		}
 		return info;
 	}
