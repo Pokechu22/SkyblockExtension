@@ -1,5 +1,6 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -441,11 +442,38 @@ public class IslandInfoCache {
 	}
 	
 	/**
-	 * Trims the cache of IslandInfo's by removing offline players.
+	 * Trims the cache of IslandInfo's by removing offline players.<br>
+	 * Trimmed island infos are written to disk.<br>
+	 * <i>NOTE: Cache trimming is performed asynchronously.</i>
 	 */
-	protected static void trimCache() {
+	public static void trimCache() {
 		CacheTrimmer trimmer = new CacheTrimmer();
 		Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), trimmer);
+	}
+	
+	/**
+	 * Dumps the entire cache of island infos, removing all of them.<br>
+	 * Dumped island infos are written to disk.<br>
+	 * <i>NOTE: Cache dumping is performed asynchronously.</i>
+	 */
+	public static void dumpCache() {
+		//Remove all of them.
+		//It's a duplicate set because otherwise running through it would
+		//lead to a ConcurentModificationException.
+		Set<Map.Entry<IslandInfoCache.IslandLocation, IslandInfo>> toRemove
+				= new HashSet<>(IslandInfoCache.cache.entrySet());
+		
+		for (Map.Entry<IslandInfoCache.IslandLocation, IslandInfo> entry
+				: toRemove) {
+			try {
+				cache.remove(entry.getKey());
+				entry.getValue().saveToDisk();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				// TODO This will need an error report.
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
