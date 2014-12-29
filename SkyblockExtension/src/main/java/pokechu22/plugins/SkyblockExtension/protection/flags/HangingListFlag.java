@@ -130,7 +130,7 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 			StringBuilder m = new StringBuilder();
 			for (int i = 0; i < args.length; i++) {
 				m.append(args[i]);
-				if (i == args.length - 1) {
+				if (i != args.length - 1) { //If NOT final value
 					m.append(" ");
 				}
 			}
