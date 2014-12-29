@@ -358,7 +358,7 @@ public class IslandInfoCache {
 		throw new AssertionError("Should never be called");
 	}
 	
-	private static HashMap<IslandLocation, IslandInfo> cache;
+	private static Map<IslandLocation, IslandInfo> cache = new HashMap<>();
 	
 	/**
 	 * Trims the cache; can be run asynchronously.
