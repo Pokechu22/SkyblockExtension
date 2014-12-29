@@ -2,20 +2,15 @@ package pokechu22.plugins.SkyblockExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 
-import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -48,21 +43,6 @@ public class Config {
 			List<CrashReport> errors  = new ArrayList<CrashReport>();
 			errors.add(new ConfigurationErrorReport(e, "CrashReports", "CrashesConfig", false));
 			ErrorHandler.errors.addAll(errors);
-		}
-		
-		//Test code.
-		//Set it to the default values; if something missing is found, skip it.
-		CommandIslandProtection.tieredValues = IslandProtectionDataSetFactory.getDefaultValues();
-		try {
-			ConfigurationSection tempCfg = getDefaultConfig().getConfigurationSection("testdefault");
-			if (tempCfg != null) {
-				Map<String, Object> tempValue = tempCfg.getValues(true);
-				for (Map.Entry<String, Object> entry : tempValue.entrySet()) {
-					CommandIslandProtection.tieredValues.put(entry.getKey(), (IslandProtectionDataSet) entry.getValue());
-				}
-			}
-		} catch (ClassCastException e) {
-			e.printStackTrace(); //TODO
 		}
 		
 		ErrorHandler.broadcastOnError = getDefaultConfig()

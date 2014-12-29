@@ -3,17 +3,20 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfoCache;
+import pokechu22.plugins.SkyblockExtension.protection.IslandInfoCache.NoIslandFoundBehaviors;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.MembershipTier;
 import pokechu22.plugins.SkyblockExtension.protection.flags.IslandProtectionDataSetFlag;
+import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
 
 /**
  * Island-protection configuration command.  
@@ -123,15 +126,56 @@ public class CommandIslandProtection {
 	 */
 	public static void Run(CommandSender sender, Command cmd, String label, String args[]) {
 		if (args.length >= 3) {
-			//IslandInfo info = IslandInfoCache.getIslandInfo(islandID)
+			IslandInfo info;
+			MembershipTier tier;
+			IslandProtectionDataSetFlag flag;
+			IslandProtectionDataSet set;
+			
+			try {
+				info = IslandInfoCache.getCommandIslandInfo(args[0], 
+						NoIslandFoundBehaviors.THROW_EXCEPTION);
+			} catch (Exception e) {
+				try (PlayerPrintStream s = new PlayerPrintStream(sender)) {
+					e.printStackTrace(s);
+				}
+				return;
+			}
+			
+			tier = MembershipTier.matchTier(args[1]);
+			if (tier == null) {
+				sender.sendMessage("§cInvalid membership tier: " + args[1]);
+				return;
+			}
+			
+			set = info.permissions.get(tier.name());
+			flag = set.getFlag(args[2]);
+			
+			if (flag == null) {
+				sender.sendMessage("There is no flag " + args[2]);
+				return;
+			}
+			
+			if (args.length == 3) {
+				sender.sendMessage("Information about flag " + args[2] + " for " + args[1] + "s of " + args[0] + ":");
+				
+				sender.sendMessage("Value: " + flag.getDisplayValue());
+				sender.sendMessage("Available actions: ");
+				if (flag.getActions().size() == 0) {
+					sender.sendMessage("§cNone."); //I doubt this will ever happen.
+				} else {
+					for (String action : flag.getActions()) {
+						// \u2022 is bullet point.  Seems to display correctly in minecraft.
+						sender.sendMessage(" \u2022 " + action);
+					}
+				}
+				return;
+			} else {
+				sender.sendMessage(flag.preformAction(args[3], 
+						Arrays.copyOfRange(args, 4, args.length)));
+				return;
+			}
 		} else {
 			sender.sendMessage("§cInvalid input"); //TODO
 		}
 	}
-	
-	/**
-	 * Values of different tiers.
-	 * TODO: this is a test value.
-	 */
-	public static Map<String, IslandProtectionDataSet> tieredValues;
 }
