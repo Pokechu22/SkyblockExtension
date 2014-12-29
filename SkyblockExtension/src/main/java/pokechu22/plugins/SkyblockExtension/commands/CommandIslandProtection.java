@@ -148,10 +148,16 @@ public class CommandIslandProtection {
 			}
 			
 			set = info.permissions.get(tier.name());
+			
+			if (!IslandProtectionDataSet.flags.contains(args[2])) {
+				sender.sendMessage("§cThere is no flag " + args[2] + ".");
+				return;
+			}
+			
 			flag = set.getFlag(args[2]);
 			
 			if (flag == null) {
-				sender.sendMessage("There is no flag " + args[2]);
+				sender.sendMessage("§cThere is no flag " + args[2] + ".");
 				return;
 			}
 			
