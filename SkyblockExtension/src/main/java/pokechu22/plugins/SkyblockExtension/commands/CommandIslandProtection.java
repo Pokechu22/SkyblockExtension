@@ -159,6 +159,7 @@ public class CommandIslandProtection {
 				sender.sendMessage("Information about flag " + args[2] + " for " + args[1] + "s of " + args[0] + ":");
 				
 				sender.sendMessage("Value: " + flag.getDisplayValue());
+				sender.sendMessage("Type: " + flag.getType());
 				sender.sendMessage("Available actions: ");
 				if (flag.getActions().size() == 0) {
 					sender.sendMessage("§cNone."); //I doubt this will ever happen.
