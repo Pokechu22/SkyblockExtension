@@ -302,7 +302,7 @@ public class HangingListFlag extends IslandProtectionDataSetFlag {
 		ListTag<StringTag> returned = new ListTag<>(name);
 		
 		for (HangingType type : this.value) {
-			returned.add(new StringTag(type.name()));
+			returned.add(new StringTag("Value", type.name()));
 		}
 		
 		return returned;

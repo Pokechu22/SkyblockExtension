@@ -301,7 +301,7 @@ public class VehicleListFlag extends IslandProtectionDataSetFlag {
 		ListTag<StringTag> returned = new ListTag<>(name);
 		
 		for (VehicleType type : this.value) {
-			returned.add(new StringTag(type.name()));
+			returned.add(new StringTag("Value", type.name()));
 		}
 		
 		return returned;

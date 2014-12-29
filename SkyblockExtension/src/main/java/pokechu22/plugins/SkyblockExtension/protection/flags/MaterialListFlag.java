@@ -301,7 +301,7 @@ public class MaterialListFlag extends IslandProtectionDataSetFlag {
 		ListTag<StringTag> returned = new ListTag<>(name);
 		
 		for (Material type : this.value) {
-			returned.add(new StringTag(type.name()));
+			returned.add(new StringTag("Value", type.name()));
 		}
 		
 		return returned;
