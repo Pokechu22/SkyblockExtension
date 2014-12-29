@@ -105,7 +105,7 @@ public abstract class IslandProtectionDataSetFlag {
 		/**
 		 * Gets a set of FlagTypes capable of performing said action.
 		 * 
-		 * @param action
+		 * @param action The action to search for.
 		 * @return
 		 */
 		public static EnumSet<FlagType> preformingAction(String action) {
@@ -199,8 +199,8 @@ public abstract class IslandProtectionDataSetFlag {
 	/**
 	 * Performs one of the available actions.
 	 * 
-	 * @param action
-	 * @param args
+	 * @param action The action to perform.
+	 * @param args The arguments to give to the action.
 	 * @returns A message relating to success or failure.  
 	 * 			If you want to know if there was success, check the second 
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
@@ -230,8 +230,10 @@ public abstract class IslandProtectionDataSetFlag {
 	 * Deserializes from NBT.  Handles making sure that the type is right,  
 	 * by using reflection.
 	 * 
-	 * @param flag
-	 * @param serialized
+	 * @param flag The name of the flag to deserialize.  (Used to determine
+	 *             the type of the flag)
+	 * @param serialized The NBT tag to deserialize from.  The type of tag
+	 *                   can vary; implementations will take multiple.
 	 * @return
 	 */
 	public static IslandProtectionDataSetFlag deserialize(String flag, 
@@ -282,8 +284,9 @@ public abstract class IslandProtectionDataSetFlag {
 	 * Deserializes.  Handles making sure that the type is right, by using 
 	 * reflection.
 	 * 
-	 * @param flag
-	 * @param serialized
+	 * @param flag The name of the flag to deserialize.  (Used to determine
+	 *             the type of the flag)
+	 * @param serialized The string-serialized form of the flag.
 	 * @return
 	 */
 	public static IslandProtectionDataSetFlag deserialize(String flag, 
@@ -329,7 +332,7 @@ public abstract class IslandProtectionDataSetFlag {
 	
 	/**
 	 * Serializes this flag to an NBT value.
-	 * @param name
+	 * @param name The name of the Tag to serialize into.
 	 * @return
 	 */
 	public Tag serializeToNBT(String name) {
@@ -338,7 +341,7 @@ public abstract class IslandProtectionDataSetFlag {
 	
 	/**
 	 * Deserializes the flag from an NBT value.
-	 * @param value
+	 * @param value The tag to deserialize from.
 	 * @throws InvalidConfigurationException 
 	 */
 	public void deserializeFromNBT(Tag value) throws InvalidConfigurationException {
