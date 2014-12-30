@@ -78,4 +78,41 @@ public class BooleanFlagTest {
 		
 		assertThat(serialized, is(flag));
 	}
+	
+	/**
+	 * Ensures that {@link BooleanFlag#preformAction(String, String[])}
+	 * works properly with "set" as an action.
+	 */
+	@Test
+	public void setActionShouldSet() {
+		BooleanFlag flag = new BooleanFlag("false");
+		
+		assertThat(flag.getValue(), is(false));
+		flag.preformAction("set", new String[]{"true"});
+		assertThat(flag.getValue(), is(true));
+		
+		flag = new BooleanFlag("true");
+		
+		assertThat(flag.getValue(), is(true));
+		flag.preformAction("set", new String[]{"false"});
+		assertThat(flag.getValue(), is(false));
+	}
+	
+	/**
+	 * Checks that {@link BooleanFlag#setValue(String)} works properly. 
+	 */
+	@Test
+	public void setValueShouldSetValue() {
+		BooleanFlag flag = new BooleanFlag("false");
+		
+		assertThat(flag.getValue(), is(false));
+		flag.setValue("true");
+		assertThat(flag.getValue(), is(true));
+		
+		flag = new BooleanFlag("true");
+		
+		assertThat(flag.getValue(), is(true));
+		flag.setValue("false");
+		assertThat(flag.getValue(), is(false));
+	}
 }
