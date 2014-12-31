@@ -17,68 +17,19 @@ public abstract class ListFlag<E extends Enum<E>> extends
 	protected ArrayList<E> value;
 	
 	/**
-	 * {@inheritDoc}
-	 * <hr>
-	 * The available actions are:
-	 * <!-- TODO I don't know if using list items like this is OK, but it
-	 *      seems to work right now.  I want a bulleted list here. --> 
-	 * <ul><dl>
-	 * <li><dt><code>set</code></dt></li>
-	 * <dd>
-	 * Sets the value (same as {@link #setValue(String)}).
-	 * Expects a list in the usual format.
-	 * </dd>
-	 * <li><dt><code>get</code></dt></li>
-	 * <dd>Gets the value (same as {@link #getDisplayValue()}).</dd>
-	 * <li><dt><code>add</code></dt></li>
-	 * <dd>Adds a single element. Warns if that element already exists.</dd>
-	 * <li><dt><code>addmultiple</code></dt></li>
-	 * <dd>
-	 * Adds multiple elements.
-	 * This list of elements is in the usual list format.<br>
-	 * Already-existing elements are illegal and result in cancellation of 
-	 * the entire action.  (To avoid this, use <code>addmultiple-f</code>.)
-	 * </dd>
-	 * <li><dt><code>addmultiple-f</code></dt></li>
-	 * <dd>
-	 * Adds multiple elements.
-	 * This list of elements is in the usual list format.<br>
-	 * Already-existing elements are allowed.
-	 * </dd>
-	 * <li><dt><code>remove</code></dt></li>
-	 * <dd>
-	 * Removes a single element.<br>
-	 * If that element already exists, an error is presented.
-	 * </dd> 
-	 * <li><dt><code>removemultiple</code></dt></li>
-	 * <dd>
-	 * Removes multiple elements.
-	 * This list of elements is in the usual list format.<br>
-	 * Already-nonexisting elements are illegal and result in cancellation
-	 * of the entire action. (To avoid this, use
-	 * <code>removemultiple-f</code>.)
-	 * </dd>
-	 * <li><dt><code>removemultiple-f</code></dt></li>
-	 * <dd>
-	 * Adds multiple elements.
-	 * This list of elements is in the usual list format.<br>
-	 * Already-nonexisting elements are allowed.</dd>
-	 * </dl></ul>
+	 * Gets the name of the type to use here.
+	 * This is used in error message outputs.
+	 * <br>
+	 * For example, EntityListFlag would return "entity".<br>
+	 * TODO: This seems like a rather inelegant solution.  Find 
+	 * something better.
+	 * 
+	 * @param capitalize Whether or not the first letter should be
+	 *                   capitalized.
+	 * @return The singular form of the thing that is listed.
 	 */
-	@Override
-	public List<String> getActions() {
-		return Arrays.asList(new String[]{
-				"set",
-				"get",
-				"add",
-				"addmultiple",
-				"addmultiple-f",
-				"remove",
-				"removemultiple",
-				"removemultiple-f"
-				});
-	}
-	
+	protected abstract String getTypeName(boolean capitalize);
+
 	@Override
 	public String getSerializedValue() {
 		return value.toString();
@@ -145,6 +96,69 @@ public abstract class ListFlag<E extends Enum<E>> extends
 		return "§aFlag set successfully.";
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * <hr>
+	 * The available actions are:
+	 * <!-- TODO I don't know if using list items like this is OK, but it
+	 *      seems to work right now.  I want a bulleted list here. --> 
+	 * <ul><dl>
+	 * <li><dt><code>set</code></dt></li>
+	 * <dd>
+	 * Sets the value (same as {@link #setValue(String)}).
+	 * Expects a list in the usual format.
+	 * </dd>
+	 * <li><dt><code>get</code></dt></li>
+	 * <dd>Gets the value (same as {@link #getDisplayValue()}).</dd>
+	 * <li><dt><code>add</code></dt></li>
+	 * <dd>Adds a single element. Warns if that element already exists.</dd>
+	 * <li><dt><code>addmultiple</code></dt></li>
+	 * <dd>
+	 * Adds multiple elements.
+	 * This list of elements is in the usual list format.<br>
+	 * Already-existing elements are illegal and result in cancellation of 
+	 * the entire action.  (To avoid this, use <code>addmultiple-f</code>.)
+	 * </dd>
+	 * <li><dt><code>addmultiple-f</code></dt></li>
+	 * <dd>
+	 * Adds multiple elements.
+	 * This list of elements is in the usual list format.<br>
+	 * Already-existing elements are allowed.
+	 * </dd>
+	 * <li><dt><code>remove</code></dt></li>
+	 * <dd>
+	 * Removes a single element.<br>
+	 * If that element already exists, an error is presented.
+	 * </dd> 
+	 * <li><dt><code>removemultiple</code></dt></li>
+	 * <dd>
+	 * Removes multiple elements.
+	 * This list of elements is in the usual list format.<br>
+	 * Already-nonexisting elements are illegal and result in cancellation
+	 * of the entire action. (To avoid this, use
+	 * <code>removemultiple-f</code>.)
+	 * </dd>
+	 * <li><dt><code>removemultiple-f</code></dt></li>
+	 * <dd>
+	 * Adds multiple elements.
+	 * This list of elements is in the usual list format.<br>
+	 * Already-nonexisting elements are allowed.</dd>
+	 * </dl></ul>
+	 */
+	@Override
+	public List<String> getActions() {
+		return Arrays.asList(new String[]{
+				"set",
+				"get",
+				"add",
+				"addmultiple",
+				"addmultiple-f",
+				"remove",
+				"removemultiple",
+				"removemultiple-f"
+				});
+	}
+
 	@Override
 	public String preformAction(String action, String[] args) {
 		String singleArgs;
@@ -418,6 +432,10 @@ public abstract class ListFlag<E extends Enum<E>> extends
 		return "§aFlag added successfully.";
 	}
 	
+	public ArrayList<E> getValue() {
+		return value;
+	}
+	
 	/**
 	 * Matches an enum value, such that capitalization is ignored.
 	 * This method may also take into account numeric IDs and such.
@@ -435,18 +453,4 @@ public abstract class ListFlag<E extends Enum<E>> extends
 	 */
 	protected abstract E matchEnumValue(String valueToMatch)
 			throws IllegalArgumentException, NullPointerException;
-	
-	/**
-	 * Gets the name of the type to use here.
-	 * This is used in error message outputs.
-	 * <br>
-	 * For example, EntityListFlag would return "entity".<br>
-	 * TODO: This seems like a rather inelegant solution.  Find 
-	 * something better.
-	 * 
-	 * @param capitalize Whether or not the first letter should be
-	 *                   capitalized.
-	 * @return The singular form of the thing that is listed.
-	 */
-	protected abstract String getTypeName(boolean capitalize);
 }
