@@ -37,19 +37,19 @@ public abstract class IslandProtectionDataSetFlag {
 		/**
 		 * Represents list of materials: Both blocks and items.
 		 */
-		MATERIALLIST(MaterialListFlag.class, new String[]{"get", "set", "add", "add-f"}),
+		MATERIALLIST(MaterialListFlag.class, new String[]{"set", "get", "add", "addmultiple", "addmultiple-f", "remove", "removemultiple", "removemultiple-f"}),
 		/**
 		 * Represents a list of all entities.
 		 */
-		ENTITYLIST(EntityListFlag.class, new String[]{"get", "set", "add", "add-f"}),
+		ENTITYLIST(EntityListFlag.class, new String[]{"set", "get", "add", "addmultiple", "addmultiple-f", "remove", "removemultiple", "removemultiple-f"}),
 		/**
 		 * Represents a list of all hangings.
 		 */
-		HANGINGLIST(HangingListFlag.class, new String[]{"get", "set", "add", "add-f"}),
+		HANGINGLIST(HangingListFlag.class, new String[]{"set", "get", "add", "addmultiple", "addmultiple-f", "remove", "removemultiple", "removemultiple-f"}),
 		/**
 		 * Represents a list of all vehicles.
 		 */
-		VEHICLELIST(VehicleListFlag.class, new String[]{"get", "set", "add", "add-f"});
+		VEHICLELIST(VehicleListFlag.class, new String[]{"set", "get", "add", "addmultiple", "addmultiple-f", "remove", "removemultiple", "removemultiple-f"});
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
 		private String[] allowedActions;
