@@ -168,13 +168,254 @@ public abstract class ListFlag<E extends Enum<E>> extends
 			return getDisplayValue();
 		}
 		case "add": {
-			return addToValue(singleArgs, false);
+			return addToValue(singleArgs);
 		}
-		case "add-f": {
-			return addToValue(singleArgs, true);
+		case "addmultiple": {
+			return addMultipleToValue(singleArgs, false);
+		}
+		case "addmultiple-f": {
+			return addMultipleToValue(singleArgs, true);
+		}
+		case "remove": {
+			return removeFromValue(singleArgs);
+		}
+		case "removemultiple": {
+			return removeMultipleFromValue(singleArgs, false);
+		}
+		case "removemultiple-f": {
+			return removeMultipleFromValue(singleArgs, true);
 		}
 		}
 		return "§c" + action + " is not a valid action for this flag!";
+	}
+	
+	/**
+	 * Adds a single value. 
+	 * @param valueToAdd The value to remove.
+	 * @return
+	 */
+	public String addToValue(String valueToAdd) {
+		E e = matchEnumValue(valueToAdd);
+		
+		if (e == null) {
+			return "§c" + valueToAdd + "is not a recognised " +
+					getTypeName(false) + "!";
+		}
+		
+		if (!this.value.contains(e)) {
+			return "§aValue added successfully.";
+		} else {
+			return "§c" + valueToAdd + " is already in the list!";
+		}
+	}
+	
+	/**
+	 * Adds multiple values to this flag.
+	 * 
+	 * @param addition The list-formated group of values to add.
+	 * @param force Whether or not to allow adding already-existing values.
+	 * @return A value indicating the result of the action.
+	 */
+	public String addMultipleToValue(String addition, boolean force) {
+		//If there is only 1 [ and 1 ], and both are at the start 
+		//and end of the strings...
+		if (!((addition.indexOf("[") == 0) 
+				&& (addition.indexOf("[", 1) == -1)
+				&& (addition.indexOf("]") == (addition.length() - 1)))) {
+			return "§cList format is invalid: It must start with " +
+					"'[' and end with ']', and not have any '['" + 
+					" or ']' anywhere else in it.";
+		}
+		String[] valueStrings = 
+				addition.substring(1, addition.length() - 1)
+				.split(",");
+		List<E> addList = new ArrayList<>();
+		for (int i = 0; i < valueStrings.length; i++) {
+			E newValue = matchEnumValue(valueStrings[i].trim());
+			if (newValue == null) {
+				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+						"\" is not recognised.\n(Location: " + 
+						//Bolds the error.
+						addition.replaceAll(valueStrings[i], 
+								"§4§l" + valueStrings[i] + 
+								"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+			}
+
+			if (addList.contains(newValue)) {
+				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+						"\" is already entered.  (Repeat entries " +
+						"are not allowed).\n(Location: " + 
+						//Bolds the error.
+						addition.replaceAll(valueStrings[i], 
+								"§4§l" + valueStrings[i] + 
+								"§r§c") + ")";
+			}
+
+			addList.add(newValue);
+
+		}
+
+		///Number of errors while merging, for the error message.
+		int mergeErrorCount = 0;
+		///The actual error message.
+		String highlightedErrors = addition;
+		ArrayList<String> erroredValues = new ArrayList<String>();
+
+		//Color used for the string.
+		String usedColor = (force ? "§e" : "§c");
+
+		for (E e : this.value) {
+			if (addList.contains(e)) {
+				mergeErrorCount ++;
+				erroredValues.add(e.toString());
+			}
+		}
+		if (mergeErrorCount != 0) {
+			for (String errored : erroredValues) {
+				highlightedErrors = highlightedErrors
+						.replaceAll(errored, 
+								"§4§l" + errored + "§r" + usedColor);
+			}
+
+			if (!force) {
+				return "§cPrevious values (Count: " + mergeErrorCount + 
+						") are already listed.  (Forcible merging " + 
+						"can be done by using the force option.\n" + 
+						"§cAlready-existant values: " + 
+						erroredValues.toString() + "\n" + 
+						"§cLocations: " + highlightedErrors + ".";
+			} else {
+				this.value.addAll(addList);
+				
+				//Displays in yellow, but starts with red for error checking
+				return "§c§ePrevious values (Count: " + mergeErrorCount + 
+						") are already listed.  (Forcible merging " + 
+						"was done by using the force option.\n" + 
+						"§eAlready-existant values: " + 
+						erroredValues.toString() + "\n" + 
+						"§eLocations: " + highlightedErrors + ".";
+			}
+		}
+
+		this.value.addAll(addList);
+
+		return "§aFlag added successfully.";
+	}
+	
+	/**
+	 * Removes a single value. 
+	 * @param valueToRemove The value to remove.
+	 * @return
+	 */
+	public String removeFromValue(String valueToRemove) {
+		E e = matchEnumValue(valueToRemove);
+		
+		if (e == null) {
+			return "§c" + valueToRemove + "is not a recognised " +
+					getTypeName(false) + "!";
+		}
+		
+		boolean valueWasInList = this.value.remove(e);
+		if (valueWasInList) {
+			return "§aValue removed successfully.";
+		} else {
+			return "§c" + valueToRemove + " was already missing!";
+		}
+	}
+	
+	/**
+	 * Removes multiple values from this flag.
+	 * 
+	 * @param removal The list-formated group of values to remove.
+	 * @param force Whether or not to allow removing already-missing values.
+	 * @return A value indicating the result of the action.
+	 */
+	public String removeMultipleFromValue(String removal, boolean force) {
+		//If there is only 1 [ and 1 ], and both are at the start 
+		//and end of the strings...
+		if (!((removal.indexOf("[") == 0) 
+				&& (removal.indexOf("[", 1) == -1)
+				&& (removal.indexOf("]") == (removal.length() - 1)))) {
+			return "§cList format is invalid: It must start with " +
+					"'[' and end with ']', and not have any '['" + 
+					" or ']' anywhere else in it.";
+		}
+		String[] valueStrings = 
+				removal.substring(1, removal.length() - 1)
+				.split(",");
+		List<E> removalList = new ArrayList<>();
+		for (int i = 0; i < valueStrings.length; i++) {
+			E newValue = matchEnumValue(valueStrings[i].trim());
+			if (newValue == null) {
+				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+						"\" is not recognised.\n(Location: " + 
+						//Bolds the error.
+						removal.replaceAll(valueStrings[i], 
+								"§4§l" + valueStrings[i] + 
+								"§r§c") + ")\n" + 
+								"§cTry using tab completion next time.";
+			}
+
+			if (removalList.contains(newValue)) {
+				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+						"\" is already entered.  (Repeat entries " +
+						"are not allowed).\n(Location: " + 
+						//Bolds the error.
+						removal.replaceAll(valueStrings[i], 
+								"§4§l" + valueStrings[i] + 
+								"§r§c") + ")";
+			}
+
+			removalList.add(newValue);
+
+		}
+
+		///Number of errors while merging, for the error message.
+		int mergeErrorCount = 0;
+		///The actual error message.
+		String highlightedErrors = removal;
+		ArrayList<String> erroredValues = new ArrayList<String>();
+
+		//Color used for the string.
+		String usedColor = (force ? "§e" : "§c");
+
+		for (E e : removalList) {
+			if (!this.value.contains(e)) {
+				mergeErrorCount ++;
+				erroredValues.add(e.toString());
+			}
+		}
+		if (mergeErrorCount != 0) {
+			for (String errored : erroredValues) {
+				highlightedErrors = highlightedErrors
+						.replaceAll(errored, 
+								"§4§l" + errored + "§r" + usedColor);
+			}
+
+			if (!force) {
+				return "§cPrevious values (Count: " + mergeErrorCount + 
+						") are already missing.  (Forcible merging " + 
+						"can be done by using the force option.\n" + 
+						"§cAlready-nonexistant values: " + 
+						erroredValues.toString() + "\n" + 
+						"§cLocations: " + highlightedErrors + ".";
+			} else {
+				this.value.removeAll(removalList);
+				
+				//Displays in yellow, but starts with red for error checking
+				return "§c§ePrevious values (Count: " + mergeErrorCount + 
+						") are already missing.  (Forcible merging " + 
+						"was done by using the force option.\n" + 
+						"§eAlready-nonexistant values: " + 
+						erroredValues.toString() + "\n" + 
+						"§eLocations: " + highlightedErrors + ".";
+			}
+		}
+
+		this.value.removeAll(removalList);
+
+		return "§aFlag added successfully.";
 	}
 	
 	/**
