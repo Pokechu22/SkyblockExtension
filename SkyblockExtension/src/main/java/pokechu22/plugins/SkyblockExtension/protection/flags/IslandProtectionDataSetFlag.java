@@ -49,13 +49,7 @@ public abstract class IslandProtectionDataSetFlag {
 		/**
 		 * Represents a list of all vehicles.
 		 */
-		VEHICLELIST(VehicleListFlag.class, new String[]{"get", "set", "add", "add-f"}),
-		/**
-		 * Represents a map between a material and a set of materials.
-		 * (EG: Item in hand interacting with a range of blocks)
-		 * TODO: NYF
-		 */
-		MaterialToMatierialListMapFlag(MaterialToMaterialListMapFlag.class, new String[]{});
+		VEHICLELIST(VehicleListFlag.class, new String[]{"get", "set", "add", "add-f"});
 		
 		private final Class<? extends IslandProtectionDataSetFlag> clazz;
 		private String[] allowedActions;
