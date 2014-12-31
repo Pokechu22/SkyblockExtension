@@ -73,7 +73,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 			
 			E entity = matchEnumValue(valueStrings[i].trim());
 			if (entity == null) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] +
 						"\" is not recognised.\n(Location: " + 
 						//Bolds the error.
 						value.replaceAll(valueStrings[i], 
@@ -83,7 +83,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 			}
 			
 			if (tempList.contains(entity)) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] + 
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] + 
 						"\" is already entered.  (Repeat entries " +
 						"are not allowed).\n(Location: " + 
 						//Bolds the error.
@@ -223,6 +223,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 		}
 		
 		if (!this.value.contains(e)) {
+			this.value.add(e);
 			return "§aValue added successfully.";
 		} else {
 			return "§c" + valueToAdd + " is already in the list!";
@@ -253,7 +254,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 		for (int i = 0; i < valueStrings.length; i++) {
 			E newValue = matchEnumValue(valueStrings[i].trim());
 			if (newValue == null) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] +
 						"\" is not recognised.\n(Location: " + 
 						//Bolds the error.
 						addition.replaceAll(valueStrings[i], 
@@ -263,7 +264,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 			}
 
 			if (addList.contains(newValue)) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] +
 						"\" is already entered.  (Repeat entries " +
 						"are not allowed).\n(Location: " + 
 						//Bolds the error.
@@ -370,7 +371,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 		for (int i = 0; i < valueStrings.length; i++) {
 			E newValue = matchEnumValue(valueStrings[i].trim());
 			if (newValue == null) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] +
 						"\" is not recognised.\n(Location: " + 
 						//Bolds the error.
 						removal.replaceAll(valueStrings[i], 
@@ -380,7 +381,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 			}
 
 			if (removalList.contains(newValue)) {
-				return "§c" + getTypeName(false) + "\"" + valueStrings[i] +
+				return "§c" + getTypeName(false) + " \"" + valueStrings[i] +
 						"\" is already entered.  (Repeat entries " +
 						"are not allowed).\n(Location: " + 
 						//Bolds the error.
