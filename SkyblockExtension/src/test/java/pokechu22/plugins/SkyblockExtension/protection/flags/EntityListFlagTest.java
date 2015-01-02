@@ -48,9 +48,13 @@ public class EntityListFlagTest {
 	 */
 	Object[] parametersFor_validValuesShouldWork() {
 		return $(
-				$("[]", new EntityType[0]),
-				$("[ARROW]", new EntityType[]{ARROW}),
-				$("[ARROW, PIG]", new EntityType[]{ARROW, PIG})
+				$("[]", new EntityType[0]), //Empty is valid.
+				$("[ARROW]", new EntityType[]{ARROW}), //Normal single.
+				$("[ARROW, PIG]", new EntityType[]{ARROW, PIG}), //Normal 2.
+				$("[arrow]", new EntityType[]{ARROW}), //Case-sensitivity.
+				$("[Arrow]", new EntityType[]{ARROW}), //Case-sensitivity.
+				$("[ArRoW]", new EntityType[]{ARROW}), //Case-sensitivity.
+				$("[aRrOw]", new EntityType[]{ARROW}) //Case-sensitivity.
 		);
 	}
 	
