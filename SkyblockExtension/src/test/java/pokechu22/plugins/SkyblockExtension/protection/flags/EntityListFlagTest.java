@@ -53,4 +53,34 @@ public class EntityListFlagTest {
 				$("[ARROW, PIG]", new EntityType[]{ARROW, PIG})
 		);
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	@Parameters(method="parametersFor_invalidValuesShouldNotWork")
+	public void invalidValuesShouldNotWork(String param) {
+		//Validate setvalue first, as the latter should throw an exception.
+		EntityListFlag flag = new EntityListFlag("[]");
+		
+		assertThat(flag.setValue(param), startsWith("§c"));
+		
+		//Validate the constructor, now.  An exception should be thrown. 
+		flag = new EntityListFlag(param); 
+		
+		//If no exception was thrown, the test fails.
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	Object[] parametersFor_invalidValuesShouldNotWork() {
+		return $(
+				$(""),
+				$("adsf"),
+				$("[PIG, PIG]"),
+				$("[PIG, COW, PIG]"),
+				$("[ARROW, PIG, ARROW]"),
+				$("[NONEXISTANT]"),
+				$("[ARROW, NONEXISTANT]")
+		);
+	}
 }
