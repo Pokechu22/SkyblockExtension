@@ -200,7 +200,7 @@ public abstract class IslandProtectionDataSetFlag {
 	 * 			char.  If it is "c", it is failure.  If it is "a", it is 
 	 * 			success.  (Interpret anything other than a as a fail)
 	 */
-	public abstract String preformAction(String action, String[] args);
+	public abstract String preformAction(String action, String... args);
 	
 	/**
 	 * Gets the raw value of the flag.

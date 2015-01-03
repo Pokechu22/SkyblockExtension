@@ -166,7 +166,7 @@ public abstract class ListFlag<E extends Enum<E>> extends
 	}
 
 	@Override
-	public String preformAction(String action, String[] args) {
+	public String preformAction(String action, String... args) {
 		String singleArgs;
 		//Wrapping to control visibility!
 		{

@@ -80,7 +80,7 @@ public class BooleanFlagTest {
 	}
 	
 	/**
-	 * Ensures that {@link BooleanFlag#preformAction(String, String[])}
+	 * Ensures that {@link BooleanFlag#preformAction(String, String...)}
 	 * works properly with "set" as an action.
 	 */
 	@Test

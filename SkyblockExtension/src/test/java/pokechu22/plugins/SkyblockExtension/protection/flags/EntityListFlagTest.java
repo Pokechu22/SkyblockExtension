@@ -1,7 +1,6 @@
 package pokechu22.plugins.SkyblockExtension.protection.flags;
 
 import static org.bukkit.entity.EntityType.*;
-
 import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -88,6 +87,64 @@ public class EntityListFlagTest {
 				$("[ARROW, PIG, ARROW]"), //Duplicate value
 				$("[NONEXISTANT]"), //Nonexistent value
 				$("[ARROW, NONEXISTANT]") //Nonexistent value
+		);
+	}
+	
+	/**
+	 * Tests that {@link EntityListFlag#preformAction(String, String...)}
+	 * works with set as an action for valid actions, and does not accept
+	 * invalid actions.
+	 * 
+	 * @param param The parameter to test
+	 * @param expected The expected final value, or null if invalid.
+	 */
+	@Test
+	@Parameters(method="parametersFor_setValueActionShouldSetValue")
+	public void setValueActionShouldSetValue(String param, 
+			EntityType[] expected) {
+		EntityListFlag flag = new EntityListFlag("[]");
+		
+		String result = flag.preformAction("set", param);
+		
+		if (expected == null) {
+			assertThat(result, startsWith("§c"));
+		} else {
+			assertThat(result, startsWith("§a"));
+			assertThat(flag.value, is(Arrays.asList(expected)));
+		}
+	}
+	
+	/**
+	 * Parameters for 
+	 * {@link #setValueActionShouldSetValue(String, EntityType[])}.
+	 */
+	Object[] parametersFor_setValueActionShouldSetValue() {
+		return $(
+				//Valid. 
+				
+				//Empty.
+				$("[]", new EntityType[0]),
+				//Normal.
+				$("[ARROW]", new EntityType[]{ARROW}),
+				$("[ARROW, PIG]", new EntityType[]{ARROW, PIG}),
+				//Case-sensitivity.
+				$("[arrow]", new EntityType[]{ARROW}),
+				$("[Arrow]", new EntityType[]{ARROW}),
+				$("[ArRoW]", new EntityType[]{ARROW}),
+				$("[aRrOw]", new EntityType[]{ARROW}),
+				
+				//Invalid.
+				
+				//Improper list
+				$("", null), 
+				$("adsf", null),
+				//Duplicate values
+				$("[PIG, PIG]", null),
+				$("[PIG, COW, PIG]", null),
+				$("[ARROW, PIG, ARROW]", null),
+				//Nonexistent value
+				$("[NONEXISTANT]", null),
+				$("[ARROW, NONEXISTANT]", null)
 		);
 	}
 }

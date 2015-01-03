@@ -81,7 +81,7 @@ public class BooleanFlag extends IslandProtectionDataSetFlag {
 	}
 
 	@Override
-	public String preformAction(String action, String[] args) {
+	public String preformAction(String action, String... args) {
 		switch (action) {
 		case "set": {
 			StringBuilder m = new StringBuilder();
