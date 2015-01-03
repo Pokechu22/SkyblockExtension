@@ -58,6 +58,10 @@ public class EntityListFlagTest {
 		);
 	}
 	
+	/**
+	 * Checks that invalid parameters are invalid.
+	 * @param param
+	 */
 	@Test(expected=IllegalArgumentException.class)
 	@Parameters(method="parametersFor_invalidValuesShouldNotWork")
 	public void invalidValuesShouldNotWork(String param) {
@@ -73,18 +77,17 @@ public class EntityListFlagTest {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Parameters for {@link #invalidValuesShouldNotWork(String)}.
 	 */
 	Object[] parametersFor_invalidValuesShouldNotWork() {
 		return $(
-				$(""),
-				$("adsf"),
-				$("[PIG, PIG]"),
-				$("[PIG, COW, PIG]"),
-				$("[ARROW, PIG, ARROW]"),
-				$("[NONEXISTANT]"),
-				$("[ARROW, NONEXISTANT]")
+				$(""), //Improper list
+				$("adsf"), //Improper list
+				$("[PIG, PIG]"), //Duplicate value
+				$("[PIG, COW, PIG]"), //Duplicate value
+				$("[ARROW, PIG, ARROW]"), //Duplicate value
+				$("[NONEXISTANT]"), //Nonexistent value
+				$("[ARROW, NONEXISTANT]") //Nonexistent value
 		);
 	}
 }
