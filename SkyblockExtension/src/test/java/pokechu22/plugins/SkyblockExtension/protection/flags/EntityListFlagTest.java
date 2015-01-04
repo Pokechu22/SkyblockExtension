@@ -214,4 +214,54 @@ public class EntityListFlagTest {
 		
 		assertThat(flag.value, is(expected));
 	}
+	
+	/**
+	 * Tests that the serialized value matches the original value when
+	 * using NBT to serialize.
+	 * 
+	 * @param value The value to serialize with. 
+	 */
+	@Parameters(method="paramsForSerializationMethods")
+	@Test
+	public void deserializedViaNBTShouldMatchOriginal(String value)
+			throws Exception {
+		EntityListFlag original = new EntityListFlag(value);
+		@SuppressWarnings("deprecation")
+		EntityListFlag result = new EntityListFlag();
+		result.deserializeFromNBT(original.serializeToNBT(""));
+		
+		assertThat(result, is(original));
+	}
+	
+	/**
+	 * Tests that the serialized value matches the original value when
+	 * using the {@link EntityListFlag#getSerializedValue()} method.
+	 * 
+	 * @param value The value to serialize with.
+	 */
+	@Parameters(method="paramsForSerializationMethods")
+	@Test
+	public void deserializedViaStringShouldMatchOriginal(String value) 
+			throws Exception {
+		EntityListFlag original = new EntityListFlag(value);
+		
+		@SuppressWarnings("deprecation")
+		EntityListFlag result = new EntityListFlag();
+		result.setValue(original.getSerializedValue());
+		
+		assertThat(result, is(original));
+	}
+	
+	/**
+	 * Provides parameters for the serialization methods: 
+	 * {@link #deserializedViaNBTShouldMatchOriginal(String)} and
+	 * {@link #deserializedViaStringShouldMatchOriginal(String)}.
+	 */
+	Object[] paramsForSerializationMethods() {
+		return $(
+				$("[]"),
+				$("[PIG]"),
+				$("[ARROW, COW]")
+		);
+	}
 }
