@@ -5,7 +5,9 @@ import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -146,5 +148,70 @@ public class EntityListFlagTest {
 				$("[NONEXISTANT]", null),
 				$("[ARROW, NONEXISTANT]", null)
 		);
+	}
+	
+	/**
+	 * Tests that adding and removing values works properly.
+	 */
+	@Test
+	public void addAndRemoveShouldAddAndRemoveProperly() {
+		EntityListFlag flag = new EntityListFlag("[]");
+		List<EntityType> expected = new ArrayList<>();
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.preformAction("add", "PIG");
+		expected.add(PIG);
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.preformAction("add", "COW");
+		expected.add(COW);
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.addToValue("CHICKEN");
+		expected.add(CHICKEN);
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.removeFromValue("PIG");
+		expected.remove(PIG);
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.preformAction("remove", "COW");
+		expected.remove(COW);
+		
+		assertThat(flag.value, is(expected));
+		
+		//Current value: [CHICKEN].
+		
+		flag.preformAction("addmultiple", "[CHICKEN, PIG]");
+		//Expect no change.
+		assertThat(flag.value, is(expected));
+		
+		flag.preformAction("addmultiple-f", "[CHICKEN, PIG]");
+		expected.add(PIG);
+		
+		assertThat(flag.value, is(expected));
+		
+		flag.addMultipleToValue("[PIG, COW]", false);
+		//Expect no change.
+		assertThat(flag.value, is(expected));
+		
+		flag.addMultipleToValue("[PIG, COW]", true);
+		expected.add(COW);
+		
+		assertThat(flag.value, is(expected));
+
+		flag.preformAction("removemultiple", "[PIG, COW, ARROW]");		
+		assertThat(flag.value, is(expected));
+		
+		flag.preformAction("removemultiple-f", "[PIG, COW, ARROW]");
+		expected.remove(PIG);
+		expected.remove(COW);
+		
+		assertThat(flag.value, is(expected));
 	}
 }
