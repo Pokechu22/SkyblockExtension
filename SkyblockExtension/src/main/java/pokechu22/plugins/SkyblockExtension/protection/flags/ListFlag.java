@@ -307,6 +307,8 @@ public abstract class ListFlag<E extends Enum<E>> extends
 						erroredValues.toString() + "\n" + 
 						"§cLocations: " + highlightedErrors + ".";
 			} else {
+				//Ugly code, but ensures that there are no duplicates.
+				this.value.removeAll(addList);
 				this.value.addAll(addList);
 				
 				//Displays in yellow, but starts with red for error checking
