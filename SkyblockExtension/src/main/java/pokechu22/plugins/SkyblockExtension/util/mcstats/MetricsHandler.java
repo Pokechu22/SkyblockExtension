@@ -7,6 +7,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.WitherWarner;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
@@ -100,6 +101,13 @@ public class MetricsHandler {
 			for (Map.Entry<String, Integer> entry : errorCounts.entrySet()) {
 				errorTypes.addPlotter(new IntPlotter(entry.getKey(), entry.getValue()));
 			}
+			
+			//WitherWarner text.
+			Graph witherWarnerEnabled = metrics.createGraph("Wither Warner Enabled");
+			
+			witherWarnerEnabled.addPlotter(
+					new BooleanPlotter("Wither Warner Enabled",
+							WitherWarner.enabled));
 			
 			metrics.start();
 		} catch (IOException e) {
