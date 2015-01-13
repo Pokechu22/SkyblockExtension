@@ -67,9 +67,6 @@ public class IslandUtils {
 	 * Gets the island that the specified location is in, or null if it is not
 	 * in an island. The Y-value of the location is set to 120, the height of 
 	 * the bedrock on the island.
-	 * <br>
-	 * TODO: Stop using int rounding and start using Math.Ceil or Math.floor.
-	 * Save that for when you aren't coding at midnight, though.
 	 * 
 	 * 
 	 * @param startingLocation
@@ -97,9 +94,7 @@ public class IslandUtils {
 	/**
 	 * Gets the x-coordinate of the nearest island, using the distance from spawn.
 	 * <br>
-	 * NOTE: At the exact border, the exact behavior is uncertain, and doesn't
-	 * matter.  It does not need to be tested; so long as 55 returns either 1 or 0,
-	 * we are good.
+	 * TODO: This seems like a slightly odd method; mabye a better general method?
 	 * 
 	 * @param location
 	 * @return
@@ -117,9 +112,7 @@ public class IslandUtils {
 	/**
 	 * Gets the z-coordinate of the nearest island, using the distance from spawn.
 	 * <br>
-	 * NOTE: At the exact border, the exact behavior is uncertain, and doesn't
-	 * matter.  It does not need to be tested; so long as 55 returns either 1 or 0,
-	 * we are good.
+	 * TODO: This seems like a slightly odd method; mabye a better general method?
 	 * 
 	 * @param location
 	 * @return
