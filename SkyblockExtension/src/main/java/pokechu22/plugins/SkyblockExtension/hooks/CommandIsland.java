@@ -52,6 +52,12 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			}
 		}
 		
+		if (args.length > 0 && args[0].equalsIgnoreCase("levle")) {
+			//Correction for a stupid typo I make way too much.
+			sender.sendMessage("§eLevel is not spelled levle.");
+			args[0] = "level";
+		}
+		
 		if (enableHelp2) {
 			//This override needs to occur beforehand.
 			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
