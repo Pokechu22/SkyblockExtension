@@ -222,4 +222,45 @@ public class IslandUtils {
 	public static String getIslandOwner(PlayerInfo player) {
 		return "";
 	}
+	
+	/**
+	 * Checks if the specified location is on that player's island.
+	 * 
+	 * @param location
+	 * @param player
+	 * @return
+	 */
+	public static boolean locationIsOnPlayerIsland(Location location, String player) {
+		if (!uSkyBlock.getInstance().hasIsland(player)) {
+			return false;
+			//TODO this might not be the best response to no island.
+		}
+		
+		return locationsShareIslands(location, 
+				uSkyBlock.getInstance().getPlayerIsland(player));
+	}
+	
+	/**
+	 * Checks if all of the specified locations share islands.
+	 * 
+	 * @param locations
+	 * @return
+	 */
+	public static boolean locationsShareIslands(Location... locations) {
+		if (locations.length == 0) { return true; }
+		
+		int x = getNearestIslandLocalX(locations[0]);
+		int z = getNearestIslandLocalZ(locations[0]);
+		
+		for (Location location : locations) {
+			if (getNearestIslandLocalX(location) != x) {
+				return false;
+			}
+			if (getNearestIslandLocalZ(location) != z) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
