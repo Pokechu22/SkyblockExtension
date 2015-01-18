@@ -153,7 +153,11 @@ public class CommandExpunge {
 		} //If sentInfo is null, we allow transport.
 		
 		sender.sendMessage("§aSending " + args[0] + " to their island.");
-		uSkyBlock.getInstance().homeTeleport(sent);
+		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
+			uSkyBlock.getInstance().homeTeleport(sent);
+		} else {
+			sent.performCommand("spawn");
+		}
 		
 		//Send a message to the player to explain.
 		if (args.length == 1) {
