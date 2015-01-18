@@ -90,8 +90,8 @@ public class CommandExpunge {
 		}
 		
 		//Provide help if syntax is invalid.
-		if (args.length != 1) {
-			sender.sendMessage("§cUsage: §4/" + label + " <player>§c.");
+		if (args.length < 1) {
+			sender.sendMessage("§cUsage: §4/" + label + " <player> [message...]§c.");
 			sender.sendMessage("§fThis command moves the specified player back to their island from your own island.");
 			sender.sendMessage("§fIt can only be used if the other player is A) currently standing within your island's bounderies, and B) is not a member of your island.  It also can only be used by the island owner.");
 			return;
@@ -132,6 +132,7 @@ public class CommandExpunge {
 		
 		//Process the location of the other player.
 		if (sentInfo != null) {
+			//TODO find better way of checking if players share islands.
 			sentIslandLoc = sentInfo.getIslandLocation();
 			if (sentIslandLoc == null) {
 				sentIslandLoc = sentInfo.getPartyIslandLocation();
@@ -145,6 +146,7 @@ public class CommandExpunge {
 			//Validate that the sent player is on the other player's island.
 			if (!IslandUtils.getOccupyingIsland(sent.getLocation())
 					.equals(senderIslandLoc)) {
+				sender.sendMessage(IslandUtils.getOccupyingIsland(sent.getLocation()) + " " + senderIslandLoc);
 				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
 				return;
 			}
@@ -152,5 +154,24 @@ public class CommandExpunge {
 		
 		sender.sendMessage("§aSending " + args[0] + " to their island.");
 		uSkyBlock.getInstance().homeTeleport(sent);
+		
+		//Send a message to the player to explain.
+		if (args.length == 1) {
+			sent.sendMessage(sender.getDisplayName() + 
+					" has sent you back to your island.");
+		} else {
+			StringBuilder message = new StringBuilder();
+			
+			for (int i = 1 /* intentional, as the first param is player */; i < args.length; i++) {
+				message.append(args[i]);
+				if (i != args.length - 1) {
+					message.append(" ");
+				}
+			}
+			
+			sent.sendMessage(sender.getDisplayName() + 
+					" has sent you back to your island.");
+			sent.sendMessage(message.toString());
+		}
 	}
 }
