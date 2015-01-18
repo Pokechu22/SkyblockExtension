@@ -144,8 +144,7 @@ public class CommandExpunge {
 			}
 			
 			//Validate that the sent player is on the other player's island.
-			if (!IslandUtils.getOccupyingIsland(sent.getLocation())
-					.equals(senderIslandLoc)) {
+			if (!IslandUtils.locationsShareIslands(sent.getLocation(), senderIslandLoc)) {
 				sender.sendMessage(IslandUtils.getOccupyingIsland(sent.getLocation()) + " " + senderIslandLoc);
 				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
 				return;
