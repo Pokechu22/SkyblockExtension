@@ -21,6 +21,8 @@ import us.talabrek.ultimateskyblock.uSkyBlock;
  *
  */
 public class IslandUtils {
+	private IslandUtils() {throw new AssertionError("Should never be called.");}
+	
 	/**
 	 * Tests if the player is active, and thus player info can be obtained via
 	 * {@linkplain #getPlayerInfo(Player)}.
