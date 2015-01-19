@@ -55,7 +55,6 @@ public class CommandExpunge {
 		final PlayerInfo senderInfo;
 		final PlayerInfo sentInfo;
 		
-		Location sentIslandLoc;
 		Location senderIslandLoc;
 		
 		//All of the sender stuff.
@@ -132,13 +131,7 @@ public class CommandExpunge {
 		
 		//Process the location of the other player.
 		if (sentInfo != null) {
-			//TODO find better way of checking if players share islands.
-			sentIslandLoc = sentInfo.getIslandLocation();
-			if (sentIslandLoc == null) {
-				sentIslandLoc = sentInfo.getPartyIslandLocation();
-			}
-			
-			if (senderIslandLoc.equals(sentIslandLoc)) {
+			if (!IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
 				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
 				return;
 			}
