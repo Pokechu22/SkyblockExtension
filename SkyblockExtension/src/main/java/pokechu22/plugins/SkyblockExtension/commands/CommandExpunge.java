@@ -3,7 +3,6 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -54,8 +53,6 @@ public class CommandExpunge {
 		
 		final PlayerInfo senderInfo;
 		final PlayerInfo sentInfo;
-		
-		Location senderIslandLoc;
 		
 		//All of the sender stuff.
 		
@@ -116,20 +113,7 @@ public class CommandExpunge {
 			return;
 		}
 		
-		sentInfo = IslandUtils.getPlayerInfo(sent);
-		
-		//Get the island location of the sender.
-		senderIslandLoc = senderInfo.getHomeLocation();
-		if (senderIslandLoc == null) {
-			senderIslandLoc = senderInfo.getPartyIslandLocation();
-		}
-		
-		if (senderIslandLoc == null) {
-			sender.sendMessage("§cCould not identify your island location.");
-			return;
-		}
-		
-		//Process the location of the other player.
+		sentInfo = IslandUtils.getPlayerInfo(sent);//Process the location of the other player.
 		if (sentInfo != null) {
 			if (!IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
 				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
@@ -137,8 +121,7 @@ public class CommandExpunge {
 			}
 			
 			//Validate that the sent player is on the other player's island.
-			if (!IslandUtils.locationsShareIslands(sent.getLocation(), senderIslandLoc)) {
-				sender.sendMessage(IslandUtils.getOccupyingIsland(sent.getLocation()) + " " + senderIslandLoc);
+			if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
 				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
 				return;
 			}
