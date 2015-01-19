@@ -263,4 +263,29 @@ public class IslandUtils {
 		
 		return true;
 	}
+	
+	/**
+	 * Checks if all the specified players are members of the same island.
+	 * 
+	 * @param players
+	 * @return
+	 */
+	public static boolean playersShareIslands(String... players) {
+		if (players.length == 0) { return true; }
+		
+		Location mainLoc = uSkyBlock.getInstance().getPlayerIsland(players[0]);
+		
+		for (String player : players) {
+			Location playerLoc = uSkyBlock.getInstance().getPlayerIsland(player);
+			
+			//Checking x and z specifically rather than using .equals() because
+			//I can't trust the y value to be the same.
+			if (mainLoc.getBlockX() != playerLoc.getBlockX() ||
+					mainLoc.getBlockZ() != playerLoc.getBlockZ()) {
+				return false;
+			}
+		}
+		
+		return false;
+	}
 }
