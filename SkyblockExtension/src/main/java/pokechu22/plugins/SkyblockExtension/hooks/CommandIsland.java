@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
@@ -58,6 +59,11 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			args[0] = "level";
 		}
 		
+		if (args.length > 0 && args[0].equalsIgnoreCase("sendhome")) {
+			sendHome(Arrays.copyOfRange(args, 1, args.length), sender, label + " sendhome");
+			return true;
+		}
+		
 		if (enableHelp2) {
 			//This override needs to occur beforehand.
 			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
@@ -65,6 +71,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				return true;
 			}
 		}
+		
 		boolean superResult = super.onCommand(sender, command, label, args);
 		if (enableHelp2) {
 			if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
@@ -144,6 +151,8 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * END OF USKYBLOCK CODE! NONE OF THIS IS PART OF THE ORIGIONAL COMMAND. *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	public static boolean membersCanExpunge = true;
 	
 	/**
 	 * Asynchronously calculates the island level.  
@@ -1028,6 +1037,121 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				.getDeclaredField("inviteList").get(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Sends a player back to their island.
+	 * 
+	 * @param args
+	 * @param sender
+	 * @param label The entire set of commands to here.
+	 */
+	@SuppressWarnings("deprecation")
+	public void sendHome(String[] args, CommandSender senderC, String label) {
+		final Player sender;
+		final Player sent;
+		
+		final PlayerInfo senderInfo;
+		final PlayerInfo sentInfo;
+		
+		//All of the sender stuff.
+		
+		if (!(senderC instanceof Player)) {
+			senderC.sendMessage("§cThis command can only be used by Players as it performs checks on both player's islands.");
+			senderC.sendMessage("§cTry using §f/sudo <player> is§c instead.");
+			return;
+		}
+		
+		sender = (Player) senderC;
+		senderInfo = IslandUtils.getPlayerInfo(sender);
+		
+		//Validate that the sender has permission.
+		if (!PermissionHandler.HasPermission(sender, "sbe.island.expunge")) {
+			sender.sendMessage("§cYou don't have permission to use this command!");
+			return;
+		}
+		
+		//Validate that the sender actually has an island
+		if (senderInfo == null || (!senderInfo.getHasIsland() && !senderInfo.getHasParty())) {
+			sender.sendMessage("§cYou cannot remove people from an island that you don't have!");
+			return;
+		}
+		
+		//Validate that the sender owns their island, if only the owner can perform this command.
+		if (!membersCanExpunge) {
+			if (!sender.getName().equalsIgnoreCase(senderInfo.getPartyLeader())) {
+				sender.sendMessage("§cOnly the owner can remove people from their island!");
+				return;
+			}
+		}
+		
+		//Provide help if syntax is invalid.
+		if (args.length < 1) {
+			sender.sendMessage("§cUsage: §4/" + label + " <player> [message...]§c.");
+			sender.sendMessage("§fThis command moves the specified player back to their island from your own island.");
+			sender.sendMessage("§fIt can only be used if the other player is A) currently standing within your island's bounderies, and B) is not a member of your island.  It also can only be used by the island owner.");
+			return;
+		}
+		
+		//Now validate the sent player.
+		
+		sent = Bukkit.getPlayer(args[0]);
+		
+		//Validate that the sent player is online.
+		if (sent == null) {
+			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			return;
+		}
+		if (!sent.getName().equalsIgnoreCase(args[0])) {
+			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			sender.sendMessage("§cDid you mean " + sent.getName() + "?");
+			return;
+		}
+		
+		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.noexpunge")) {
+			sender.sendMessage(sent.getDisplayName() + "§c is a moderator and cannot be sent.");
+			return;
+		}
+		
+		sentInfo = IslandUtils.getPlayerInfo(sent);//Process the location of the other player.
+		if (sentInfo != null) {
+			if (IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
+				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
+				return;
+			}
+			
+			//Validate that the sent player is on the other player's island.
+			if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
+				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
+				return;
+			}
+		} //If sentInfo is null, we allow transport.
+		
+		sender.sendMessage("§aSending " + args[0] + " to their island.");
+		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
+			uSkyBlock.getInstance().homeTeleport(sent);
+		} else {
+			sent.performCommand("spawn");
+		}
+		
+		//Send a message to the player to explain.
+		if (args.length == 1) {
+			sent.sendMessage(sender.getDisplayName() + 
+					" has sent you back to your island.");
+		} else {
+			StringBuilder message = new StringBuilder();
+			
+			for (int i = 1 /* intentional, as the first param is player */; i < args.length; i++) {
+				message.append(args[i]);
+				if (i != args.length - 1) {
+					message.append(" ");
+				}
+			}
+			
+			sent.sendMessage(sender.getDisplayName() + 
+					" has sent you back to your island.");
+			sent.sendMessage(message.toString());
 		}
 	}
 }

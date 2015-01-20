@@ -144,10 +144,6 @@ public class SkyblockExtension extends JavaPlugin {
 				CommandTpCancel.Run(sender, cmd, label, args);
 				break;
 			}
-			case "expunge": {
-				CommandExpunge.Run(sender, cmd, label, args);
-				break;
-			}
 			default: {
 				// Tell player.
 				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
@@ -223,9 +219,6 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 			case "tpcancel": {
 				return CommandTpCancel.onTabComplete(sender, cmd, label, args);
-			}
-			case "expunge": {
-				return CommandExpunge.onTabComplete(sender, cmd, label, args);
 			}
 			default: {
 				// Tell player.

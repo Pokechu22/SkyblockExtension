@@ -34,11 +34,6 @@ commands:
     usage: |
           /<command> [player]
     aliases: [tpacancel, tpc, tpac]
-  
-  expunge: 
-    description: Removes a visiting player from your island and returns them to their island.
-    usage: |
-          /<command> <player>
     
 
 permissions: 
