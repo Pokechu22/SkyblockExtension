@@ -278,6 +278,10 @@ public class IslandUtils {
 		for (String player : players) {
 			Location playerLoc = uSkyBlock.getInstance().getPlayerIsland(player);
 			
+			if (!uSkyBlock.getInstance().hasIsland(player)) {
+				return false;
+			}
+			
 			//Checking x and z specifically rather than using .equals() because
 			//I can't trust the y value to be the same.
 			if (mainLoc.getBlockX() != playerLoc.getBlockX() ||
