@@ -151,9 +151,6 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * END OF USKYBLOCK CODE! NONE OF THIS IS PART OF THE ORIGIONAL COMMAND. *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	
-	public static boolean membersCanExpunge = true;
-	
 	/**
 	 * Asynchronously calculates the island level.  
 	 *
@@ -1041,6 +1038,17 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 	}
 	
 	/**
+	 * Whether or not /spawn should be used to take the player to spawn.
+	 * If disabled, sends to {@link uSkyBlock#getSkyBlockWorld()}'s spawn
+	 * point.
+	 */
+	public static boolean useSpawnCommandForSpawn = true;
+	/**
+	 * Controls whether members of an island have access to sendhome.
+	 */
+	public static boolean membersCanSendHome = true;
+	
+	/**
 	 * Sends a player back to their island.
 	 * 
 	 * @param args
@@ -1079,7 +1087,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		}
 		
 		//Validate that the sender owns their island, if only the owner can perform this command.
-		if (!membersCanExpunge) {
+		if (!membersCanSendHome) {
 			if (!sender.getName().equalsIgnoreCase(senderInfo.getPartyLeader())) {
 				sender.sendMessage("§cOnly the owner can remove people from their island!");
 				return;
@@ -1128,11 +1136,25 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			}
 		} //If sentInfo is null, we allow transport.
 		
+		sender.sendMessage("§aSending " + sent.getDisplayName() +
+				" to their island.");
+		
 		sender.sendMessage("§aSending " + args[0] + " to their island.");
 		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
 			uSkyBlock.getInstance().homeTeleport(sent);
 		} else {
 			sent.performCommand("spawn");
+		}
+		
+		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
+			uSkyBlock.getInstance().homeTeleport(sent);
+		} else {
+			if (useSpawnCommandForSpawn) {
+				sent.performCommand("spawn");
+			} else {
+				sent.teleport(uSkyBlock.getSkyBlockWorld()
+						.getSpawnLocation());
+			}
 		}
 		
 		//Send a message to the player to explain.
