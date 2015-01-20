@@ -131,7 +131,7 @@ public class IslandInfoCache {
 		 * @return
 		 */
 		public static IslandLocation IslandInfoForPlayer(String player) {
-			Location location = uSkyBlock.getInstance().getPlayerIsland(player);
+			Location location = IslandUtils.getPlayerIslandLocation(player);
 			if (location == null) {
 				throw new RuntimeException("§cPlayer " + player + " does not appear to have an island.");
 			} else {

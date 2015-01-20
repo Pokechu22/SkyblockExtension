@@ -189,6 +189,25 @@ public class IslandUtils {
 	}
 	
 	/**
+	 * Gets the location of a player's island.
+	 * 
+	 * If the player neither owns nor is a member of an island, returns
+	 * null.
+	 * @param player
+	 */
+	public static Location getPlayerIslandLocation(String player) {
+		PlayerInfo info = getPlayerInfo(player);
+		
+		if (info.getHasIsland()) {
+			return info.getIslandLocation();
+		} else if (info.getHasParty()) {
+			return info.getPartyIslandLocation();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
 	 * Checks if the specified location is on that player's island.
 	 * 
 	 * @param location
@@ -202,7 +221,7 @@ public class IslandUtils {
 		}
 		
 		return locationsShareIslands(location, 
-				uSkyBlock.getInstance().getPlayerIsland(player));
+				getPlayerIslandLocation(player));
 	}
 	
 	/**
@@ -238,12 +257,12 @@ public class IslandUtils {
 	public static boolean playersShareIslands(String... players) {
 		if (players.length == 0) { return true; }
 		
-		Location mainLoc = uSkyBlock.getInstance().getPlayerIsland(players[0]);
+		Location mainLoc = getPlayerIslandLocation(players[0]);
 		
 		for (String player : players) {
-			Location playerLoc = uSkyBlock.getInstance().getPlayerIsland(player);
+			Location playerLoc = getPlayerIslandLocation(player);
 			
-			if (!uSkyBlock.getInstance().hasIsland(player)) {
+			if (playerLoc == null) {
 				return false;
 			}
 			
