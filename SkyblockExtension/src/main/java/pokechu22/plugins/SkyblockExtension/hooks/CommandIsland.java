@@ -62,6 +62,18 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		if (args.length > 0 && args[0].equalsIgnoreCase("sendhome")) {
 			sendHome(Arrays.copyOfRange(args, 1, args.length), sender, label + " sendhome");
 			return true;
+			
+			//TODO: ALt names.
+			/*
+Command User who named it Message 
+/island sendhome <player> [message]   xsmallz14x  ,  DanTheMan497    
+/island sendback <player> [message]   herobrine102245    
+/island dismiss <player> [message]   Bousce    
+/island awaywithyou <player> [message]   Yankeelova20    
+/island shiphome <player>   craftmanphilip   Wooosh! You have been boxed up and shipped back to your island. 
+/island fusrodah <player>   Yankeelova20   §lFUS RO DAH! 
+/island sayonarasucker <player>   Creep_52   Sayonara, sucker! 
+			 */
 		}
 		
 		if (enableHelp2) {
