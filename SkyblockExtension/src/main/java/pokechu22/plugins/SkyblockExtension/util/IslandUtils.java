@@ -204,26 +204,6 @@ public class IslandUtils {
 	}
 	
 	/**
-	 * Gets the name of the player that owns specified player's island.
-	 * 
-	 * @param player
-	 * @return The name of the player, or null if there is no owner of that island.
-	 */
-	public static String getIslandOwner(Player player) {
-		return "";
-	}
-	
-	/**
-	 * Gets the name of the player that owns specified player's island.
-	 * 
-	 * @param player
-	 * @return The name of the player, or null if there is no owner of that island.
-	 */
-	public static String getIslandOwner(PlayerInfo player) {
-		return "";
-	}
-	
-	/**
 	 * Checks if the specified location is on that player's island.
 	 * 
 	 * @param location
