@@ -60,7 +60,13 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		}
 		
 		if (args.length > 0 && args[0].equalsIgnoreCase("sendhome")) {
-			sendHome(Arrays.copyOfRange(args, 1, args.length), sender, label + " sendhome");
+			if (args.length > 1) {
+				sendHome(args[1], sender, label + " " + args[0], true, 
+						Arrays.copyOfRange(args, 1, args.length));
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player> [message]");
+			}
 			return true;
 			
 			//TODO: ALt names.
@@ -75,6 +81,7 @@ Command User who named it Message
 /island sayonarasucker <player>   Creep_52   Sayonara, sucker! 
 			 */
 		}
+		
 		
 		if (enableHelp2) {
 			//This override needs to occur beforehand.
@@ -1061,6 +1068,25 @@ Command User who named it Message
 	public static boolean membersCanSendHome = true;
 	
 	/**
+	 * 
+	 * @param args
+	 * @param senderC
+	 * @param label
+	 * @param message
+	 */
+	public void sendHome(String player, CommandSender senderC, String label, 
+			boolean includeSender, String... messageWords) {
+		StringBuilder message = new StringBuilder();
+		for (int i = 0; i < messageWords.length; i++) {
+			message.append(messageWords[i]);
+			if (i != messageWords.length - 1) {
+				message.append(" ");
+			}
+		}
+		sendHome(player, senderC, label, includeSender, message.toString());
+	}
+	
+	/**
 	 * Sends a player back to their island.
 	 * 
 	 * @param args
@@ -1068,7 +1094,8 @@ Command User who named it Message
 	 * @param label The entire set of commands to here.
 	 */
 	@SuppressWarnings("deprecation")
-	public void sendHome(String[] args, CommandSender senderC, String label) {
+	public void sendHome(String player, CommandSender senderC, String label, 
+			boolean includeSender, String message) {
 		final Player sender;
 		final Player sent;
 		
@@ -1106,25 +1133,17 @@ Command User who named it Message
 			}
 		}
 		
-		//Provide help if syntax is invalid.
-		if (args.length < 1) {
-			sender.sendMessage("§cUsage: §4/" + label + " <player> [message...]§c.");
-			sender.sendMessage("§fThis command moves the specified player back to their island from your own island.");
-			sender.sendMessage("§fIt can only be used if the other player is A) currently standing within your island's bounderies, and B) is not a member of your island.  It also can only be used by the island owner.");
-			return;
-		}
-		
 		//Now validate the sent player.
 		
-		sent = Bukkit.getPlayer(args[0]);
+		sent = Bukkit.getPlayer(player);
 		
 		//Validate that the sent player is online.
 		if (sent == null) {
-			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			sender.sendMessage("§cPlayer " + player + " was not found.");
 			return;
 		}
-		if (!sent.getName().equalsIgnoreCase(args[0])) {
-			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+		if (!sent.getName().equalsIgnoreCase(player)) {
+			sender.sendMessage("§cPlayer " + player + " was not found.");
 			sender.sendMessage("§cDid you mean " + sent.getName() + "?");
 			return;
 		}
@@ -1143,7 +1162,7 @@ Command User who named it Message
 			
 			//Validate that the sent player is on the other player's island.
 			if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
-				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
+				sender.sendMessage("§cPlayer " + player + "§c is not currently on your island.");
 				return;
 			}
 		} //If sentInfo is null, we allow transport.
@@ -1151,7 +1170,7 @@ Command User who named it Message
 		sender.sendMessage("§aSending " + sent.getDisplayName() +
 				" to their island.");
 		
-		sender.sendMessage("§aSending " + args[0] + " to their island.");
+		sender.sendMessage("§aSending " + player + " to their island.");
 		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
 			uSkyBlock.getInstance().homeTeleport(sent);
 		} else {
@@ -1170,22 +1189,12 @@ Command User who named it Message
 		}
 		
 		//Send a message to the player to explain.
-		if (args.length == 1) {
+		if (includeSender) {
 			sent.sendMessage(sender.getDisplayName() + 
 					" has sent you back to your island.");
-		} else {
-			StringBuilder message = new StringBuilder();
-			
-			for (int i = 1 /* intentional, as the first param is player */; i < args.length; i++) {
-				message.append(args[i]);
-				if (i != args.length - 1) {
-					message.append(" ");
-				}
-			}
-			
-			sent.sendMessage(sender.getDisplayName() + 
-					" has sent you back to your island.");
-			sent.sendMessage(message.toString());
+		}
+		if (message != null && !message.equalsIgnoreCase("")) {
+			sent.sendMessage(message);
 		}
 	}
 }
