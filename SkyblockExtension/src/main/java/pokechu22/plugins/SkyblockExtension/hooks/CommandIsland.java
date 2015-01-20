@@ -59,7 +59,10 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			args[0] = "level";
 		}
 		
-		if (args.length > 0 && args[0].equalsIgnoreCase("sendhome")) {
+		if (args.length > 0 && (args[0].equalsIgnoreCase("sendhome")
+				|| args[0].equalsIgnoreCase("sendback")
+				|| args[0].equalsIgnoreCase("dismiss")
+				|| args[0].equalsIgnoreCase("awaywithyou"))) {
 			if (args.length > 1) {
 				sendHome(args[1], sender, label + " " + args[0], true, 
 						Arrays.copyOfRange(args, 1, args.length));
@@ -68,20 +71,40 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 						" " + args[0] + " <player> [message]");
 			}
 			return true;
-			
-			//TODO: ALt names.
-			/*
-Command User who named it Message 
-/island sendhome <player> [message]   xsmallz14x  ,  DanTheMan497    
-/island sendback <player> [message]   herobrine102245    
-/island dismiss <player> [message]   Bousce    
-/island awaywithyou <player> [message]   Yankeelova20    
-/island shiphome <player>   craftmanphilip   Wooosh! You have been boxed up and shipped back to your island. 
-/island fusrodah <player>   Yankeelova20   §lFUS RO DAH! 
-/island sayonarasucker <player>   Creep_52   Sayonara, sucker! 
-			 */
 		}
-		
+		if (args.length > 0 && args[0].equalsIgnoreCase("shiphome")) {
+			if (args.length == 2) {
+				if (sender instanceof Player) {
+					String playerName = ((Player)sender).getDisplayName();
+					sendHome(args[1], sender, label + " " + args[0], true,
+							"Woosh!  " + playerName + " has boxed you up and shipped you back to your island.");
+				}
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
+		}
+		if (args.length > 0 && args[0].equalsIgnoreCase("fusrodah")) {
+			if (args.length == 2) {
+				sendHome(args[1], sender, label + " " + args[0], false,
+						"§lFUS RO DAH!");
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
+		}
+		if (args.length > 0 && args[0].equalsIgnoreCase("sayonarasucker")) {
+			if (args.length == 2) {
+				sendHome(args[1], sender, label + " " + args[0], false,
+						"§oSayonara, sucker!");
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
+		}
 		
 		if (enableHelp2) {
 			//This override needs to occur beforehand.
