@@ -788,10 +788,6 @@ public class CommandPokechu22 {
 				return;
 			}
 			Player player = (Player) sender;
-			if (!IslandUtils.canGetPlayerInfo(player)) {
-				sender.sendMessage("§cError: You do not have an island.");
-				return;
-			}
 			//ToString is commented out because it caused issues with null.  
 			//The same effect is triggered automatically, but null is displayed as "null".
 			sender.sendMessage("§6getIslandLocation(): §e" + 

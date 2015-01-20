@@ -91,16 +91,16 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean addPlayertoParty(String playerName, String partyLeader) {
-		if (IslandUtils.canGetPlayerInfo(partyLeader)) {
-			//Should ALWAYS happen.
+		//Handle the leader
+		{
 			Player leader = Bukkit.getPlayer(partyLeader);
 			PlayerInfo info = IslandUtils.getPlayerInfo(leader);
 			
 			IslandInfo islandInfo = IslandUtils.getIslandInfo(info);
 			islandInfo.freshenOwner(leader);
 		}
-		if (IslandUtils.canGetPlayerInfo(playerName)) {
-			//Should ALWAYS happen.
+		//Handle the member.
+		{
 			Player member = Bukkit.getPlayer(playerName);
 			PlayerInfo info = IslandUtils.getPlayerInfo(member);
 			

@@ -17,7 +17,6 @@ import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
 //Static imports - Imports a function, not a class.
-import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.canGetPlayerInfo;
 import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo;
 
 /**
@@ -77,11 +76,6 @@ public class CommandMultiChallenge {
 		
 		Player player = (Player) sender;
 		
-		if (!canGetPlayerInfo(player)) {
-			//If player info is unavailable, return nothing.
-			return new ArrayList<String>();
-		}
-		
 		if (args.length == 2) {
 			List<String> availableChallenges = getAvailableChallenges(player);
 			ArrayList<String> returned = new ArrayList<String>();
@@ -129,13 +123,6 @@ public class CommandMultiChallenge {
 		if (!uSkyBlock.getSkyBlockWorld().equals(player.getWorld())) //If not in skyblock world
 		{
 			sender.sendMessage("§cYou can only submit challenges in the skyblock world!");
-			return;
-		}
-		
-		if (!canGetPlayerInfo(player)) {
-			sender.sendMessage("§4Internal error: You are not in the list of active players!");
-			sender.sendMessage("§4You cannot use this command.  You might not even exist.");
-			sender.sendMessage("§4Try completing a challenge with /c and then trying again.");
 			return;
 		}
 		
