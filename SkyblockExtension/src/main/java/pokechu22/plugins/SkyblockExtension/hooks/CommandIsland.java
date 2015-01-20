@@ -727,7 +727,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island sendhome <player> [message]§f.",
 				//Perm
-				"", //TODO permissions
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -736,7 +736,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island sendback <player> [message]§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -745,7 +745,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island dismiss <player> [message]§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -754,7 +754,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island awaywithyou <player> [message]§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -763,7 +763,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island shiphome <player>§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -772,7 +772,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island fusrodah <player>§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -781,7 +781,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"Sends another player back to your island.\n" +
 				"Usage:\n§6/island sayonarasucker <player>§f.",
 				//Perm
-				"",
+				"sbe.island.sendhome",
 				//Conf
 				""
 		});
@@ -1204,7 +1204,7 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 		senderInfo = IslandUtils.getPlayerInfo(sender);
 		
 		//Validate that the sender has permission.
-		if (!PermissionHandler.HasPermission(sender, "sbe.island.expunge")) {
+		if (!PermissionHandler.HasPermission(sender, "sbe.island.sendhome")) {
 			sender.sendMessage("§cYou don't have permission to use this command!");
 			return;
 		}
@@ -1238,22 +1238,25 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			return;
 		}
 		
-		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.noexpunge")) {
+		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.nosendhome")) {
 			sender.sendMessage(sent.getDisplayName() + "§c is a moderator and cannot be sent.");
 			return;
 		}
 		
 		sentInfo = IslandUtils.getPlayerInfo(sent);//Process the location of the other player.
 		if (sentInfo != null) {
-			if (IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
-				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
-				return;
-			}
-			
-			//Validate that the sent player is on the other player's island.
-			if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
-				sender.sendMessage("§cPlayer " + player + "§c is not currently on your island.");
-				return;
+			//If that permission is enabled, ignore it.
+			if (!sender.hasPermission("sbe.mod.sendhomeall")) {
+				if (IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
+					sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
+					return;
+				}
+				
+				//Validate that the sent player is on the other player's island.
+				if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
+					sender.sendMessage("§cPlayer " + player + "§c is not currently on your island.");
+					return;
+				}
 			}
 		} //If sentInfo is null, we allow transport.
 		

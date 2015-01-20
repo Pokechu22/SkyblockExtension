@@ -55,14 +55,20 @@ permissions:
       same challenge multiple times quickly.
     default: true
   
-  sbe.island.expunge: 
-    description: 
-      Allows access to the /expunge command, which lets one force a player back to their island if they are staying on the user's.
+  sbe.island.sendhome: 
+    description: |
+      Allows access to the /island sendhome command, which lets one force a player 
+      back to their island if they are staying on the user's.
     default: true
   
-  sbe.mod.noexpunge: 
+  sbe.mod.nosendhome: 
     description:
-      Disables players from using /expunge on you
+      Disables players from using /island sendhome on you.
+    default: op
+    
+  sbe.mod.sendhomeall: 
+    description:
+      Allows you to use /island sendhome on players not on your island.
     default: op
   
   sbe.debug.*: 
