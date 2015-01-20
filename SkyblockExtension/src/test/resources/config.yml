@@ -13,6 +13,15 @@ uSkyBlockOverrides:
     #Use custom block values?  (See block_values.yml)
     useCustomBlockValues: true
 
+sendHome: 
+  #Controls whether or not members can send players back to their island.
+  #If false, only owners can do so.
+  allowMembersToSendHome: true
+  #Controls whether /spawn is used to send players to spawn.
+  #If false, uSkyBlock's skyWorld's spawn is used.
+  #Set this to false if /spawn is not avaiable to all players.
+  useSpawnCommandForSpawn: true
+
 errorHandling: 
   #Broadcast an error to all players who have the permission 
   #sbe.debug.crashes.broadcast set - This includes ops by default.

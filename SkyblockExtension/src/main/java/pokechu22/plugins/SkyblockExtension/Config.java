@@ -55,6 +55,10 @@ public class Config {
 				"uSkyBlockOverrides.islandCommand.allowIgnoreCase", true);
 		CommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
 				"uSkyBlockOverrides.islandCommand.useCustomBlockValues", true);
+		CommandIsland.membersCanSendHome = getDefaultConfig().getBoolean(
+				"sendHome.allowMembersToSendHome", true);
+		CommandIsland.useSpawnCommandForSpawn = getDefaultConfig().getBoolean(
+				"sendHome.useSpawnCommandForSpawn", true);
 		
 		WitherWarner.enabled = getDefaultConfig().getBoolean(
 				"witherWarning.enabled");
