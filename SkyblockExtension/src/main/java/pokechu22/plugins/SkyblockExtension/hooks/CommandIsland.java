@@ -716,7 +716,74 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				//Help
 				"Nicer help system.\nIMPORTANT NOTE: This command is " +
 				"infinitely better than §6/island help§f.\n" +
-				"Usage:\n§6/island help2 [subCommands]§f."
+				"Usage:\n§6/island help2 [subCommands]§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("sendhome", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sendhome <player> [message]§f.",
+				//Perm
+				"", //TODO permissions
+				//Conf
+				""
+		});
+		map.put("sendback", new String[]{
+				////Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sendback <player> [message]§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("dismiss", new String[]{
+				////Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island dismiss <player> [message]§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("awaywithyou", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island awaywithyou <player> [message]§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("shiphome", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island shiphome <player>§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("fusrodah", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island fusrodah <player>§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("sayonarasucker", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sayonarasucker <player>§f.",
+				//Perm
+				"",
+				//Conf
+				""
 		});
 		
 		
