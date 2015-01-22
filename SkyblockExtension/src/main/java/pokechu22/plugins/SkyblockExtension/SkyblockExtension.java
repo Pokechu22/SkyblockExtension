@@ -9,7 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import pokechu22.plugins.SkyblockExtension.commands.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
+import pokechu22.plugins.SkyblockExtension.commands.CommandMultiChallenge;
+import pokechu22.plugins.SkyblockExtension.commands.CommandPokechu22;
+import pokechu22.plugins.SkyblockExtension.commands.CommandTpCancel;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
@@ -21,14 +32,6 @@ import pokechu22.plugins.SkyblockExtension.protection.IslandInfoCache;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.util.mcstats.MetricsHandler;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * 
@@ -44,7 +47,7 @@ public class SkyblockExtension extends JavaPlugin {
 	 * is not possible to overwrite.
 	 */
 	private static SkyblockExtension inst;
-	
+
 	/**
 	 * Gets the instance of this plugin.
 	 * 
@@ -53,48 +56,56 @@ public class SkyblockExtension extends JavaPlugin {
 	public static SkyblockExtension inst() {
 		return inst;
 	}
-	
+
 	/**
 	 * Called when the plugin is enabled.
 	 */
 	@Override
 	public void onEnable() {
 		// Register crash reports as being serializable.
-		//TODO: Move to own methods.
+		// TODO: Move to own methods.
 		ConfigurationSerialization.registerClass(CrashReport.class,
 				"CrashReport");
 		ConfigurationSerialization.registerClass(ThrowableReport.class,
 				"ThrowableReport");
-		ConfigurationSerialization.registerClass(ConfigurationErrorReport.class,
-				"ConfigurationErrorReport");
+		ConfigurationSerialization.registerClass(
+				ConfigurationErrorReport.class, "ConfigurationErrorReport");
 		ConfigurationSerialization.registerClass(GenericReport.class,
 				"GenericReport");
-		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
+		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class,
 				"IslandProtectionDataSet");
 
-		//Register events.
-		getServer().getPluginManager().registerEvents(new LoginErrorBroadcaster(), this);
+		// Register events.
+		getServer().getPluginManager().registerEvents(
+				new LoginErrorBroadcaster(), this);
 		getServer().getPluginManager().registerEvents(new WitherWarner(), this);
-		
-		//Other registration.
+
+		// Other registration.
+		registerCommands();
 		CommandIsland.registerHooks();
-		
+
 		this.saveDefaultVersionsOfAllConfigs();
 
 		inst = this;
-		
-		//Load the default protection.
+
+		// Load the default protection.
 		try {
 			IslandProtectionDataSetFactory.init();
 			WitherWarner.load();
 		} catch (InvalidConfigurationException e) {
-			//If this fails, we want it to be fully thrown to stop loading.
+			// If this fails, we want it to be fully thrown to stop loading.
 			throw new RuntimeException(e);
 		}
-		
+
 		Config.loadConfig();
-		
+
 		MetricsHandler.start();
+	}
+
+	private void registerCommands() {
+		CommandMultiChallenge multichallenge = new CommandMultiChallenge();
+		this.getCommand("multichallenge").setExecutor(multichallenge);
+		this.getCommand("multichallenge").setTabCompleter(multichallenge);
 	}
 
 	/**
@@ -132,10 +143,6 @@ public class SkyblockExtension extends JavaPlugin {
 
 				break;
 			}
-			case "multichallenge": {
-				CommandMultiChallenge.Run(sender, cmd, label, args);
-				break;
-			}
 			case "islandprotection": {
 				CommandIslandProtection.Run(sender, cmd, label, args);
 				break;
@@ -146,8 +153,8 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 			default: {
 				// Tell player.
-				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
-						+ " (Label: " + label + ")");
+				sender.sendMessage("§4[SBE]: Unrecognised command: "
+						+ cmd.getName() + " (Label: " + label + ")");
 
 				// Log to console.
 				getLogger().warning(
@@ -156,9 +163,9 @@ public class SkyblockExtension extends JavaPlugin {
 
 				// Log to error handler.
 				ErrorHandler.logError(new GenericReport(
-						"Unrecognised command while tabCompleting: " + 
-								cmd.getName() + "(Label: "	+ label + ")"));
-				
+						"Unrecognised command while tabCompleting: "
+								+ cmd.getName() + "(Label: " + label + ")"));
+
 				break;
 			}
 			}
@@ -183,8 +190,8 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 
 			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label, args, 
-					"Executing onCommand."));
+			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label,
+					args, "Executing onCommand."));
 
 			// Errors are typically things that shouldn't be caught (EG
 			// ThreadDeath), so they will be rethrown.
@@ -203,27 +210,25 @@ public class SkyblockExtension extends JavaPlugin {
 	 * Handles tab completion.
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String args[]) {
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String label, String args[]) {
 		try {
 			switch (cmd.getName().toLowerCase()) {
 			case "pokechu22": { // "/pokechu22" command
 
 				return CommandPokechu22.onTabComplete(sender, cmd, label, args);
 			}
-			case "multichallenge": {
-				
-				return CommandMultiChallenge.onTabComplete(sender, cmd, label, args);
-			}
 			case "islandprotection": {
-				return CommandIslandProtection.onTabComplete(sender, cmd, label, args);
+				return CommandIslandProtection.onTabComplete(sender, cmd,
+						label, args);
 			}
 			case "tpcancel": {
 				return CommandTpCancel.onTabComplete(sender, cmd, label, args);
 			}
 			default: {
 				// Tell player.
-				sender.sendMessage("§4[SBE]: Unrecognised command: " + cmd.getName()
-						+ " (Label: " + label + ")");
+				sender.sendMessage("§4[SBE]: Unrecognised command: "
+						+ cmd.getName() + " (Label: " + label + ")");
 
 				// Log to console.
 				getLogger().warning(
@@ -232,8 +237,8 @@ public class SkyblockExtension extends JavaPlugin {
 
 				// Log to error handler.
 				ErrorHandler.logError(new GenericReport(
-						"Unrecognised command while tabCompleting: " + 
-								cmd.getName() + "(Label: "	+ label + ")"));
+						"Unrecognised command while tabCompleting: "
+								+ cmd.getName() + "(Label: " + label + ")"));
 				break;
 			}
 			}
@@ -258,8 +263,8 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 
 			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label, args, 
-					"Executing onTabComplete."));
+			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label,
+					args, "Executing onTabComplete."));
 
 			// Errors are typically things that shouldn't be caught (EG
 			// ThreadDeath), so they will be rethrown.
@@ -273,7 +278,7 @@ public class SkyblockExtension extends JavaPlugin {
 
 		return new ArrayList<String>();
 	}
-	
+
 	/**
 	 * Custom configuration for crashes.
 	 */
@@ -282,7 +287,7 @@ public class SkyblockExtension extends JavaPlugin {
 	 * And the file associated with {@linkplain #crashesConfig it}.
 	 */
 	private File crashesConfigFile = null;
-	
+
 	public void reloadCrashesConfig() {
 		if (crashesConfigFile == null) {
 			crashesConfigFile = new File(getDataFolder(), "crashes.yml");
@@ -293,13 +298,14 @@ public class SkyblockExtension extends JavaPlugin {
 		Reader defConfigStream;
 		try {
 			defConfigStream = new InputStreamReader(
-				this.getResource("crashes.yml"), "UTF8");
-		} catch (UnsupportedEncodingException e) { //Probably shouldn't happen...
+					this.getResource("crashes.yml"), "UTF8");
+		} catch (UnsupportedEncodingException e) { // Probably shouldn't
+													// happen...
 			getLogger().severe("Failed to create input stream reader.");
 			getLogger().log(Level.SEVERE, "Exception: ", e);
 			return;
 		}
-		
+
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration
 					.loadConfiguration(defConfigStream);
@@ -309,6 +315,7 @@ public class SkyblockExtension extends JavaPlugin {
 
 	/**
 	 * Gets the crashes config.
+	 * 
 	 * @return the crashes config.
 	 */
 	public FileConfiguration getCrashesConfig() {
@@ -337,7 +344,7 @@ public class SkyblockExtension extends JavaPlugin {
 	 * Saves the default crashes config.
 	 */
 	public void saveDefaultCrashesConfig() {
-		
+
 		if (crashesConfigFile == null) {
 			crashesConfigFile = new File(getDataFolder(), "crashes.yml");
 		}
@@ -345,7 +352,7 @@ public class SkyblockExtension extends JavaPlugin {
 			this.saveResource("crashes.yml", false);
 		}
 	}
-	
+
 	/**
 	 * Reloads all configs - Convenience method.
 	 */
@@ -353,15 +360,16 @@ public class SkyblockExtension extends JavaPlugin {
 		reloadConfig();
 		reloadCrashesConfig();
 	}
-	
+
 	/**
 	 * Saves all configs - Convenience method.
 	 */
 	public void saveAllConfigs() {
-		//saveConfig(); //DISABLED - no need to save it, and would overwrite stuff anyways.
+		// saveConfig(); //DISABLED - no need to save it, and would overwrite
+		// stuff anyways.
 		saveCrashesConfig();
 	}
-	
+
 	/**
 	 * Saves the default versions of all configs - Convenience method.
 	 */
@@ -369,11 +377,10 @@ public class SkyblockExtension extends JavaPlugin {
 		saveDefaultConfig();
 		saveDefaultCrashesConfig();
 	}
-	
+
 	/**
-	 * Gets the directory for island info.
-	 * This is, by default, the same as the dataFolder, but it will
-	 * use a different location during unit testing.  
+	 * Gets the directory for island info. This is, by default, the same as the
+	 * dataFolder, but it will use a different location during unit testing.
 	 * 
 	 * @return
 	 */
@@ -382,11 +389,12 @@ public class SkyblockExtension extends JavaPlugin {
 		if (returned != null) {
 			return returned;
 		}
-		
-		//Ugly...
-		returned = new File((new File(SkyblockExtension.class.getResource("/plugin.yml")
-				.getFile())).getParentFile().getParentFile(), "test-classes");
-		
+
+		// Ugly...
+		returned = new File((new File(SkyblockExtension.class.getResource(
+				"/plugin.yml").getFile())).getParentFile().getParentFile(),
+				"test-classes");
+
 		return returned;
 	}
 }
