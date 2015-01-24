@@ -109,6 +109,9 @@ public class SkyblockExtension extends JavaPlugin {
 		CommandPokechu22 pokechu22 = new CommandPokechu22();
 		this.getCommand("pokechu22").setExecutor(pokechu22);
 		this.getCommand("pokechu22").setTabCompleter(pokechu22);
+		CommandIslandProtection islandprotection = new CommandIslandProtection();
+		this.getCommand("islandprotection").setExecutor(islandprotection);
+		this.getCommand("islandprotection").setTabCompleter(islandprotection);
 	}
 
 	/**
@@ -140,10 +143,6 @@ public class SkyblockExtension extends JavaPlugin {
 			String[] args) {
 		try {
 			switch (cmd.getName().toLowerCase()) {
-			case "islandprotection": {
-				CommandIslandProtection.Run(sender, cmd, label, args);
-				break;
-			}
 			case "tpcancel": {
 				CommandTpCancel.Run(sender, cmd, label, args);
 				break;
@@ -182,10 +181,6 @@ public class SkyblockExtension extends JavaPlugin {
 			String label, String args[]) {
 		try {
 			switch (cmd.getName().toLowerCase()) {
-			case "islandprotection": {
-				return CommandIslandProtection.onTabComplete(sender, cmd,
-						label, args);
-			}
 			case "tpcancel": {
 				return CommandTpCancel.onTabComplete(sender, cmd, label, args);
 			}
