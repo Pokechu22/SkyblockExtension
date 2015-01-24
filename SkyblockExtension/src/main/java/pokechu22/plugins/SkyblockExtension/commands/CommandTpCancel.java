@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
-import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
-import us.talabrek.ultimateskyblock.uSkyBlock;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.commands.Commandtpa;
 
 /**
  * A command that cancels your own TPA.
@@ -22,8 +22,7 @@ import com.earth2me.essentials.commands.Commandtpa;
  * @author Pokechu22
  *
  */
-@SuppressWarnings("unused")
-public class CommandTpCancel {
+public class CommandTpCancel implements CommandExecutor, TabCompleter {
 	/**
 	 * Runnable for iterating thru all players and canceling TPAs.
 	 *  
@@ -64,21 +63,28 @@ public class CommandTpCancel {
 			}
 		}
 	}
-	public static void Run(CommandSender sender, Command cmd, 
+	public boolean onCommand(CommandSender sender, Command cmd, 
 			String label, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(
-					"§cYou must be a player to use this command.");
-			return;
+		try {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(
+						"§cYou must be a player to use this command.");
+				return true;
+			}
+			
+			Player player = (Player) sender;
+			
+			Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), 
+					new AsyncTpCanceler(player));
+			
+			return true;
+		} catch (Throwable e) {
+			ErrorHandler.logExceptionOnCommand(sender, cmd, label, args, e);
+			return true;
 		}
-		
-		Player player = (Player) sender;
-		
-		Bukkit.getScheduler().runTaskAsynchronously(SkyblockExtension.inst(), 
-				new AsyncTpCanceler(player));
 	}
 	
-	public static List<String> onTabComplete(CommandSender sender, 
+	public List<String> onTabComplete(CommandSender sender, 
 			Command cmd, String label, String args[]) {
 		return new ArrayList<String>();
 	}

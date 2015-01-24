@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +19,6 @@ import pokechu22.plugins.SkyblockExtension.commands.CommandPokechu22;
 import pokechu22.plugins.SkyblockExtension.commands.CommandTpCancel;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
-import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
@@ -112,6 +107,9 @@ public class SkyblockExtension extends JavaPlugin {
 		CommandIslandProtection islandprotection = new CommandIslandProtection();
 		this.getCommand("islandprotection").setExecutor(islandprotection);
 		this.getCommand("islandprotection").setTabCompleter(islandprotection);
+		CommandTpCancel tpcancel = new CommandTpCancel();
+		this.getCommand("tpcancel").setExecutor(tpcancel);
+		this.getCommand("tpcancel").setTabCompleter(tpcancel);
 	}
 
 	/**
@@ -122,91 +120,6 @@ public class SkyblockExtension extends JavaPlugin {
 		Config.saveConfig();
 		WitherWarner.save();
 		IslandInfoCache.dumpCache();
-	}
-
-	/**
-	 * Called when a command is run.
-	 * 
-	 * @param sender
-	 *            The person who sent the command.
-	 * @param cmd
-	 *            The command.
-	 * @param lable
-	 *            The given name of the command (EG "example" for "/example")
-	 * @param args
-	 *            The arguments provided to the command.
-	 * @return True if the command syntax was correct, false if you want the
-	 *         message in plugin.yml to be displayed.
-	 */
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		try {
-			switch (cmd.getName().toLowerCase()) {
-			case "tpcancel": {
-				CommandTpCancel.Run(sender, cmd, label, args);
-				break;
-			}
-			default: {
-				// Tell player.
-				sender.sendMessage("§4[SBE]: Unrecognised command: "
-						+ cmd.getName() + " (Label: " + label + ")");
-
-				// Log to console.
-				getLogger().warning(
-						"§4Unrecognised command: " + cmd.getName() + "(Label: "
-								+ label + ")");
-
-				// Log to error handler.
-				ErrorHandler.logError(new GenericReport(
-						"Unrecognised command while tabCompleting: "
-								+ cmd.getName() + "(Label: " + label + ")"));
-
-				break;
-			}
-			}
-
-		} catch (Throwable e) {
-			ErrorHandler.logExceptionOnCommand(sender, cmd, label, args, e);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Handles tab completion.
-	 */
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String label, String args[]) {
-		try {
-			switch (cmd.getName().toLowerCase()) {
-			case "tpcancel": {
-				return CommandTpCancel.onTabComplete(sender, cmd, label, args);
-			}
-			default: {
-				// Tell player.
-				sender.sendMessage("§4[SBE]: Unrecognised command: "
-						+ cmd.getName() + " (Label: " + label + ")");
-
-				// Log to console.
-				getLogger().warning(
-						"§4Unrecognised command: " + cmd.getName() + "(Label: "
-								+ label + ")");
-
-				// Log to error handler.
-				ErrorHandler.logError(new GenericReport(
-						"Unrecognised command while tabCompleting: "
-								+ cmd.getName() + "(Label: " + label + ")"));
-				break;
-			}
-			}
-
-		} catch (Throwable e) {
-			ErrorHandler.logExceptionOnTabComplete(sender, cmd, label, args, e);
-		}
-
-		return new ArrayList<String>();
 	}
 
 	/**
