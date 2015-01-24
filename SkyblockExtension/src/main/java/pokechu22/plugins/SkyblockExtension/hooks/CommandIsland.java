@@ -46,83 +46,87 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, 
 			String label, String[] args) {
-		if (allowIgnoreCase) {
-			//Only applied to first argument at this time, but that seems fine.
-			if (args.length > 0) {
-				args[0] = args[0].toLowerCase(Locale.ENGLISH);
-			}
-		}
-		
-		if (args.length > 0 && args[0].equalsIgnoreCase("levle")) {
-			//Correction for a stupid typo I make way too much.
-			sender.sendMessage("§eLevel is not spelled levle.");
-			args[0] = "level";
-		}
-		
-		if (args.length > 0 && (args[0].equalsIgnoreCase("sendhome")
-				|| args[0].equalsIgnoreCase("sendback")
-				|| args[0].equalsIgnoreCase("dismiss")
-				|| args[0].equalsIgnoreCase("awaywithyou"))) {
-			if (args.length > 1) {
-				sendHome(args[1], sender, label + " " + args[0], true, 
-						Arrays.copyOfRange(args, 1, args.length));
-			} else {
-				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
-						" " + args[0] + " <player> [message]");
-			}
-			return true;
-		}
-		if (args.length > 0 && args[0].equalsIgnoreCase("shiphome")) {
-			if (args.length == 2) {
-				if (sender instanceof Player) {
-					String playerName = ((Player)sender).getDisplayName();
-					sendHome(args[1], sender, label + " " + args[0], true,
-							"Woosh!  " + playerName + " has boxed you up and shipped you back to your island.");
+		try {
+			if (allowIgnoreCase) {
+				//Only applied to first argument at this time, but that seems fine.
+				if (args.length > 0) {
+					args[0] = args[0].toLowerCase(Locale.ENGLISH);
 				}
-			} else {
-				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
-						" " + args[0] + " <player>");
 			}
-			return true;
-		}
-		if (args.length > 0 && args[0].equalsIgnoreCase("fusrodah")) {
-			if (args.length == 2) {
-				sendHome(args[1], sender, label + " " + args[0], false,
-						"§lFUS RO DAH!");
-			} else {
-				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
-						" " + args[0] + " <player>");
+			
+			if (args.length > 0 && args[0].equalsIgnoreCase("levle")) {
+				//Correction for a stupid typo I make way too much.
+				sender.sendMessage("§eLevel is not spelled levle.");
+				args[0] = "level";
 			}
-			return true;
-		}
-		if (args.length > 0 && args[0].equalsIgnoreCase("sayonarasucker")) {
-			if (args.length == 2) {
-				sendHome(args[1], sender, label + " " + args[0], false,
-						"§oSayonara, sucker!");
-			} else {
-				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
-						" " + args[0] + " <player>");
-			}
-			return true;
-		}
-		
-		if (enableHelp2) {
-			//This override needs to occur beforehand.
-			if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
-				help2(sender, command, label, args);
+			
+			if (args.length > 0 && (args[0].equalsIgnoreCase("sendhome")
+					|| args[0].equalsIgnoreCase("sendback")
+					|| args[0].equalsIgnoreCase("dismiss")
+					|| args[0].equalsIgnoreCase("awaywithyou"))) {
+				if (args.length > 1) {
+					sendHome(args[1], sender, label + " " + args[0], true, 
+							Arrays.copyOfRange(args, 1, args.length));
+				} else {
+					sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+							" " + args[0] + " <player> [message]");
+				}
 				return true;
 			}
-		}
-		
-		boolean superResult = super.onCommand(sender, command, label, args);
-		if (enableHelp2) {
-			if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
-				alertAboutNewHelp(sender);
+			if (args.length > 0 && args[0].equalsIgnoreCase("shiphome")) {
+				if (args.length == 2) {
+					if (sender instanceof Player) {
+						String playerName = ((Player)sender).getDisplayName();
+						sendHome(args[1], sender, label + " " + args[0], true,
+								"Woosh!  " + playerName + " has boxed you up and shipped you back to your island.");
+					}
+				} else {
+					sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+							" " + args[0] + " <player>");
+				}
+				return true;
 			}
-		}
-		
-		if (superResult == false) {
-			sender.sendMessage("Syntax error; see /island help for usage.");
+			if (args.length > 0 && args[0].equalsIgnoreCase("fusrodah")) {
+				if (args.length == 2) {
+					sendHome(args[1], sender, label + " " + args[0], false,
+							"§lFUS RO DAH!");
+				} else {
+					sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+							" " + args[0] + " <player>");
+				}
+				return true;
+			}
+			if (args.length > 0 && args[0].equalsIgnoreCase("sayonarasucker")) {
+				if (args.length == 2) {
+					sendHome(args[1], sender, label + " " + args[0], false,
+							"§oSayonara, sucker!");
+				} else {
+					sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+							" " + args[0] + " <player>");
+				}
+				return true;
+			}
+			
+			if (enableHelp2) {
+				//This override needs to occur beforehand.
+				if (args.length > 0 && args[0].equalsIgnoreCase("help2")) {
+					help2(sender, command, label, args);
+					return true;
+				}
+			}
+			
+			boolean superResult = super.onCommand(sender, command, label, args);
+			if (enableHelp2) {
+				if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
+					alertAboutNewHelp(sender);
+				}
+			}
+			
+			if (superResult == false) {
+				sender.sendMessage("Syntax error; see /island help for usage.");
+			}
+		} catch (Throwable e) {
+			ErrorHandler.logExceptionOnCommand(sender, command, label, args, e);
 		}
 		return true;
 	}
@@ -806,8 +810,13 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, 
 			String label, String args[]) {
-		//TODO
-		return new ArrayList<String>(subCommands.keySet());
+		try {
+			//TODO
+			return new ArrayList<String>(subCommands.keySet());
+		} catch (Throwable e) {
+			ErrorHandler.logExceptionOnTabComplete(sender, cmd, label, args, e);
+		}
+		return new ArrayList<String>();
 	}
 	
 	/**
