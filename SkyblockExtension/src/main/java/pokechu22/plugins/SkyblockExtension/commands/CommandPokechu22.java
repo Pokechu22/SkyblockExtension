@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
@@ -36,7 +38,7 @@ import us.talabrek.ultimateskyblock.PlayerInfo;
  * @author Pokechu22
  * 
  */
-public class CommandPokechu22 {
+public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	
 	/**
 	 * Information for when help is created.
@@ -174,36 +176,41 @@ public class CommandPokechu22 {
 	 * @return True if the command syntax was correct, 
 	 *     false if you want the message in plugin.yml to be displayed. 
 	 */
-	public static void Run(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length == 0) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		try {
+			if (args.length == 0) {
+				sender.sendMessage("Usage: /" + label + " help");
+				return true;
+			} else {
+				switch (args[0].toLowerCase()) {
+				case "test": {
+					Test(sender, cmd, label, args);
+					return true;
+				}
+				case "crashes": {
+					Crashes(sender,cmd,label,args);
+					return true;
+				}
+				case "logo": {
+					//This is pointless, but is ported from the old version.
+					ShowLogo(sender);
+					return true;
+				}
+				case "help": {
+					Help(sender, cmd, label, args);
+					return true;
+				}
+				case "witherwarning": {
+					witherWarning(sender, cmd, label, args);
+					return true;
+				}
+				}
+			}
 			sender.sendMessage("Usage: /" + label + " help");
-			return;
-		} else {
-			switch (args[0].toLowerCase()) {
-			case "test": {
-				Test(sender, cmd, label, args);
-				return;
-			}
-			case "crashes": {
-				Crashes(sender,cmd,label,args);
-				return;
-			}
-			case "logo": {
-				//This is pointless, but is ported from the old version.
-				ShowLogo(sender);
-				return;
-			}
-			case "help": {
-				Help(sender, cmd, label, args);
-				return;
-			}
-			case "witherwarning": {
-				witherWarning(sender, cmd, label, args);
-				return;
-			}
-			}
+		} catch (Throwable e) {
+			ErrorHandler.logExceptionOnCommand(sender, cmd, label, args, e);
 		}
-		sender.sendMessage("Usage: /" + label + " help");
+		return true;
 	}
 	
 	/**
@@ -215,48 +222,52 @@ public class CommandPokechu22 {
 	 * @param args
 	 * @return
 	 */
-	public static List<String> onTabComplete(CommandSender sender, Command cmd, String label, String args[]) {
-		if (args.length == 0) {
-			return new ArrayList<String>(subCommands.keySet());
-		}
-		if (args.length == 1) {
-			return TabLimit(subCommands.keySet(), args[0]);
-		}
-		
-		if (args.length == 2) {
-			switch (args[0].toLowerCase()) {
-			case "help": {
-				return TabLimit(subCommands.keySet(), args[1]);
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String args[]) {
+		try {
+			if (args.length == 0) {
+				return new ArrayList<String>(subCommands.keySet());
 			}
-			case "test": {
-				return TabLimit(tests.keySet(), args[1]);
+			if (args.length == 1) {
+				return TabLimit(subCommands.keySet(), args[0]);
 			}
-			case "crashes": {
-				return TabLimit(crashesCommands.keySet(), args[1]);
-			}
-			case "logo": {
-				return new ArrayList<String>();
-			}
-			}
-		}
-		
-		if (args.length == 3) {
-			//Provides tab-completion for reset.
-			if (args[0].equalsIgnoreCase("crashes")) {
-				if (args[1].equalsIgnoreCase("reset")) {
-					ArrayList<String> returned = new ArrayList<>();
-					returned.add("" + getResetConfirmCode(sender));
-					return returned;
+			
+			if (args.length == 2) {
+				switch (args[0].toLowerCase()) {
+				case "help": {
+					return TabLimit(subCommands.keySet(), args[1]);
+				}
+				case "test": {
+					return TabLimit(tests.keySet(), args[1]);
+				}
+				case "crashes": {
+					return TabLimit(crashesCommands.keySet(), args[1]);
+				}
+				case "logo": {
+					return new ArrayList<String>();
+				}
 				}
 			}
-			if (args[0].equalsIgnoreCase("help")) {
-				if (args[1].equalsIgnoreCase("test")) {
-					return TabLimit(tests.keySet(), args[2]);
+			
+			if (args.length == 3) {
+				//Provides tab-completion for reset.
+				if (args[0].equalsIgnoreCase("crashes")) {
+					if (args[1].equalsIgnoreCase("reset")) {
+						ArrayList<String> returned = new ArrayList<>();
+						returned.add("" + getResetConfirmCode(sender));
+						return returned;
+					}
 				}
-				if (args[1].equalsIgnoreCase("crashes")) {
-					return TabLimit(crashesCommands.keySet(), args[2]);
+				if (args[0].equalsIgnoreCase("help")) {
+					if (args[1].equalsIgnoreCase("test")) {
+						return TabLimit(tests.keySet(), args[2]);
+					}
+					if (args[1].equalsIgnoreCase("crashes")) {
+						return TabLimit(crashesCommands.keySet(), args[2]);
+					}
 				}
 			}
+		} catch (Throwable e) {
+			ErrorHandler.logExceptionOnTabComplete(sender, cmd, label, args, e);
 		}
 		
 		return new ArrayList<String>();
@@ -270,7 +281,7 @@ public class CommandPokechu22 {
 	 * @param args
 	 * @Throws {@link Error} when args.length is 0, which should never happen.
 	 */
-	protected static void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Args.length should NEVER be 0.");
 		}
@@ -618,7 +629,7 @@ public class CommandPokechu22 {
 		return;
 	}
 	
-	private static int getResetConfirmCode(CommandSender sender) {
+	private int getResetConfirmCode(CommandSender sender) {
 		return sender.getName().hashCode();
 	}
 	
@@ -629,7 +640,7 @@ public class CommandPokechu22 {
 	 * @param label
 	 * @param args
 	 */
-	protected static void Test(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void Test(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length < 2) {
 			sender.sendMessage("§cError: Too few arguments.");
 			return;
@@ -916,7 +927,7 @@ public class CommandPokechu22 {
 	 * 
 	 * @param sender The CommandSender to show the logo to.
 	 */
-	private static void ShowLogo(CommandSender sender) {
+	private void ShowLogo(CommandSender sender) {
 		sender.sendMessage(logoText);
 	}
 	
@@ -936,7 +947,7 @@ public class CommandPokechu22 {
 	 * @param label
 	 * @param args
 	 */
-	protected static void Help(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void Help(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			//Shouldn't happen.
 			return;
@@ -1029,7 +1040,7 @@ public class CommandPokechu22 {
 	 * @param label
 	 * @param args
 	 */
-	protected static void witherWarning(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void witherWarning(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			return;
 		}

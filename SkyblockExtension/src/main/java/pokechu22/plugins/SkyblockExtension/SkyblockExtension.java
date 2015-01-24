@@ -106,6 +106,9 @@ public class SkyblockExtension extends JavaPlugin {
 		CommandMultiChallenge multichallenge = new CommandMultiChallenge();
 		this.getCommand("multichallenge").setExecutor(multichallenge);
 		this.getCommand("multichallenge").setTabCompleter(multichallenge);
+		CommandPokechu22 pokechu22 = new CommandPokechu22();
+		this.getCommand("pokechu22").setExecutor(pokechu22);
+		this.getCommand("pokechu22").setTabCompleter(pokechu22);
 	}
 
 	/**
@@ -137,12 +140,6 @@ public class SkyblockExtension extends JavaPlugin {
 			String[] args) {
 		try {
 			switch (cmd.getName().toLowerCase()) {
-			case "pokechu22": { // "/pokechu22" command
-
-				CommandPokechu22.Run(sender, cmd, label, args);
-
-				break;
-			}
 			case "islandprotection": {
 				CommandIslandProtection.Run(sender, cmd, label, args);
 				break;
@@ -185,10 +182,6 @@ public class SkyblockExtension extends JavaPlugin {
 			String label, String args[]) {
 		try {
 			switch (cmd.getName().toLowerCase()) {
-			case "pokechu22": { // "/pokechu22" command
-
-				return CommandPokechu22.onTabComplete(sender, cmd, label, args);
-			}
 			case "islandprotection": {
 				return CommandIslandProtection.onTabComplete(sender, cmd,
 						label, args);
