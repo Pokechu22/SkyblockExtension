@@ -2,8 +2,6 @@ package pokechu22.plugins.SkyblockExtension.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +14,6 @@ import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
-import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
@@ -96,34 +93,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				return returned;
 			}
 		} catch (Throwable e) {
-			// Tell the player that an error occurred.
-			sender.sendMessage("§4An unhandled error occoured while tab completing.");
-			sender.sendMessage("§4" + e.toString());
-
-			// Put the error message in the console / log file.
-			getLogger().severe("An error occoured:");
-			getLogger().log(Level.SEVERE, "Exception:", e);
-			getLogger().severe("Context: ");
-			getLogger().severe(
-					"    Command name: " + cmd.getName() + "(Label: " + commandLabel
-							+ ")");
-			getLogger().severe("    Arguments: ");
-			for (int i = 0; i < args.length; i++) {
-				// For each of the values output it with a number next to it.
-				getLogger().severe("        " + i + ": " + args[i]);
-			}
-
-			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, commandLabel,
-					args, "Executing onTabComplete."));
-
-			// Errors are typically things that shouldn't be caught (EG
-			// ThreadDeath), so they will be rethrown.
-			if (e instanceof Error) {
-				getLogger().severe("Rethrowing Error...");
-				sender.sendMessage("§4Rethrowing, as it extends error.");
-				throw e;
-			}
+			ErrorHandler.logExceptionOnTabComplete(sender, cmd, commandLabel, args, e);
 		}
 		
 		return new ArrayList<String>();
@@ -139,147 +109,120 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String args[]) {
 		try {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("§cOnly players are allowed to complete challenges!");
-			return true;
-		}
-		
-		Player player = (Player)sender;
-		
-		if (!Settings.challenges_allowChallenges)
-		{
-			sender.sendMessage("§cChallenges are not enabled.");
-			return true;
-		}
-		
-		if (!PermissionHandler.HasPermission(sender, "sbe.challenges.multicomplete")) {
-			return true;
-		}
-		
-		if (!uSkyBlock.getSkyBlockWorld().equals(player.getWorld())) //If not in skyblock world
-		{
-			sender.sendMessage("§cYou can only submit challenges in the skyblock world!");
-			return true;
-		}
-		
-		if (args.length == 0) {
-			sendHelp(sender, commandLabel);
-			return true;
-		}
-		
-		if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("§cOnly players are allowed to complete challenges!");
+				return true;
+			}
+			
+			Player player = (Player)sender;
+			
+			if (!Settings.challenges_allowChallenges)
+			{
+				sender.sendMessage("§cChallenges are not enabled.");
+				return true;
+			}
+			
+			if (!PermissionHandler.HasPermission(sender, "sbe.challenges.multicomplete")) {
+				return true;
+			}
+			
+			if (!uSkyBlock.getSkyBlockWorld().equals(player.getWorld())) //If not in skyblock world
+			{
+				sender.sendMessage("§cYou can only submit challenges in the skyblock world!");
+				return true;
+			}
+			
+			if (args.length == 0) {
 				sendHelp(sender, commandLabel);
 				return true;
 			}
-			sender.sendMessage("§cERROR: Too few parameters.");
-			sender.sendMessage("For syntax, do /" + commandLabel + " help");
-			return true;
-		}
-		
-		if (args.length == 2) {
-			int repititions;
-			String challengeName;
 			
-			try {
-				repititions = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				sender.sendMessage("§cFailed to parse repititions (Got " + args[0] + 
-						", expected Integer).");
-				sender.sendMessage("For usage, do /" + commandLabel + " help");
+			if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
+					sendHelp(sender, commandLabel);
+					return true;
+				}
+				sender.sendMessage("§cERROR: Too few parameters.");
+				sender.sendMessage("For syntax, do /" + commandLabel + " help");
 				return true;
 			}
 			
-			if (repititions < 0) {
-				sender.sendMessage("§cError: Repititions must be positive.  " + 
-						"(Got " + args[0] + ")");
+			if (args.length == 2) {
+				int repititions;
+				String challengeName;
 				
-				return true;
-			}
-			
-			if (repititions == 0) {
-				//It would be pointless if this were allowed.
-				sender.sendMessage("§cError: Repititions must not be 0.  ");
-				return true;
-			}
-			
-			challengeName = args[1];
-			if (!challengeExists(player, challengeName)) {
-				sender.sendMessage("§cChallenge " + challengeName + " does not exist!");
-				return true;
-			}
-			if (!challengeUnlocked(player, challengeName)) {
-				sender.sendMessage("§cChallenge " + challengeName + " has not been unlocked!");
-				return true;
-			}
-			if (!isChallengeRepeatable(challengeName)) {
-				sender.sendMessage("§cChallenge " + challengeName + " is not repeatable!");
-				return true;
-			}
-			if (!isChallengeAvailable(player, challengeName)) {
-				sender.sendMessage("§cYou have not unlocked " + challengeName + ".");
-				sender.sendMessage("§cTo be able to use a challenge with /" + commandLabel + 
-						", you must first complete it with the regular /c command.");
-				return true;
-			}
-			
-			if (!canCompleteChallenge(player, challengeName, repititions)) {
-				sender.sendMessage("§cYou don't have the items needed to complete " + 
-						challengeName + " " + repititions + " time" + 
-						(repititions == 1 ? "" : "s") + "!");
-				return true;
-			}
-			
-			for (int i = 0; i < repititions; i++) {
-				///Result of taking items.
-				boolean result;
-				//Takes the items required.
-				result = uSkyBlock.getInstance().takeRequired(player, challengeName, "onPlayer");
-				if (!result) {
-					throw new RuntimeException("Player does not have all needed items " + 
-							"despite canCompleteChallenge returning true!");
+				try {
+					repititions = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					sender.sendMessage("§cFailed to parse repititions (Got " + args[0] + 
+							", expected Integer).");
+					sender.sendMessage("For usage, do /" + commandLabel + " help");
+					return true;
 				}
 				
-				//Give the reward.
-				uSkyBlock.getInstance().giveReward(player, challengeName);
+				if (repititions < 0) {
+					sender.sendMessage("§cError: Repititions must be positive.  " + 
+							"(Got " + args[0] + ")");
+					
+					return true;
+				}
+				
+				if (repititions == 0) {
+					//It would be pointless if this were allowed.
+					sender.sendMessage("§cError: Repititions must not be 0.  ");
+					return true;
+				}
+				
+				challengeName = args[1];
+				if (!challengeExists(player, challengeName)) {
+					sender.sendMessage("§cChallenge " + challengeName + " does not exist!");
+					return true;
+				}
+				if (!challengeUnlocked(player, challengeName)) {
+					sender.sendMessage("§cChallenge " + challengeName + " has not been unlocked!");
+					return true;
+				}
+				if (!isChallengeRepeatable(challengeName)) {
+					sender.sendMessage("§cChallenge " + challengeName + " is not repeatable!");
+					return true;
+				}
+				if (!isChallengeAvailable(player, challengeName)) {
+					sender.sendMessage("§cYou have not unlocked " + challengeName + ".");
+					sender.sendMessage("§cTo be able to use a challenge with /" + commandLabel + 
+							", you must first complete it with the regular /c command.");
+					return true;
+				}
+				
+				if (!canCompleteChallenge(player, challengeName, repititions)) {
+					sender.sendMessage("§cYou don't have the items needed to complete " + 
+							challengeName + " " + repititions + " time" + 
+							(repititions == 1 ? "" : "s") + "!");
+					return true;
+				}
+				
+				for (int i = 0; i < repititions; i++) {
+					///Result of taking items.
+					boolean result;
+					//Takes the items required.
+					result = uSkyBlock.getInstance().takeRequired(player, challengeName, "onPlayer");
+					if (!result) {
+						throw new RuntimeException("Player does not have all needed items " + 
+								"despite canCompleteChallenge returning true!");
+					}
+					
+					//Give the reward.
+					uSkyBlock.getInstance().giveReward(player, challengeName);
+				}
+				
+				return true;
 			}
 			
-			return true;
-		}
-		
-		if (args.length >= 3) {
-			sender.sendMessage("§cERROR: Too many parameters.");
-			sender.sendMessage("For syntax, do /" + commandLabel + " help");
-		}
+			if (args.length >= 3) {
+				sender.sendMessage("§cERROR: Too many parameters.");
+				sender.sendMessage("For syntax, do /" + commandLabel + " help");
+			}
 		} catch (Throwable e) {
-			// Tell the player that an error occurred.
-			sender.sendMessage("§4An unhandled error occoured while preforming this command.");
-			sender.sendMessage("§4" + e.toString());
-
-			// Put the error message in the console / log file.
-			getLogger().severe("An error occoured:");
-			getLogger().log(Level.SEVERE, "Exception:", e);
-			getLogger().severe("Context: ");
-			getLogger().severe(
-					"    Command name: " + cmd.getName() + "(Label: " + commandLabel
-							+ ")");
-			getLogger().severe("    Arguments: ");
-			for (int i = 0; i < args.length; i++) {
-				// For each of the values output it with a number next to it.
-				getLogger().severe("        " + i + ": " + args[i]);
-			}
-
-			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, commandLabel,
-					args, "Executing onCommand."));
-
-			// Errors are typically things that shouldn't be caught (EG
-			// ThreadDeath), so they will be rethrown.
-			if (e instanceof Error) {
-				getLogger().severe("Rethrowing Error...");
-				sender.sendMessage("§4Rethrowing, as it extends error.");
-				throw e;
-			}
+			ErrorHandler.logExceptionOnCommand(sender, cmd, commandLabel, args, e);
 		}
 		return true;
 	}
@@ -555,9 +498,5 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		}
 		
 		return true;
-	}
-	
-	private Logger getLogger() {
-		return SkyblockExtension.inst().getLogger();
 	}
 }

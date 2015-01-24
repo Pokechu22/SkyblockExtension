@@ -2,8 +2,11 @@ package pokechu22.plugins.SkyblockExtension.errorhandling;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
@@ -43,6 +46,68 @@ public class ErrorHandler {
 		errors.add(c);
 		if (broadcast) {
 			broadcastError(c);
+		}
+	}
+
+	public static void logExceptionOnCommand(CommandSender sender, Command cmd, String commandLabel, String args[], Throwable e) {
+		// Tell the player that an error occurred.
+		sender.sendMessage("§4An unhandled error occoured while preforming this command.");
+		sender.sendMessage("§4" + e.toString());
+
+		// Put the error message in the console / log file.
+		getLogger().severe("An error occoured:");
+		getLogger().log(Level.SEVERE, "Exception:", e);
+		getLogger().severe("Context: ");
+		getLogger().severe(
+				"    Command name: " + cmd.getName() + "(Label: " + commandLabel
+						+ ")");
+		getLogger().severe("    Arguments: ");
+		for (int i = 0; i < args.length; i++) {
+			// For each of the values output it with a number next to it.
+			getLogger().severe("        " + i + ": " + args[i]);
+		}
+
+		// Log the error for command access.
+		ErrorHandler.logError(new ThrowableReport(e, sender, cmd, commandLabel,
+				args, "Executing onCommand."));
+
+		// Errors are typically things that shouldn't be caught (EG
+		// ThreadDeath), so they will be rethrown.
+		if (e instanceof Error) {
+			getLogger().severe("Rethrowing Error...");
+			sender.sendMessage("§4Rethrowing, as it extends error.");
+			throw (Error)e; //Why this cast is necessary here, I don't know.
+		}
+	}
+	
+	public static void logExceptionOnTabComplete(CommandSender sender, Command cmd, String commandLabel, String args[], Throwable e) {
+		// Tell the player that an error occurred.
+		sender.sendMessage("§4An unhandled error occoured while tab completing.");
+		sender.sendMessage("§4" + e.toString());
+
+		// Put the error message in the console / log file.
+		getLogger().severe("An error occoured:");
+		getLogger().log(Level.SEVERE, "Exception:", e);
+		getLogger().severe("Context: ");
+		getLogger().severe(
+				"    Command name: " + cmd.getName() + "(Label: " + commandLabel
+						+ ")");
+		getLogger().severe("    Arguments: ");
+		for (int i = 0; i < args.length; i++) {
+			// For each of the values output it with a number next to it.
+			getLogger().severe("        " + i + ": " + args[i]);
+		}
+
+		// Log the error for command access.
+		ErrorHandler.logError(new ThrowableReport(e, sender, cmd, commandLabel,
+				args, "Executing onTabComplete."));
+
+		// Errors are typically things that shouldn't be caught (EG
+		// ThreadDeath), so they will be rethrown.
+		if (e instanceof Error) {
+			getLogger().severe("Rethrowing Error...");
+			sender.sendMessage("§4Rethrowing, as it extends error.");
+			throw (Error)e;
 		}
 	}
 	
@@ -237,5 +302,9 @@ public class ErrorHandler {
 		}
 		
 		return errors.get(CrashID);
+	}
+	
+	private static Logger getLogger() {
+		return SkyblockExtension.inst().getLogger();
 	}
 }

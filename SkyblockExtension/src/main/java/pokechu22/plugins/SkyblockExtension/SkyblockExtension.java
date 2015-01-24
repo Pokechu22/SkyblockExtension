@@ -171,36 +171,7 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 
 		} catch (Throwable e) {
-
-			// Tell the player that an error occurred.
-			sender.sendMessage("§4An unhandled error occoured while preforming this command.");
-			sender.sendMessage("§4" + e.toString());
-
-			// Put the error message in the console / log file.
-			getLogger().severe("An error occoured:");
-			getLogger().log(Level.SEVERE, "Exception:", e);
-			getLogger().severe("Context: ");
-			getLogger().severe(
-					"    Command name: " + cmd.getName() + "(Label: " + label
-							+ ")");
-			getLogger().severe("    Arguments: ");
-			for (int i = 0; i < args.length; i++) {
-				// For each of the values output it with a number next to it.
-				getLogger().severe("        " + i + ": " + args[i]);
-			}
-
-			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label,
-					args, "Executing onCommand."));
-
-			// Errors are typically things that shouldn't be caught (EG
-			// ThreadDeath), so they will be rethrown.
-			if (e instanceof Error) {
-				getLogger().severe("Rethrowing Error...");
-				sender.sendMessage("§4Rethrowing, as it extends error.");
-				throw e;
-			}
-
+			ErrorHandler.logExceptionOnCommand(sender, cmd, label, args, e);
 		}
 
 		return true;
@@ -244,36 +215,7 @@ public class SkyblockExtension extends JavaPlugin {
 			}
 
 		} catch (Throwable e) {
-
-			// Tell the player that an error occurred.
-			sender.sendMessage("§4An unhandled error occoured while tab completing.");
-			sender.sendMessage("§4" + e.toString());
-
-			// Put the error message in the console / log file.
-			getLogger().severe("An error occoured:");
-			getLogger().log(Level.SEVERE, "Exception:", e);
-			getLogger().severe("Context: ");
-			getLogger().severe(
-					"    Command name: " + cmd.getName() + "(Label: " + label
-							+ ")");
-			getLogger().severe("    Arguments: ");
-			for (int i = 0; i < args.length; i++) {
-				// For each of the values output it with a number next to it.
-				getLogger().severe("        " + i + ": " + args[i]);
-			}
-
-			// Log the error for command access.
-			ErrorHandler.logError(new ThrowableReport(e, sender, cmd, label,
-					args, "Executing onTabComplete."));
-
-			// Errors are typically things that shouldn't be caught (EG
-			// ThreadDeath), so they will be rethrown.
-			if (e instanceof Error) {
-				getLogger().severe("Rethrowing Error...");
-				sender.sendMessage("§4Rethrowing, as it extends error.");
-				throw e;
-			}
-
+			ErrorHandler.logExceptionOnTabComplete(sender, cmd, label, args, e);
 		}
 
 		return new ArrayList<String>();
