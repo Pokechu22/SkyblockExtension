@@ -59,21 +59,51 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			args[0] = "level";
 		}
 		
-		if (args.length > 0 && args[0].equalsIgnoreCase("sendhome")) {
-			sendHome(Arrays.copyOfRange(args, 1, args.length), sender, label + " sendhome");
+		if (args.length > 0 && (args[0].equalsIgnoreCase("sendhome")
+				|| args[0].equalsIgnoreCase("sendback")
+				|| args[0].equalsIgnoreCase("dismiss")
+				|| args[0].equalsIgnoreCase("awaywithyou"))) {
+			if (args.length > 1) {
+				sendHome(args[1], sender, label + " " + args[0], true, 
+						Arrays.copyOfRange(args, 1, args.length));
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player> [message]");
+			}
 			return true;
-			
-			//TODO: ALt names.
-			/*
-Command User who named it Message 
-/island sendhome <player> [message]   xsmallz14x  ,  DanTheMan497    
-/island sendback <player> [message]   herobrine102245    
-/island dismiss <player> [message]   Bousce    
-/island awaywithyou <player> [message]   Yankeelova20    
-/island shiphome <player>   craftmanphilip   Wooosh! You have been boxed up and shipped back to your island. 
-/island fusrodah <player>   Yankeelova20   §lFUS RO DAH! 
-/island sayonarasucker <player>   Creep_52   Sayonara, sucker! 
-			 */
+		}
+		if (args.length > 0 && args[0].equalsIgnoreCase("shiphome")) {
+			if (args.length == 2) {
+				if (sender instanceof Player) {
+					String playerName = ((Player)sender).getDisplayName();
+					sendHome(args[1], sender, label + " " + args[0], true,
+							"Woosh!  " + playerName + " has boxed you up and shipped you back to your island.");
+				}
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
+		}
+		if (args.length > 0 && args[0].equalsIgnoreCase("fusrodah")) {
+			if (args.length == 2) {
+				sendHome(args[1], sender, label + " " + args[0], false,
+						"§lFUS RO DAH!");
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
+		}
+		if (args.length > 0 && args[0].equalsIgnoreCase("sayonarasucker")) {
+			if (args.length == 2) {
+				sendHome(args[1], sender, label + " " + args[0], false,
+						"§oSayonara, sucker!");
+			} else {
+				sender.sendMessage("§cInvalid format.  Syntax: /" + label + 
+						" " + args[0] + " <player>");
+			}
+			return true;
 		}
 		
 		if (enableHelp2) {
@@ -686,7 +716,74 @@ Command User who named it Message
 				//Help
 				"Nicer help system.\nIMPORTANT NOTE: This command is " +
 				"infinitely better than §6/island help§f.\n" +
-				"Usage:\n§6/island help2 [subCommands]§f."
+				"Usage:\n§6/island help2 [subCommands]§f.",
+				//Perm
+				"",
+				//Conf
+				""
+		});
+		map.put("sendhome", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sendhome <player> [message]§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("sendback", new String[]{
+				////Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sendback <player> [message]§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("dismiss", new String[]{
+				////Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island dismiss <player> [message]§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("awaywithyou", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island awaywithyou <player> [message]§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("shiphome", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island shiphome <player>§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("fusrodah", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island fusrodah <player>§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
+		});
+		map.put("sayonarasucker", new String[]{
+				//Help
+				"Sends another player back to your island.\n" +
+				"Usage:\n§6/island sayonarasucker <player>§f.",
+				//Perm
+				"sbe.island.sendhome",
+				//Conf
+				""
 		});
 		
 		
@@ -1061,6 +1158,25 @@ Command User who named it Message
 	public static boolean membersCanSendHome = true;
 	
 	/**
+	 * 
+	 * @param args
+	 * @param senderC
+	 * @param label
+	 * @param message
+	 */
+	public void sendHome(String player, CommandSender senderC, String label, 
+			boolean includeSender, String... messageWords) {
+		StringBuilder message = new StringBuilder();
+		for (int i = 0; i < messageWords.length; i++) {
+			message.append(messageWords[i]);
+			if (i != messageWords.length - 1) {
+				message.append(" ");
+			}
+		}
+		sendHome(player, senderC, label, includeSender, message.toString());
+	}
+	
+	/**
 	 * Sends a player back to their island.
 	 * 
 	 * @param args
@@ -1068,7 +1184,8 @@ Command User who named it Message
 	 * @param label The entire set of commands to here.
 	 */
 	@SuppressWarnings("deprecation")
-	public void sendHome(String[] args, CommandSender senderC, String label) {
+	public void sendHome(String player, CommandSender senderC, String label, 
+			boolean includeSender, String message) {
 		final Player sender;
 		final Player sent;
 		
@@ -1087,7 +1204,7 @@ Command User who named it Message
 		senderInfo = IslandUtils.getPlayerInfo(sender);
 		
 		//Validate that the sender has permission.
-		if (!PermissionHandler.HasPermission(sender, "sbe.island.expunge")) {
+		if (!PermissionHandler.HasPermission(sender, "sbe.island.sendhome")) {
 			sender.sendMessage("§cYou don't have permission to use this command!");
 			return;
 		}
@@ -1106,52 +1223,47 @@ Command User who named it Message
 			}
 		}
 		
-		//Provide help if syntax is invalid.
-		if (args.length < 1) {
-			sender.sendMessage("§cUsage: §4/" + label + " <player> [message...]§c.");
-			sender.sendMessage("§fThis command moves the specified player back to their island from your own island.");
-			sender.sendMessage("§fIt can only be used if the other player is A) currently standing within your island's bounderies, and B) is not a member of your island.  It also can only be used by the island owner.");
-			return;
-		}
-		
 		//Now validate the sent player.
 		
-		sent = Bukkit.getPlayer(args[0]);
+		sent = Bukkit.getPlayer(player);
 		
 		//Validate that the sent player is online.
 		if (sent == null) {
-			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+			sender.sendMessage("§cPlayer " + player + " was not found.");
 			return;
 		}
-		if (!sent.getName().equalsIgnoreCase(args[0])) {
-			sender.sendMessage("§cPlayer " + args[0] + " was not found.");
+		if (!sent.getName().equalsIgnoreCase(player)) {
+			sender.sendMessage("§cPlayer " + player + " was not found.");
 			sender.sendMessage("§cDid you mean " + sent.getName() + "?");
 			return;
 		}
 		
-		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.noexpunge")) {
+		if (PermissionHandler.HasPermissionSilent(sent, "sbe.mod.nosendhome")) {
 			sender.sendMessage(sent.getDisplayName() + "§c is a moderator and cannot be sent.");
 			return;
 		}
 		
 		sentInfo = IslandUtils.getPlayerInfo(sent);//Process the location of the other player.
 		if (sentInfo != null) {
-			if (IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
-				sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
-				return;
-			}
-			
-			//Validate that the sent player is on the other player's island.
-			if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
-				sender.sendMessage("§cPlayer " + args[0] + "§c is not currently on your island.");
-				return;
+			//If that permission is enabled, ignore it.
+			if (!sender.hasPermission("sbe.mod.sendhomeall")) {
+				if (IslandUtils.playersShareIslands(sent.getName(), sender.getName())) {
+					sender.sendMessage("§cCannot teleport " + sent.getDisplayName() + "§c as they are a member of your island.");
+					return;
+				}
+				
+				//Validate that the sent player is on the other player's island.
+				if (!IslandUtils.locationIsOnPlayerIsland(sent.getLocation(), sender.getName())) {
+					sender.sendMessage("§cPlayer " + player + "§c is not currently on your island.");
+					return;
+				}
 			}
 		} //If sentInfo is null, we allow transport.
 		
 		sender.sendMessage("§aSending " + sent.getDisplayName() +
 				" to their island.");
 		
-		sender.sendMessage("§aSending " + args[0] + " to their island.");
+		sender.sendMessage("§aSending " + player + " to their island.");
 		if (uSkyBlock.getInstance().hasIsland(sent.getName())) {
 			uSkyBlock.getInstance().homeTeleport(sent);
 		} else {
@@ -1170,22 +1282,12 @@ Command User who named it Message
 		}
 		
 		//Send a message to the player to explain.
-		if (args.length == 1) {
+		if (includeSender) {
 			sent.sendMessage(sender.getDisplayName() + 
 					" has sent you back to your island.");
-		} else {
-			StringBuilder message = new StringBuilder();
-			
-			for (int i = 1 /* intentional, as the first param is player */; i < args.length; i++) {
-				message.append(args[i]);
-				if (i != args.length - 1) {
-					message.append(" ");
-				}
-			}
-			
-			sent.sendMessage(sender.getDisplayName() + 
-					" has sent you back to your island.");
-			sent.sendMessage(message.toString());
+		}
+		if (message != null && !message.equalsIgnoreCase("")) {
+			sent.sendMessage(message);
 		}
 	}
 }

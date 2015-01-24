@@ -1,8 +1,12 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -384,8 +388,20 @@ public class IslandInfoCache {
 		/**
 		 * Creates the list of players that are to be checked.
 		 */
+		@SuppressWarnings("unchecked")
 		private void initPlayersList() {
-			Player[] allPlayers = Bukkit.getOnlinePlayers();
+			List<Player> allPlayers;
+			
+			//TODO Ugly code to try and deal with my development environment using two types...
+			Object temp = Bukkit.getOnlinePlayers();
+			if (temp instanceof Player[]) {
+				allPlayers = Arrays.asList((Player[])temp);
+			} else if (temp instanceof Collection<?>) {
+				allPlayers = new ArrayList<Player>((Collection<Player>)temp);
+			} else {
+				throw new Error("Failed to parse Bukkit.getOnlinePlayers(): " +
+						"returned unknown type " + temp.getClass());
+			}
 			for (Player player : allPlayers) {
 				if (player.getWorld().equals(uSkyBlock.getSkyBlockWorld())) {
 					playersOnWorld.add(player.getUniqueId());
