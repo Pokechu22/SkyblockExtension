@@ -7,10 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
@@ -66,53 +68,76 @@ public class CommandIslandProtection implements CommandExecutor, TabCompleter {
 	{
 		try {
 			if (args.length == 0) {
-				//Produce tiers from scratch
-				return tiers;
+				List<String> returned = new ArrayList<>();
+				if (sender instanceof Player) {
+					//Add the sender to the start of the list, to simplify
+					//modification of one's own island.
+					returned.add(((Player)sender).getName());
+				}
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					returned.add(player.getName());
+				}
+				return returned;
 			}
 			if (args.length == 1) {
-				//Produce tiers based off of args.
-				return TabLimit(tiers, args[0]);
+				List<String> returned = new ArrayList<>();
+				if (sender instanceof Player) {
+					//Add the sender to the start of the list, to simplify
+					//modification of one's own island.
+					returned.add(((Player)sender).getName());
+				}
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					returned.add(player.getName());
+				}
+				return TabLimit(returned, args[0]);
 			}
 			if (args.length == 2) {
+				//Produce tiers based off of args.
+				return TabLimit(tiers, args[1]);
+			}
+			if (args.length == 3) {
 				//Validate tiers.
-				if (!tiers.contains(args[0])) {
+				if (!tiers.contains(args[1])) {
 					return new ArrayList<String>();
 				}
 				
 				//Produce flag name.
-				return TabLimit(flags, args[1]);
+				return TabLimit(flags, args[2]);
 			}
-			if (args.length == 3) {
+			if (args.length == 4) {
 				//Validate tiers.
-				if (!tiers.contains(args[0])) {
+				if (!tiers.contains(args[1])) {
+					System.out.println("invalid teir");
 					return new ArrayList<String>();
 				}
 				
+				System.out.println("args[2]: \"" + args[2] + "\"");
 				//Validate flag.
-				if (!IslandProtectionDataSetFlag.flagTypes.entrySet().contains(args[1])) {
+				if (!IslandProtectionDataSetFlag.flagTypes.keySet().contains(args[2])) {
+					System.out.println("invalid flag");
 					return new ArrayList<String>();
 				}
 				
-				return TabLimit(IslandProtectionDataSetFlag.flagTypes.get(args[1]).getAllowedActions(), args[2]);
+				return TabLimit(IslandProtectionDataSetFlag.flagTypes.get(args[2]).getAllowedActions(), args[3]);
 			}
 			
-			if (args.length >= 4) {
+			if (args.length >= 5) {
 				//Validate tiers.
-				if (!tiers.contains(args[0])) {
+				if (!tiers.contains(args[1])) {
 					return new ArrayList<String>();
 				}
 				
 				//Validate flag.
-				if (!IslandProtectionDataSetFlag.flagTypes.entrySet().contains(args[1])) {
+				if (!IslandProtectionDataSetFlag.flagTypes.keySet().contains(args[2])) {
 					return new ArrayList<String>();
 				}
 				
 				//Validate action.
-				if (!IslandProtectionDataSetFlag.flagTypes.get(args[1]).canPreformAction(args[3])) {
+				if (!IslandProtectionDataSetFlag.flagTypes.get(args[2]).canPreformAction(args[3])) {
 					return new ArrayList<String>();
 				}
 			
-				//TODO: Get the location.
+				//TODO Tabcomplete flag using it's function to do so.
 				return new ArrayList<String>();
 			}
 		} catch (Throwable e) {
