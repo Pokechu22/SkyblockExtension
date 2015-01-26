@@ -1,6 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.hooks;
 
 import static pokechu22.plugins.SkyblockExtension.util.StringUtil.trailOff;
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -845,8 +846,13 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command cmd, 
 			String label, String args[]) {
 		try {
+			if (args.length == 0) {
+				new ArrayList<String>(subCommands.keySet());	
+			}
+			if (args.length == 1) {
+				return TabLimit(new ArrayList<String>(subCommands.keySet()), args[0]);
+			}
 			//TODO
-			return new ArrayList<String>(subCommands.keySet());
 		} catch (Throwable e) {
 			ErrorHandler.logExceptionOnTabComplete(sender, cmd, label, args, e);
 		}
