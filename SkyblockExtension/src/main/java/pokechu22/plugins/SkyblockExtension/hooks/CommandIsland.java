@@ -106,6 +106,31 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				}
 				return true;
 			}
+			if (args.length > 0 && args[0].equalsIgnoreCase("protection")) {
+				if (!(sender instanceof Player)) {
+					sender.sendMessage("§cBecause bukkit does not have " +
+							"a method for CommandSenders to directly " +
+							"execute commands, you must be a player " +
+							"to use this command.");
+					sender.sendMessage("§cYou can use /isprot, though.");
+					return true;
+				} else {
+					Player player = (Player)sender;
+					
+					String[] newArgs = args.clone();
+					//Replace "protection" with the player's name, which allows
+					//use with /isprot.
+					newArgs[0] = sender.getName();
+					
+					StringBuilder newCommand = new StringBuilder("/isprot");
+					for (String s : newArgs) {
+						newCommand.append(' ').append(s);
+					}
+					
+					player.chat(newCommand.toString());
+					return true;
+				}
+			}
 			
 			if (enableHelp2) {
 				//This override needs to occur beforehand.
@@ -788,6 +813,15 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 				"sbe.island.sendhome",
 				//Conf
 				""
+		});
+		map.put("protection", new String[] {
+				//Help
+				"Allows modification of island protection.\n" +
+				"Serves as a wrapper for §6/isprot§f.",
+				//Perm
+				"sbe.protection.self.view",
+				//Conf
+				"_is_owner"
 		});
 		
 		
