@@ -6,7 +6,16 @@ SkyblockExtension (SBE) is a modernized version of my very old skyblock plugin, 
 Features
 --------
 
-<!-- TODO -->
+The following features are included (~~struck through~~ lines are not yet finished)
+
+ * ~~(NYF) the ability to configure exactly what different ranks of players are allowed to do on your island~~
+ * ~~(NYF) the ability to temporarily invite other players to your island (guests) without them losing their island~~
+ * `/multichallenge` command, which performs the same challenge multiple times at once (to negate the requirement of spamming `/c`)
+ * Command that returns foreign visitors to on your island to theirs (`/island sendhome`)
+ * Configuration of how many points a block is island-level wise
+ * A command that retracts a previously sent TPA (for use when you tpa the wrong person) 
+ * Actual help for `/island` provides some level of information!  (`/island help2`)
+ * Functionality to give players a warning that Withers are 4 blocks high and not 3
 
 About the old version
 ---------------------
