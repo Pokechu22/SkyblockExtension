@@ -39,20 +39,22 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 	 * <br>
 	 * <i>(If you wish to not log at all, you can do so by calling
 	 * {@linkplain #USkyBlockPlayerInfoConverter(Logger) one}
-	 * {@linkplain #USkyBlockPlayerInfoConverter(PrintStream) of}
-	 * {@linkplain #USkyBlockPlayerInfoConverter(PrintStream, Logger) the}
-	 * other constructors with <code>null</code> as the argument(s).)</i>
+	 * {@linkplain #USkyBlockPlayerInfoConverter(PrintStream, Logger) of}
+	 * the other constructors which takes a Logger with <code>null</code>
+	 * for that Logger.)</i>
 	 */
 	public USkyBlockPlayerInfoConverter() {
-		this(SkyblockExtension.inst().getLogger());
+		this.logger = SkyblockExtension.inst().getLogger();
 	}
 	
 	/**
-	 * Creates a converter with logging to a stream.
+	 * Creates a converter with logging to a stream, as well as the 
+	 * default SBE logger.
 	 * <br>
 	 * @param stream The stream to log to.  If null, no logging occurs.
 	 */
 	public USkyBlockPlayerInfoConverter(PrintStream stream) {
+		this.logger = SkyblockExtension.inst().getLogger();
 		this.logStream = stream;
 	}
 	
