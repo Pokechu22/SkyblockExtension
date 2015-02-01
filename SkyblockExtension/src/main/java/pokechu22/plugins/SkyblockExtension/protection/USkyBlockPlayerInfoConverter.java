@@ -117,42 +117,43 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 				continue;
 			}
 			
-			if (logger != null) {
-				logger.fine("Porting " + name + "'s info.");
-			}
-			if (logStream != null) {
-				logStream.println("Porting " + name + "'s info.");
-			}
-			
-			PlayerInfo info = uSkyBlock.getInstance().readPlayerFile(name);
-			
-			ignored.remove(info.getPartyLeader());
-			ignored.removeAll(info.getMembers());
-			
-			if (info.getHasIsland()) {
-				//Save the value to disk.
-				try {
-					IslandInfo.convertFromPlayerInfo(info).saveToDisk();
-				} catch (Exception e) {
-					e.printStackTrace();
-					if (logger != null) {
-						logger.log(Level.SEVERE, "Error while porting " +
-								name + "'s info:  ", e);
-					}
-					if (logStream != null) {
-						logStream.println("Error while porting " +
-								name + "'s info:  " + e.toString());
-						e.printStackTrace(logStream);
-					}
-					continue;
+			try {
+				if (logger != null) {
+					logger.fine("Porting " + name + "'s info.");
 				}
-			}
-			
-			if (logger != null) {
-				logger.fine(name + "'s info was successfully ported!");
-			}
-			if (logStream != null) {
-				logStream.println(name + "'s info was sucessfully ported!");
+				if (logStream != null) {
+					logStream.println("Porting " + name + "'s info.");
+				}
+				
+				PlayerInfo info = uSkyBlock.getInstance().readPlayerFile(name);
+				
+				if (info.getHasIsland() || info.getHasParty()) {
+					//Save the value to disk.
+					IslandInfo.convertFromPlayerInfo(info).saveToDisk();
+				}
+				
+				ignored.add(info.getPlayerName());
+				ignored.add(info.getPartyLeader());
+				ignored.addAll(info.getMembers());
+				
+				if (logger != null) {
+					logger.fine(name + "'s info was successfully ported!");
+				}
+				if (logStream != null) {
+					logStream.println(name + "'s info was sucessfully ported!");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (logger != null) {
+					logger.log(Level.SEVERE, "Error while porting " +
+							name + "'s info:  ", e);
+				}
+				if (logStream != null) {
+					logStream.println("Error while porting " +
+							name + "'s info:  " + e.toString());
+					e.printStackTrace(logStream);
+				}
+				continue;
 			}
 		}
 		
