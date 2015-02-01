@@ -1,12 +1,12 @@
 package pokechu22.plugins.SkyblockExtension.protection;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -25,29 +25,56 @@ import us.talabrek.ultimateskyblock.uSkyBlock;
  */
 public class USkyBlockPlayerInfoConverter implements Runnable {
 	/**
-	 * Log messages to the player?
+	 * A stream to log to.  If null, no logging occurs.
 	 */
-	private boolean hasLogging;
+	private PrintStream logStream;
 	
 	/**
-	 * Where to send the logging to.
-	 * Most commonly, will be a PlayerPrintStream.
+	 * A logger to log to.  If null, no logging occurs.
 	 */
-	private PrintStream logTo;
+	private Logger logger;
 	
 	/**
-	 * Creates a converter with no logging.
+	 * Creates a converter that logs to the default SBE logger.
+	 * <br>
+	 * <i>(If you wish to not log at all, you can do so by calling
+	 * {@linkplain #USkyBlockPlayerInfoConverter(Logger) one}
+	 * {@linkplain #USkyBlockPlayerInfoConverter(PrintStream) of}
+	 * {@linkplain #USkyBlockPlayerInfoConverter(PrintStream, Logger) the}
+	 * other constructors with <code>null</code> as the argument(s).)</i>
 	 */
 	public USkyBlockPlayerInfoConverter() {
-		this.hasLogging = false;
+		this(SkyblockExtension.inst().getLogger());
 	}
 	
 	/**
-	 * Creates a converter with logging.
+	 * Creates a converter with logging to a stream.
+	 * <br>
+	 * @param stream The stream to log to.  If null, no logging occurs.
 	 */
 	public USkyBlockPlayerInfoConverter(PrintStream stream) {
-		this.hasLogging = true;
-		this.logTo = stream;
+		this.logStream = stream;
+	}
+	
+	/**
+	 * Creates a converter with logging to a {@link Logger}.
+	 * <br>
+	 * @param logger The Logger to log to.  If null, no logging occurs.
+	 */
+	public USkyBlockPlayerInfoConverter(Logger logger) {
+		this.logger = logger;
+	}
+	
+	/**
+	 * Creates a converter with logging to both a stream and a 
+	 * {@link Logger}.
+	 * <br>
+	 * @param stream The stream to log to.  If null, no logging occurs.
+	 * @param logger The Logger to log to.  If null, no logging occurs.
+	 */
+	public USkyBlockPlayerInfoConverter(PrintStream stream, Logger logger) {
+		this.logStream = stream;
+		this.logger = logger;
 	}
 	
 	/**
@@ -70,10 +97,11 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 	
 	@Override
 	public void run() {
-		SkyblockExtension.inst().getLogger()
-				.info("Started porting USkyBlockPlayerInfo's.");
-		if (hasLogging) {
-			logTo.println("Started porting USkyBlockPlayerInfos.");
+		if (logger != null) {
+			logger.info("Started porting USkyBlockPlayerInfos.");
+		}
+		if (logStream != null) {
+			logStream.println("Started porting USkyBlockPlayerInfos.");
 		}
 		
 		File playerDir = uSkyBlock.getInstance().directoryPlayers;
@@ -87,8 +115,11 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 				continue;
 			}
 			
-			if (hasLogging) {
-				logTo.println("Porting " + name + "'s info.");
+			if (logger != null) {
+				logger.fine("Porting " + name + "'s info.");
+			}
+			if (logStream != null) {
+				logStream.println("Porting " + name + "'s info.");
 			}
 			
 			PlayerInfo info = uSkyBlock.getInstance().readPlayerFile(name);
@@ -100,30 +131,34 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 				//Save the value to disk.
 				try {
 					IslandInfo.convertFromPlayerInfo(info).saveToDisk();
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
-					if (hasLogging) {
-						logTo.println("Error - " + e.toString());
-						e.printStackTrace(logTo);
+					if (logger != null) {
+						logger.log(Level.SEVERE, "Error while porting " +
+								name + "'s info:  ", e);
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					if (hasLogging) {
-						logTo.println("Error - " + e.toString());
-						e.printStackTrace(logTo);
+					if (logStream != null) {
+						logStream.println("Error while porting " +
+								name + "'s info:  " + e.toString());
+						e.printStackTrace(logStream);
 					}
+					continue;
 				}
 			}
 			
-			if (hasLogging) {
-				logTo.println("Ported.");
+			if (logger != null) {
+				logger.fine(name + "'s info was successfully ported!");
+			}
+			if (logStream != null) {
+				logStream.println(name + "'s info was sucessfully ported!");
 			}
 		}
 		
-		SkyblockExtension.inst().getLogger()
-				.info("Finished porting USkyBlockPlayerInfo's.");
-		if (hasLogging) {
-			logTo.println("Finished porting USkyBlockPlayerInfos.");
+		if (logger != null) {
+			logger.info("Finished porting USkyBlockPlayerInfos.");
+		}
+		if (logStream != null) {
+			logStream.println("Finished porting USkyBlockPlayerInfos.");
 		}
 	}
 }
