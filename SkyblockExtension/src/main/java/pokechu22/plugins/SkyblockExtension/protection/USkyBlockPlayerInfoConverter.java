@@ -78,8 +78,8 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 	}
 	
 	/**
-	 * Prepares an schedules a converter with no logging, which starts in 
-	 * 4 ticks.
+	 * Prepares and schedules a converter which logs to the default 
+	 * SBE logger, and starts in 4 ticks.
 	 */
 	public static void start() {
 		Bukkit.getScheduler().runTaskLater(uSkyBlock.getInstance(), 
@@ -87,8 +87,8 @@ public class USkyBlockPlayerInfoConverter implements Runnable {
 	}
 	
 	/**
-	 * Prepares an schedules a converter with logging, which starts in 
-	 * 4 ticks.
+	 * Prepares and schedules a converter with logging, which starts in 
+	 * 4 ticks
 	 */
 	public static void start(PrintStream stream) {
 		Bukkit.getScheduler().runTaskLater(uSkyBlock.getInstance(), 
