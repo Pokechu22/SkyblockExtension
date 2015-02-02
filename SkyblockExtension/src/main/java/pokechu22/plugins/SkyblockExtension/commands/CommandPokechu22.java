@@ -3,6 +3,7 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,6 +120,8 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 				"you have no use for receiving a bunch of chat stuff.)");
 		map.put("MyIslandInfoData", "Sends the user the NBT structure " + 
 				"of their island's IslandInfo.");
+		map.put("PrintPlayerInfo", "Reads an entire PlayerInfo.\n" +
+				"Usage:\n§e/pokechu22 test PrintPlayerInfo <player> [m][f]§f.");
 		
 		tests = Collections.unmodifiableMap(map);
 	}
@@ -895,6 +898,83 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 				isInfo.serializeToNBT().print(s);
 			} catch (Exception e) {
 				sender.sendMessage("§cAn error occured: " + e.toString());
+				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
+						"An error occured in MyIslandInfoData test.", e);
+			}
+			
+			return;
+		}
+		if (args[1].equalsIgnoreCase("PrintPlayerInfo")) {
+			//Log playerinfo.
+			if (args.length < 3) {
+				sender.sendMessage("§cToo few arguments - see help.");
+				return;
+			}
+			if (args.length > 4) {
+				sender.sendMessage("§cToo many arguments - see help.");
+				return;
+			}
+			
+			String player, flags;
+			
+			if (args.length == 3) {
+				player = args[2];
+				flags = "m";
+			} else {
+				player = args[2];
+				flags = args[3];
+			}
+			//Validate flags.
+			{
+				if (flags.length() > 2) {
+					sender.sendMessage("§cInvalid flags: Expected m, f, or mf");
+				}
+				for (char c : flags.toCharArray()) {
+					if (c != 'm' && c != 'f') {
+						sender.sendMessage("§cInvalid flags: Expected m, f, or mf");
+					}
+				}
+			}
+			
+			PlayerInfo info = IslandUtils.getPlayerInfo(player);
+			if (info == null) {
+				sender.sendMessage("Player has no info.");
+				sender.sendMessage("(IslandUtils.getPlayerInfo returned null)");
+				return;
+			}
+			
+			try {
+				if (flags.contains("m")) {
+					sender.sendMessage("§e -=- Methods -=- ");
+					
+					sender.sendMessage("getPartyIslandLocation(): " + info.getPartyIslandLocation());
+					sender.sendMessage("getPlayer(): " + info.getPlayer());
+					sender.sendMessage("getPlayerName(): " + info.getPlayerName());
+					sender.sendMessage("getHasIsland(): " + info.getHasIsland());
+					sender.sendMessage("getDeathWorld(): " + info.getDeathWorld());
+					sender.sendMessage("getIslandLocation(): " + info.getIslandLocation());
+					sender.sendMessage("getHomeLocation(): " + info.getHomeLocation());
+					sender.sendMessage("getHasParty(): " + info.getHasParty());
+					sender.sendMessage("getMembers(): " + info.getMembers());
+					sender.sendMessage("getPartyLeader(): " + info.getPartyLeader());
+					sender.sendMessage("getIslandExp(): " + info.getIslandExp());
+					sender.sendMessage("getIslandLevel(): " + info.getIslandLevel());
+				}
+				if (flags.contains("f")) {
+					sender.sendMessage("§e -=- Private feilds -=- ");
+					
+					Field[] feilds = info.getClass().getDeclaredFields();
+					for (Field feild : feilds) {
+						feild.setAccessible(true);
+						sender.sendMessage(feild.toString() + ": " + feild.get(info));
+					}
+				}
+			} catch (Exception e) {
+				sender.sendMessage("§cAn error occured: " + e.toString());
+				try (PlayerPrintStream s = new PlayerPrintStream(sender, "§c")) {
+					e.printStackTrace(s);
+				}
+				
 				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
 						"An error occured in MyIslandInfoData test.", e);
 			}
