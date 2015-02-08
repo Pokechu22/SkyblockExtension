@@ -19,9 +19,6 @@ import org.junit.runner.RunWith;
 import org.bukkit.entity.EntityType;
 import org.bukkit.Material;
 
-import pokechu22.plugins.SkyblockExtension.protection.HangingType;
-import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
-
 @RunWith(JUnitParamsRunner.class)
 public class ListUtilTest {
 	/**
@@ -102,46 +99,6 @@ public class ListUtilTest {
 			assertThat(ListUtil.matchEnumValue(e.name() + " ", Material.class), is(e));
 			//With whitespace on both sides.
 			assertThat(ListUtil.matchEnumValue(" " + e.name() + " ", Material.class), is(e));
-		}
-	}
-	
-	/**
-	 * Tests the {@link HangingType} enum.
-	 */
-	@Test
-	public void hangingTypeMatchTest() {
-		for (HangingType e : HangingType.values()) {
-			//Normal case.
-			assertThat(ListUtil.matchEnumValue(e.name(), HangingType.class), is(e));
-			//Lower case
-			assertThat(ListUtil.matchEnumValue(e.name().toLowerCase(Locale.ENGLISH),
-					HangingType.class), is(e));
-			//With leading whitespace.
-			assertThat(ListUtil.matchEnumValue(" " + e.name(), HangingType.class), is(e));
-			//With trailing whitespace.
-			assertThat(ListUtil.matchEnumValue(e.name() + " ", HangingType.class), is(e));
-			//With whitespace on both sides.
-			assertThat(ListUtil.matchEnumValue(" " + e.name() + " ", HangingType.class), is(e));
-		}
-	}
-	
-	/**
-	 * Tests the {@link VehicleType} enum.
-	 */
-	@Test
-	public void vehicleTypeMatchTest() {
-		for (VehicleType e : VehicleType.values()) {
-			//Normal case.
-			assertThat(ListUtil.matchEnumValue(e.name(), VehicleType.class), is(e));
-			//Lower case
-			assertThat(ListUtil.matchEnumValue(e.name().toLowerCase(Locale.ENGLISH),
-					VehicleType.class), is(e));
-			//With leading whitespace.
-			assertThat(ListUtil.matchEnumValue(" " + e.name(), VehicleType.class), is(e));
-			//With trailing whitespace.
-			assertThat(ListUtil.matchEnumValue(e.name() + " ", VehicleType.class), is(e));
-			//With whitespace on both sides.
-			assertThat(ListUtil.matchEnumValue(" " + e.name() + " ", VehicleType.class), is(e));
 		}
 	}
 	

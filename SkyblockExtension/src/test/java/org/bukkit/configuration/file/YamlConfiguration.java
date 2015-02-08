@@ -23,7 +23,6 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorRepor
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 
 /**
  * An implementation of {@link Configuration} which saves all files in Yaml.
@@ -51,8 +50,6 @@ public class YamlConfiguration extends FileConfiguration {
 				"ConfigurationErrorReport");
 		ConfigurationSerialization.registerClass(GenericReport.class,
 				"GenericReport");
-		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class, 
-				"IslandProtectionDataSet");
     }
     
     @SuppressWarnings("deprecation")
