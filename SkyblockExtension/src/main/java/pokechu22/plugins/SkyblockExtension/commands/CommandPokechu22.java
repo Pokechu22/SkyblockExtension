@@ -84,15 +84,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 				"ConfigurationErrorReports, using all avaliable " + 
 				"constructors.\nUsage: \n" + 
 				"§e/pokechu22 test ConfigurationErrorReport§f.");
-		map.put("IsProtected", "Checks if the area you are currently in " + 
-				"allows you to place blocks.\nUsage: \n" + 
-				"§e/pokechu22 test IsProtected§f.");
-		//TODO Remove this, as it WILL be done automatically.
-		map.put("ReplaceDefaultProtections", "Replaces the default " + 
-				"USkyBlockProtection system with the custom one which " + 
-				"allows for player-based protection choises.\nUsage: \n" + 
-				"§e/pokechu22 test ReplaceDefaultProtections§f." + 
-				"NOTE: This should be done automatically.  Remove this.");
 		map.put("MyIslandLocation", "Provides your own island location." +
 				"\nUsage: \n§e/pokechu22 test MyIslandLocation§f.");
 		map.put("NearestIslandLocation", "Provides the nearest valid " + 
@@ -104,20 +95,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 				"WILL override the IslandInfo for 0,0; however, this " + 
 				"be spawn, and thus not be an issue.\nUsage: \n" + 
 				"§e/pokechu22 test IslandInfoSerialization§f.");
-		map.put("USkyBlockPlayerInfoConversion", "Manualy converts all " +
-				"of the USkyBlock PlayerInfo's (which contain island " + 
-				"and challenge information for each player) to the custom" +
-				"format used here.  This is done when needed normally " + 
-				"(EG on the first run), and for any new players as well, " +
-				"but can be forced using this.\nUsage: \n" + 
-				"§e/pokechu22 test USkyBlockPlayerInfoConversion§f - " + 
-				"Convert with logging enabled.\n" + 
-				"§e/pokechu22 test USkyBlockPlayerInfoConversion -nl§f" + 
-				" OR \n§e/pokechu22 test USkyBlockPlayerInfoConversion " +
-				"--no-logging§f - Convert with no logging.  (Useful if " +
-				"you have no use for receiving a bunch of chat stuff.)");
-		map.put("MyIslandInfoData", "Sends the user the NBT structure " + 
-				"of their island's IslandInfo.");
 		map.put("PrintPlayerInfo", "Reads an entire PlayerInfo.\n" +
 				"Usage:\n§e/pokechu22 test PrintPlayerInfo <player> [m][f]§f.");
 		
