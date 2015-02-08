@@ -143,6 +143,7 @@ permissions:
       sbe.debug.test.ConfigErrorReport: true
       sbe.debug.test.ThrowableReport: true
       sbe.debug.test.MyIslandLocation: true
+      sbe.debug.test.NearestIslandLocation: true
       sbe.debug.test.PrintPlayerInfo: true
   
   sbe.debug.test.ThrowableReport: 
@@ -155,6 +156,10 @@ permissions:
     
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays various information about the executor's island.
+    default: op
+    
+  sbe.debug.test.NearestIslandLocation: 
+    description: A test that displays the coords of the nearest island to the executor's position.
     default: op
   
   sbe.debug.test.PrintPlayerInfo:
