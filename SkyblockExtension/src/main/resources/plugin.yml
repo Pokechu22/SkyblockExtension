@@ -142,11 +142,7 @@ permissions:
     children: 
       sbe.debug.test.ConfigErrorReport: true
       sbe.debug.test.ThrowableReport: true
-      sbe.debug.test.ProtectionHandler: true
-      sbe.debug.test.ReplaceDefaultProtections: true
       sbe.debug.test.MyIslandLocation: true
-      sbe.debug.test.NearestIslandLocation: true
-      sbe.debug.test.IslandInfoSerialization: true
       sbe.debug.test.PrintPlayerInfo: true
   
   sbe.debug.test.ThrowableReport: 
@@ -160,15 +156,7 @@ permissions:
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays various information about the executor's island.
     default: op
-    
-  sbe.debug.test.NearestIslandLocation: 
-    description: A test that displays the island location nearest to the player.
-    default: op
-    
-  sbe.debug.test.IslandInfoSerialization: 
-    description: A test of IslandInfo serialization.
-    default: op
-    
+  
   sbe.debug.test.PrintPlayerInfo:
     description: A test that shows a player's PlayerInfo file.
     default: op
