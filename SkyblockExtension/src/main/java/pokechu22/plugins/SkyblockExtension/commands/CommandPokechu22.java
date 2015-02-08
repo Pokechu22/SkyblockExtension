@@ -796,6 +796,10 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 		}
 		if (args[1].equalsIgnoreCase("PrintPlayerInfo")) {
 			//Log playerinfo.
+			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.PrintPlayerInfo")) {
+				return;
+			}
+			
 			if (args.length < 3) {
 				sender.sendMessage("§cToo few arguments - see help.");
 				return;

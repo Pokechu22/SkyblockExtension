@@ -147,6 +147,7 @@ permissions:
       sbe.debug.test.MyIslandLocation: true
       sbe.debug.test.NearestIslandLocation: true
       sbe.debug.test.IslandInfoSerialization: true
+      sbe.debug.test.PrintPlayerInfo: true
   
   sbe.debug.test.ThrowableReport: 
     description: A test of ThrowableReports.
@@ -166,4 +167,8 @@ permissions:
     
   sbe.debug.test.IslandInfoSerialization: 
     description: A test of IslandInfo serialization.
+    default: op
+    
+  sbe.debug.test.PrintPlayerInfo:
+    description: A test that shows a player's PlayerInfo file.
     default: op
