@@ -8,8 +8,8 @@ Features
 
 The following features are included (~~struck through~~ lines are not yet finished)
 
- * ~~(NYF) the ability to configure exactly what different ranks of players are allowed to do on your island~~
- * ~~(NYF) the ability to temporarily invite other players to your island (guests) without them losing their island~~
+ * ~~(NYF) the ability to configure exactly what different ranks of players are allowed to do on your island~~ (*this probably won't be implemented for a long time*)
+ * ~~(NYF) the ability to temporarily invite other players to your island (guests) without them losing their island~~ (*this probably won't be implemented for a long time*)
  * `/multichallenge` command, which performs the same challenge multiple times at once (to negate the requirement of spamming `/c`)
  * Command that returns foreign visitors to on your island to theirs (`/island sendhome`)
  * Configuration of how many points a block is island-level wise
