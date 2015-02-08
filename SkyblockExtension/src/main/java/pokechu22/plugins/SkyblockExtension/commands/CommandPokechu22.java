@@ -188,28 +188,31 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 				switch (args[0].toLowerCase()) {
 				case "test": {
 					Test(sender, cmd, label, args);
-					return true;
+					break;
 				}
 				case "crashes": {
 					Crashes(sender,cmd,label,args);
-					return true;
+					break;
 				}
 				case "logo": {
 					//This is pointless, but is ported from the old version.
 					ShowLogo(sender);
-					return true;
+					break;
 				}
 				case "help": {
 					Help(sender, cmd, label, args);
-					return true;
+					break;
 				}
 				case "witherwarning": {
 					witherWarning(sender, cmd, label, args);
-					return true;
+					break;
+				}
+				default: {
+					sender.sendMessage("Usage: /" + label + " help");
+					break;
 				}
 				}
 			}
-			sender.sendMessage("Usage: /" + label + " help");
 		} catch (Throwable e) {
 			ErrorHandler.logExceptionOnCommand(sender, cmd, label, args, e);
 		}
