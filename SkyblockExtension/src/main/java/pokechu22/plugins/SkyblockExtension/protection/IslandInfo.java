@@ -725,6 +725,8 @@ public class IslandInfo {
 	 */
 	@SuppressWarnings("deprecation")
 	public static IslandInfo convertFromPlayerInfo(PlayerInfo info) {
+		//TODO Proper island location, and if there's already one for that location don't overwrite it.
+		
 		if (!info.getHasIsland() && !info.getHasParty()) {
 			return null;
 		}
