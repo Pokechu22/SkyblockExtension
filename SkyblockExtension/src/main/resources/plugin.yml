@@ -82,6 +82,12 @@ permissions:
     children: 
       sbe.debug.crashes.list: true
       sbe.debug.crashes.show: true
+      sbe.debug.crashes.viewraw: true
+      sbe.debug.crashes.markread: true
+      sbe.debug.crashes.markunread: true
+      sbe.debug.crashes.hide: true
+      sbe.debug.crashes.unhide: true
+      sbe.debug.crashes.markallread: true
   
   sbe.debug.crashes.write*: 
     description: Gives access to anything involving modifying existing crashes.
