@@ -752,46 +752,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 			return;
 		}
 		
-		if (args[1].equalsIgnoreCase("IsProtected")) {
-			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.IsProtected")) {
-				return;
-			}
-			
-			//TODO replace/remove these
-			sender.sendMessage("§cThis test is disabled; why are you even running this build?");
-			/*if (!(sender instanceof Player)) {
-				sender.sendMessage("§cYou must be a player.");
-				return;
-			}
-			Player player = (Player) sender;
-			if (ProtectionHandler_OLD.getProtectionHandler().isProtected(
-					player.getLocation(), player)) {
-				sender.sendMessage("You have permission in this area.");
-			} else {
-				sender.sendMessage("You do not have permission in this area.");
-			}
-			return;*/
-		}
-		
-		if (args[1].equalsIgnoreCase("ReplaceDefaultProtections")) {
-			if (!PermissionHandler.HasPermission(sender, "sbe.debug.test.ReplaceDefaultProtections")) {
-				return;
-			}
-			//TODO replace/remove these
-			sender.sendMessage("§cThis test is disabled; why are you even running this build?");
-			/*sender.sendMessage("Removing default uSkyBlock protection system.");
-			USkyBlockProtectionListener.removeExistingProtectionEvents();
-			sender.sendMessage("Installing new protection system.");
-			SkyblockExtension
-					.inst()
-					.getServer()
-					.getPluginManager()
-					.registerEvents(new USkyBlockProtectionListener(),
-							SkyblockExtension.inst());
-			sender.sendMessage("Done!");
-			return;*/
-		}
-		
 		if (args[1].equalsIgnoreCase("MyIslandLocation")) {
 			//Provides location of own island.
 			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.MyIslandLocation")) {

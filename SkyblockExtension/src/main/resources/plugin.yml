@@ -155,15 +155,7 @@ permissions:
   sbe.debug.test.ConfigErrorReport: 
     description: A test of ConfigurationErrorReports.
     default: op
-  
-  sbe.debug.test.IsProtected: 
-    description: A test that states whether your current position is protected.
-    default: op
     
-  sbe.debug.test.ReplaceDefaultProtections: 
-    description: A test that replaces the default uSkyBlock protection with the sbe version.
-    default: op
-
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays various information about the executor's island.
     default: op
@@ -174,12 +166,4 @@ permissions:
     
   sbe.debug.test.IslandInfoSerialization: 
     description: A test of IslandInfo serialization.
-    default: op
-    
-  sbe.debug.test.USkyBlockPlayerInfoConversion: 
-    description: A test that attempts to convert USkyblock's PlayerInfos.
-    default: op
-    
-  sbe.debug.test.MyIslandInfoData: 
-    description: A test that sends the user the NBT structure of their island's IslandInfo.
     default: op
