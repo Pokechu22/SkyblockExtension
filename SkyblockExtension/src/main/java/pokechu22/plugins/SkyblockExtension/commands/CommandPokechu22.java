@@ -27,8 +27,6 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.WitherWarner;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
-import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
-import pokechu22.plugins.SkyblockExtension.protection.USkyBlockPlayerInfoConverter;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
 import us.talabrek.ultimateskyblock.PlayerInfo;
@@ -834,77 +832,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 			} else {
 				sender.sendMessage("Bedrock is not found.");
 			}
-			return;
-		}
-		if (args[1].equalsIgnoreCase("IslandInfoSerialization")) {
-			if (!PermissionHandler.HasPermission(sender,
-					"sbe.debug.test.IslandInfoSerialization")) {
-				return;
-			}
-			
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("§cYou must be a player.");
-				return;
-			}
-			
-			Player player = (Player) sender;
-			
-			try (PlayerPrintStream stream = new PlayerPrintStream(sender)) {
-				IslandInfo info = new IslandInfo(new Location(player.getWorld(),
-						0,120,0), player);
-				player.sendMessage("Starting NBT data: ");
-				info.serializeToNBT().print(stream);
-				info.saveToDisk();
-				player.sendMessage("Saved.");
-				IslandInfo loaded = IslandInfo.readFromDisk(0, 0);
-				player.sendMessage("Loaded.");
-				player.sendMessage("Loaded NBT data: ");
-				loaded.serializeToNBT().print(stream);
-				player.sendMessage("Done.");
-				return;
-			} catch (Exception e) {
-				player.sendMessage("Exception: " + e.toString());
-				e.printStackTrace();
-				return;
-			}
-		}
-		if (args[1].equalsIgnoreCase("USkyBlockPlayerInfoConversion")) {
-			//Very light test of conversion.
-			if (!PermissionHandler.HasPermission(sender,
-					"sbe.debug.test.USkyBlockPlayerInfoConversion")) {
-				return;
-			}
-			if (args.length >= 3) {
-				if (args[2].equalsIgnoreCase("-nl") || args[2].equalsIgnoreCase("--no-log")) {
-					USkyBlockPlayerInfoConverter.start();
-					sender.sendMessage("Started.");
-					return;
-				}
-			}
-			
-			USkyBlockPlayerInfoConverter.start(new PlayerPrintStream(sender));
-			sender.sendMessage("Started.");
-			
-			return;
-		}
-		if (args[1].equalsIgnoreCase("MyIslandInfoData")) {
-			//Very light test of conversion.
-			if (!PermissionHandler.HasPermission(sender,
-					"sbe.debug.test.MyIslandInfoData")) {
-				return;
-			}
-			
-			try (PlayerPrintStream s = new PlayerPrintStream(sender)) {
-				PlayerInfo info = IslandUtils.getPlayerInfo(sender
-						.getName());
-				IslandInfo isInfo = IslandUtils.getIslandInfo(info.getIslandLocation());
-				isInfo.serializeToNBT().print(s);
-			} catch (Exception e) {
-				sender.sendMessage("§cAn error occured: " + e.toString());
-				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
-						"An error occured in MyIslandInfoData test.", e);
-			}
-			
 			return;
 		}
 		if (args[1].equalsIgnoreCase("PrintPlayerInfo")) {

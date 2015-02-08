@@ -7,13 +7,11 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import pokechu22.plugins.SkyblockExtension.commands.CommandIslandProtection;
 import pokechu22.plugins.SkyblockExtension.commands.CommandMultiChallenge;
 import pokechu22.plugins.SkyblockExtension.commands.CommandPokechu22;
 import pokechu22.plugins.SkyblockExtension.commands.CommandTpCancel;
@@ -23,9 +21,6 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
-import pokechu22.plugins.SkyblockExtension.protection.IslandInfoCache;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSetFactory;
 import pokechu22.plugins.SkyblockExtension.util.mcstats.MetricsHandler;
 
 /**
@@ -67,8 +62,6 @@ public class SkyblockExtension extends JavaPlugin {
 				ConfigurationErrorReport.class, "ConfigurationErrorReport");
 		ConfigurationSerialization.registerClass(GenericReport.class,
 				"GenericReport");
-		ConfigurationSerialization.registerClass(IslandProtectionDataSet.class,
-				"IslandProtectionDataSet");
 
 		// Register events.
 		getServer().getPluginManager().registerEvents(
@@ -83,14 +76,7 @@ public class SkyblockExtension extends JavaPlugin {
 
 		inst = this;
 
-		// Load the default protection.
-		try {
-			IslandProtectionDataSetFactory.init();
-			WitherWarner.load();
-		} catch (InvalidConfigurationException e) {
-			// If this fails, we want it to be fully thrown to stop loading.
-			throw new RuntimeException(e);
-		}
+		WitherWarner.load();
 
 		Config.loadConfig();
 
@@ -104,9 +90,6 @@ public class SkyblockExtension extends JavaPlugin {
 		CommandPokechu22 pokechu22 = new CommandPokechu22();
 		this.getCommand("pokechu22").setExecutor(pokechu22);
 		this.getCommand("pokechu22").setTabCompleter(pokechu22);
-		CommandIslandProtection islandprotection = new CommandIslandProtection();
-		this.getCommand("islandprotection").setExecutor(islandprotection);
-		this.getCommand("islandprotection").setTabCompleter(islandprotection);
 		CommandTpCancel tpcancel = new CommandTpCancel();
 		this.getCommand("tpcancel").setExecutor(tpcancel);
 		this.getCommand("tpcancel").setTabCompleter(tpcancel);
@@ -119,7 +102,6 @@ public class SkyblockExtension extends JavaPlugin {
 	public void onDisable() {
 		Config.saveConfig();
 		WitherWarner.save();
-		IslandInfoCache.dumpCache();
 	}
 
 	/**

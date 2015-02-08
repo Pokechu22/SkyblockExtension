@@ -25,7 +25,6 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.GenericReport;
 import pokechu22.plugins.SkyblockExtension.util.BlockValueCalculator;
-import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
 import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
 import us.talabrek.ultimateskyblock.IslandCommand;
 import us.talabrek.ultimateskyblock.PlayerInfo;
@@ -155,42 +154,6 @@ public class CommandIsland extends IslandCommand implements TabCompleter {
 			ErrorHandler.logExceptionOnCommand(sender, command, label, args, e);
 		}
 		return true;
-	}
-	
-	/**
-	 * Adds a player to the party.
-	 */
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean addPlayertoParty(String playerName, String partyLeader) {
-		//Handle the leader
-		{
-			Player leader = Bukkit.getPlayer(partyLeader);
-			PlayerInfo info = IslandUtils.getPlayerInfo(leader);
-			
-			IslandInfo islandInfo = IslandUtils.getIslandInfo(info);
-			islandInfo.freshenOwner(leader);
-		}
-		//Handle the member.
-		{
-			Player member = Bukkit.getPlayer(playerName);
-			PlayerInfo info = IslandUtils.getPlayerInfo(member);
-			
-			IslandInfo islandInfo = IslandUtils.getIslandInfo(info);
-			islandInfo.freshenMember(member);
-		}
-		//IslandUtils.getPlayerInfo()
-		boolean superResult = super.addPlayertoParty(playerName, partyLeader);
-		return superResult;
-	}
-	
-	/**
-	 * Removes a player from the party.
-	 */
-	@Override
-	public void removePlayerFromParty(String playerName, String partyLeader) {
-		super.removePlayerFromParty(playerName, partyLeader);
-		return;
 	}
 	
 	/**

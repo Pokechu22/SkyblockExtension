@@ -9,9 +9,6 @@ import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import pokechu22.plugins.SkyblockExtension.protection.HangingType;
-import pokechu22.plugins.SkyblockExtension.protection.VehicleType;
-
 /**
  * Handles list values over text.
  * 
@@ -432,14 +429,6 @@ public class ListUtil {
 		}
 		if (type.equals(Material.class)) {
 			result = (T) Material.matchMaterial(s);
-			return result;
-		}
-		if (type.equals(HangingType.class)) {
-			result = (T) HangingType.matchHangingType(s);
-			return result;
-		}
-		if (type.equals(VehicleType.class)) {
-			result = (T) VehicleType.matchVehicleType(s);
 			return result;
 		}
 		

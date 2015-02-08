@@ -1,15 +1,8 @@
 package pokechu22.plugins.SkyblockExtension.util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
-import pokechu22.plugins.SkyblockExtension.protection.IslandInfo;
-import pokechu22.plugins.SkyblockExtension.protection.IslandProtectionDataSet;
 import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
@@ -122,70 +115,6 @@ public class IslandUtils {
 	public static String getNearestIslandName(Location location) {
 		return getNearestIslandLocalX(location) + "x" + 
 				getNearestIslandLocalZ(location) + "z";
-	}
-	
-	/**
-	 * Gets the relevant IslandInfo for a location.
-	 * Returns null if the data could not be found.  Does not attempt
-	 * to create a new island info.
-	 * @param location
-	 * @return
-	 */
-	public static IslandInfo getIslandInfo(Location location) {
-		try {
-			return IslandInfo.readFromDisk(getNearestIslandName(location) + ".nbt");
-		} catch (FileNotFoundException e) {
-			//None existing at this time, OK to return null.
-			return null;
-		} catch (IOException e) {
-			//This is more of a problem.
-			SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
-					"Failed to read IslandInfo for location " + 
-							location + ".", e);
-			return null;
-		}
-	}
-	
-	/**
-	 * Gets the relevant IslandInfo for a PlayerInfo.
-	 * Returns null if the data could not be found.  If the player has
-	 * an island, but no PlayerInfo, a new one is created.
-	 * @param location
-	 * @return
-	 */
-	public static IslandInfo getIslandInfo(PlayerInfo playerInfo) {
-		if (!playerInfo.getHasIsland()) {
-			IslandInfo returned;
-			//See if we can get one directly.
-			returned = getIslandInfo(playerInfo.getIslandLocation());
-			//If there isn't one, try creating one.
-			if (returned == null) {
-				returned = IslandInfo.convertFromPlayerInfo(playerInfo);
-			}
-			//If that STILL didn't work, we have an issue.
-			if (returned == null) {
-				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
-						"Failed to read IslandInfo for playerinfo " + 
-								playerInfo + ".  Location: " + 
-								playerInfo.getIslandLocation() + 
-								", Player: " + playerInfo.getPlayer() + 
-								", Party: " + playerInfo.getMembers());
-			}
-			return returned;
-		}
-		//No info.
-		return null;
-	}
-	
-	/**
-	 * Gets the IslandProtectionDataSet that applies to that player in the specific area.
-	 * 
-	 * @param player
-	 * @param at The location of the island to check.
-	 * @return
-	 */
-	public static IslandProtectionDataSet getDataSetFor(Player player, Location at) {
-		return getIslandInfo(at).getDataSetForPlayer(player);
 	}
 	
 	/**
