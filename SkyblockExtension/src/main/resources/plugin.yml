@@ -1,6 +1,6 @@
 name: SkyblockExtension
 main: pokechu22.plugins.SkyblockExtension.SkyblockExtension
-version: 0.0.0 (With protection)
+version: 0.0.1
 author: Pokechu22
 
 #This is used in logging.
@@ -22,12 +22,6 @@ commands:
     usage: |
           /multichallenge help
     aliases: [mc, spamchallenge]
-  
-  islandprotection: 
-    description: Configure custom protections for your island!
-    usage: |
-          /islandprotection help
-    aliases: [isprot]
 
   tpcancel: 
     description: Cancel a /tpa that you sent earlier but has not been accepted.
@@ -60,44 +54,6 @@ permissions:
       Allows access to the /island sendhome command, which lets one force a player 
       back to their island if they are staying on the user's.
     default: true
-    
-  sbe.protection.self.*: 
-    description: |
-      Allows access to all functions of island protection on one's own island
-      (assuming that they are the island owner).
-    default: true
-    children: 
-      sbe.protection.self.view: true
-      sbe.protection.self.modify: true
-  
-  sbe.protection.self.view: 
-    description: |
-      Allows access to viewing the protection configuration of one's own
-      island.  
-    default: true
-  
-  sbe.protection.self.modify: 
-    description: |
-      Allows modification of the protection configuration of one's own
-      island, assuming they are island owner.
-    default: true
-    
-  sbe.protection.all.*: 
-    description: |
-      Allows access to all functions of island protection on all islands.
-    children: 
-      sbe.protection.self.view: true
-      sbe.protection.self.modify: true
-  
-  sbe.protection.self.view: 
-    description: |
-      Allows access to viewing the protection configuration on all islands.
-    default: op
-  
-  sbe.protection.self.modify: 
-    description: |
-      Allows modification of the protection configuration on all islands.
-    default: op
   
   sbe.mod.nosendhome: 
     description:
@@ -191,8 +147,6 @@ permissions:
       sbe.debug.test.MyIslandLocation: true
       sbe.debug.test.NearestIslandLocation: true
       sbe.debug.test.IslandInfoSerialization: true
-      sbe.debug.test.USkyBlockPlayerInfoConversion: true
-      sbe.debug.test.MyIslandInfoData: true
   
   sbe.debug.test.ThrowableReport: 
     description: A test of ThrowableReports.
