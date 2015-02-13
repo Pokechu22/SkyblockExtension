@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension.util;
+package pokechu22.plugins.SkyblockExtension.util.blockvalue;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

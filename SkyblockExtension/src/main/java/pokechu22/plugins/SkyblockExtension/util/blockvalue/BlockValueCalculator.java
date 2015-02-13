@@ -1,4 +1,4 @@
-package pokechu22.plugins.SkyblockExtension.util;
+package pokechu22.plugins.SkyblockExtension.util.blockvalue;
 
 import java.io.File;
 import java.io.InputStream;
