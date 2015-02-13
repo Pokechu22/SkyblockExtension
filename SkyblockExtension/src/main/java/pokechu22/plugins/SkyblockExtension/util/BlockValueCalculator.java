@@ -47,11 +47,18 @@ public class BlockValueCalculator {
 	/**
 	 * Creates a calculator from the stream as a config.
 	 */
-	@SuppressWarnings("deprecation")
 	public BlockValueCalculator(InputStream stream) {
 		islandPoints = 0;
 		
-		this.blockValuesConfig = YamlConfiguration.loadConfiguration(stream);
+		// Look for defaults in the jar
+		Reader reader;
+		try {
+			reader = new InputStreamReader(stream, "UTF8");
+		} catch (UnsupportedEncodingException e) { 
+			throw new RuntimeException(e);
+		}
+		
+		blockValuesConfig = YamlConfiguration.loadConfiguration(reader);
 		
 		defaultBlockValue = getBlockValuesConfig()
 				.getInt("defaultBlockValue");
