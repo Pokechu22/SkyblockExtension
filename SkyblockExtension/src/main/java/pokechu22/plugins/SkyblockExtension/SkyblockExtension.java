@@ -69,6 +69,8 @@ public class SkyblockExtension extends JavaPlugin {
 				"SBEBlockValuation");
 		ConfigurationSerialization.registerClass(MaximumPool.class,
 				"SBEMaximumPool");
+		ConfigurationSerialization.registerClass(MaximumPool.class,
+				"SBEBlockValueData");
 		
 		// Register events.
 		getServer().getPluginManager().registerEvents(

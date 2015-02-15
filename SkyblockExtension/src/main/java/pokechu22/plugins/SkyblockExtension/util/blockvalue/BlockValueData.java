@@ -19,12 +19,46 @@ public class BlockValueData implements ConfigurationSerializable {
 	 * 
 	 * @author Pokechu22
 	 */
-	public static class MaximumPoolCollection {
-		//TODO: Serialization.
-		
+	public static class MaximumPoolCollection implements 
+			ConfigurationSerializable {
 		public MaximumPool defaultPool;
 		
 		public Map<String, MaximumPool> map;
+
+		public MaximumPool getValueOrDefault(String key) {
+			if (key.equalsIgnoreCase("default")) {
+				return defaultPool;
+			}
+			if (map.containsKey(key)) {
+				return map.get(key);
+			} else {
+				return defaultPool;
+			}
+		}
+		
+		@Override
+		public Map<String, Object> serialize() {
+			Map<String, Object> map = new HashMap<>();
+			
+			map.putAll(this.map);
+			map.put("default", defaultPool);
+			
+			return map;
+		}
+		
+		public MaximumPoolCollection(Map<String, Object> map) {
+			
+		}
+		
+		public static BlockValueCollection deserialize(
+				Map<String, Object> map) {
+			return new BlockValueCollection(map);
+		}
+		
+		public static BlockValueCollection valueOf(
+				Map<String, Object> map) {
+			return new BlockValueCollection(map);
+		}
 	}
 	
 	/**
@@ -32,10 +66,39 @@ public class BlockValueData implements ConfigurationSerializable {
 	 * 
 	 * @author Pokechu22
 	 */
-	public static class BlockValueCollection {
+	public static class BlockValueCollection implements
+			ConfigurationSerializable {
 		public BlockValuation defaultBlockValuation = new BlockValuation();
 		
 		public Map<Material, BlockValuation> map;
+		
+		@Override
+		public Map<String, Object> serialize() {
+			Map<String, Object> returned = new HashMap<>();
+			returned.put("defaultBlockValuation", defaultBlockValuation);
+			for (Map.Entry<Material, BlockValuation> e : map.entrySet()) {
+				returned.put(e.getKey().toString(), e.getValue());
+			}
+			
+			return returned;
+		}
+		
+		public BlockValueCollection(Map<String, Object> map) {
+			this.defaultBlockValuation = 
+					(BlockValuation) map.get("defaultBlockValuation");
+			
+			this.map = new HashMap<>();
+		}
+		
+		public static MaximumPoolCollection deserialize(
+				Map<String, Object> map) {
+			return new MaximumPoolCollection(map);
+		}
+		
+		public static MaximumPoolCollection valueOf(
+				Map<String, Object> map) {
+			return new MaximumPoolCollection(map);
+		}
 	}
 
 	@Override
