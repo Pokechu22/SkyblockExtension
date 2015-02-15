@@ -8,7 +8,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 
 @SerializableAs("SBEBlockValuation")
 /**
- * Represents the value of a block or set of blocks.
+ * Represents the value of a block and its data values.
  * @author Pokechu22
  *
  */
