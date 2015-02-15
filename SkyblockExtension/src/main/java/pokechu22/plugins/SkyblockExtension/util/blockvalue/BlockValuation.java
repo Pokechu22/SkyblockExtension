@@ -84,9 +84,13 @@ public class BlockValuation implements ConfigurationSerializable {
 		}
 	}
 	
-	public BlockValueData defaultData;
+	public BlockValuation() {
+		
+	}
 	
-	public Map<Short, BlockValuation> dataValues;
+	public BlockValueData defaultData = new BlockValueData();
+	
+	public Map<Short, BlockValuation> dataValues = new HashMap<>(); //TODO
 	
 	@Override
 	public Map<String, Object> serialize() {
