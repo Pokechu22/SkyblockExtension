@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -46,8 +47,14 @@ public class BlockValueData implements ConfigurationSerializable {
 			return map;
 		}
 		
-		public MaximumPoolCollection(Map<String, Object> map) {
-			
+		public MaximumPoolCollection(Map<String, Object> serialized) {
+			for (Map.Entry<String, Object> e : serialized.entrySet()) {
+				if (e.getKey().equals("default")) {
+					this.defaultPool = (MaximumPool) e.getValue();
+				} else {
+					this.map.put(e.getKey(), (MaximumPool) e.getValue());
+				}
+			}
 		}
 		
 		public static BlockValueCollection deserialize(
@@ -83,11 +90,24 @@ public class BlockValueData implements ConfigurationSerializable {
 			return returned;
 		}
 		
-		public BlockValueCollection(Map<String, Object> map) {
-			this.defaultBlockValuation = 
-					(BlockValuation) map.get("defaultBlockValuation");
-			
+		public BlockValueCollection(Map<String, Object> serialized) {
 			this.map = new HashMap<>();
+			for (Map.Entry<String, Object> e : serialized.entrySet()) {
+				if (e.getKey().equals("defaultBlockValuation")) {
+					this.defaultBlockValuation = 
+							(BlockValuation) e.getValue();
+				} else {
+					Material m = Material.matchMaterial(e.getKey());
+					if (m == null) {
+						throw new RuntimeException(
+								new InvalidConfigurationException(
+								"Failed to parse material: " + 
+								m + " (this is during BlockValueMapping" +
+								"deserialization)..."));
+					}
+					this.map.put(m, (BlockValuation) e.getValue());
+				}
+			}
 		}
 		
 		public static MaximumPoolCollection deserialize(
