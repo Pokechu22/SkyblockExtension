@@ -75,7 +75,10 @@ public class SkyblockExtension extends JavaPlugin {
 		// Register events.
 		getServer().getPluginManager().registerEvents(
 				new LoginErrorBroadcaster(), this);
-		getServer().getPluginManager().registerEvents(new WitherWarner(), this);
+		getServer().getPluginManager().registerEvents(new WitherWarner(), 
+				this);
+		getServer().getPluginManager().registerEvents(
+				new SlabPlacementListener(), this);
 
 		// Other registration.
 		registerCommands();
