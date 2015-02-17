@@ -71,6 +71,8 @@ public class Config {
 				//Escaping.
 				.replace("\\&", "\uFFFF").replace("&", "§").replace("\uFFFF", "&");
 		
+		SlabPlacementListener.enabled = getDefaultConfig().getBoolean("enableSlabOverrides");
+		
 		getLogger().info("Configuration loaded!");
 	}
 	

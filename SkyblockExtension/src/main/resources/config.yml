@@ -40,3 +40,8 @@ witherWarning:
   warningText: "&fHey!  Be careful!  While the model to make a wither is 3 by 3, the actual wither is 1 by 4!  If you're trying to cage it, it's possible for it to escape unless your cage is 4 high!"
   #The text that describes how to opt out (displayed next)
   optOutText: "&7&oTo disable this message, do '&r&7/pokechu22 WitherWarning off&7&o'."
+
+#Allows placement of superstone, since 1.8 removed it.  (When enabled, normal slabs with 
+#data values higher than 8 (normally upside down slabs and unobtainable in the inventory) will
+#create super stone when placed (but upside down slabs that are that way from a normal slab won't))  
+enableSlabOverrides: true
