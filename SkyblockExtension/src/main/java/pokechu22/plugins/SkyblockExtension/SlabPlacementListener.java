@@ -71,12 +71,12 @@ public class SlabPlacementListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent e) {
 		if (enabled) {
 			if (e.getBlockPlaced().getTypeId() == HALF_STONE_SLAB_1_ID){
-				if (e.getBlockPlaced().getData() >= 8) {
+				if (e.getItemInHand().getData().getData() >= 8) {
 					e.getBlockPlaced().setTypeId(FULL_STONE_SLAB_1_ID);
 				}
 			}
 			if (e.getBlockPlaced().getTypeId() == HALF_STONE_SLAB_2_ID){
-				if (e.getBlockPlaced().getData() >= 8) {
+				if (e.getItemInHand().getData().getData() >= 8) {
 					e.getBlockPlaced().setTypeId(FULL_STONE_SLAB_2_ID);
 				}
 			}
