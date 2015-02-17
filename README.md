@@ -16,6 +16,7 @@ The following features are included (~~struck through~~ lines are not yet finish
  * A command that retracts a previously sent TPA (for use when you tpa the wrong person) 
  * Actual help for `/island` provides some level of information!  (`/island help2`)
  * Functionality to give players a warning that Withers are 4 blocks high and not 3
+ * Functionality to allow placement of superstone (seamless double smooth stone half slab) in 1.8, where it no longer exists in the inventory, by using upside down versions of regular slabs.
 
 About the old version
 ---------------------
