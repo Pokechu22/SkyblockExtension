@@ -1,16 +1,25 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -73,6 +82,13 @@ public class Config {
 		
 		SlabPlacementListener.enabled = getDefaultConfig().getBoolean("enableSlabOverrides");
 		
+		getBlockValuesConfig().set("Test", new BlockValuation());
+		try {
+			getBlockValuesConfig().save(blockValuesConfigFile);
+		} catch (IOException e) {
+			throw new RuntimeException();
+		}
+		
 		getLogger().info("Configuration loaded!");
 	}
 	
@@ -116,5 +132,54 @@ public class Config {
 	 */
 	private static Logger getLogger() {
 		return SkyblockExtension.inst().getLogger();
+	}
+	
+	/**
+	 * Custom configuration for block values.
+	 */
+	protected static FileConfiguration blockValuesConfig = null;
+	/**
+	 * And the file associated with {@linkplain #blockValuesConfig it}.
+	 */
+	protected static File blockValuesConfigFile = null;
+	
+	protected static void reloadBlockValuesConfig() {
+		if (blockValuesConfigFile == null) {
+			blockValuesConfigFile = new File(SkyblockExtension.getRealDataFolder(), "block_values.yml");
+		}
+		blockValuesConfig = YamlConfiguration
+				.loadConfiguration(blockValuesConfigFile);
+
+		// Look for defaults in the jar
+		Reader defConfigStream;
+		try {
+			defConfigStream = new InputStreamReader(
+					SkyblockExtension.inst()
+					.getResource("block_values.yml"), "UTF8");
+		} catch (UnsupportedEncodingException e) { 
+			//Probably shouldn't happen...
+			SkyblockExtension.inst().getLogger()
+					.severe("Failed to create input stream reader.");
+			SkyblockExtension.inst()
+					.getLogger().log(Level.SEVERE, "Exception: ", e);
+			return;
+		}
+		
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration
+					.loadConfiguration(defConfigStream);
+			blockValuesConfig.setDefaults(defConfig);
+		}
+	}
+
+	/**
+	 * Gets the BlockValues config.
+	 * @return the BlockValues config.
+	 */
+	protected static FileConfiguration getBlockValuesConfig() {
+		if (blockValuesConfig == null) {
+			reloadBlockValuesConfig();
+		}
+		return blockValuesConfig;
 	}
 }

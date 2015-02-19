@@ -22,6 +22,12 @@ public class BlockValueData implements ConfigurationSerializable {
 	 */
 	public static class MaximumPoolCollection implements 
 			ConfigurationSerializable {
+		public MaximumPoolCollection() {
+			this.defaultPool = new MaximumPool(-1);
+			this.map = new HashMap<>();
+			map.put("test", new MaximumPool(200));
+		}
+		
 		public MaximumPool defaultPool;
 		
 		public Map<String, MaximumPool> map;
@@ -75,7 +81,13 @@ public class BlockValueData implements ConfigurationSerializable {
 	 */
 	public static class BlockValueCollection implements
 			ConfigurationSerializable {
-		public BlockValuation defaultBlockValuation = new BlockValuation();
+		public BlockValueCollection() {
+			this.defaultBlockValuation = new BlockValuation();
+			this.map = new HashMap<>();
+			map.put(Material.DIRT, new BlockValuation());
+		}
+		
+		public BlockValuation defaultBlockValuation;
 		
 		public Map<Material, BlockValuation> map;
 		
@@ -121,11 +133,20 @@ public class BlockValueData implements ConfigurationSerializable {
 		}
 	}
 
+	public MaximumPoolCollection maximumPools;
+	public BlockValueCollection blockValues;
+	
+	public BlockValueData() {
+		this.maximumPools = new MaximumPoolCollection();
+		this.blockValues = new BlockValueCollection();
+	}
+	
 	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = new HashMap<>();
+		map.put("maximumPools", maximumPools);
+		map.put("blockValues", blockValues);
 		return map;
-		//TODO
 	}
 	
 	public BlockValueData(Map<String, Object> map) {
