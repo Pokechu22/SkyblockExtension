@@ -96,7 +96,7 @@ public class BlockValuation implements ConfigurationSerializable {
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = new HashMap<>();
 		map.putAll(defaultData.writeToYML());
-		return null;
+		return map;
 	}
 
 	public BlockValuation(Map<String, Object> serialized) {
