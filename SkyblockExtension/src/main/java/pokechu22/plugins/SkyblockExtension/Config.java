@@ -19,7 +19,7 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
-import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValueData;
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValueMapping;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -82,7 +82,7 @@ public class Config {
 		
 		SlabPlacementListener.enabled = getDefaultConfig().getBoolean("enableSlabOverrides");
 		
-		getBlockValuesConfig().set("Test", new BlockValueData());
+		getBlockValuesConfig().set("Test", new BlockValueMapping());
 		try {
 			getBlockValuesConfig().save(blockValuesConfigFile);
 		} catch (IOException e) {

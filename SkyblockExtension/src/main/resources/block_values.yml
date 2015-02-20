@@ -1,5 +1,5 @@
 Test:
-  ==: SBEBlockValueData
+  ==: SBEBlockValueMapping
   blockValues:
     ==: SBEBlockValueCollection
     DIRT:

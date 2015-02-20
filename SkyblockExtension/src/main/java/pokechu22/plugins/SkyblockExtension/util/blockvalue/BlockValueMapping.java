@@ -13,8 +13,8 @@ import org.bukkit.configuration.serialization.SerializableAs;
  * 
  * @author Pokechu22
  */
-@SerializableAs("SBEBlockValueData")
-public class BlockValueData implements ConfigurationSerializable {
+@SerializableAs("SBEBlockValueMapping")
+public class BlockValueMapping implements ConfigurationSerializable {
 	/**
 	 * Collection of {@link MaximumPool}s, intended for serialization.
 	 * 
@@ -151,7 +151,7 @@ public class BlockValueData implements ConfigurationSerializable {
 	public MaximumPoolCollection maximumPools;
 	public BlockValueCollection blockValues;
 	
-	public BlockValueData() {
+	public BlockValueMapping() {
 		this.maximumPools = new MaximumPoolCollection();
 		this.blockValues = new BlockValueCollection();
 	}
@@ -164,15 +164,15 @@ public class BlockValueData implements ConfigurationSerializable {
 		return map;
 	}
 	
-	public BlockValueData(Map<String, Object> map) {
+	public BlockValueMapping(Map<String, Object> map) {
 		//TODO
 	}
 	
-	public static BlockValueData deserialize(Map<String, Object> map) {
-		return new BlockValueData(map);
+	public static BlockValueMapping deserialize(Map<String, Object> map) {
+		return new BlockValueMapping(map);
 	}
 	
-	public static BlockValueData valueOf(Map<String, Object> map) {
-		return new BlockValueData(map);
+	public static BlockValueMapping valueOf(Map<String, Object> map) {
+		return new BlockValueMapping(map);
 	}
 }
