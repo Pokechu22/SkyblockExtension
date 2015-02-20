@@ -4,16 +4,32 @@ Test:
     ==: SBEBlockValueCollection
     DIRT:
       ==: SBEBlockValuation
-      maximumPool: default
-      postPoolValue: 0
-      value: 1
-      poolChange: 1
+      defualt:
+        ==: BlockValueData
+        maximumPool: default
+        postPoolValue: 0
+        value: 1
+        poolChange: 1
+      '4':
+        ==: BlockValueData
+        maximumPool: default
+        postPoolValue: 0
+        value: 1
+        poolChange: 1
     defaultBlockValuation:
       ==: SBEBlockValuation
-      maximumPool: default
-      postPoolValue: 0
-      value: 1
-      poolChange: 1
+      defualt:
+        ==: BlockValueData
+        maximumPool: default
+        postPoolValue: 0
+        value: 1
+        poolChange: 1
+      '4':
+        ==: BlockValueData
+        maximumPool: default
+        postPoolValue: 0
+        value: 1
+        poolChange: 1
   maximumPools:
     ==: SBEMaximumPoolCollection
     default:

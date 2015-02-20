@@ -6,23 +6,26 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-@SerializableAs("SBEBlockValuation")
 /**
  * Represents the value of a block and its data values.
  * @author Pokechu22
  *
  */
+@SerializableAs("SBEBlockValuation")
 public class BlockValuation implements ConfigurationSerializable {
 	/**
 	 * Simple class that contains the values of a single block / subblock.
 	 * 
-	 * Intentionally does NOT implement {@link ConfigurationSerializable}, 
-	 * as it is used as a subvalue of the class in which it is nested.
-	 * 
 	 * @author Pokechu22
 	 *
 	 */
-	public static class BlockValueData {
+	@SerializableAs("BlockValueData")
+	public static class BlockValueData implements 
+			ConfigurationSerializable {
+		public BlockValueData() {
+			
+		}
+		
 		/**
 		 * The value used (before the pool max has been reached).
 		 */
@@ -40,12 +43,7 @@ public class BlockValuation implements ConfigurationSerializable {
 		 */
 		public String maximumPool = "default";
 		
-		/**
-		 * Writes to a map, intended for serialization.
-		 * 
-		 * @return
-		 */
-		private Map<String, Object> writeToYML() {
+		public Map<String, Object> serialize() {
 			Map<String, Object> map = new HashMap<>();
 			
 			map.put("value", this.value);
@@ -56,11 +54,7 @@ public class BlockValuation implements ConfigurationSerializable {
 			return map;
 		}
 		
-		/**
-		 * Reads from a map, intended for deserialization.
-		 * @param map
-		 */
-		private void readFromYML(Map<String, Object> map) {
+		public BlockValueData(Map<String, Object> map) {
 			for (Map.Entry<String, Object> e : map.entrySet()) {
 				switch (e.getKey()) {
 				case "value": {
@@ -82,26 +76,45 @@ public class BlockValuation implements ConfigurationSerializable {
 				}
 			}
 		}
+		
+		public static BlockValueData deserialize(Map<String, Object> s) {
+			return new BlockValueData(s);
+		}
+		
+		public static BlockValueData valueOf(Map<String, Object> s) {
+			return new BlockValueData(s);
+		}
 	}
 	
 	public BlockValuation() {
-		
+		this.dataValues.put((byte)4, new BlockValueData());
 	}
 	
 	public BlockValueData defaultData = new BlockValueData();
 	
-	public Map<Short, BlockValuation> dataValues = new HashMap<>(); //TODO
+	public Map<Byte, BlockValueData> dataValues = new HashMap<>(); //TODO
 	
 	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = new HashMap<>();
-		map.putAll(defaultData.writeToYML());
+		map.put("defualt", defaultData);
+		
+		for (Map.Entry<Byte, BlockValueData> e : dataValues.entrySet()) {
+			map.put(e.getKey().toString(), e.getValue());
+		}
 		return map;
 	}
 
 	public BlockValuation(Map<String, Object> serialized) {
-		this.defaultData = new BlockValueData();
-		defaultData.readFromYML(serialized);
+		this.defaultData = (BlockValueData) serialized.get("default");
+		//TODO handle null defualtData (throw exception?)
+		for (Byte b = Byte.MIN_VALUE; b < Byte.MAX_VALUE; b++) {
+			BlockValueData data = (BlockValueData) serialized.get(
+					b.toString());
+			if (data != null) {
+				dataValues.put(b, data);
+			}
+		}
 	}
 	
 	public static BlockValuation deserialize(Map<String, Object> s) {
