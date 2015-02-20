@@ -1,76 +1,24 @@
-#Contains various block values.  This can be set to whatever is wanted.
-#It is only used when useCustomBlockValues is set to true in config.yml.
-
-#Default value of a block.
-defaultBlockValue: 1
-
-#Pools of maximums
-maximumPools: 
-  cobbleCount: 
-    max: 10000
-  endCount: 
-    max: 5000
-  #-1 means that it is infinite.
-  #You can reference it explicitly if needed.
-  #DO NOT REMOVE IT, however.  Doing so WILL CAUSE ISSUES.
-  default: 
-    max: -1
-
-#Actual values
-blockValues:
-  #Air 
-  0: 0
-  #Water and lava, flowing and nonflowing
-  8: 0
-  9: 0
-  10: 0
-  11: 0
-  #Vine
-  106: 0
-  #Diamond block
-  57: 301
-  #Gold block, enchantment table, Dragon egg (!)
-  41: 151
-  116: 151
-  122: 151
-  #Iron block, Obsidian: 
-  42: 11
-  49: 11
-  #Bookshelf, jukebox 
-  47: 6
-  84: 6
-  #Ice, clay, nether brick, grass, mycelium (mycel? wat bukkit)
-  79: 4
-  82: 4
-  112: 4
-  2: 4
-  110: 4
-  #Brick, wool, sandstone, end stone, brick and stone brick stairs, 
-  #Double stone-based slabs, glass, glowstone, quartz block, quartz stairs
-  45: 3
-  35: 3
-  24: 3
-  108: 3
-  109: 3
-  43: 3
-  20: 3
-  89: 3
-  155: 3
-  156: 3
-  #Cobble
-  4: 
-    value: 1
-    maximumPool: 'cobbleCount'
-  #End stone
-  121: 
-    value: 3
-    postPoolValue: 2
-    maximumPool: 'endCount'
-    
-#For reference, this can be done to make only certain data values work:
-#This example uses wool.  Obvously, it is not a good thing for use on an 
-#actual server, but it is a good example.
-# 35: 
-#   value: -1000
-#   data0: 0
-#   data15: 1000000000
+Test:
+  ==: SBEBlockValueData
+  blockValues:
+    ==: SBEBlockValueCollection
+    DIRT:
+      ==: SBEBlockValuation
+      maximumPool: default
+      postPoolValue: 0
+      value: 1
+      poolChange: 1
+    defaultBlockValuation:
+      ==: SBEBlockValuation
+      maximumPool: default
+      postPoolValue: 0
+      value: 1
+      poolChange: 1
+  maximumPools:
+    ==: SBEMaximumPoolCollection
+    default:
+      ==: SBEMaximumPool
+      max: -1
+    test:
+      ==: SBEMaximumPool
+      max: 200
