@@ -22,6 +22,9 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
 import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
 import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation;
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValueData;
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValueData.BlockValueCollection;
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValueData.MaximumPoolCollection;
 import pokechu22.plugins.SkyblockExtension.util.blockvalue.MaximumPool;
 import pokechu22.plugins.SkyblockExtension.util.mcstats.MetricsHandler;
 
@@ -69,8 +72,12 @@ public class SkyblockExtension extends JavaPlugin {
 				"SBEBlockValuation");
 		ConfigurationSerialization.registerClass(MaximumPool.class,
 				"SBEMaximumPool");
-		ConfigurationSerialization.registerClass(MaximumPool.class,
+		ConfigurationSerialization.registerClass(BlockValueData.class,
 				"SBEBlockValueData");
+		ConfigurationSerialization.registerClass(MaximumPoolCollection.class,
+				"SBEMaximumPoolCollection");
+		ConfigurationSerialization.registerClass(BlockValueCollection.class,
+				"SBEBlockValueCollection");
 		
 		// Register events.
 		getServer().getPluginManager().registerEvents(

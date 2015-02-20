@@ -20,6 +20,7 @@ public class BlockValueData implements ConfigurationSerializable {
 	 * 
 	 * @author Pokechu22
 	 */
+	@SerializableAs("SBEMaximumPoolCollection")
 	public static class MaximumPoolCollection implements 
 			ConfigurationSerializable {
 		public MaximumPoolCollection() {
@@ -63,14 +64,14 @@ public class BlockValueData implements ConfigurationSerializable {
 			}
 		}
 		
-		public static BlockValueCollection deserialize(
+		public static MaximumPoolCollection deserialize(
 				Map<String, Object> map) {
-			return new BlockValueCollection(map);
+			return new MaximumPoolCollection(map);
 		}
 		
-		public static BlockValueCollection valueOf(
+		public static MaximumPoolCollection valueOf(
 				Map<String, Object> map) {
-			return new BlockValueCollection(map);
+			return new MaximumPoolCollection(map);
 		}
 	}
 	
@@ -79,6 +80,7 @@ public class BlockValueData implements ConfigurationSerializable {
 	 * 
 	 * @author Pokechu22
 	 */
+	@SerializableAs("SBEBlockValueCollection")
 	public static class BlockValueCollection implements
 			ConfigurationSerializable {
 		public BlockValueCollection() {
@@ -122,14 +124,14 @@ public class BlockValueData implements ConfigurationSerializable {
 			}
 		}
 		
-		public static MaximumPoolCollection deserialize(
+		public static BlockValueCollection deserialize(
 				Map<String, Object> map) {
-			return new MaximumPoolCollection(map);
+			return new BlockValueCollection(map);
 		}
 		
-		public static MaximumPoolCollection valueOf(
+		public static BlockValueCollection valueOf(
 				Map<String, Object> map) {
-			return new MaximumPoolCollection(map);
+			return new BlockValueCollection(map);
 		}
 	}
 
