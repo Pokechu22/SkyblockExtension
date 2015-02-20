@@ -115,8 +115,8 @@ public class BlockValueData implements ConfigurationSerializable {
 					if (m == null) {
 						throw new RuntimeException(
 								new InvalidConfigurationException(
-								"Failed to parse material: " + 
-								m + " (this is during BlockValueMapping" +
+								"Failed to parse material: " + e.getKey() + 
+								" (this is during BlockValueMapping" +
 								"deserialization)..."));
 					}
 					this.map.put(m, (BlockValuation) e.getValue());
