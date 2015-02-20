@@ -55,7 +55,14 @@ public class BlockValueData implements ConfigurationSerializable {
 		}
 		
 		public MaximumPoolCollection(Map<String, Object> serialized) {
+			this.map = new HashMap<>();
+			
 			for (Map.Entry<String, Object> e : serialized.entrySet()) {
+				if (e.getKey().equals("==")) {
+					//Ugly code to handle serialization issues.
+					continue;
+				}
+				
 				if (e.getKey().equals("default")) {
 					this.defaultPool = (MaximumPool) e.getValue();
 				} else {
@@ -106,7 +113,13 @@ public class BlockValueData implements ConfigurationSerializable {
 		
 		public BlockValueCollection(Map<String, Object> serialized) {
 			this.map = new HashMap<>();
+			
 			for (Map.Entry<String, Object> e : serialized.entrySet()) {
+				if (e.getKey().equals("==")) {
+					//Ugly code to handle serialization issues.
+					continue;
+				}
+				
 				if (e.getKey().equals("defaultBlockValuation")) {
 					this.defaultBlockValuation = 
 							(BlockValuation) e.getValue();
@@ -116,7 +129,7 @@ public class BlockValueData implements ConfigurationSerializable {
 						throw new RuntimeException(
 								new InvalidConfigurationException(
 								"Failed to parse material: " + e.getKey() + 
-								" (this is during BlockValueMapping" +
+								" (this is during BlockValueMapping " +
 								"deserialization)..."));
 					}
 					this.map.put(m, (BlockValuation) e.getValue());
