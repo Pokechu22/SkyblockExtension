@@ -1,21 +1,19 @@
-Test:
+#
+#Controls the entire mapping of block values for island level calculation.
+#
+#Useful references: 
+#
+#Bukkit 1.7 material names (and numeric ids): 
+#https://github.com/SpigotMC/Spigot-API/blob/master/src/main/java/org/bukkit/Material.java
+#
+#Numeric IDs and data values: 
+#http://minecraft.gamepedia.com/Ids#Data
+#
+
+block_value:
   ==: SBEBlockValueMapping
   blockValues:
     ==: SBEBlockValueCollection
-    DIRT:
-      ==: SBEBlockValuation
-      defualt:
-        ==: BlockValueData
-        maximumPool: default
-        postPoolValue: 0
-        value: 1
-        poolChange: 1
-      '4':
-        ==: BlockValueData
-        maximumPool: default
-        postPoolValue: 0
-        value: 1
-        poolChange: 1
     defaultBlockValuation:
       ==: SBEBlockValuation
       defualt:
@@ -24,17 +22,209 @@ Test:
         postPoolValue: 0
         value: 1
         poolChange: 1
-      '4':
+    #One can use numeric IDs here, or the Bukkit Material names.
+    0:
+      ==: SBEBlockValuation
+      #The default value, used if there's a subvalue that's not specified.
+      #Subvalues will be described later.
+      defualt:
+        ==: BlockValueData
+        #The pool to apply to (see *far* below)
+        #By default, this is "defualt", and as such can be ommited.
+        maximumPool: default
+        #The value to add after the pool has been passed.
+        #This is assumed to be 0 if ommited.
+        #This can be negative, if you so desire.
+        postPoolValue: 0
+        #The value to add normally.
+        #This is 1 if ommited, but it's not logical to ommit it.
+        #This can be negative, if you so desire.
+        value: 1
+        #How much to increment the pool value.
+        #This can be negative, if you so desire.
+        poolChange: 1
+    #To use the names, you need to know the bukkit list of names.
+    #The link at the top includes everything for 1.7, but 1.8 stuff can also
+    #be used if the server runs 1.8.  
+    WATER: 
+      ==: SBEBlockValuation
+      defualt:
         ==: BlockValueData
         maximumPool: default
         postPoolValue: 0
-        value: 1
+        value: 0
         poolChange: 1
+    STATIONARY_WATER: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 0
+    LAVA: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 0
+    STATIONARY_LAVA: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 0
+    VINE: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 0
+    DIAMOND_BLOCK: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 301
+    GOLD_BLOCK: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 151
+    ENCHANTMENT_TABLE: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 151
+    #Default uSkyBlock gives a value of 151 to this, but let's use it as an
+    #example of how data values would be done as well.
+    DRAGON_EGG: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 151
+      #To define a datavalue, you simply need to use its numeric ID as below.
+      #If it isn't defined here, the default above is used.
+      #For this specific example, I just do random stuff.
+      #Nobody's going to get a DRAGON_EGG:15, right?
+      15:
+        ==: BlockValueData
+        value: -42
+        postPoolValue: 12
+        maximumPool: cobble
+        poolChange: -24
+    IRON_BLOCK:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 11
+    OBSIDIAN:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 11
+    BOOKSHELF: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 6
+    JUKEBOX:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 6
+    ICE:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 4
+    CLAY: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 4
+    NETHER_BRICK:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 4
+    GRASS: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 4
+    MYCEL: #Mycelium, but bukkit likes weird names...
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 4
+    BRICK: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    WOOL: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    SANDSTONE: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    ENDER_STONE: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    BRICK_STAIRS: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    SMOOTH_STAIRS: #Stone brick stairs.  Don't ask about the name :/
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    DOUBLE_STEP: #Double stone slab 1.
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    GLASS: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    GLOWSTONE: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    QUARTZ_BLOCK: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    QUARTZ_STAIRS: 
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 3
+    #Now for the more interesting thing: Cobblestone.
+    #And by interesting, I mean "Uses maximum pools".
+    COBBLESTONE:
+      ==: SBEBlockValuation
+      defualt:
+        ==: BlockValueData
+        value: 1
+        postPoolValue: 0
+        maximumPool: cobble
+  #MaximumPools allow capping the number of points a block can give.
   maximumPools:
     ==: SBEMaximumPoolCollection
+    #The (required) default maximum pool.
     default:
       ==: SBEMaximumPool
+      #A value of -1 will result in infinite.
+      #Why you'd use this appart from the default is not clear to me, though.
       max: -1
-    test:
+    #Any other pools.
+    cobble:
       ==: SBEMaximumPool
-      max: 200
+      max: 5000
