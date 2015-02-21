@@ -193,7 +193,8 @@ public class BlockValueMapping implements ConfigurationSerializable {
 	}
 	
 	public BlockValueMapping(Map<String, Object> map) {
-		//TODO
+		this.maximumPools = (MaximumPoolCollection) map.get("maximumPools");
+		this.blockValues = (BlockValueCollection) map.get("blockValues");
 	}
 	
 	public static BlockValueMapping deserialize(Map<String, Object> map) {
