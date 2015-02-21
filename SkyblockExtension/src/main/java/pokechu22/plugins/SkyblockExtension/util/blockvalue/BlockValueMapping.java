@@ -8,6 +8,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation.BlockValueData;
+
 /**
  * Contains all of the info used for block_value.yml.
  * 
@@ -99,6 +101,32 @@ public class BlockValueMapping implements ConfigurationSerializable {
 		public BlockValuation defaultBlockValuation;
 		
 		public Map<Material, BlockValuation> map;
+		
+		/**
+		 * Gets the {@link BlockValuation} used for the specified material.
+		 * 
+		 * @param dataValue
+		 * @return
+		 */
+		public BlockValuation getValueOrDefault(Material material) {
+			if (map.containsKey(material)) {
+				return map.get(material);
+			} else {
+				return defaultBlockValuation;
+			}
+		}
+		
+		/**
+		 * Gets the {@link BlockValueData} used for the specified material
+		 * and data value.
+		 * 
+		 * @param dataValue
+		 * @return
+		 */
+		public BlockValueData getValueOrDefault(Material material, 
+				Byte dataValue) {
+			return getValueOrDefault(material).getValueOrDefault(dataValue);
+		}
 		
 		@Override
 		public Map<String, Object> serialize() {

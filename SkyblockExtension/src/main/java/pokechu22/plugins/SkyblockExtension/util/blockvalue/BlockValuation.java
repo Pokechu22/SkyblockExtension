@@ -87,12 +87,31 @@ public class BlockValuation implements ConfigurationSerializable {
 	}
 	
 	public BlockValuation() {
-		this.dataValues.put((byte)4, new BlockValueData());
+		
 	}
 	
+	/**
+	 * The {@link BlockValueData} used by default.
+	 */
 	public BlockValueData defaultData = new BlockValueData();
+	/**
+	 * Specific, overriding block value datas.
+	 */
+	public Map<Byte, BlockValueData> dataValues = new HashMap<>();
 	
-	public Map<Byte, BlockValueData> dataValues = new HashMap<>(); //TODO
+	/**
+	 * Gets the {@link BlockValueData} used for the specified data value.
+	 * 
+	 * @param dataValue
+	 * @return
+	 */
+	public BlockValueData getValueOrDefault(Byte dataValue) {
+		if (dataValues.containsKey(dataValue)) {
+			return dataValues.get(dataValue);
+		} else {
+			return defaultData;
+		}
+	}
 	
 	@Override
 	public Map<String, Object> serialize() {
