@@ -6,6 +6,8 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation.BlockValueData;
+
 /**
  * Calculates the values of blocks in an island.
  * 1 should be created per calculation.
@@ -86,7 +88,17 @@ public class BlockValueCalculator {
 	 * @param dataValue the numeric data value (damage value) to use.
 	 */
 	public void addBlock(Material material, byte dataValue) {
-		//TODO: Get BlockValuation and use it!
-		//AKA actually do stuff.
+		BlockValueData valueData = mapping.blockValues.getValueOrDefault(
+				material, dataValue);
+		
+		if (poolValues.get(valueData.maximumPool) <= mapping.maximumPools
+				.getValueOrDefault(valueData.maximumPool).maximumValue) {
+			islandPoints += valueData.value;
+		} else {
+			islandPoints += valueData.postPoolValue;
+		}
+		
+		poolValues.put(valueData.maximumPool, poolValues.get(
+				valueData.maximumPool) + valueData.poolChange);
 	}
 }
