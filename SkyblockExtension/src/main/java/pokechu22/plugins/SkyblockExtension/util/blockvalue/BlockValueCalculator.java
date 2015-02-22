@@ -92,14 +92,9 @@ public class BlockValueCalculator {
 		BlockValueData valueData = mapping.blockValues.getValueOrDefault(
 				material, dataValue);
 		
-		System.err.println(material);
-		System.err.println(dataValue);
-		System.err.println(valueData);
-		System.err.println(poolValues);
-		System.err.println(mapping);
-		System.err.println(mapping.blockValues.getValueOrDefault(material).defaultData);
-		System.err.println(mapping.blockValues.getValueOrDefault(material).dataValues);
-		System.err.println(mapping.maximumPools.getValueOrDefault(valueData.maximumPool));
+		if (!poolValues.containsKey(valueData.maximumPool)) {
+			poolValues.put(valueData.maximumPool, 0);
+		}
 		
 		if (poolValues.get(valueData.maximumPool) <= mapping.maximumPools
 				.getValueOrDefault(valueData.maximumPool).maximumValue) {
