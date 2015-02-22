@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation.BlockValueData;
 
 /**
@@ -27,7 +28,7 @@ public class BlockValueCalculator {
 	 * <code>block_value.yml</code>.
 	 */
 	public BlockValueCalculator() {
-		
+		this.mapping = (BlockValueMapping) SkyblockExtension.inst().getBlockValueConfig().get("block_value");
 	}
 	
 	/**
@@ -90,6 +91,15 @@ public class BlockValueCalculator {
 	public void addBlock(Material material, byte dataValue) {
 		BlockValueData valueData = mapping.blockValues.getValueOrDefault(
 				material, dataValue);
+		
+		System.err.println(material);
+		System.err.println(dataValue);
+		System.err.println(valueData);
+		System.err.println(poolValues);
+		System.err.println(mapping);
+		System.err.println(mapping.blockValues.getValueOrDefault(material).defaultData);
+		System.err.println(mapping.blockValues.getValueOrDefault(material).dataValues);
+		System.err.println(mapping.maximumPools.getValueOrDefault(valueData.maximumPool));
 		
 		if (poolValues.get(valueData.maximumPool) <= mapping.maximumPools
 				.getValueOrDefault(valueData.maximumPool).maximumValue) {

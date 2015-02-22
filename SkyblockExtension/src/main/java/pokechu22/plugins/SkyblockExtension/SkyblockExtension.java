@@ -199,6 +199,80 @@ public class SkyblockExtension extends JavaPlugin {
 			this.saveResource("crashes.yml", false);
 		}
 	}
+	
+	/**
+	 * Custom configuration for block value.
+	 */
+	private FileConfiguration blockValueConfig = null;
+	/**
+	 * And the file associated with {@linkplain #blockValueConfig it}.
+	 */
+	private File blockValueConfigFile = null;
+
+	public void reloadBlockValueConfig() {
+		if (blockValueConfigFile == null) {
+			blockValueConfigFile = new File(getDataFolder(), "block_values.yml");
+		}
+		blockValueConfig = YamlConfiguration.loadConfiguration(blockValueConfigFile);
+
+		// Look for defaults in the jar
+		Reader defConfigStream;
+		try {
+			defConfigStream = new InputStreamReader(
+					this.getResource("block_values.yml"), "UTF8");
+		} catch (UnsupportedEncodingException e) { // Probably shouldn't
+													// happen...
+			getLogger().severe("Failed to create input stream reader.");
+			getLogger().log(Level.SEVERE, "Exception: ", e);
+			return;
+		}
+
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration
+					.loadConfiguration(defConfigStream);
+			blockValueConfig.setDefaults(defConfig);
+		}
+	}
+
+	/**
+	 * Gets the block value config.
+	 * 
+	 * @return the block value config.
+	 */
+	public FileConfiguration getBlockValueConfig() {
+		if (blockValueConfig == null) {
+			reloadBlockValueConfig();
+		}
+		return blockValueConfig;
+	}
+
+	/**
+	 * Saves the block value config.
+	 */
+	public void saveBlockValueConfig() {
+		if (blockValueConfig == null || blockValueConfigFile == null) {
+			return;
+		}
+		try {
+			getBlockValueConfig().save(blockValueConfigFile);
+		} catch (IOException ex) {
+			getLogger().log(Level.SEVERE,
+					"Could not save config to " + blockValueConfigFile, ex);
+		}
+	}
+
+	/**
+	 * Saves the default block value config.
+	 */
+	public void saveDefaultBlockValueConfig() {
+
+		if (blockValueConfigFile == null) {
+			blockValueConfigFile = new File(getDataFolder(), "block_values.yml");
+		}
+		if (!blockValueConfigFile.exists()) {
+			this.saveResource("block_values.yml", false);
+		}
+	}
 
 	/**
 	 * Reloads all configs - Convenience method.
@@ -206,14 +280,14 @@ public class SkyblockExtension extends JavaPlugin {
 	public void reloadAllConfigs() {
 		reloadConfig();
 		reloadCrashesConfig();
+		reloadBlockValueConfig();
 	}
 
 	/**
-	 * Saves all configs - Convenience method.
+	 * Saves all configs that should be saved.
+	 * In reality, this is only the crashes config.
 	 */
 	public void saveAllConfigs() {
-		// saveConfig(); //DISABLED - no need to save it, and would overwrite
-		// stuff anyways.
 		saveCrashesConfig();
 	}
 
@@ -223,6 +297,7 @@ public class SkyblockExtension extends JavaPlugin {
 	public void saveDefaultVersionsOfAllConfigs() {
 		saveDefaultConfig();
 		saveDefaultCrashesConfig();
+		saveDefaultBlockValueConfig();
 	}
 
 	/**
