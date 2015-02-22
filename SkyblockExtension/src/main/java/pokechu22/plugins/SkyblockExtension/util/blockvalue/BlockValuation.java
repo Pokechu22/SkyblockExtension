@@ -116,7 +116,7 @@ public class BlockValuation implements ConfigurationSerializable {
 	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = new HashMap<>();
-		map.put("defualt", defaultData);
+		map.put("default", defaultData);
 		
 		for (Map.Entry<Byte, BlockValueData> e : dataValues.entrySet()) {
 			map.put(e.getKey().toString(), e.getValue());
