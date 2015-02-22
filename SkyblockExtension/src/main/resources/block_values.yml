@@ -39,7 +39,7 @@ block_value:
         #The value to add normally.
         #This is 1 if ommited, but it's not logical to ommit it.
         #This can be negative, if you so desire.
-        value: 1
+        value: 0
         #How much to increment the pool value.
         #This can be negative, if you so desire.
         poolChange: 1
