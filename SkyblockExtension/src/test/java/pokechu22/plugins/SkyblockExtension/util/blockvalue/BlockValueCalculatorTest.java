@@ -178,4 +178,41 @@ public class BlockValueCalculatorTest {
 		assertThat(c.islandPoints, is(15));
 		assertThat(c.getPoolValue("foo"), is(7));
 	}
+	
+	/**
+	 * Checks that sub data values work.
+	 */
+	@Test
+	public void dataValuesShouldBeDistinct() {
+		BlockValueMapping mapping = new BlockValueMapping();
+		mapping.blockValues.defaultBlockValuation = new BlockValuation() {{ 
+				this.defaultData = new BlockValueData() {{
+					this.value = 1;
+				}};
+				this.dataValues.put((byte)1, new BlockValueData() {{
+					this.value = 2;
+				}});
+				this.dataValues.put((byte)2, new BlockValueData() {{
+					this.value = 4;
+				}});
+		}};
+		
+		BlockValueCalculator c = new BlockValueCalculator(mapping);
+		
+		assertThat(c.islandPoints, is(0));
+		c.addBlock(Material.DIRT, (byte)0);
+		assertThat(c.islandPoints, is(1));
+		c.addBlock(Material.DIRT, (byte)0);
+		assertThat(c.islandPoints, is(2));
+		c.addBlock(Material.DIRT, (byte)1);
+		assertThat(c.islandPoints, is(4));
+		c.addBlock(Material.DIRT, (byte)1);
+		assertThat(c.islandPoints, is(6));
+		c.addBlock(Material.DIRT, (byte)1);
+		assertThat(c.islandPoints, is(8));
+		c.addBlock(Material.DIRT, (byte)2);
+		assertThat(c.islandPoints, is(12));
+		c.addBlock(Material.DIRT, (byte)2);
+		assertThat(c.islandPoints, is(16));
+	}
 }
