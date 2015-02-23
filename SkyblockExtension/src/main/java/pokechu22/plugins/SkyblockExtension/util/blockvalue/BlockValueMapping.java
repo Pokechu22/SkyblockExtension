@@ -28,7 +28,6 @@ public class BlockValueMapping implements ConfigurationSerializable {
 		public MaximumPoolCollection() {
 			this.defaultPool = new MaximumPool(-1);
 			this.map = new HashMap<>();
-			map.put("test", new MaximumPool(200));
 		}
 		
 		public MaximumPool defaultPool;
@@ -95,7 +94,6 @@ public class BlockValueMapping implements ConfigurationSerializable {
 		public BlockValueCollection() {
 			this.defaultBlockValuation = new BlockValuation();
 			this.map = new HashMap<>();
-			map.put(Material.DIRT, new BlockValuation());
 		}
 		
 		public BlockValuation defaultBlockValuation;
