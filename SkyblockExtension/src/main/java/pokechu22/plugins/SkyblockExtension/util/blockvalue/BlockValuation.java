@@ -66,7 +66,7 @@ public class BlockValuation implements ConfigurationSerializable {
 					break;
 				}
 				case "poolChange": {
-					this.postPoolValue = (int)e.getValue();
+					this.poolChange = (int)e.getValue();
 					break;
 				}
 				case "maximumPool": {
