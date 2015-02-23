@@ -96,7 +96,7 @@ public class BlockValueCalculator {
 			poolValues.put(valueData.maximumPool, 0);
 		}
 		
-		if (poolValues.get(valueData.maximumPool) <= mapping.maximumPools
+		if (poolValues.get(valueData.maximumPool) < mapping.maximumPools
 				.getValueOrDefault(valueData.maximumPool).maximumValue ||
 				mapping.maximumPools.getValueOrDefault(
 				valueData.maximumPool).maximumValue == -1) {
