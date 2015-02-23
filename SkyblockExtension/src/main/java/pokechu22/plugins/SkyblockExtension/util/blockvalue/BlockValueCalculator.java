@@ -19,8 +19,8 @@ import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation.BlockV
 public class BlockValueCalculator {
 	public int islandPoints;
 	
-	private Map<String, Integer> poolValues = new HashMap<>();
-	private BlockValueMapping mapping;
+	Map<String, Integer> poolValues = new HashMap<>();
+	BlockValueMapping mapping;
 	
 	/**
 	 * Creates a BlockValueCalculator with the default
