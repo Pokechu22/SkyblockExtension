@@ -97,7 +97,9 @@ public class BlockValueCalculator {
 		}
 		
 		if (poolValues.get(valueData.maximumPool) <= mapping.maximumPools
-				.getValueOrDefault(valueData.maximumPool).maximumValue) {
+				.getValueOrDefault(valueData.maximumPool).maximumValue ||
+				mapping.maximumPools.getValueOrDefault(
+				valueData.maximumPool).maximumValue == -1) {
 			islandPoints += valueData.value;
 		} else {
 			islandPoints += valueData.postPoolValue;
