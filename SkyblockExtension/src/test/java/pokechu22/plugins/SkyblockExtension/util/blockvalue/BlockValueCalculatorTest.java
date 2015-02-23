@@ -143,27 +143,39 @@ public class BlockValueCalculatorTest {
 		BlockValueCalculator c = new BlockValueCalculator(mapping);
 		
 		assertThat(c.islandPoints, is(0));
+		assertThat(c.poolValues.get("foo"), anyOf(is(0), nullValue()));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(1));
+		assertThat(c.poolValues.get("foo"), is(1));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(2));
+		assertThat(c.poolValues.get("foo"), is(2));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(3));
+		assertThat(c.poolValues.get("foo"), is(3));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(4));
+		assertThat(c.poolValues.get("foo"), is(4));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(5));
+		assertThat(c.poolValues.get("foo"), is(5));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(7));
+		assertThat(c.poolValues.get("foo"), is(6));
 		c.addBlock(Material.DIAMOND);
 		assertThat(c.islandPoints, is(9));
+		assertThat(c.poolValues.get("foo"), is(3));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(10));
+		assertThat(c.poolValues.get("foo"), is(4));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(11));
+		assertThat(c.poolValues.get("foo"), is(5));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(13));
+		assertThat(c.poolValues.get("foo"), is(6));
 		c.addBlock(Material.DIRT);
 		assertThat(c.islandPoints, is(15));
+		assertThat(c.poolValues.get("foo"), is(7));
 	}
 }
