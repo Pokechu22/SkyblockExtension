@@ -19,8 +19,8 @@ import pokechu22.plugins.SkyblockExtension.util.blockvalue.BlockValuation.BlockV
 public class BlockValueCalculator {
 	public int islandPoints;
 	
-	Map<String, Integer> poolValues = new HashMap<>();
-	BlockValueMapping mapping;
+	private Map<String, Integer> poolValues = new HashMap<>();
+	private BlockValueMapping mapping;
 	
 	/**
 	 * Creates a BlockValueCalculator with the default
@@ -107,5 +107,14 @@ public class BlockValueCalculator {
 		
 		poolValues.put(valueData.maximumPool, poolValues.get(
 				valueData.maximumPool) + valueData.poolChange);
+	}
+	
+	/**
+	 * Gets the current value of the specified maximum pool.
+	 * @param pool
+	 * @return
+	 */
+	public Integer getPoolValue(String pool) {
+		return poolValues.containsKey(pool) ? poolValues.get(pool) : 0;
 	}
 }
