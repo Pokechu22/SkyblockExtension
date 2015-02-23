@@ -78,4 +78,92 @@ public class BlockValueCalculatorTest {
 		c.addBlock(Material.TNT);
 		assertThat(c.islandPoints, is(2));
 	}
+	
+	/**
+	 * Checks that maximum pools work.
+	 */
+	@Test
+	public void maximumPoolsShouldWork() {
+		BlockValueMapping mapping = new BlockValueMapping();
+		mapping.blockValues.defaultBlockValuation.defaultData = 
+				new BlockValuation.BlockValueData() {{
+					this.maximumPool = "foo";
+					this.value = 1;
+					this.postPoolValue = 2;
+					this.poolChange = 1;
+				}};
+		mapping.maximumPools.map.put("foo", new MaximumPool(5));
+		
+		BlockValueCalculator c = new BlockValueCalculator(mapping);
+		
+		assertThat(c.islandPoints, is(0));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(1));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(2));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(3));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(4));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(5));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(7));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(9));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(11));
+	}
+	
+	/**
+	 * Checks that {@link BlockValuation.BlockValueData#poolChange} works.
+	 */
+	@Test
+	public void poolChangeShouldWork() {
+		BlockValueMapping mapping = new BlockValueMapping();
+		mapping.blockValues.defaultBlockValuation.defaultData = 
+				new BlockValuation.BlockValueData() {{
+					this.maximumPool = "foo";
+					this.value = 1;
+					this.postPoolValue = 2;
+					this.poolChange = 1;
+				}};
+		mapping.blockValues.map.put(Material.DIAMOND, 
+				new BlockValuation() {{
+					this.defaultData =
+					new BlockValuation.BlockValueData() {{
+						this.maximumPool = "foo";
+						this.value = 1;
+						this.postPoolValue = 2;
+						this.poolChange = -3;
+					}};
+				}});
+		mapping.maximumPools.map.put("foo", new MaximumPool(5));
+		
+		BlockValueCalculator c = new BlockValueCalculator(mapping);
+		
+		assertThat(c.islandPoints, is(0));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(1));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(2));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(3));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(4));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(5));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(7));
+		c.addBlock(Material.DIAMOND);
+		assertThat(c.islandPoints, is(9));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(10));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(11));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(13));
+		c.addBlock(Material.DIRT);
+		assertThat(c.islandPoints, is(15));
+	}
 }
