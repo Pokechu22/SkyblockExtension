@@ -36,7 +36,6 @@ import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo
  *
  */
 public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
-	
 	/**
 	 * Challenge names.
 	 */
@@ -51,8 +50,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 */
 	protected void initiate() {
 		initiated = true;
-		challengeNames = new ArrayList<String>(Settings.challenges_challengeList.size());
-		challengeNames.addAll(Settings.challenges_challengeList);
+		challengeNames = new ArrayList<String>(Settings.challenges_challengeList);
 	}
 	
 	/**
@@ -227,7 +225,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		return true;
 	}
 	
-	protected static void sendHelp(CommandSender sender, String label) {
+	protected void sendHelp(CommandSender sender, String label) {
 		sender.sendMessage("/" + label + " help:");
 		sender.sendMessage(
 				"This command provides completion of any challenge multiple times in quick " + 
@@ -244,7 +242,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @param challengeName
 	 * @return
 	 */
-	protected static boolean challengeExists(Player player, String challengeName) {
+	protected boolean challengeExists(Player player, String challengeName) {
 		return getPlayerInfo(player).challengeExists(challengeName);
 	}
 	
@@ -255,7 +253,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @param challengeName
 	 * @return
 	 */
-	protected static boolean challengeUnlocked(Player player, String challengeName) {
+	protected boolean challengeUnlocked(Player player, String challengeName) {
 		return (uSkyBlock.getInstance().isRankAvailable(
 				player, uSkyBlock.getInstance().getConfig()
 				.getString("options.challenges.challengeList." 
@@ -272,7 +270,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @param challengeName
 	 * @return
 	 */
-	protected static boolean isChallengeAvailable(Player player, String challengeName) {
+	protected boolean isChallengeAvailable(Player player, String challengeName) {
 		PlayerInfo p = getPlayerInfo(player);
 		
 		//Player has completed the challenge once & challenge is repeatable.
@@ -288,7 +286,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @param challengeName
 	 * @return
 	 */
-	protected static boolean isChallengeRepeatable(String challengeName) {
+	protected boolean isChallengeRepeatable(String challengeName) {
 		//Will need to change getConfig() with getChallengeConfig() in the future
 		return (("onPlayer".equalsIgnoreCase(uSkyBlock
 				.getInstance()
