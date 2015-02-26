@@ -1,5 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,21 @@ public class CommandTpCancel implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, 
 			Command cmd, String label, String args[]) {
+		if (args.length == 0) {
+			ArrayList<String> returned = new ArrayList<>();
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				returned.add(player.getName());
+			}
+			return returned;
+		}
+		if (args.length == 1) {
+			ArrayList<String> returned = new ArrayList<>();
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				returned.add(player.getName());
+			}
+			return TabLimit(returned, args[0]);
+		}
+		
 		return new ArrayList<String>();
 	}
 }
