@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 
@@ -66,6 +67,11 @@ public class CommandTpCancel implements CommandExecutor, TabCompleter {
 	public boolean onCommand(CommandSender sender, Command cmd, 
 			String label, String[] args) {
 		try {
+			if (!PermissionHandler.HasPermission(sender, 
+					"sbe.commands.multichallenge")) {
+				return true;
+			}
+			
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(
 						"§cYou must be a player to use this command.");

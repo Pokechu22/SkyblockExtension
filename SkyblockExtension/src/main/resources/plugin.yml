@@ -34,20 +34,28 @@ permissions:
   sbe.*: 
     description: Gives access to all SkyblockExtension commands and subpermisions.
     children: 
-      sbe.challenges.*: true
+      sbe.commands.*: true
       sbe.debug.*: true
       #sbe.protection.*: true
   
-  sbe.challenges.*: 
-    description: Gives access to all SkyblockExtension challenge functions.
+  sbe.commands.*: 
+    description: Gives access to all SkyblockExtension commands.
     children: 
-      sbe.challenges.multicomplete: true
+      sbe.commands.multichallenge: true
+      sbe.commands.tpcancel: true
   
-  sbe.challenges.multicomplete: 
+  sbe.commands.multichallenge: 
     description: 
       Allows access to the /multichallenge command, which lets one complete the 
       same challenge multiple times quickly.
     default: true
+  
+  sbe.commands.tpcancel: 
+    description: 
+      Allows access to the /tpcancel command, which lets one cancel a TPA
+      that they sent.
+    default: true
+  
   
   sbe.island.sendhome: 
     description: |

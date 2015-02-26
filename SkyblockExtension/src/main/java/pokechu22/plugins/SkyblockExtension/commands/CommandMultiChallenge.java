@@ -120,7 +120,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			
-			if (!PermissionHandler.HasPermission(sender, "sbe.challenges.multicomplete")) {
+			if (!PermissionHandler.HasPermission(sender, "sbe.commands.multichallenge")) {
 				return true;
 			}
 			
