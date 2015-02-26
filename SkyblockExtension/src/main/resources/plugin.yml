@@ -154,20 +154,10 @@ permissions:
   sbe.debug.test.*: 
     description: Gives access to all SkyblockExtension debug tests.
     children: 
-      sbe.debug.test.ConfigErrorReport: true
-      sbe.debug.test.ThrowableReport: true
       sbe.debug.test.MyIslandLocation: true
       sbe.debug.test.NearestIslandLocation: true
       sbe.debug.test.PrintPlayerInfo: true
   
-  sbe.debug.test.ThrowableReport: 
-    description: A test of ThrowableReports.
-    default: op
-    
-  sbe.debug.test.ConfigErrorReport: 
-    description: A test of ConfigurationErrorReports.
-    default: op
-    
   sbe.debug.test.MyIslandLocation: 
     description: A test that displays various information about the executor's island.
     default: op

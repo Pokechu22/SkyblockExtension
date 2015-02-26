@@ -77,24 +77,12 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 		TreeMap<String, String> map = new TreeMap<String, String>(
 				String.CASE_INSENSITIVE_ORDER);
 		
-		map.put("ThrowableReport", "A test that creates an example " + 
-				"ThrowableReport.\nUsage: \n" + 
-				"§e/pokechu22 test ThrowableReport§f.");
-		map.put("ConfigurationErrorReport", "A test that creates example " +
-				"ConfigurationErrorReports, using all avaliable " + 
-				"constructors.\nUsage: \n" + 
-				"§e/pokechu22 test ConfigurationErrorReport§f.");
 		map.put("MyIslandLocation", "Provides your own island location." +
 				"\nUsage: \n§e/pokechu22 test MyIslandLocation§f.");
 		map.put("NearestIslandLocation", "Provides the nearest valid " + 
 				"island location.  This location should have a bedrock " + 
 				"block in it.\nUsage: \n" + 
 				"§e/pokechu22 test NearestIslandLocation§f.");
-		map.put("IslandInfoSerialization", "Tests serializing and " + 
-				"deserializing of an IslandInfo, to an NBT file.  This " +
-				"WILL override the IslandInfo for 0,0; however, this " + 
-				"be spawn, and thus not be an issue.\nUsage: \n" + 
-				"§e/pokechu22 test IslandInfoSerialization§f.");
 		map.put("PrintPlayerInfo", "Reads an entire PlayerInfo.\n" +
 				"Usage:\n§e/pokechu22 test PrintPlayerInfo <player> [m][f]§f.");
 		
@@ -624,108 +612,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	protected void Test(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length < 2) {
 			sender.sendMessage("§cError: Too few arguments.");
-			return;
-		}
-		
-		if (args[1].equalsIgnoreCase("ThrowableReport")) {
-			if (PermissionHandler.HasPermission(sender, "sbe.debug.test.ThrowableReport")) {
-				throw new RuntimeException("Test");
-			}
-			return;
-		}
-		
-		if (args[1].equalsIgnoreCase("ConfigurationErrorReport")) {
-			if (PermissionHandler.HasPermission(sender,"sbe.debug.test.ConfigErrorReport")) {
-				//Test ALL the constructors!
-				sender.sendMessage("Testing all configurationerrorreport constructors.");
-				sender.sendMessage("Check /pokechu22 crashes list.");
-				SkyblockExtension.inst().getLogger().warning(sender.getName() + 
-						" just tested ConfigurationErrorReports...");
-				//With loading...
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(),
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								false));
-				//And with saving.
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(),
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22", 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-				ErrorHandler.logError(
-						new pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport(
-								new Exception("Test").fillInStackTrace(), 
-								"Key.Example", 
-								SkyblockExtension.inst().getConfig().getName(), 
-								"pokechu22.plugins.SkyblockExtension.CommandPokechu22",
-								true));
-
-				return;
-			}
 			return;
 		}
 		
