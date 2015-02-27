@@ -18,8 +18,8 @@ import us.talabrek.ultimateskyblock.PlayerInfo;
 import us.talabrek.ultimateskyblock.Settings;
 import us.talabrek.ultimateskyblock.uSkyBlock;
 
-//Static imports - Imports a function, not a class.
 import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo;
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 /**
  * Hijacks the existing functionality of uSkyblock to allow players to quickly
@@ -77,18 +77,12 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			
 			Player player = (Player) sender;
 			
-			if (args.length == 2) {
+			if (args.length == 0) {
+				return getAvailableChallenges(player);
+			}
+			if (args.length == 1) {
 				List<String> availableChallenges = getAvailableChallenges(player);
-				ArrayList<String> returned = new ArrayList<String>();
-		
-				String find = args[1].toLowerCase();
-				
-				for (String name : availableChallenges) {
-					if (name.startsWith(find))
-						returned.add(name);
-				}
-				
-				return returned;
+				return TabLimit(availableChallenges, args[0]);
 			}
 		} catch (Throwable e) {
 			ErrorHandler.logExceptionOnTabComplete(sender, cmd, commandLabel, args, e);
@@ -150,9 +144,9 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				String challengeName;
 				
 				try {
-					repititions = Integer.parseInt(args[0]);
+					repititions = Integer.parseInt(args[1]);
 				} catch (NumberFormatException e) {
-					sender.sendMessage("§cFailed to parse repititions (Got " + args[0] + 
+					sender.sendMessage("§cFailed to parse repititions (Got " + args[1] + 
 							", expected Integer).");
 					sender.sendMessage("For usage, do /" + commandLabel + " help");
 					return true;
@@ -160,7 +154,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				
 				if (repititions < 0) {
 					sender.sendMessage("§cError: Repititions must be positive.  " + 
-							"(Got " + args[0] + ")");
+							"(Got " + args[1] + ")");
 					
 					return true;
 				}
@@ -171,7 +165,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					return true;
 				}
 				
-				challengeName = args[1];
+				challengeName = args[0];
 				if (!challengeExists(player, challengeName)) {
 					sender.sendMessage("§cChallenge " + challengeName + " does not exist!");
 					return true;
@@ -230,7 +224,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		sender.sendMessage(
 				"This command provides completion of any challenge multiple times in quick " + 
 				"succession, instead of spaming the /c command.");
-		sender.sendMessage("Syntax: /" + label + " <repititions> <challengeName>");
+		sender.sendMessage("Syntax: /" + label + " <challengeName> <repititions>");
 		sender.sendMessage("Note that you §lMUST§r complete the challenge once using the " + 
 				"regular challenges command (/c) first.");
 	}
