@@ -32,10 +32,12 @@ commands:
 
 permissions: 
   sbe.*: 
-    description: Gives access to all SkyblockExtension commands and subpermisions.
+    description: 
+      Gives access to all SkyblockExtension commands and subpermisions.
     children: 
       sbe.commands.*: true
       sbe.debug.*: true
+      sbe.mod.*: true
       #sbe.protection.*: true
   
   sbe.commands.*: 
@@ -43,6 +45,7 @@ permissions:
     children: 
       sbe.commands.multichallenge: true
       sbe.commands.tpcancel: true
+      sbe.island.sendhome: true
   
   sbe.commands.multichallenge: 
     description: 
@@ -62,6 +65,13 @@ permissions:
       Allows access to the /island sendhome command, which lets one force a player 
       back to their island if they are staying on the user's.
     default: true
+  
+  sbe.mod.*: 
+    description: 
+      Gives access to all mod commands.
+    children:
+      sbe.mod.nosendhome
+      sbe.mod.sendhomeall 
   
   sbe.mod.nosendhome: 
     description:
