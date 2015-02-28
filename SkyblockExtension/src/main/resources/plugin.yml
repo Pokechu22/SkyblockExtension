@@ -70,8 +70,8 @@ permissions:
     description: 
       Gives access to all mod commands.
     children:
-      sbe.mod.nosendhome
-      sbe.mod.sendhomeall 
+      sbe.mod.nosendhome: true
+      sbe.mod.sendhomeall: true
   
   sbe.mod.nosendhome: 
     description:
