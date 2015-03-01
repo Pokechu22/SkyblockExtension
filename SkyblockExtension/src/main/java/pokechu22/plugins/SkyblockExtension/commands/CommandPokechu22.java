@@ -170,6 +170,10 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 					witherWarning(sender, cmd, label, args);
 					break;
 				}
+				case "reloadconfig": {
+					reloadConfigs(sender, cmd, label, args);
+					break;
+				}
 				default: {
 					sender.sendMessage("Usage: /" + label + " help");
 					break;
@@ -932,5 +936,53 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 		}
 		
 		sender.sendMessage("§cSyntax error!  Usage: /" + label + " WitherWarning [off/on]");
+	}
+	
+	/**
+	 * Reloads configs.
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 */
+	protected void reloadConfigs(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0) {
+			return;
+		}
+		if (!PermissionHandler.HasPermission(sender, "sbe.mod.reload")) {
+			return;
+		}
+		if (args.length == 1) {
+			SkyblockExtension.inst().reloadAllConfigs();
+			sender.sendMessage("§aSuccessfully reloaded all configs!");
+			return;
+		}
+		if (args.length == 2) {
+			switch (args[1].toLowerCase()) {
+			case "main": //Fall through
+			case "default": {
+				SkyblockExtension.inst().reloadConfig();
+				sender.sendMessage("§aSuccessfully reloaded the main configuration!");
+				return;
+			}
+			case "block_value": {
+				SkyblockExtension.inst().reloadBlockValueConfig();
+				sender.sendMessage("§aSuccessfully reloaded the block value configuration!");
+				return;
+			}
+			//Don't want to allow this.
+			//case "crashes": {
+			//	SkyblockExtension.inst().reloadCrashesConfig();
+			//	sender.sendMessage("§aSuccessfully reloaded crashes config.");
+			//}
+			default: {
+				sender.sendMessage("§c" + args[1] + " is not a recognised configuration!");
+				return;
+			}
+			}
+		}
+		if (args.length >= 3) {
+			sender.sendMessage("§cToo many arguments - see help.");
+		}
 	}
 }

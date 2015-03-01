@@ -72,6 +72,12 @@ permissions:
     children:
       sbe.mod.nosendhome: true
       sbe.mod.sendhomeall: true
+      sbe.mod.reload: true
+  
+  sbe.mod.reload: 
+    description:
+      Allows reloading of the configuration with '/pokechu22 reloadConfig'.
+    default: op
   
   sbe.mod.nosendhome: 
     description:
