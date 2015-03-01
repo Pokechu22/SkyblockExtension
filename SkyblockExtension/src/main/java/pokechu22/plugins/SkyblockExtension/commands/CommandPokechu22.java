@@ -62,6 +62,8 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 		map.put("help", "View this help.  It is clear you understand.\n" +
 				"Usage: \n§e/pokechu22 help [commandName, subCommand, " + 
 				"...]§f.");
+		map.put("reloadConfig", "Reloads one or all of the configuration(s).\n" +
+				"Usage: \n§e/pokechu22 help [configName]§f.");
 		
 		subCommands = Collections.unmodifiableMap(map);
 	}
