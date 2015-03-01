@@ -1,6 +1,6 @@
 name: SkyblockExtension
 main: pokechu22.plugins.SkyblockExtension.SkyblockExtension
-version: 0.1.0
+version: 0.1.1
 author: Pokechu22
 
 #This is used in logging.
