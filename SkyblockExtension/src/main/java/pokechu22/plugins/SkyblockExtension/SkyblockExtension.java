@@ -12,6 +12,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.wasteofplastic.askyblock.ASkyBlock;
+
 import pokechu22.plugins.SkyblockExtension.commands.CommandMultiChallenge;
 import pokechu22.plugins.SkyblockExtension.commands.CommandPokechu22;
 import pokechu22.plugins.SkyblockExtension.commands.CommandTpCancel;
@@ -92,7 +94,7 @@ public class SkyblockExtension extends JavaPlugin {
 
 		// Other registration.
 		registerCommands();
-		CommandIsland.registerHooks();
+		registerOverridenCommands();
 
 		this.saveDefaultVersionsOfAllConfigs();
 
@@ -105,6 +107,9 @@ public class SkyblockExtension extends JavaPlugin {
 		MetricsHandler.start();
 	}
 
+	/**
+	 * Registers all of the SBE commands.
+	 */
 	private void registerCommands() {
 		CommandMultiChallenge multichallenge = new CommandMultiChallenge();
 		this.getCommand("multichallenge").setExecutor(multichallenge);
@@ -115,6 +120,15 @@ public class SkyblockExtension extends JavaPlugin {
 		CommandTpCancel tpcancel = new CommandTpCancel();
 		this.getCommand("tpcancel").setExecutor(tpcancel);
 		this.getCommand("tpcancel").setTabCompleter(tpcancel);
+	}
+	
+	/**
+	 * Registers any commands that override those of other plugins.
+	 */
+	private void registerOverridenCommands() {
+		CommandIsland island = new CommandIsland();
+		ASkyBlock.getPlugin().getCommand("island").setExecutor(island);
+		ASkyBlock.getPlugin().getCommand("island").setTabCompleter(island);
 	}
 
 	/**

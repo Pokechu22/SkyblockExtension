@@ -49,12 +49,6 @@ public class Config {
 				.getBoolean("errorHandling.broadcastOnError", true);
 		LoginErrorBroadcaster.broadcastOnLogin = getDefaultConfig()
 				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
-		CommandIsland.enableHelp2 = getDefaultConfig().getBoolean(
-				"uSkyBlockOverrides.islandCommand.enableHelp2", true);
-		CommandIsland.allowIgnoreCase = getDefaultConfig().getBoolean(
-				"uSkyBlockOverrides.islandCommand.allowIgnoreCase", true);
-		CommandIsland.useCustomBlockValues = getDefaultConfig().getBoolean(
-				"uSkyBlockOverrides.islandCommand.useCustomBlockValues", true);
 		CommandIsland.membersCanSendHome = getDefaultConfig().getBoolean(
 				"sendHome.allowMembersToSendHome", true);
 		CommandIsland.useSpawnCommandForSpawn = getDefaultConfig().getBoolean(
@@ -95,7 +89,6 @@ public class Config {
 	 *
 	 * @return The configuration.
 	 */
-	//@SuppressWarnings("unused")
 	private static Configuration getDefaultConfig() {
 		return SkyblockExtension.inst().getConfig();
 	}
