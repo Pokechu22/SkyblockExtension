@@ -1,9 +1,8 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
-import static pokechu22.plugins.SkyblockExtension.util.StringUtil.*;
-import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
+import static pokechu22.plugins.SkyblockExtension.util.StringUtil.trailOff;
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,10 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,9 +23,6 @@ import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.WitherWarner;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
-import pokechu22.plugins.SkyblockExtension.util.IslandUtils;
-import pokechu22.plugins.SkyblockExtension.util.PlayerPrintStream;
-import us.talabrek.ultimateskyblock.PlayerInfo;
 
 /**
  * Provides support for the /pokechu22 command, which does basic stuff.
@@ -618,130 +611,6 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	protected void Test(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length < 2) {
 			sender.sendMessage("§cError: Too few arguments.");
-			return;
-		}
-		
-		if (args[1].equalsIgnoreCase("MyIslandLocation")) {
-			//Provides location of own island.
-			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.MyIslandLocation")) {
-				return;
-			}
-			
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("§cYou must be a player.");
-				return;
-			}
-			Player player = (Player) sender;
-			//ToString is commented out because it caused issues with null.  
-			//The same effect is triggered automatically, but null is displayed as "null".
-			sender.sendMessage("§6getIslandLocation(): §e" + 
-					IslandUtils.getPlayerInfo(player).getIslandLocation()/*.toString()*/);
-			sender.sendMessage("§6getPartyIslandLocation(): §e" + 
-					IslandUtils.getPlayerInfo(player).getPartyIslandLocation()/*.toString()*/);
-			sender.sendMessage("§6getHomeLocation(): §e" + 
-					IslandUtils.getPlayerInfo(player).getHomeLocation()/*.toString()*/);
-			return;
-		}
-		
-		if (args[1].equalsIgnoreCase("NearestIslandLocation")) {
-			//Provides location of nearest island.
-			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.NearestIslandLocation")) {
-				return;
-			}
-			
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("§cYou must be a player.");
-				return;
-			}
-			Player player = (Player) sender;
-			Location location = IslandUtils.getOccupyingIsland(player.getLocation());
-			sender.sendMessage("Nearest island is at " + location + ".");
-			if (location.getBlock().getType() == Material.BEDROCK) {
-				sender.sendMessage("Bedrock is found.");
-			} else {
-				sender.sendMessage("Bedrock is not found.");
-			}
-			return;
-		}
-		if (args[1].equalsIgnoreCase("PrintPlayerInfo")) {
-			//Log playerinfo.
-			if (!PermissionHandler.HasPermission(sender,"sbe.debug.test.PrintPlayerInfo")) {
-				return;
-			}
-			
-			if (args.length < 3) {
-				sender.sendMessage("§cToo few arguments - see help.");
-				return;
-			}
-			if (args.length > 4) {
-				sender.sendMessage("§cToo many arguments - see help.");
-				return;
-			}
-			
-			String player, flags;
-			
-			if (args.length == 3) {
-				player = args[2];
-				flags = "m";
-			} else {
-				player = args[2];
-				flags = args[3];
-			}
-			//Validate flags.
-			{
-				if (flags.length() > 2) {
-					sender.sendMessage("§cInvalid flags: Expected m, f, or mf");
-				}
-				for (char c : flags.toCharArray()) {
-					if (c != 'm' && c != 'f') {
-						sender.sendMessage("§cInvalid flags: Expected m, f, or mf");
-					}
-				}
-			}
-			
-			PlayerInfo info = IslandUtils.getPlayerInfo(player);
-			if (info == null) {
-				sender.sendMessage("Player has no info.");
-				sender.sendMessage("(IslandUtils.getPlayerInfo returned null)");
-				return;
-			}
-			
-			try {
-				if (flags.contains("m")) {
-					sender.sendMessage("§e -=- Methods -=- ");
-					
-					sender.sendMessage("getPartyIslandLocation(): " + info.getPartyIslandLocation());
-					sender.sendMessage("getPlayer(): " + info.getPlayer());
-					sender.sendMessage("getPlayerName(): " + info.getPlayerName());
-					sender.sendMessage("getHasIsland(): " + info.getHasIsland());
-					sender.sendMessage("getDeathWorld(): " + info.getDeathWorld());
-					sender.sendMessage("getIslandLocation(): " + info.getIslandLocation());
-					sender.sendMessage("getHomeLocation(): " + info.getHomeLocation());
-					sender.sendMessage("getHasParty(): " + info.getHasParty());
-					sender.sendMessage("getMembers(): " + info.getMembers());
-					sender.sendMessage("getPartyLeader(): " + info.getPartyLeader());
-					sender.sendMessage("getIslandExp(): " + info.getIslandExp());
-					sender.sendMessage("getIslandLevel(): " + info.getIslandLevel());
-				}
-				if (flags.contains("f")) {
-					sender.sendMessage("§e -=- Private feilds -=- ");
-					
-					Field[] feilds = info.getClass().getDeclaredFields();
-					for (Field feild : feilds) {
-						feild.setAccessible(true);
-						sender.sendMessage(feild.toString() + ": " + feild.get(info));
-					}
-				}
-			} catch (Exception e) {
-				sender.sendMessage("§cAn error occured: " + e.toString());
-				try (PlayerPrintStream s = new PlayerPrintStream(sender, "§c")) {
-					e.printStackTrace(s);
-				}
-				
-				SkyblockExtension.inst().getLogger().log(Level.SEVERE, 
-						"An error occured in MyIslandInfoData test.", e);
-			}
-			
 			return;
 		}
 		
