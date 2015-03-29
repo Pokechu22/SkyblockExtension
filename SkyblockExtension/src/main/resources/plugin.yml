@@ -6,7 +6,7 @@ author: Pokechu22
 #This is used in logging.
 prefix: PSBE
 
-depend: [uSkyBlock]
+depend: [ASkyBlock]
 #Most of these aren't used but are still needed.
 softdepend: [Essentials, WorldEdit, WorldGuard] 
 
