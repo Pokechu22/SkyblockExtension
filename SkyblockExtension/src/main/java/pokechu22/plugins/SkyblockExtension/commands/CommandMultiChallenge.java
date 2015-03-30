@@ -10,47 +10,35 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.wasteofplastic.askyblock.ASkyBlock;
+import com.wasteofplastic.askyblock.ASkyBlockAPI;
+import com.wasteofplastic.askyblock.PlayerCache;
+import com.wasteofplastic.askyblock.commands.Challenges;
+
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
-import us.talabrek.ultimateskyblock.PlayerInfo;
-import us.talabrek.ultimateskyblock.Settings;
-import us.talabrek.ultimateskyblock.uSkyBlock;
-
-import static pokechu22.plugins.SkyblockExtension.util.IslandUtils.getPlayerInfo;
 import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 /**
- * Hijacks the existing functionality of uSkyblock to allow players to quickly
- * complete a challenge multiple times.
+ * Allows a player to complete a challenge multiple times.  
  * <br>
- * Based off of the source code that I got 
- * <a href=https://github.com/wolfwork/uSkyBlock>here</a>.
- * 
- * TODO: This WILL break if the plugin uses UUIDPlayerInfo rather than PlayerInfo.  
+ * Based off of the A-SkyBlock challenges code: 
+ * https://github.com/tastybento/askyblock/blob/master/src/com/wasteofplastic/askyblock/commands/IslandCmd.java
  * 
  * @author Pokechu22
- * @author Talabrek
- * @author wolfwork
- *
+ * @author 
  */
 public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
-	/**
-	 * Challenge names.
-	 */
-	private List<String> challengeNames = null;
-	/**
-	 * Has this command been initiated?
-	 */
-	private boolean initiated = false;
+	private ASkyBlockAPI aSkyBlock;
+	private Challenges challenges;
+	private PlayerCache players;
 	
-	/**
-	 * Initiates this.
-	 */
-	protected void initiate() {
-		initiated = true;
-		challengeNames = new ArrayList<String>(Settings.challenges_challengeList);
+	public CommandMultiChallenge() {
+		this.aSkyBlock = ASkyBlockAPI.getInstance();
+		this.challenges = ASkyBlock.getPlugin().getChallenges();
+		this.players = ASkyBlock.getPlugin().getPlayers();
 	}
 	
 	/**
@@ -66,10 +54,6 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String args[]) 
 	{
 		try {
-			if (!initiated) {
-				initiate();
-			}
-			
 			if (!(sender instanceof Player)) {
 				return null;
 				//This probably won't happen.
@@ -118,7 +102,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			
-			if (!uSkyBlock.getSkyBlockWorld().equals(player.getWorld())) //If not in skyblock world
+			if (!ASkyBlock.getIslandWorld().equals(player.getWorld())) //If not in skyblock world
 			{
 				sender.sendMessage("§cYou can only submit challenges in the skyblock world!");
 				return true;
@@ -237,7 +221,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @return
 	 */
 	protected boolean challengeExists(Player player, String challengeName) {
-		return getPlayerInfo(player).challengeExists(challengeName);
+		return players.challengeExists(playerName, challengeName);
 	}
 	
 	/**
@@ -248,10 +232,15 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @return
 	 */
 	protected boolean challengeUnlocked(Player player, String challengeName) {
-		return (uSkyBlock.getInstance().isRankAvailable(
-				player, uSkyBlock.getInstance().getConfig()
-				.getString("options.challenges.challengeList." 
-				+ challengeName + ".rankLevel")));
+		//ASkyBlock code.
+		String level = Challenges.getChallengeConfig().getString("challenges.challengeList." + challengeName + ".level");
+		// Only check if the challenge has a level, otherwise it's a free level
+		if (!level.isEmpty()) {
+		    if (!challenges.isLevelAvailable(player, level)) {
+		    	return false;
+		    }
+		}
+		return true;
 	}
 	
 	/**
@@ -265,10 +254,9 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @return
 	 */
 	protected boolean isChallengeAvailable(Player player, String challengeName) {
-		PlayerInfo p = getPlayerInfo(player);
-		
 		//Player has completed the challenge once & challenge is repeatable.
-		return (p.checkChallenge(challengeName) && isChallengeRepeatable(challengeName));
+		return (players.checkChallenge(player.getUniqueId(), challengeName) && 
+				isChallengeRepeatable(challengeName));
 	}
 	
 	/**
