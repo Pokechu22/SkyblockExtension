@@ -145,11 +145,11 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 			} else {
 				switch (args[0].toLowerCase()) {
 				case "test": {
-					Test(sender, cmd, label, args);
+					test(sender, cmd, label, args);
 					break;
 				}
 				case "crashes": {
-					Crashes(sender,cmd,label,args);
+					crashesInfo(sender,cmd,label,args);
 					break;
 				}
 				case "logo": {
@@ -158,7 +158,7 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 					break;
 				}
 				case "help": {
-					Help(sender, cmd, label, args);
+					help(sender, cmd, label, args);
 					break;
 				}
 				case "witherwarning": {
@@ -249,7 +249,7 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @Throws {@link Error} when args.length is 0, which should never happen.
 	 */
-	protected void Crashes(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void crashesInfo(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Args.length should NEVER be 0.");
 		}
@@ -608,7 +608,7 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	 * @param label
 	 * @param args
 	 */
-	protected void Test(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void test(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length < 2) {
 			sender.sendMessage("§cError: Too few arguments.");
 			return;
@@ -659,7 +659,7 @@ public class CommandPokechu22 implements CommandExecutor, TabCompleter {
 	 * @param label
 	 * @param args
 	 */
-	protected void Help(CommandSender sender, Command cmd, String label, String[] args) {
+	protected void help(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
 			//Shouldn't happen.
 			return;
