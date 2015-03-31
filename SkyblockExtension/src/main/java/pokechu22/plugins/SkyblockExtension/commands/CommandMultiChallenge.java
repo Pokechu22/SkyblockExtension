@@ -1,6 +1,7 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -263,24 +264,42 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * Checks if a challenge is repeatable.  It does this by reading the config.
 	 * This also returns false if it isn't a challenge that takes items.
 	 * 
-	 * @author talabrek
-	 * 
 	 * @param challengeName
 	 * @return
 	 */
 	protected boolean isChallengeRepeatable(String challengeName) {
-		//Will need to change getConfig() with getChallengeConfig() in the future
-		return (("onPlayer".equalsIgnoreCase(uSkyBlock
-				.getInstance()
-				.getConfig()
-				.getString(
-						"options.challenges.challengeList."
-								+ challengeName.toLowerCase() + ".type")) && uSkyBlock
-				.getInstance()
-				.getConfig()
-				.getBoolean(
-						"options.challenges.challengeList." + challengeName
-								+ ".repeatable")));
+		if (!Challenges.getChallengeConfig().getBoolean(
+				"challenges.challengeList." + challengeName + ".repeatable")) {
+			return false;
+		}
+		if (!Challenges.getChallengeConfig().getString(
+				"challenges.challengeList." + challengeName + ".type")
+				.equalsIgnoreCase("inventory")) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks if the player can perform the specified challenge the 
+	 * specified number of times without hitting the maximum.
+	 * @param player
+	 * @param challenge
+	 * @param times
+	 * @return
+	 */
+	protected boolean canDoChallengeWithoutRunningOutOfTimes(Player player,
+			String challenge, int times) {
+		int currentTimes = players.checkChallengeTimes(player.getUniqueId(),
+				challenge);
+		int maxTimes = Challenges.getChallengeConfig().getInt(
+				"challenges.challengeList." + challenge + ".maxtimes", 0);
+	    if (maxTimes > 0) {
+			if (currentTimes + times > maxTimes) {
+				return false;
+			}
+	    }
+		return true;
 	}
 	
 	/**
@@ -294,15 +313,15 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @param label
 	 * @return
 	 */
-	protected List<String> getAvailableChallenges(Player sender) {
+	protected List<String> getAvailableChallenges(Player player) {
 		ArrayList<String> availableChallenges = new ArrayList<String>();
 		
-		PlayerInfo p = getPlayerInfo(sender);
+		Map<String, Boolean> challengeStatus = 
+				players.getChallengeStatus(player.getUniqueId());
 		
-		for (String challengeName : challengeNames) {
-			//checkChallenge sees if a player has completed a challenge.
-			if (p.checkChallenge(challengeName)) {
-				availableChallenges.add(challengeName);
+		for (Map.Entry<String, Boolean> e : challengeStatus.entrySet()) {
+			if (e.getValue()) {
+				availableChallenges.add(e.getKey());
 			}
 		}
 		
