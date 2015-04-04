@@ -1,15 +1,19 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionType;
 
 import com.wasteofplastic.askyblock.ASkyBlock;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
@@ -328,174 +332,255 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		return availableChallenges;
 	}
 	
-	/**
-	 * Can a player complete a challenge the required number of times?
-	 * 
-	 * Assumes challenge requires items.  Also uses deprecated constructors, 
-	 * because numeric ids.  Yay.
-	 * 
-	 * Based off of {@link uSkyBlock#hasRequired(Player, String, String)}.
-	 * 
-	 * @param player
-	 * @param challengeName
-	 * @param times
-	 * @return
-	 */
 	@SuppressWarnings("deprecation")
-	protected boolean canCompleteChallenge(Player player, String challengeName, int times) {
-		//Will look something like "1:4 44:1:64", where the first number is the numeric ID,
-		//and the last one is the quantity.  If it exists, the middle number is the data value.
-		String[] requiredItemsList = uSkyBlock
-				.getInstance()
-				.getConfig()
-				.getString(
-						"options.challenges.challengeList." + challengeName
-								+ ".requiredItems").split(" ");
-		int requiredItemID = 0;
-		int requiredAmount = 0;
-		int requiredDataValue = -1;
+	public boolean hasRequired(String challenge, Player player, int times) {
+		final String[] reqList = Challenges.getChallengeConfig().getString(
+				"challenges.challengeList." + challenge + ".requiredItems")
+				.split(" ");
 		
-		for (int i = 0; i < requiredItemsList.length; i++) {
-			String[] requiredItemData = requiredItemsList[i].split(":");
-			if (requiredItemData.length == 2) {
+		List<ItemStack> toBeRemoved = new ArrayList<ItemStack>();
+		Material reqItem;
+		int reqAmount = 0;
+		for (final String s : reqList) {
+			final String[] part = s.split(":");
+			// Material:Qty
+			if (part.length == 2) {
 				try {
-					requiredItemID = Integer.parseInt(requiredItemData[0]);
-				} catch (NumberFormatException e) {
-					player.sendMessage(
-							"§4Internal error: " + 
-							"Failed to parse uSkyBlock challenges configuration.");
-					
-					ErrorHandler.logError(new ConfigurationErrorReport(
-							e,
-							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-							"uSkyBlock challenges config", false)
-					.setContext("Failed to parse int for requiredItemID.\n" + 
-							"Expected integer, got " + requiredItemData[0] + ".\n" + 
-							"Parsing: " + requiredItemsList[i] + ", index 0.\n" + 
-							"Index is " + i + ".")
-							);
-					
-					SkyblockExtension.inst().getLogger().warning(
-							"Failed to parse uSkyBlock challenges configuration.");
+					// Correct some common mistakes
+					if (part[0].equalsIgnoreCase("potato")) {
+						part[0] = "POTATO_ITEM";
+					} else if (part[0].equalsIgnoreCase("brewing_stand")) {
+						part[0] = "BREWING_STAND_ITEM";
+					} else if (part[0].equalsIgnoreCase("carrot")) {
+						part[0] = "CARROT_ITEM";
+					} else if (part[0].equalsIgnoreCase("cauldron")) {
+						part[0] = "CAULDRON_ITEM";
+					} else if (part[0].equalsIgnoreCase("skull")) {
+						part[0] = "SKULL_ITEM";
+					}
+					reqItem = Material.getMaterial(part[0]);
+					reqAmount = Integer.parseInt(part[1]) * times;
+					ItemStack item = new ItemStack(reqItem);
+
+					if (!player.getInventory().contains(reqItem)) {
+						return false;
+					} else {
+						// check amount
+						int amount = 0;
+						// Go through all the inventory and try to find
+						// enough required items
+						for (Map.Entry<Integer, ? extends ItemStack> en
+								: player.getInventory().all(reqItem).entrySet()) {
+							// Get the item
+							ItemStack i = en.getValue();
+							// Map needs special handling because the
+							// durability increments every time a new one is
+							// made by the player
+							// TODO: if there are any other items that act
+							// in the same way, they need adding too...
+							if (i.getDurability() == 0 || (reqItem == Material.MAP && i.getType() == Material.MAP)) {
+								// Clear any naming, or lore etc.
+								//POKECHU22-TODO: Why clear it!?
+								i.setItemMeta(null);
+								player.getInventory().setItem(en.getKey(), i);
+								// #1 item stack qty + amount is less than
+								// required items - take all i
+								// #2 item stack qty + amount = required
+								// item -
+								// take all
+								// #3 item stack qty + amount > req items -
+								// take
+								// portion of i
+								// amount += i.getAmount();
+								if ((amount + i.getAmount()) < reqAmount) {
+									// Remove all of this item stack - clone
+									// otherwise it will keep a reference to
+									// the
+									// original
+									toBeRemoved.add(i.clone());
+									amount += i.getAmount();
+								} else if ((amount + i.getAmount()) == reqAmount) {
+									toBeRemoved.add(i.clone());
+									amount += i.getAmount();
+									break;
+								} else {
+									// Remove a portion of this item
+
+									item.setAmount(reqAmount - amount);
+									item.setDurability(i.getDurability());
+									toBeRemoved.add(item);
+									amount += i.getAmount();
+									break;
+								}
+							}
+						}
+						if (amount < reqAmount) {
+							return false;
+						}
+					}
+				} catch (Exception e) {
+					getLogger().severe("Problem with " + s + " in challenges.yml!");
+					player.sendMessage("§cThere are errors in the challenges configuration!  Command cannot be used.");
+					String materialList = "";
+					boolean hint = false;
+					for (Material m : Material.values()) {
+						materialList += m.toString() + ",";
+						if (m.toString().contains(s.substring(0, 3).toUpperCase())) {
+							getLogger().severe("Did you mean " + m.toString() + "?");
+							hint = true;
+						}
+					}
+					if (!hint) {
+						getLogger().severe("Sorry, I have no idea what " + s + " is. Pick from one of these:");
+						getLogger().severe(materialList.substring(0, materialList.length() - 1));
+					} else {
+						getLogger().severe("Correct challenges.yml with the correct material.");
+					}
 					return false;
 				}
+			} else if (part.length == 3) {
+				// This handles items with durability or potions
 				try {
-					requiredAmount = Integer.parseInt(requiredItemData[1]);
-				} catch (NumberFormatException e) {
-					player.sendMessage(
-							"§4Internal error: " + 
-							"Failed to parse uSkyBlock challenges configuration.");
-					
-					ErrorHandler.logError(new ConfigurationErrorReport(
-							e,
-							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-							"uSkyBlock challenges config", false)
-					.setContext("Failed to parse int for requiredAmount.\n" + 
-							"Expected integer, got " + requiredItemData[1] + ".\n" + 
-							"Parsing: " + requiredItemsList[i] + ", index 1.\n" + 
-							"Index is " + i + ".")
-							);
-					
-					SkyblockExtension.inst().getLogger().warning(
-							"Failed to parse uSkyBlock challenges configuration.");
-					
+					// Correct some common mistakes
+					if (part[0].equalsIgnoreCase("potato")) {
+						part[0] = "POTATO_ITEM";
+					} else if (part[0].equalsIgnoreCase("brewing_stand")) {
+						part[0] = "BREWING_STAND_ITEM";
+					} else if (part[0].equalsIgnoreCase("carrot")) {
+						part[0] = "CARROT_ITEM";
+					} else if (part[0].equalsIgnoreCase("cauldron")) {
+						part[0] = "CAULDRON_ITEM";
+					} else if (part[0].equalsIgnoreCase("skull")) {
+						part[0] = "SKULL_ITEM";
+					}
+					reqItem = Material.getMaterial(part[0]);
+					int reqDurability = Integer.parseInt(part[1]);
+					reqAmount = Integer.parseInt(part[2]) * times;
+					int count = reqAmount;
+					ItemStack item = new ItemStack(reqItem);
+					// Check for potions
+					if (reqItem.equals(Material.POTION)) {
+						// Contains at least does not work for potions
+						ItemStack[] playerInv = player.getInventory().getContents();
+						for (ItemStack i : playerInv) {
+							if (i != null && i.getType().equals(Material.POTION)) {
+								if (i.getDurability() == reqDurability) {
+									item = i.clone();
+									if (item.getAmount() > reqAmount) {
+										item.setAmount(reqAmount);
+									}
+									count = count - item.getAmount();
+									// If the item stack has more in it than
+									// required, just take the minimum
+									toBeRemoved.add(item);
+								}
+							}
+							if (count == 0) {
+								break;
+							}
+						}
+						if (count > 0) {
+							return false;
+						}
+						// They have enough
+					} else {
+						// Item
+						item.setDurability((short) reqDurability);
+						// check amount
+						int amount = 0;
+						// Go through all the inventory and try to find
+						// enough required items
+						for (Map.Entry<Integer, ? extends ItemStack> en : player.getInventory().all(reqItem).entrySet()) {
+							// Get the item
+							ItemStack i = en.getValue();
+							if (i.getDurability() == reqDurability) {
+								// Clear any naming, or lore etc.
+								i.setItemMeta(null);
+								player.getInventory().setItem(en.getKey(), i);
+								// #1 item stack qty + amount is less than
+								// required items - take all i
+								// #2 item stack qty + amount = required
+								// item -
+								// take all
+								// #3 item stack qty + amount > req items -
+								// take
+								// portion of i
+								if ((amount + i.getAmount()) < reqAmount) {
+									// Remove all of this item stack - clone
+									// otherwise it will keep a reference to
+									// the
+									// original
+									toBeRemoved.add(i.clone());
+									amount += i.getAmount();
+								} else if ((amount + i.getAmount()) == reqAmount) {
+									toBeRemoved.add(i.clone());
+									amount += i.getAmount();
+									break;
+								} else {
+									// Remove a portion of this item
+
+									item.setAmount(reqAmount - amount);
+									item.setDurability(i.getDurability());
+									toBeRemoved.add(item);
+									amount += i.getAmount();
+									break;
+								}
+							}
+						}
+						if (amount < reqAmount) {
+							return false;
+						}
+					}
+				} catch (Exception e) {
+					getLogger().severe("Problem with " + s + " in challenges.yml!");
+					player.sendMessage("§cThere are errors in the challenges configuration!  Command cannot be used.");
+					if (part[0].equalsIgnoreCase("POTION")) {
+						getLogger().severe("Format POTION:TYPE:QTY where TYPE is the number of the following:");
+						for (PotionType p : PotionType.values()) {
+							getLogger().info(p.toString() + ":" + p.getDamageValue());
+						}
+					} else {
+						String materialList = "";
+						boolean hint = false;
+						for (Material m : Material.values()) {
+							materialList += m.toString() + ",";
+							if (m.toString().contains(s.substring(0, 3))) {
+								getLogger().severe("Did you mean " + m.toString() + "?");
+								hint = true;
+							}
+						}
+						if (!hint) {
+							getLogger().severe("Sorry, I have no idea what " + s + " is. Pick from one of these:");
+							getLogger().severe(materialList.substring(0, materialList.length() - 1));
+						} else {
+							getLogger().severe("Correct challenges.yml with the correct material.");
+						}
+						return false;
+					}
 					return false;
 				}
-				
-				if (!player.getInventory().contains(requiredItemID, requiredAmount * times)) {
-					return false;
-				}
-				
-			} else if (requiredItemData.length == 3) {
-				try {
-					requiredItemID = Integer.parseInt(requiredItemData[0]);
-				} catch (NumberFormatException e) {
-					player.sendMessage(
-							"§4Internal error: " + 
-							"Failed to parse uSkyBlock challenges configuration.");
-					
-					ErrorHandler.logError(new ConfigurationErrorReport(
-							e,
-							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-							"uSkyBlock challenges config", false)
-					.setContext("Failed to parse int for requiredItemID.\n" + 
-							"Expected integer, got " + requiredItemData[0] + ".\n" + 
-							"Parsing: " + requiredItemsList[i] + ", index 0.\n" + 
-							"Index is " + i + ".")
-							);
-					
-					SkyblockExtension.inst().getLogger().warning(
-							"Failed to parse uSkyBlock challenges configuration.");
-					return false;
-				}
-				try {
-					requiredAmount = Integer.parseInt(requiredItemData[2]);
-				} catch (NumberFormatException e) {
-					player.sendMessage(
-							"§4Internal error: " + 
-							"Failed to parse uSkyBlock challenges configuration.");
-					
-					ErrorHandler.logError(new ConfigurationErrorReport(
-							e,
-							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-							"uSkyBlock challenges config", false)
-					.setContext("Failed to parse int for requiredAmount.\n" + 
-							"Expected integer, got " + requiredItemData[2] + ".\n" + 
-							"Parsing: " + requiredItemsList[i] + ", index 2.\n" + 
-							"Index is " + i + ".")
-							);
-					
-					SkyblockExtension.inst().getLogger().warning(
-							"Failed to parse uSkyBlock challenges configuration.");
-					return false;
-				}
-				try {
-					requiredDataValue = Integer.parseInt(requiredItemData[1]);
-				} catch (NumberFormatException e) {
-					player.sendMessage(
-							"§4Internal error: " + 
-							"Failed to parse uSkyBlock challenges configuration.");
-					
-					ErrorHandler.logError(new ConfigurationErrorReport(
-							e,
-							"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-							"uSkyBlock challenges config", false)
-					.setContext("Failed to parse int for requiredDataValue.\n" + 
-							"Expected integer, got " + requiredItemData[1] + ".\n" + 
-							"Parsing: " + requiredItemsList[i] + ", index 1.\n" + 
-							"Index is " + i + ".")
-							);
-					
-					SkyblockExtension.inst().getLogger().warning(
-							"Failed to parse uSkyBlock challenges configuration.");
-					return false;
-				}
-				if (!player.getInventory().containsAtLeast(
-						new ItemStack(requiredItemID, requiredAmount,
-								(short) requiredDataValue),
-						requiredAmount * times)) {
-					return false;
-				}
-			} else {
-				//Error state.
-				player.sendMessage(
-						"§4Internal error: Failed to parse uSkyBlock challenges configuration.");
-				
-				ErrorHandler.logError(new ConfigurationErrorReport(
-						"options.challenges.challengeList." + challengeName	+ ".requiredItems",
-						"uSkyBlock challenges config", false)
-				.setContext("requiredItemData.length was not valid.\n" + 
-						"Expected either 2 or 3, got " + requiredItemData.length + ".\n" + 
-						"Value is: " + requiredItemsList[i] + "\n" + 
-						"Index is " + i + ".")
-						);
-				
-				SkyblockExtension.inst().getLogger().warning(
-						"Failed to parse uSkyBlock challenges configuration.");
-				return false;
 			}
 		}
-		
+		// Build up the items in the inventory and remove them if they are
+		// all there.
+
+		if (Challenges.getChallengeConfig().getBoolean("challenges.challengeList." + challenge + ".takeItems")) {
+			for (ItemStack i : toBeRemoved) {
+				HashMap<Integer, ItemStack> leftOver = player.getInventory().removeItem(i);
+				if (!leftOver.isEmpty()) {
+					getLogger().warning(
+							"Exploit? Could not remove the following in challenge " + challenge + " for player " + player.getName() + ":");
+					for (ItemStack left : leftOver.values()) {
+						getLogger().info(left.toString());
+					}
+					return false;
+				}
+			}
+		}
 		return true;
+	}
+	
+	private Logger getLogger() {
+		return SkyblockExtension.inst().getLogger();
 	}
 }
