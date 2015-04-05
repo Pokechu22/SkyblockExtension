@@ -169,4 +169,5 @@ permissions:
   
   sbe.debug.test.*: 
     description: Gives access to all SkyblockExtension debug tests.
-    children: !!map
+    #children: #No children.
+    
