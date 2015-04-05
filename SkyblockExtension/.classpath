@@ -44,5 +44,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/Essentials.jar" sourcepath="C:/Pokechu22/TestServer/plugins/Essentials-d11a295ffd006a6b3edd2c84866b343342e052da.zip"/>
 	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/askyblock.jar" sourcepath="C:/Pokechu22/TestServer/plugins/askyblock-712f7d9a8290239b1342a0ec9d79791f4f561def.zip"/>
+	<classpathentry kind="lib" path="C:/Pokechu22/TestServer/plugins/Vault-1.4.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://milkbowl.github.io/VaultAPI/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

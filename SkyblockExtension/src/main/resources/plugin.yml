@@ -8,7 +8,7 @@ prefix: PSBE
 
 depend: [ASkyBlock]
 #Most of these aren't used but are still needed.
-softdepend: [Essentials, WorldEdit, WorldGuard] 
+softdepend: [Essentials, WorldEdit, WorldGuard, Vault] 
 
 commands: 
   pokechu22:
