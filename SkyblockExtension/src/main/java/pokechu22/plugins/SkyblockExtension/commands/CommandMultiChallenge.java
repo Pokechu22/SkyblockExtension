@@ -1,9 +1,11 @@
 package pokechu22.plugins.SkyblockExtension.commands;
 
+import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.TabLimit;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -22,19 +24,16 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
+import pokechu22.plugins.SkyblockExtension.PermissionHandler;
+import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
+import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
+
 import com.wasteofplastic.askyblock.ASkyBlock;
-import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.PlayerCache;
 import com.wasteofplastic.askyblock.Settings;
 import com.wasteofplastic.askyblock.commands.Challenges;
 import com.wasteofplastic.askyblock.events.ChallengeCompleteEvent;
 import com.wasteofplastic.askyblock.util.VaultHelper;
-
-import pokechu22.plugins.SkyblockExtension.PermissionHandler;
-import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
-import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
-import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
-import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
 
 /**
  * Allows a player to complete a challenge multiple times.  
@@ -46,12 +45,10 @@ import static pokechu22.plugins.SkyblockExtension.util.TabCompleteUtil.*;
  * @author 
  */
 public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
-	private ASkyBlockAPI aSkyBlock;
 	private Challenges challenges;
 	private PlayerCache players;
 	
 	public CommandMultiChallenge() {
-		this.aSkyBlock = ASkyBlockAPI.getInstance();
 		this.challenges = ASkyBlock.getPlugin().getChallenges();
 		this.players = ASkyBlock.getPlugin().getPlayers();
 	}
