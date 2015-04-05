@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,7 +20,10 @@ import org.bukkit.potion.PotionType;
 import com.wasteofplastic.askyblock.ASkyBlock;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.PlayerCache;
+import com.wasteofplastic.askyblock.Settings;
 import com.wasteofplastic.askyblock.commands.Challenges;
+import com.wasteofplastic.askyblock.events.ChallengeCompleteEvent;
+import com.wasteofplastic.askyblock.util.VaultHelper;
 
 import pokechu22.plugins.SkyblockExtension.PermissionHandler;
 import pokechu22.plugins.SkyblockExtension.SkyblockExtension;
@@ -49,7 +54,6 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	/**
 	 * Tab-completion.  (For challenge names)
 	 * 
-	 * @author wolfwork
 	 * @param sender
 	 * @param cmd
 	 * @param commandLabel
@@ -96,12 +100,6 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			}
 			
 			Player player = (Player)sender;
-			
-			if (!Settings.challenges_allowChallenges)
-			{
-				sender.sendMessage("§cChallenges are not enabled.");
-				return true;
-			}
 			
 			if (!PermissionHandler.HasPermission(sender, "sbe.commands.multichallenge")) {
 				return true;
@@ -174,7 +172,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					return true;
 				}
 				
-				if (!canCompleteChallenge(player, challengeName, repititions)) {
+				if (!hasRequired(player, challengeName, repititions)) {
 					sender.sendMessage("§cYou don't have the items needed to complete " + 
 							challengeName + " " + repititions + " time" + 
 							(repititions == 1 ? "" : "s") + "!");
@@ -182,17 +180,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				}
 				
 				for (int i = 0; i < repititions; i++) {
-					///Result of taking items.
-					boolean result;
-					//Takes the items required.
-					result = uSkyBlock.getInstance().takeRequired(player, challengeName, "onPlayer");
-					if (!result) {
-						throw new RuntimeException("Player does not have all needed items " + 
-								"despite canCompleteChallenge returning true!");
-					}
-					
-					//Give the reward.
-					uSkyBlock.getInstance().giveReward(player, challengeName);
+					//TODO give reward
 				}
 				
 				return true;
@@ -226,7 +214,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @return
 	 */
 	protected boolean challengeExists(Player player, String challengeName) {
-		return players.challengeExists(playerName, challengeName);
+		return players.challengeExists(player.getUniqueId(), challengeName);
 	}
 	
 	/**
@@ -332,8 +320,18 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		return availableChallenges;
 	}
 	
+	/**
+	 * Checks if the player has the required items, and if so, takes them.  
+	 * 
+	 * @author tastybento
+	 * 
+	 * @param player
+	 * @param challenge
+	 * @param times
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
-	public boolean hasRequired(String challenge, Player player, int times) {
+	public boolean hasRequired(Player player, String challenge, int times) {
 		final String[] reqList = Challenges.getChallengeConfig().getString(
 				"challenges.challengeList." + challenge + ".requiredItems")
 				.split(" ");
@@ -578,6 +576,184 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Gives the reward to the specified player.
+	 * This command <b>only</b> gives repeat rewards.  
+	 * 
+	 * @author tastybento 
+	 * 
+	 * @param player
+	 * @param challenge
+	 * @param times
+	 */
+	private void giveReward(Player player, String challenge, int times) {
+		// Grab the rewards from the config.yml file
+		String[] permList;
+		String[] itemRewards;
+		int moneyReward = 0;
+		int expReward = 0;
+		String rewardText = "";
+		// If the friendly name is available use it
+		String challengeName = Challenges.getChallengeConfig().getString(
+				"challenges.challengeList." + challenge + ".friendlyname",
+				challenge.substring(0, 1).toUpperCase() + challenge.substring(1));
+
+		// Repeat challenge
+		itemRewards = Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatItemReward", "").split(" ");
+		moneyReward = Challenges.getChallengeConfig().getInt("challenges.challengeList." + challenge.toLowerCase() + ".repeatMoneyReward", 0);
+		rewardText = ChatColor.translateAlternateColorCodes('&',
+				Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatRewardText", "Goodies!"));
+		expReward = Challenges.getChallengeConfig().getInt("challenges.challengeList." + challenge + ".repeatExpReward", 0);
+
+		// Report the rewards and give out exp, money and permissions if
+		// appropriate
+		player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesrewards + ": " + ChatColor.WHITE + rewardText);
+		if (expReward > 0) {
+			player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesexpReward + ": " + ChatColor.WHITE + expReward);
+			player.giveExp(expReward);
+		}
+		if (Settings.useEconomy && moneyReward > 0 && (VaultHelper.econ != null)) {
+			EconomyResponse e = VaultHelper.econ.depositPlayer(player, Settings.worldName, moneyReward);
+			if (e.transactionSuccess()) {
+				player.sendMessage(ChatColor.GOLD + plugin.myLocale(player.getUniqueId()).challengesmoneyReward + ": " + ChatColor.WHITE + VaultHelper.econ.format(moneyReward));
+			} else {
+				plugin.getLogger().severe("Error giving player " + player.getUniqueId() + " challenge money:" + e.errorMessage);
+				plugin.getLogger().severe("Reward was $" + moneyReward);
+			}
+		}
+		// Dole out permissions
+		permList = Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".permissionReward", "").split(" ");
+		for (final String s : permList) {
+			if (!s.isEmpty()) {
+				if (!VaultHelper.checkPerm(player, s)) {
+					VaultHelper.addPerm(player, s);
+					plugin.getLogger().info("Added permission " + s + " to " + player.getName() + "");
+				}
+			}
+		}
+		// Give items
+		Material rewardItem;
+		int rewardQty;
+		// Build the item stack of rewards to give the player
+		for (final String s : itemRewards) {
+			final String[] element = s.split(":");
+			if (element.length == 2) {
+				try {
+					rewardItem = Material.getMaterial(element[0].toUpperCase());
+					rewardQty = Integer.parseInt(element[1]);
+					final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { new ItemStack(rewardItem, rewardQty) });
+					if (!leftOvers.isEmpty()) {
+						player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+					}
+					player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.RED + plugin.myLocale(player.getUniqueId()).challengeserrorRewardProblem);
+					plugin.getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					String materialList = "";
+					boolean hint = false;
+					for (Material m : Material.values()) {
+						materialList += m.toString() + ",";
+						if (element[0].length() > 3) {
+							if (m.toString().startsWith(element[0].substring(0, 3))) {
+								plugin.getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								hint = true;
+							}
+						}
+					}
+					if (!hint) {
+						plugin.getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
+						plugin.getLogger().severe(materialList.substring(0, materialList.length() - 1));
+					}
+				}
+			} else if (element.length == 3) {
+				try {
+					rewardItem = Material.getMaterial(element[0]);
+					rewardQty = Integer.parseInt(element[2]);
+					// Check for POTION
+					if (rewardItem.equals(Material.POTION)) {
+						// Add the effect of the potion
+						final PotionEffectType potionType = PotionEffectType.getByName(element[1]);
+						if (potionType == null) {
+							plugin.getLogger().severe("Reward potion effect type in config.yml challenges is unknown - skipping!");
+						} else {
+							final Potion rewPotion = new Potion(PotionType.getByEffect(potionType));
+							final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { rewPotion.toItemStack(rewardQty) });
+							if (!leftOvers.isEmpty()) {
+								player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+							}
+						}
+					} else {
+						// Normal item, not a potion
+						int rewMod = Integer.parseInt(element[1]);
+						final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(
+								new ItemStack[] { new ItemStack(rewardItem, rewardQty, (short) rewMod) });
+						if (!leftOvers.isEmpty()) {
+							player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+						}
+					}
+					player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.RED + "There was a problem giving your reward. Ask Admin to check log!");
+					plugin.getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					if (element[0].equalsIgnoreCase("POTION")) {
+						String potionList = "";
+						boolean hint = false;
+						for (PotionEffectType m : PotionEffectType.values()) {
+							potionList += m.toString() + ",";
+							if (element[1].length() > 3) {
+								if (m.toString().startsWith(element[1].substring(0, 3))) {
+									plugin.getLogger().severe("Did you mean " + m.toString() + "?");
+									hint = true;
+								}
+							}
+						}
+						if (!hint) {
+							plugin.getLogger().severe("Sorry, I have no idea what potion type " + element[1] + " is. Pick from one of these:");
+							plugin.getLogger().severe(potionList.substring(0, potionList.length() - 1));
+						}
+					} else {
+						String materialList = "";
+						boolean hint = false;
+						for (Material m : Material.values()) {
+							materialList += m.toString() + ",";
+							if (m.toString().startsWith(element[0].substring(0, 3))) {
+								plugin.getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								hint = true;
+							}
+						}
+						if (!hint) {
+							getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
+							getLogger().severe(materialList.substring(0, materialList.length() - 1));
+						}
+					}
+				}
+			}
+		}
+		// Run reward commands
+		List<String> commands = Challenges.getChallengeConfig().getStringList("challenges.challengeList." + challenge.toLowerCase() + ".repeatrewardcommands");
+		for (String cmd : commands) {
+			// Substitute in any references to player
+			try {
+				if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("[player]", player.getName()))) {
+					getLogger().severe("Problem executing challenge repeat reward commands - skipping!");
+					getLogger().severe("Command was : " + cmd);
+				}
+			} catch (Exception e) {
+				getLogger().severe("Problem executing challenge repeat reward commands - skipping!");
+				getLogger().severe("Command was : " + cmd);
+				getLogger().severe("Error was: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		// Mark the challenge as complete
+		players.completeChallenge(player.getUniqueId(), challenge);
+		// Call the Challenge Complete Event
+		final ChallengeCompleteEvent event = new ChallengeCompleteEvent(player, challenge, permList, itemRewards, moneyReward, expReward, rewardText);
+		Bukkit.getPluginManager().callEvent(event);
+		return;
 	}
 	
 	private Logger getLogger() {
