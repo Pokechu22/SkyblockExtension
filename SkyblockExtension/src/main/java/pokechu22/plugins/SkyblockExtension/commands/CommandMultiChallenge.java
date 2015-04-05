@@ -170,6 +170,11 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					sender.sendMessage("§cChallenge " + challengeName + " is not repeatable!");
 					return true;
 				}
+				if (!canDoChallengeWithoutRunningOutOfTimes(player, challengeName, repititions)) {
+					sender.sendMessage("§cDoing " + challengeName + " " + repititions + 
+							" more times would excede the maximum times!");
+					return true;
+				}
 				if (!isChallengeAvailable(player, challengeName)) {
 					sender.sendMessage("§cYou have not unlocked " + challengeName + ".");
 					sender.sendMessage("§cTo be able to use a challenge with /" + commandLabel + 
