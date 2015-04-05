@@ -6,15 +6,20 @@ import java.util.Map;
 import java.util.List;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import com.wasteofplastic.askyblock.ASkyBlock;
@@ -180,7 +185,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				}
 				
 				for (int i = 0; i < repititions; i++) {
-					//TODO give reward
+					giveReward(player, challengeName);
 				}
 				
 				return true;
@@ -586,9 +591,8 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * 
 	 * @param player
 	 * @param challenge
-	 * @param times
 	 */
-	private void giveReward(Player player, String challenge, int times) {
+	private void giveReward(Player player, String challenge) {
 		// Grab the rewards from the config.yml file
 		String[] permList;
 		String[] itemRewards;
@@ -617,10 +621,10 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		if (Settings.useEconomy && moneyReward > 0 && (VaultHelper.econ != null)) {
 			EconomyResponse e = VaultHelper.econ.depositPlayer(player, Settings.worldName, moneyReward);
 			if (e.transactionSuccess()) {
-				player.sendMessage(ChatColor.GOLD + plugin.myLocale(player.getUniqueId()).challengesmoneyReward + ": " + ChatColor.WHITE + VaultHelper.econ.format(moneyReward));
+				player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesmoneyReward + ": " + ChatColor.WHITE + VaultHelper.econ.format(moneyReward));
 			} else {
-				plugin.getLogger().severe("Error giving player " + player.getUniqueId() + " challenge money:" + e.errorMessage);
-				plugin.getLogger().severe("Reward was $" + moneyReward);
+				getLogger().severe("Error giving player " + player.getUniqueId() + " challenge money:" + e.errorMessage);
+				getLogger().severe("Reward was $" + moneyReward);
 			}
 		}
 		// Dole out permissions
@@ -629,7 +633,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			if (!s.isEmpty()) {
 				if (!VaultHelper.checkPerm(player, s)) {
 					VaultHelper.addPerm(player, s);
-					plugin.getLogger().info("Added permission " + s + " to " + player.getName() + "");
+					getLogger().info("Added permission " + s + " to " + player.getName() + "");
 				}
 			}
 		}
@@ -649,22 +653,22 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					}
 					player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
 				} catch (Exception e) {
-					player.sendMessage(ChatColor.RED + plugin.myLocale(player.getUniqueId()).challengeserrorRewardProblem);
-					plugin.getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					player.sendMessage(ChatColor.RED + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengeserrorRewardProblem);
+					getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
 					String materialList = "";
 					boolean hint = false;
 					for (Material m : Material.values()) {
 						materialList += m.toString() + ",";
 						if (element[0].length() > 3) {
 							if (m.toString().startsWith(element[0].substring(0, 3))) {
-								plugin.getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
 								hint = true;
 							}
 						}
 					}
 					if (!hint) {
-						plugin.getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
-						plugin.getLogger().severe(materialList.substring(0, materialList.length() - 1));
+						getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
+						getLogger().severe(materialList.substring(0, materialList.length() - 1));
 					}
 				}
 			} else if (element.length == 3) {
@@ -676,7 +680,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 						// Add the effect of the potion
 						final PotionEffectType potionType = PotionEffectType.getByName(element[1]);
 						if (potionType == null) {
-							plugin.getLogger().severe("Reward potion effect type in config.yml challenges is unknown - skipping!");
+							getLogger().severe("Reward potion effect type in config.yml challenges is unknown - skipping!");
 						} else {
 							final Potion rewPotion = new Potion(PotionType.getByEffect(potionType));
 							final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { rewPotion.toItemStack(rewardQty) });
@@ -696,7 +700,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
 				} catch (Exception e) {
 					player.sendMessage(ChatColor.RED + "There was a problem giving your reward. Ask Admin to check log!");
-					plugin.getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
 					if (element[0].equalsIgnoreCase("POTION")) {
 						String potionList = "";
 						boolean hint = false;
@@ -704,14 +708,14 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 							potionList += m.toString() + ",";
 							if (element[1].length() > 3) {
 								if (m.toString().startsWith(element[1].substring(0, 3))) {
-									plugin.getLogger().severe("Did you mean " + m.toString() + "?");
+									getLogger().severe("Did you mean " + m.toString() + "?");
 									hint = true;
 								}
 							}
 						}
 						if (!hint) {
-							plugin.getLogger().severe("Sorry, I have no idea what potion type " + element[1] + " is. Pick from one of these:");
-							plugin.getLogger().severe(potionList.substring(0, potionList.length() - 1));
+							getLogger().severe("Sorry, I have no idea what potion type " + element[1] + " is. Pick from one of these:");
+							getLogger().severe(potionList.substring(0, potionList.length() - 1));
 						}
 					} else {
 						String materialList = "";
@@ -719,7 +723,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 						for (Material m : Material.values()) {
 							materialList += m.toString() + ",";
 							if (m.toString().startsWith(element[0].substring(0, 3))) {
-								plugin.getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
 								hint = true;
 							}
 						}
