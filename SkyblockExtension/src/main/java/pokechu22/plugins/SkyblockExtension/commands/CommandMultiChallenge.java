@@ -18,6 +18,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
@@ -47,10 +48,18 @@ import com.wasteofplastic.askyblock.util.VaultHelper;
 public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	private Challenges challenges;
 	private PlayerCache players;
+	private FileConfiguration challengesConfig;
 	
 	public CommandMultiChallenge() {
 		this.challenges = ASkyBlock.getPlugin().getChallenges();
 		this.players = ASkyBlock.getPlugin().getPlayers();
+		this.challengesConfig = challengesConfig;
+	}
+	
+	public CommandMultiChallenge(Challenges challenges, PlayerCache players, FileConfiguration challengesConfig) {
+		this.challenges = challenges;
+		this.players = players;
+		this.challengesConfig = challengesConfig;
 	}
 	
 	/**
@@ -231,7 +240,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 */
 	protected boolean challengeUnlocked(Player player, String challengeName) {
 		//ASkyBlock code.
-		String level = Challenges.getChallengeConfig().getString("challenges.challengeList." + challengeName + ".level");
+		String level = challengesConfig.getString("challenges.challengeList." + challengeName + ".level");
 		// Only check if the challenge has a level, otherwise it's a free level
 		if (!level.isEmpty()) {
 		    if (!challenges.isLevelAvailable(player, level)) {
@@ -265,11 +274,11 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 * @return
 	 */
 	protected boolean isChallengeRepeatable(String challengeName) {
-		if (!Challenges.getChallengeConfig().getBoolean(
+		if (!challengesConfig.getBoolean(
 				"challenges.challengeList." + challengeName + ".repeatable")) {
 			return false;
 		}
-		if (!Challenges.getChallengeConfig().getString(
+		if (!challengesConfig.getString(
 				"challenges.challengeList." + challengeName + ".type")
 				.equalsIgnoreCase("inventory")) {
 			return false;
@@ -289,7 +298,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			String challenge, int times) {
 		int currentTimes = players.checkChallengeTimes(player.getUniqueId(),
 				challenge);
-		int maxTimes = Challenges.getChallengeConfig().getInt(
+		int maxTimes = challengesConfig.getInt(
 				"challenges.challengeList." + challenge + ".maxtimes", 0);
 	    if (maxTimes > 0) {
 			if (currentTimes + times > maxTimes) {
@@ -337,7 +346,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	 */
 	@SuppressWarnings("deprecation")
 	public boolean hasRequired(Player player, String challenge, int times) {
-		final String[] reqList = Challenges.getChallengeConfig().getString(
+		final String[] reqList = challengesConfig.getString(
 				"challenges.challengeList." + challenge + ".requiredItems")
 				.split(" ");
 		
@@ -567,7 +576,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		// Build up the items in the inventory and remove them if they are
 		// all there.
 
-		if (Challenges.getChallengeConfig().getBoolean("challenges.challengeList." + challenge + ".takeItems")) {
+		if (challengesConfig.getBoolean("challenges.challengeList." + challenge + ".takeItems")) {
 			for (ItemStack i : toBeRemoved) {
 				HashMap<Integer, ItemStack> leftOver = player.getInventory().removeItem(i);
 				if (!leftOver.isEmpty()) {
@@ -601,11 +610,11 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		int expReward = 0;
 		String rewardText = "";
 
-		itemRewards = Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatItemReward", "").split(" ");
-		moneyReward = Challenges.getChallengeConfig().getInt("challenges.challengeList." + challenge.toLowerCase() + ".repeatMoneyReward", 0);
+		itemRewards = challengesConfig.getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatItemReward", "").split(" ");
+		moneyReward = challengesConfig.getInt("challenges.challengeList." + challenge.toLowerCase() + ".repeatMoneyReward", 0);
 		rewardText = ChatColor.translateAlternateColorCodes('&',
-				Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatRewardText", "Goodies!"));
-		expReward = Challenges.getChallengeConfig().getInt("challenges.challengeList." + challenge + ".repeatExpReward", 0);
+				challengesConfig.getString("challenges.challengeList." + challenge.toLowerCase() + ".repeatRewardText", "Goodies!"));
+		expReward = challengesConfig.getInt("challenges.challengeList." + challenge + ".repeatExpReward", 0);
 
 		int moneySuccesses = 0;
 		
@@ -626,7 +635,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				}
 			}
 			// Dole out permissions
-			permList = Challenges.getChallengeConfig().getString("challenges.challengeList." + challenge.toLowerCase() + ".permissionReward", "").split(" ");
+			permList = challengesConfig.getString("challenges.challengeList." + challenge.toLowerCase() + ".permissionReward", "").split(" ");
 			for (final String s : permList) {
 				if (!s.isEmpty()) {
 					if (!VaultHelper.checkPerm(player, s)) {
@@ -732,7 +741,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 				}
 			}
 			// Run reward commands
-			List<String> commands = Challenges.getChallengeConfig().getStringList("challenges.challengeList." + challenge.toLowerCase() + ".repeatrewardcommands");
+			List<String> commands = challengesConfig.getStringList("challenges.challengeList." + challenge.toLowerCase() + ".repeatrewardcommands");
 			for (String cmd : commands) {
 				// Substitute in any references to player
 				try {
