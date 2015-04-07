@@ -1,5 +1,8 @@
 package pokechu22.plugins.SkyblockExtension;
 
+import java.util.List;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -7,6 +10,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldguard.bukkit.BukkitPlayer;
+import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
@@ -30,17 +39,21 @@ public class AnimalProtection implements Listener {
 				Projectile projectile = (Projectile) e.getDamager();
 				if (projectile.getShooter() instanceof Player) {
 					Player shooter = (Player) projectile.getShooter();
-					if(isProtected(e.getEntity().getLocation(), shooter, hasPerms(shooter, e.getEntity()))) {
-						e.setCancelled(true);
-						projectile.remove();
-						shooter.sendMessage("§cYou don't have permission.");
+					if (!hasPermission(shooter, e.getEntity())) {
+						if(isProtected(e.getEntity().getLocation(), shooter)) {
+							e.setCancelled(true);
+							projectile.remove();
+							shooter.sendMessage("§cYou don't have permission.");
+						}
 					}
 				}
 			} else if (e.getDamager() instanceof Player) {
 				Player damager = (Player) e.getDamager();
-				if(isProtected(e.getEntity().getLocation(), damager, hasPerms(damager, e.getEntity()))) {
-					e.setCancelled(true);
-					damager.sendMessage("§cYou don't have permission.");
+				if (!hasPermission(damager, e.getEntity())) {
+					if(isProtected(e.getEntity().getLocation(), damager)) {
+						e.setCancelled(true);
+						damager.sendMessage("§cYou don't have permission.");
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -56,5 +69,27 @@ public class AnimalProtection implements Listener {
 					"\nisCanceled" + e.isCancelled());
 			ErrorHandler.logError(report);
 		}
+	}
+	
+	/**
+	 * Checks if the specified location is within a worldgaurd protected
+	 * region.
+	 * 
+	 * @param location The location to check.
+	 * @param player The player to check.
+	 * @return Whether the specified player is a member or owner of all
+	 *        regions in the given area.
+	 */
+	private boolean isProtected(Location location, Player player) {
+		RegionManager manager = WGBukkit.getRegionManager(player.getWorld());
+		List<String> regions = manager.getApplicableRegionsIDs(
+				new Vector(location.getX(), location.getY(), location.getZ()));
+		for (String region : regions) {
+			ProtectedRegion pr = manager.getRegion(region);
+			if (!(pr.isMember(new BukkitPlayer(WGBukkit.getPlugin(), player)))) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
