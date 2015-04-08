@@ -83,7 +83,30 @@ permissions:
     description:
       Disables players from using /island sendhome on you.
     default: op
+  
+  sbe.protection.entities.*:
+    description: 
+      Gives the ability to harm all entities in worldgaurd protected regions.
+    children: 
+      sbe.protection.entities.animals: true
+      sbe.protection.entities.monsters: true
+      sbe.protection.entities.other: true
+  
+  sbe.protection.animals:
+    description:  
+      Gives the ability to harm animals in worldgaurd protected regions.
+    default: op
+  
+  sbe.protection.monsters:
+    description:  
+      Gives the ability to harm monsters in worldgaurd protected regions.
+    default: true
     
+  sbe.protection.others:
+    description: 
+      Gives the ability to harm other entities in worldgaurd protected regions.
+    default: op
+  
   sbe.mod.sendhomeall: 
     description:
       Allows you to use /island sendhome on players not on your island.

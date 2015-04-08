@@ -39,7 +39,7 @@ public class AnimalProtection implements Listener {
 				Projectile projectile = (Projectile) e.getDamager();
 				if (projectile.getShooter() instanceof Player) {
 					Player shooter = (Player) projectile.getShooter();
-					if (!hasPermission(shooter, e.getEntity())) {
+					if (!hasPermissionToHarm(shooter, e.getEntity())) {
 						if(isProtected(e.getEntity().getLocation(), shooter)) {
 							e.setCancelled(true);
 							projectile.remove();
@@ -49,7 +49,7 @@ public class AnimalProtection implements Listener {
 				}
 			} else if (e.getDamager() instanceof Player) {
 				Player damager = (Player) e.getDamager();
-				if (!hasPermission(damager, e.getEntity())) {
+				if (!hasPermissionToHarm(damager, e.getEntity())) {
 					if(isProtected(e.getEntity().getLocation(), damager)) {
 						e.setCancelled(true);
 						damager.sendMessage("§cYou don't have permission.");
@@ -71,6 +71,43 @@ public class AnimalProtection implements Listener {
 		}
 	}
 	
+	private boolean hasPermissionToHarm(Player player, Entity entity) {
+		switch(entity.getType()) {
+		case BAT:
+		case CHICKEN:
+		case COW:
+		case HORSE:
+		case IRON_GOLEM:
+		case MUSHROOM_COW:
+		case OCELOT: 
+		case PIG:
+		case SHEEP:
+		case SNOWMAN: 
+		case SQUID: 
+		case VILLAGER:
+		case WOLF: 
+			return player.hasPermission("sbe.protection.animals");
+		case BLAZE:
+		case CAVE_SPIDER: 
+		case CREEPER: 
+		case ENDER_DRAGON: 
+		case ENDERMAN: 
+		case GHAST: 
+		case GIANT: 
+		case MAGMA_CUBE:
+		case PIG_ZOMBIE: 
+		case SILVERFISH:
+		case SKELETON: 
+		case SLIME: 
+		case SPIDER: 
+		case WITCH: 
+		case ZOMBIE: 
+			return player.hasPermission("sbe.protection.monsters");
+		default:
+			return player.hasPermission("sbe.protection.others");
+		}
+	}
+
 	/**
 	 * Checks if the specified location is within a worldgaurd protected
 	 * region.
