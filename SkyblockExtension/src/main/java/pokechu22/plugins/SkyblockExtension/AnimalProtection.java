@@ -28,9 +28,17 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ThrowableReport;
  * @author Pokechu22
  */
 public class AnimalProtection implements Listener {
+	/**
+	 * Whether or not AnimalProtection is enabled -- configuration setting.
+	 */
+	public static boolean enabled = true;
+	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void preventHurting(EntityDamageByEntityEvent e) {
 		try {
+			if (!enabled) {
+				return;
+			}
 			if (e.getEntity() instanceof Player) {
 				//Don't handle PVP as PVP is handled by main WorldGaurd.
 				return;

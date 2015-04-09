@@ -66,6 +66,7 @@ public class Config {
 				.replace("\\&", "\uFFFF").replace("&", "§").replace("\uFFFF", "&");
 		
 		SlabPlacementListener.enabled = getDefaultConfig().getBoolean("enableSlabOverrides");
+		AnimalProtection.enabled = getDefaultConfig().getBoolean("enableWorldGaurdEntityProtection");
 		
 		getLogger().info("Configuration loaded!");
 	}

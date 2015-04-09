@@ -45,3 +45,6 @@ witherWarning:
 #data values higher than 8 (normally upside down slabs and unobtainable in the inventory) will
 #create super stone when placed (but upside down slabs that are that way from a normal slab won't))  
 enableSlabOverrides: true
+
+#Enables/disables the protection of various 
+enableWorldGaurdEntityProtection: true
