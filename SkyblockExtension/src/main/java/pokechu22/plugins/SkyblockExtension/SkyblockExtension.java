@@ -91,6 +91,8 @@ public class SkyblockExtension extends JavaPlugin {
 				this);
 		getServer().getPluginManager().registerEvents(
 				new SlabPlacementListener(), this);
+		getServer().getPluginManager().registerEvents(
+				new AnimalProtection(), this);
 
 		// Other registration.
 		registerCommands();
