@@ -53,7 +53,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	public CommandMultiChallenge() {
 		this.challenges = ASkyBlock.getPlugin().getChallenges();
 		this.players = ASkyBlock.getPlugin().getPlayers();
-		this.challengesConfig = challengesConfig;
+		this.challengesConfig = Challenges.getChallengeConfig();
 	}
 	
 	public CommandMultiChallenge(Challenges challenges, PlayerCache players, FileConfiguration challengesConfig) {
