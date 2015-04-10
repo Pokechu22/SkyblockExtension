@@ -46,13 +46,13 @@ multiChallenge:
   tax: 1
   #The way to round the tax.  
   #Valid values:
-  # * round up lossy
-  # * round up keep
-  # * round nearest lossy
-  # * round nearest keep
-  # * round down lossy
-  # * round down keep
-  roundMode: "round up lossy"
+  # * Round up: Lossy
+  # * Round up: Keep
+  # * Round nearest: Lossy
+  # * Round nearest: Keep
+  # * Round down: Lossy
+  # * Round down: Keep
+  roundMode: "Round up: Lossy"
 
 #Allows placement of superstone, since 1.8 removed it.  (When enabled, normal slabs with 
 #data values higher than 8 (normally upside down slabs and unobtainable in the inventory) will

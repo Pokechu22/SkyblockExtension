@@ -216,4 +216,37 @@ public class CommandMultiChallengeTest {
 			$(ROUND_DOWN_KEEP, 1, 2, 0f, 0)
 		);
 	}
+	
+	@Test
+	@Parameters(method="paramsFor_roundModeMatchTest")
+	public void roundModeMatchTest(String mode, 
+			MultiChallengeRoundingMode expected) {
+		assertThat(MultiChallengeRoundingMode.match(mode), is(expected));
+	}
+	
+	private Object[] paramsFor_roundModeMatchTest() {
+		return $(
+			//Actual enum constants
+			$("ROUND_UP_LOSSY", ROUND_UP_LOSSY),
+			$("ROUND_UP_KEEP", ROUND_UP_KEEP), 
+			$("ROUND_NEAREST_LOSSY", ROUND_NEAREST_LOSSY), 
+			$("ROUND_NEAREST_KEEP", ROUND_NEAREST_KEEP), 
+			$("ROUND_DOWN_LOSSY", ROUND_DOWN_LOSSY), 
+			$("ROUND_DOWN_KEEP", ROUND_DOWN_KEEP),
+			//Lowercase, spaced versions.
+			$("round up lossy", ROUND_UP_LOSSY),
+			$("round up keep", ROUND_UP_KEEP), 
+			$("round nearest lossy", ROUND_NEAREST_LOSSY), 
+			$("round nearest keep", ROUND_NEAREST_KEEP), 
+			$("round down lossy", ROUND_DOWN_LOSSY), 
+			$("round down keep", ROUND_DOWN_KEEP),
+			//Obvious syntax versions.
+			$("Round up: Lossy", ROUND_UP_LOSSY),
+			$("Round up: Keep", ROUND_UP_KEEP), 
+			$("Round nearest: Lossy", ROUND_NEAREST_LOSSY), 
+			$("Round nearest: Keep", ROUND_NEAREST_KEEP), 
+			$("Round down: Lossy", ROUND_DOWN_LOSSY), 
+			$("Round down: Keep", ROUND_DOWN_KEEP) 
+		);
+	}
 }
