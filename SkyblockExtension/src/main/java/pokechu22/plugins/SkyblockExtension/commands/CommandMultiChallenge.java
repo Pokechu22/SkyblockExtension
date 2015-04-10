@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -834,7 +836,8 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		}
 		
 		//And now we handle the messages.
-		player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesrewards + ": " + ChatColor.WHITE + times + " * " + rewardText);
+		player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesrewards + ": " + ChatColor.WHITE + 
+				replacedNumbers(rewardText, times, tax));
 		
 		if (expReward > 0) {
 			player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesexpReward + ": " + ChatColor.WHITE + (expReward * times));
@@ -844,6 +847,21 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		}
 		
 		player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
+	}
+	
+	private String replacedNumbers(String description, 
+			int times, float tax) {
+		StringBuilder edited = new StringBuilder(description);
+		Matcher m = Pattern.compile("\\d").matcher(edited);
+		while (m.find()) {
+			String number = edited.substring(m.start(), m.end());
+			int val = Integer.parseInt(number.trim());
+			String newVal = Integer.toString(
+					roundMode.apply(val, times, tax));
+			edited.replace(m.start(), m.end(), newVal);
+		}
+		
+		return edited.toString();
 	}
 	
 	private Logger getLogger() {
