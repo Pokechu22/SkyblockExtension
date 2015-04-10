@@ -41,6 +41,19 @@ witherWarning:
   #The text that describes how to opt out (displayed next)
   optOutText: "&7&oTo disable this message, do '&r&7/pokechu22 WitherWarning off&7&o'."
 
+#Multichallenge functionality.
+multiChallenge: 
+  tax: 1
+  #The way to round the tax.  
+  #Valid values:
+  # * round up lossy
+  # * round up keep
+  # * round nearest lossy
+  # * round nearest keep
+  # * round down lossy
+  # * round down keep
+  roundMode: "round up lossy"
+
 #Allows placement of superstone, since 1.8 removed it.  (When enabled, normal slabs with 
 #data values higher than 8 (normally upside down slabs and unobtainable in the inventory) will
 #create super stone when placed (but upside down slabs that are that way from a normal slab won't))  

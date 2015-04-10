@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
 
+import pokechu22.plugins.SkyblockExtension.commands.CommandMultiChallenge;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
@@ -53,6 +54,13 @@ public class Config {
 				"sendHome.allowMembersToSendHome", true);
 		CommandIsland.useSpawnCommandForSpawn = getDefaultConfig().getBoolean(
 				"sendHome.useSpawnCommandForSpawn", true);
+		
+		CommandMultiChallenge.tax = (float)getDefaultConfig().getDouble(
+				"multiChallenge.tax", 1);
+		CommandMultiChallenge.roundMode = CommandMultiChallenge
+				.MultiChallengeRoundingMode.match(getDefaultConfig()
+						.getString("multiChallenge.roundMode",
+								"round up lossy"));
 		
 		WitherWarner.enabled = getDefaultConfig().getBoolean(
 				"witherWarning.enabled");

@@ -46,6 +46,74 @@ import com.wasteofplastic.askyblock.util.VaultHelper;
  * @author 
  */
 public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
+	public static enum MultiChallengeRoundingMode {
+		ROUND_UP_LOSSY {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return ceil(tax * quantity) * times;
+			}
+		},
+		ROUND_UP_KEEP {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return ceil(tax * times * quantity);
+			}
+		},
+		ROUND_NEAREST_LOSSY {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return nearest(tax * times) * quantity;
+			}
+		},
+		ROUND_NEAREST_KEEP {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return nearest(tax * times * quantity);
+			}
+		},
+		ROUND_DOWN_LOSSY {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return floor(tax * times) * quantity;
+			}
+		},
+		ROUND_DOWN_KEEP {
+			@Override
+			public int apply(int quantity, int times, float tax) {
+				return floor(tax * times * quantity);
+			}
+		};
+		
+		public abstract int apply(int quantity, int times, 
+				float tax);
+		
+		private static int ceil(float value) {
+			return (int)Math.ceil(value);
+		}
+		private static int floor(float value) {
+			return (int)Math.floor(value);
+		}
+		private static int nearest(float value) {
+			return (int)Math.round(value);
+		}
+		
+		public static MultiChallengeRoundingMode match(
+				String name) {
+			return MultiChallengeRoundingMode.valueOf(
+					name.toUpperCase().replaceAll("\\s+", "_")
+					.replaceAll("\\W", ""));
+		}
+	}
+	
+	/**
+	 * The way that quantities are rounded.
+	 */
+	public static MultiChallengeRoundingMode roundMode;
+	/**
+	 * The tax to apply.
+	 */
+	public static float tax;
+	
 	private Challenges challenges;
 	private PlayerCache players;
 	private FileConfiguration challengesConfig;
@@ -618,7 +686,103 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 
 		int moneySuccesses = 0;
 		
-		//Give each reward repeatedly.  Messages are done later.
+		// Give items
+		Material rewardItem;
+		int rewardQty;
+		// Build the item stack of rewards to give the player
+		for (final String s : itemRewards) {
+			final String[] element = s.split(":");
+			if (element.length == 2) {
+				try {
+					rewardItem = Material.getMaterial(element[0].toUpperCase());
+					rewardQty = roundMode.apply(Integer.parseInt(element[1]), times, tax);
+					final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { new ItemStack(rewardItem, rewardQty) });
+					if (!leftOvers.isEmpty()) {
+						player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+					}
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.RED + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengeserrorRewardProblem);
+					getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					String materialList = "";
+					boolean hint = false;
+					for (Material m : Material.values()) {
+						materialList += m.toString() + ",";
+						if (element[0].length() > 3) {
+							if (m.toString().startsWith(element[0].substring(0, 3))) {
+								getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								hint = true;
+							}
+						}
+					}
+					if (!hint) {
+						getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
+						getLogger().severe(materialList.substring(0, materialList.length() - 1));
+					}
+				}
+			} else if (element.length == 3) {
+				try {
+					rewardItem = Material.getMaterial(element[0]);
+					rewardQty = roundMode.apply(Integer.parseInt(element[2]), times, tax);
+					// Check for POTION
+					if (rewardItem.equals(Material.POTION)) {
+						// Add the effect of the potion
+						final PotionEffectType potionType = PotionEffectType.getByName(element[1]);
+						if (potionType == null) {
+							getLogger().severe("Reward potion effect type in config.yml challenges is unknown - skipping!");
+						} else {
+							final Potion rewPotion = new Potion(PotionType.getByEffect(potionType));
+							final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { rewPotion.toItemStack(rewardQty) });
+							if (!leftOvers.isEmpty()) {
+								player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+							}
+						}
+					} else {
+						// Normal item, not a potion
+						int rewMod = Integer.parseInt(element[1]);
+						final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(
+								new ItemStack[] { new ItemStack(rewardItem, rewardQty, (short) rewMod) });
+						if (!leftOvers.isEmpty()) {
+							player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
+						}
+					}
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.RED + "There was a problem giving your reward. Ask Admin to check log!");
+					getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
+					if (element[0].equalsIgnoreCase("POTION")) {
+						String potionList = "";
+						boolean hint = false;
+						for (PotionEffectType m : PotionEffectType.values()) {
+							potionList += m.toString() + ",";
+							if (element[1].length() > 3) {
+								if (m.toString().startsWith(element[1].substring(0, 3))) {
+									getLogger().severe("Did you mean " + m.toString() + "?");
+									hint = true;
+								}
+							}
+						}
+						if (!hint) {
+							getLogger().severe("Sorry, I have no idea what potion type " + element[1] + " is. Pick from one of these:");
+							getLogger().severe(potionList.substring(0, potionList.length() - 1));
+						}
+					} else {
+						String materialList = "";
+						boolean hint = false;
+						for (Material m : Material.values()) {
+							materialList += m.toString() + ",";
+							if (m.toString().startsWith(element[0].substring(0, 3))) {
+								getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
+								hint = true;
+							}
+						}
+						if (!hint) {
+							getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
+							getLogger().severe(materialList.substring(0, materialList.length() - 1));
+						}
+					}
+				}
+			}
+		}
+		//Give all other components of the reward using a loop.
 		for (int i = 0; i < times; i++) {
 			// Report the rewards and give out exp, money and permissions if
 			// appropriate
@@ -644,102 +808,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 					}
 				}
 			}
-			// Give items
-			Material rewardItem;
-			int rewardQty;
-			// Build the item stack of rewards to give the player
-			for (final String s : itemRewards) {
-				final String[] element = s.split(":");
-				if (element.length == 2) {
-					try {
-						rewardItem = Material.getMaterial(element[0].toUpperCase());
-						rewardQty = Integer.parseInt(element[1]);
-						final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { new ItemStack(rewardItem, rewardQty) });
-						if (!leftOvers.isEmpty()) {
-							player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
-						}
-					} catch (Exception e) {
-						player.sendMessage(ChatColor.RED + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengeserrorRewardProblem);
-						getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
-						String materialList = "";
-						boolean hint = false;
-						for (Material m : Material.values()) {
-							materialList += m.toString() + ",";
-							if (element[0].length() > 3) {
-								if (m.toString().startsWith(element[0].substring(0, 3))) {
-									getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
-									hint = true;
-								}
-							}
-						}
-						if (!hint) {
-							getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
-							getLogger().severe(materialList.substring(0, materialList.length() - 1));
-						}
-					}
-				} else if (element.length == 3) {
-					try {
-						rewardItem = Material.getMaterial(element[0]);
-						rewardQty = Integer.parseInt(element[2]);
-						// Check for POTION
-						if (rewardItem.equals(Material.POTION)) {
-							// Add the effect of the potion
-							final PotionEffectType potionType = PotionEffectType.getByName(element[1]);
-							if (potionType == null) {
-								getLogger().severe("Reward potion effect type in config.yml challenges is unknown - skipping!");
-							} else {
-								final Potion rewPotion = new Potion(PotionType.getByEffect(potionType));
-								final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(new ItemStack[] { rewPotion.toItemStack(rewardQty) });
-								if (!leftOvers.isEmpty()) {
-									player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
-								}
-							}
-						} else {
-							// Normal item, not a potion
-							int rewMod = Integer.parseInt(element[1]);
-							final HashMap<Integer, ItemStack> leftOvers = player.getInventory().addItem(
-									new ItemStack[] { new ItemStack(rewardItem, rewardQty, (short) rewMod) });
-							if (!leftOvers.isEmpty()) {
-								player.getWorld().dropItemNaturally(player.getLocation(), leftOvers.get(0));
-							}
-						}
-					} catch (Exception e) {
-						player.sendMessage(ChatColor.RED + "There was a problem giving your reward. Ask Admin to check log!");
-						getLogger().severe("Could not give " + element[0] + ":" + element[1] + " to " + player.getName() + " for challenge reward!");
-						if (element[0].equalsIgnoreCase("POTION")) {
-							String potionList = "";
-							boolean hint = false;
-							for (PotionEffectType m : PotionEffectType.values()) {
-								potionList += m.toString() + ",";
-								if (element[1].length() > 3) {
-									if (m.toString().startsWith(element[1].substring(0, 3))) {
-										getLogger().severe("Did you mean " + m.toString() + "?");
-										hint = true;
-									}
-								}
-							}
-							if (!hint) {
-								getLogger().severe("Sorry, I have no idea what potion type " + element[1] + " is. Pick from one of these:");
-								getLogger().severe(potionList.substring(0, potionList.length() - 1));
-							}
-						} else {
-							String materialList = "";
-							boolean hint = false;
-							for (Material m : Material.values()) {
-								materialList += m.toString() + ",";
-								if (m.toString().startsWith(element[0].substring(0, 3))) {
-									getLogger().severe("Did you mean " + m.toString() + "? If so, put that in challenges.yml.");
-									hint = true;
-								}
-							}
-							if (!hint) {
-								getLogger().severe("Sorry, I have no idea what " + element[0] + " is. Pick from one of these:");
-								getLogger().severe(materialList.substring(0, materialList.length() - 1));
-							}
-						}
-					}
-				}
-			}
+			
 			// Run reward commands
 			List<String> commands = challengesConfig.getStringList("challenges.challengeList." + challenge.toLowerCase() + ".repeatrewardcommands");
 			for (String cmd : commands) {
