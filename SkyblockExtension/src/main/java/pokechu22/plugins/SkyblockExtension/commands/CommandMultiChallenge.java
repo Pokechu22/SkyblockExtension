@@ -837,7 +837,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		
 		//And now we handle the messages.
 		player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesrewards + ": " + ChatColor.WHITE + 
-				replacedNumbers(rewardText, times, tax));
+				replacedNumbers(rewardText, times, tax, roundMode));
 		
 		if (expReward > 0) {
 			player.sendMessage(ChatColor.GOLD + ASkyBlock.getPlugin().myLocale(player.getUniqueId()).challengesexpReward + ": " + ChatColor.WHITE + (expReward * times));
@@ -849,8 +849,8 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
 	}
 	
-	private String replacedNumbers(String description, 
-			int times, float tax) {
+	protected String replacedNumbers(String description, int times, 
+			float tax, MultiChallengeRoundingMode roundMode) {
 		StringBuilder edited = new StringBuilder(description);
 		Matcher m = Pattern.compile("\\d").matcher(edited);
 		while (m.find()) {
