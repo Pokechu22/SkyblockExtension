@@ -859,6 +859,8 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 			String newVal = Integer.toString(
 					roundMode.apply(val, times, tax));
 			edited.replace(m.start(), m.end(), newVal);
+			
+			m.region(m.start() + newVal.length(), edited.length());
 		}
 		
 		return edited.toString();
