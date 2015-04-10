@@ -58,31 +58,31 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		ROUND_UP_KEEP {
 			@Override
 			public int apply(int quantity, int times, float tax) {
-				return ceil(tax * times * quantity);
+				return ceil(tax * quantity * times);
 			}
 		},
 		ROUND_NEAREST_LOSSY {
 			@Override
 			public int apply(int quantity, int times, float tax) {
-				return nearest(tax * times) * quantity;
+				return nearest(tax * quantity) * times;
 			}
 		},
 		ROUND_NEAREST_KEEP {
 			@Override
 			public int apply(int quantity, int times, float tax) {
-				return nearest(tax * times * quantity);
+				return nearest(tax * quantity * times);
 			}
 		},
 		ROUND_DOWN_LOSSY {
 			@Override
 			public int apply(int quantity, int times, float tax) {
-				return floor(tax * times) * quantity;
+				return floor(tax * quantity) * times;
 			}
 		},
 		ROUND_DOWN_KEEP {
 			@Override
 			public int apply(int quantity, int times, float tax) {
-				return floor(tax * times * quantity);
+				return floor(tax * quantity * times);
 			}
 		};
 		
