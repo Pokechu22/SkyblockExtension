@@ -851,22 +851,28 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	
 	protected static String replacedNumbers(String description, int times, 
 			float tax, MultiChallengeRoundingMode roundMode) {
-		StringBuilder edited = new StringBuilder(description);
-		//The following regex matches a series of digits.
+		//Prepend and apend a space for the below regex.
+		StringBuilder edited = new StringBuilder(description)
+				.insert(0, ' ').append(' ');
+		//The following regex matches a series of digits
+		//that have a space before and after them.
 		//The '+' means that it goes for all that it can
 		//(rather than grabbing only 1).
-		Matcher m = Pattern.compile("\\d+").matcher(edited);
+		Matcher m = Pattern.compile("\\s+\\d+\\s+").matcher(edited);
 		while (m.find()) {
-			String number = edited.substring(m.start(), m.end());
-			int val = Integer.parseInt(number.trim());
-			String newVal = Integer.toString(
-					roundMode.apply(val, times, tax));
-			edited.replace(m.start(), m.end(), newVal);
+			String sub = edited.substring(m.start(), m.end());
+			String number = sub.trim();
+			int val = Integer.parseInt(sub.trim());
+			int newVal = roundMode.apply(val, times, tax); 
+			String newNumber = Integer.toString(newVal);
+			String newSub = sub.replace(number, newNumber);
+			edited.replace(m.start(), m.end(), sub.replace(number,
+					newNumber));
 			
-			m.region(m.start() + newVal.length(), edited.length());
+			m.region(m.start() + newSub.length(), edited.length());
 		}
 		
-		return edited.toString();
+		return edited.toString().trim();
 	}
 	
 	private Logger getLogger() {

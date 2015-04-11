@@ -271,7 +271,12 @@ public class CommandMultiChallengeTest {
 			$("16 redstone dust, 1 cocoa bean, 1 spawn egg" +
 					"(chicken,cow,pig)", 11, .9f, ROUND_UP_LOSSY,
 					"165 redstone dust, 11 cocoa bean, 11 " +
-					"spawn egg(chicken,cow,pig)")
+					"spawn egg(chicken,cow,pig)"),
+			//Middle numbers (yes, this is a random string, 
+			//but it is a good test value)
+			$("Pokechu22 teh h4x0r 1s eating 2 diamonds",
+					2, 1f, ROUND_UP_LOSSY,
+					"Pokechu22 teh h4x0r 1s eating 4 diamonds")
 		);
 	}
 }
