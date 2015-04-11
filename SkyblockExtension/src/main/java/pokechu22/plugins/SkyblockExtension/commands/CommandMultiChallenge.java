@@ -849,7 +849,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 		player.getWorld().playSound(player.getLocation(), Sound.ITEM_PICKUP, 1F, 1F);
 	}
 	
-	protected String replacedNumbers(String description, int times, 
+	protected static String replacedNumbers(String description, int times, 
 			float tax, MultiChallengeRoundingMode roundMode) {
 		StringBuilder edited = new StringBuilder(description);
 		Matcher m = Pattern.compile("\\d").matcher(edited);

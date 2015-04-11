@@ -3,10 +3,8 @@ package pokechu22.plugins.SkyblockExtension.commands;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static junitparams.JUnitParamsRunner.$;
-
 import static pokechu22.plugins.SkyblockExtension.commands
 		.CommandMultiChallenge.MultiChallengeRoundingMode.*;
-
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
@@ -224,6 +222,7 @@ public class CommandMultiChallengeTest {
 		assertThat(MultiChallengeRoundingMode.match(mode), is(expected));
 	}
 	
+	@SuppressWarnings("unused")
 	private Object[] paramsFor_roundModeMatchTest() {
 		return $(
 			//Actual enum constants
@@ -247,6 +246,26 @@ public class CommandMultiChallengeTest {
 			$("Round nearest: Keep", ROUND_NEAREST_KEEP), 
 			$("Round down: Lossy", ROUND_DOWN_LOSSY), 
 			$("Round down: Keep", ROUND_DOWN_KEEP) 
+		);
+	}
+	
+	@Test
+	@Parameters(method="paramsFor_replacedNumbersTest")
+	public void replacedNumbersTest(String desc, int times, float tax, 
+			MultiChallengeRoundingMode roundMode, String expected) {
+		assertThat(CommandMultiChallenge.replacedNumbers(desc, times,
+				tax, roundMode), is(expected));
+	}
+	
+	@SuppressWarnings("unused")
+	private Object[] paramsFor_replacedNumbersTest() {
+		return $(
+			$("4", 2, .6f, ROUND_UP_LOSSY, "6"), 
+			$("4", 2, .6f, ROUND_UP_KEEP, "5"),
+			$("4", 2, .6f, ROUND_NEAREST_LOSSY, "4"), 
+			$("4", 2, .6f, ROUND_NEAREST_KEEP, "5"),
+			$("4", 2, .6f, ROUND_DOWN_LOSSY, "4"), 
+			$("4", 2, .6f, ROUND_DOWN_KEEP, "4")
 		);
 	}
 }
