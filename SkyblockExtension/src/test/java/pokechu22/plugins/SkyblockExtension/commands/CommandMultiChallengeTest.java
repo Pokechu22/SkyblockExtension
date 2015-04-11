@@ -260,12 +260,18 @@ public class CommandMultiChallengeTest {
 	@SuppressWarnings("unused")
 	private Object[] paramsFor_replacedNumbersTest() {
 		return $(
+			//Normal conditions
 			$("4", 2, .6f, ROUND_UP_LOSSY, "6"), 
 			$("4", 2, .6f, ROUND_UP_KEEP, "5"),
 			$("4", 2, .6f, ROUND_NEAREST_LOSSY, "4"), 
 			$("4", 2, .6f, ROUND_NEAREST_KEEP, "5"),
 			$("4", 2, .6f, ROUND_DOWN_LOSSY, "4"), 
-			$("4", 2, .6f, ROUND_DOWN_KEEP, "4")
+			$("4", 2, .6f, ROUND_DOWN_KEEP, "4"),
+			//Repeated number issue
+			$("16 redstone dust, 1 cocoa bean, 1 spawn" + 
+					"egg(chicken,cow,pig)", 11, .9f, ROUND_UP_LOSSY,
+					"165 redstone dust, 11 cocoa bean, 11 " +
+					"spawn egg(chicken,cow,pig)")
 		);
 	}
 }
