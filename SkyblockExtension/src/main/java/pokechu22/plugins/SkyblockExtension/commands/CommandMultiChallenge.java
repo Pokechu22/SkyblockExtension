@@ -852,7 +852,10 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	protected static String replacedNumbers(String description, int times, 
 			float tax, MultiChallengeRoundingMode roundMode) {
 		StringBuilder edited = new StringBuilder(description);
-		Matcher m = Pattern.compile("\\d").matcher(edited);
+		//The following regex matches a series of digits.
+		//The '+' means that it goes for all that it can
+		//(rather than grabbing only 1).
+		Matcher m = Pattern.compile("\\d+").matcher(edited);
 		while (m.find()) {
 			String number = edited.substring(m.start(), m.end());
 			int val = Integer.parseInt(number.trim());
