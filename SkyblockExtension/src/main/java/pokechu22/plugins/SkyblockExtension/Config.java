@@ -55,7 +55,7 @@ public class Config {
 		CommandIsland.useSpawnCommandForSpawn = getDefaultConfig().getBoolean(
 				"sendHome.useSpawnCommandForSpawn", true);
 		
-		CommandMultiChallenge.tax = (float)getDefaultConfig().getDouble(
+		CommandMultiChallenge.tax = getDefaultConfig().getDouble(
 				"multiChallenge.tax", 1);
 		CommandMultiChallenge.roundMode = CommandMultiChallenge
 				.MultiChallengeRoundingMode.match(getDefaultConfig()

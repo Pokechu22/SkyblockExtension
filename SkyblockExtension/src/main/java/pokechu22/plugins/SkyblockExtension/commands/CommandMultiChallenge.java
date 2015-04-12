@@ -51,51 +51,51 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	public static enum MultiChallengeRoundingMode {
 		ROUND_UP_LOSSY {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return ceil(tax * quantity) * times;
 			}
 		},
 		ROUND_UP_KEEP {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return ceil(tax * quantity * times);
 			}
 		},
 		ROUND_NEAREST_LOSSY {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return nearest(tax * quantity) * times;
 			}
 		},
 		ROUND_NEAREST_KEEP {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return nearest(tax * quantity * times);
 			}
 		},
 		ROUND_DOWN_LOSSY {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return floor(tax * quantity) * times;
 			}
 		},
 		ROUND_DOWN_KEEP {
 			@Override
-			public int apply(int quantity, int times, float tax) {
+			public int apply(int quantity, int times, double tax) {
 				return floor(tax * quantity * times);
 			}
 		};
 		
 		public abstract int apply(int quantity, int times, 
-				float tax);
+				double tax);
 		
-		private static int ceil(float value) {
+		private static int ceil(double value) {
 			return (int)Math.ceil(value);
 		}
-		private static int floor(float value) {
+		private static int floor(double value) {
 			return (int)Math.floor(value);
 		}
-		private static int nearest(float value) {
+		private static int nearest(double value) {
 			return (int)Math.round(value);
 		}
 		
@@ -114,7 +114,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	/**
 	 * The tax to apply.
 	 */
-	public static float tax;
+	public static double tax;
 	
 	private Challenges challenges;
 	private PlayerCache players;
@@ -850,7 +850,7 @@ public class CommandMultiChallenge implements CommandExecutor, TabCompleter {
 	}
 	
 	protected static String replacedNumbers(String description, int times, 
-			float tax, MultiChallengeRoundingMode roundMode) {
+			double tax, MultiChallengeRoundingMode roundMode) {
 		//Prepend and apend a space for the below regex.
 		StringBuilder edited = new StringBuilder(description)
 				.insert(0, ' ').append(' ');
