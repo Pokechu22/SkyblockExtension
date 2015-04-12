@@ -11,7 +11,6 @@ import pokechu22.plugins.SkyblockExtension.errorhandling.ConfigurationErrorRepor
 import pokechu22.plugins.SkyblockExtension.errorhandling.CrashReport;
 import pokechu22.plugins.SkyblockExtension.errorhandling.ErrorHandler;
 import pokechu22.plugins.SkyblockExtension.errorhandling.LoginErrorBroadcaster;
-import pokechu22.plugins.SkyblockExtension.hooks.CommandIsland;
 
 /**
  * Utility class for dealing with bukkit configurations.
@@ -50,10 +49,6 @@ public class Config {
 				.getBoolean("errorHandling.broadcastOnError", true);
 		LoginErrorBroadcaster.broadcastOnLogin = getDefaultConfig()
 				.getBoolean("errorHandling.notifyOfExistingOnLogin", false);
-		CommandIsland.membersCanSendHome = getDefaultConfig().getBoolean(
-				"sendHome.allowMembersToSendHome", true);
-		CommandIsland.useSpawnCommandForSpawn = getDefaultConfig().getBoolean(
-				"sendHome.useSpawnCommandForSpawn", true);
 		
 		CommandMultiChallenge.tax = getDefaultConfig().getDouble(
 				"multiChallenge.tax", 1);
